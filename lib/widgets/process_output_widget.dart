@@ -1,0 +1,100 @@
+/*
+ * Wine Bar - A Wine prefix manager.
+ * Copyright (C) 2025 Josif Arcimovic
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../blocs/process_output_view/process_output_view_bloc.dart';
+import '../blocs/process_output_view/process_output_view_state.dart';
+import '../models/process_output.dart';
+
+class ProcessOutputWidget extends StatelessWidget {
+  @protected
+  final ProcessOutput processOutput;
+
+  const ProcessOutputWidget({super.key, required this.processOutput});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return BlocProvider(
+      create: (context) => ProcessOutputViewBloc(processOutput: processOutput),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: colorScheme.inversePrimary,
+          title: const Text('Process Output'),
+          actionsPadding: EdgeInsetsGeometry.symmetric(horizontal: 8.0),
+          actions: [
+            BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
+              builder: (context, state) {
+                return SegmentedButton<ProcessOutputPage>(
+                  showSelectedIcon: false,
+                  segments: [
+                    ButtonSegment<ProcessOutputPage>(
+                      value: ProcessOutputPage.stdout,
+                      label: Text('STDOUT'),
+                    ),
+                    ButtonSegment<ProcessOutputPage>(
+                      value: ProcessOutputPage.stderr,
+                      label: Text('STDERR'),
+                    ),
+                  ],
+                  selected: {state.page},
+                  onSelectionChanged: (Set<ProcessOutputPage> selection) {
+                    final firstElement = selection.elementAtOrNull(0);
+                    if (firstElement != null) {
+                      BlocProvider.of<ProcessOutputViewBloc>(
+                        context,
+                      ).selectPage(firstElement);
+                    }
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: IndexedStack(
+                      sizing: StackFit.expand,
+                      index: state.page.index,
+                      children: ProcessOutputPage.values
+                          .map<Widget>(
+                            (page) => SelectableText(
+                              state.textForPage(page),
+                              style: TextStyle(fontFamily: 'monospace'),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}

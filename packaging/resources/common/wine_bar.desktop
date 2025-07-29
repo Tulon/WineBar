@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+SingleMainWindow=true
+Name=Wine Bar
+Comment=Manage Wine Prefixes
+Exec=winebar
+Icon=wine_bar
+Categories=System;Emulator
+X-AppImage-Name=Wine Bar
