@@ -16,23 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:bloc/bloc.dart';
+#pragma once
 
-import '../../models/process_output.dart';
-import 'process_output_view_state.dart';
+#include <stdbool.h>
 
-class ProcessOutputViewBloc extends Cubit<ProcessOutputViewState> {
-  ProcessOutputViewBloc({required ProcessOutput processOutput})
-    : super(
-        ProcessOutputViewState(
-          processOutput: processOutput,
-          selectedLogIndex: processOutput.logs.isEmpty ? null : 0,
-        ),
-      );
-
-  void setSelectedLogIndex(int logIndex) {
-    if (logIndex != state.selectedLogIndex) {
-      emit(state.copyWith(selectedLogIndexGetter: () => logIndex));
-    }
-  }
-}
+/**
+ * Sets or clears the FD_CLOEXEC flag on a file descriptor.
+ *
+ * @param fd The file descriptor to set or clear the flag on.
+ * @param flagsVal Whether to set or clear the flag.
+ * @return true on success, false on failure. The errno variable
+ *         will give the details about the error.
+ */
+bool fdSetCloexecFlag(int fd, bool flagVal);

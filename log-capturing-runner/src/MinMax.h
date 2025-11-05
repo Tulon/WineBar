@@ -16,23 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:bloc/bloc.dart';
+#pragma once
 
-import '../../models/process_output.dart';
-import 'process_output_view_state.dart';
-
-class ProcessOutputViewBloc extends Cubit<ProcessOutputViewState> {
-  ProcessOutputViewBloc({required ProcessOutput processOutput})
-    : super(
-        ProcessOutputViewState(
-          processOutput: processOutput,
-          selectedLogIndex: processOutput.logs.isEmpty ? null : 0,
-        ),
-      );
-
-  void setSelectedLogIndex(int logIndex) {
-    if (logIndex != state.selectedLogIndex) {
-      emit(state.copyWith(selectedLogIndexGetter: () => logIndex));
-    }
-  }
-}
+#define MIN(a, b) (a) < (b) ? (a) : (b)
+#define MAX(a, b) (a) < (b) ? (b) : (a)

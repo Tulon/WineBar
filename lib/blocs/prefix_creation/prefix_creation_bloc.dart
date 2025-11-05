@@ -472,7 +472,10 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     final process = await startupData.wineProcessRunnerService.start(
       commandLine: wineInstDescriptor.buildWineInvocationCommand(
         wineArgs: [
-          'reg',
+          // Invoking reg.exe rather than just 'reg' means we won't
+          // have to run this command through start.exe. See
+          // commandLineToWineArgs() for details.
+          'reg.exe',
           'add',
           'HKEY_CURRENT_USER\\Control Panel\\Desktop',
           '/v',

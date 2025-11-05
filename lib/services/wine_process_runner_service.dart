@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -24,8 +25,8 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/generic_process_exception.dart';
-
-import '../utils/env_vars_to_muvm_args.dart';
+import 'package:winebar/models/process_log.dart';
+import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 
 void _validateCommandLine(List<String> commandLine) {
   if (commandLine.isEmpty) {
@@ -33,9 +34,30 @@ void _validateCommandLine(List<String> commandLine) {
   }
 }
 
+ProcessLog? _maybeBuildLog(String name, Uint8List content) {
+  return content.isEmpty
+      ? null
+      : ProcessLog(
+          name: name,
+          content: utf8.decode(content, allowMalformed: true),
+        );
+}
+
 /// Runs a wine process (or a process that may invoke wine) either directly
 /// or through muvm.
 abstract interface class WineProcessRunnerService {
+  factory WineProcessRunnerService({
+    required String toplevelTempDir,
+    required String logCapturingRunnerPath,
+    required bool runWithMuvm,
+  }) {
+    return _WineProcessRunnerService(
+      toplevelTempDir: toplevelTempDir,
+      logCapturingRunnerPath: logCapturingRunnerPath,
+      runWithMuvm: runWithMuvm,
+    );
+  }
+
   Future<WineProcess> start({
     required List<String> commandLine,
     required Map<String, String> envVars,
@@ -52,61 +74,26 @@ abstract interface class WineProcess {
   bool kill([ProcessSignal signal = ProcessSignal.sigterm]);
 }
 
-abstract interface class WineProcessResult {
-  /// The process's exit code. If null, that indicates either that
-  /// the target process never started within a wrapper process
-  /// or that the wrapper process was forcefully killed.
-  int? get exitCode;
-
-  Uint8List get stdout;
-  Uint8List get stderr;
-}
-
-class _WineProcessResult implements WineProcessResult {
-  @override
+class WineProcessResult {
+  /// The process's exit code. The value of null typically indicates
+  /// a crash in the log-capturing-runner process.
   final int? exitCode;
 
-  @override
-  final Uint8List stdout;
+  final List<ProcessLog> logs;
 
-  @override
-  final Uint8List stderr;
-
-  _WineProcessResult({
-    required this.exitCode,
-    required this.stdout,
-    required this.stderr,
-  });
+  WineProcessResult({required this.exitCode, required this.logs});
 }
 
-class DirectWineProcessRunnerService implements WineProcessRunnerService {
-  final logger = GetIt.I.get<Logger>();
-
-  @override
-  Future<WineProcess> start({
-    required List<String> commandLine,
-    required Map<String, String> envVars,
-  }) async {
-    _validateCommandLine(commandLine);
-
-    final process = await Process.start(
-      commandLine.first,
-      commandLine.sublist(1),
-      environment: envVars,
-    );
-
-    return _DirectWineProcess(process);
-  }
-}
-
-class MuvmWineProcessRunnerService implements WineProcessRunnerService {
+class _WineProcessRunnerService implements WineProcessRunnerService {
   final logger = GetIt.I.get<Logger>();
   final String toplevelTempDir;
-  final String muvmWrapperScriptPath;
+  final String logCapturingRunnerPath;
+  final bool runWithMuvm;
 
-  MuvmWineProcessRunnerService({
+  _WineProcessRunnerService({
     required this.toplevelTempDir,
-    required this.muvmWrapperScriptPath,
+    required this.logCapturingRunnerPath,
+    required this.runWithMuvm,
   });
 
   @override
@@ -117,69 +104,136 @@ class MuvmWineProcessRunnerService implements WineProcessRunnerService {
     _validateCommandLine(commandLine);
 
     // muvm doesn't propagate the stdout, stderr or even the exit code of the
-    // process it runs. So, we create a temporary directory and write those
-    // things there as files.
+    // process it runs. So, we create a temporary directory and wrap the
+    // command with log-capturing-runner that writes the logs and the exit
+    // code to files in that directory. In the non-muvm case we still use the
+    // tempory directory and log-capturing-runner, just to avoid having a
+    // separate logic for such a case.
     final tempOutDir = await Directory(
       toplevelTempDir,
     ).createTemp('process-outdir-');
 
-    final muvmProcess = await Process.start('muvm', [
-      // This option is supposed to forward stdin / stdout from the process
-      // running in the virtual machine, but that only seems to happen when
-      // stdin / stdout are connected to a terminal. However, it has another
-      // useful side effect: In case another muvm process is already running,
-      // the 2nd muvm process won't exit immediately but will wait for the
-      // existing one to finish. With or without --interactive, the command
-      // will actually run in the existing virtual machine.
-      '--interactive',
+    final (executable, args) = _buildExecutableAndArgs(
+      tempOutDir: tempOutDir.path,
+      commandLine: commandLine,
+      envVars: envVars,
+    );
 
-      ...envVarsToMuvmArgs(envVars),
-      '-e',
-      'OUTDIR=${tempOutDir.path}',
-      '--',
-      muvmWrapperScriptPath,
-      ...commandLine,
-    ]);
+    logger.i(
+      'Running command:\n'
+      '${[executable, ...args].join(' ')}',
+    );
 
-    return _MuvmWineProcess(muvmProcess: muvmProcess, tempOutDir: tempOutDir);
+    final process = await Process.start(
+      executable,
+      args,
+
+      // Muvm doesn't pass its environment to the child, so in this case,
+      // we pass the environment through the command-line arguments
+      // (see _buildExecutableAndArgs()).
+      environment: runWithMuvm ? null : envVars,
+    );
+
+    return _WineProcessWithLogCapturingRunner(
+      process: process,
+      tempOutDir: tempOutDir,
+    );
+  }
+
+  (String, List<String>) _buildExecutableAndArgs({
+    required String tempOutDir,
+    required List<String> commandLine,
+    required Map<String, String> envVars,
+  }) {
+    final logCapturingRunnerArgs = [tempOutDir, ...commandLine];
+
+    if (!runWithMuvm) {
+      return (logCapturingRunnerPath, logCapturingRunnerArgs);
+    } else {
+      final muvmArgs = [
+        // This option is supposed to forward stdin / stdout from the process
+        // running in the virtual machine, but that only seems to happen when
+        // stdin / stdout are connected to a terminal. However, it has another
+        // useful side effect: In case another muvm process is already running,
+        // the 2nd muvm process won't exit immediately but will wait for the
+        // existing one to finish. With or without --interactive, the command
+        // will actually run in the existing virtual machine.
+        '--interactive',
+
+        ..._envVarsToMuvmArgs(envVars),
+
+        '--',
+
+        logCapturingRunnerPath,
+        ...logCapturingRunnerArgs,
+      ];
+
+      return ('muvm', muvmArgs);
+    }
+  }
+
+  static List<String> _envVarsToMuvmArgs(Map<String, String> envVars) {
+    List<String> args = [];
+    for (final entry in envVars.entries) {
+      args.add('-e');
+      args.add('${entry.key}=${entry.value}');
+    }
+    return args;
   }
 }
 
-class _DirectWineProcess implements WineProcess {
+class _WineProcessWithLogCapturingRunner implements WineProcess {
   final Process process;
+  final Directory tempOutDir;
   final _completer = Completer<WineProcessResult>();
-  final _stdoutBuilder = BytesBuilder();
-  final _stderrBuilder = BytesBuilder();
 
-  _DirectWineProcess(this.process) {
-    final stdoutClosedFuture = process.stdout.forEach(
-      (bytes) => _stdoutBuilder.add(bytes),
-    );
-
-    final stderrClosedFuture = process.stderr.forEach(
-      (bytes) => _stderrBuilder.add(bytes),
-    );
-
+  _WineProcessWithLogCapturingRunner({
+    required this.process,
+    required this.tempOutDir,
+  }) {
     unawaited(
-      (process.exitCode, stdoutClosedFuture, stderrClosedFuture).wait.then(
-        (rec) {
-          _completer.complete(
-            _WineProcessResult(
-              exitCode: rec.$1,
-              stdout: _stdoutBuilder.toBytes(),
-              stderr: _stderrBuilder.toBytes(),
-            ),
-          );
-        },
-        onError: (e) {
-          _completer.complete(
-            _WineProcessResult(
-              exitCode: e.values.$1,
-              stdout: _stdoutBuilder.toBytes(),
-              stderr: _stderrBuilder.toBytes(),
-            ),
-          );
-        },
+      process.exitCode
+          .then(_processNormalCompletion)
+          .catchError(
+            (e, stackTrace) => _completer.completeError(e, stackTrace),
+          ),
+    );
+  }
+
+  Future<void> _processNormalCompletion(int exitCode) async {
+    // Muvm doesn't propagate the status code from the child, so we don't use
+    // the exitCode argument and instead read it form status.txt.
+
+    final statusString = await File(
+      path.join(tempOutDir.path, 'status.txt'),
+    ).readAsString().catchError((e) => '');
+
+    final exitCode = int.tryParse(statusString.trim());
+
+    // The log files are size-limted, so it's totally fine
+    // to read them into memory.
+    final stdout = await File(
+      path.join(tempOutDir.path, 'stdout.txt'),
+    ).readAsBytes().catchError((e) => Uint8List(0));
+
+    final stderr = await File(
+      path.join(tempOutDir.path, 'stderr.txt'),
+    ).readAsBytes().catchError((e) => Uint8List(0));
+
+    final logCapturingRunnerLog = await File(
+      path.join(tempOutDir.path, 'log-capturing-runner.txt'),
+    ).readAsBytes().catchError((e) => Uint8List(0));
+
+    await recursiveDeleteAndLogErrors(tempOutDir);
+
+    _completer.complete(
+      WineProcessResult(
+        exitCode: exitCode,
+        logs: [
+          ?_maybeBuildLog("STDOUT", stdout),
+          ?_maybeBuildLog("STDERR", stderr),
+          ?_maybeBuildLog("Log capturing runner", logCapturingRunnerLog),
+        ],
       ),
     );
   }
@@ -192,55 +246,5 @@ class _DirectWineProcess implements WineProcess {
   @override
   bool kill([ProcessSignal signal = ProcessSignal.sigterm]) {
     return process.kill(signal);
-  }
-}
-
-class _MuvmWineProcess implements WineProcess {
-  final Process muvmProcess;
-  final Directory tempOutDir;
-  final _completer = Completer<WineProcessResult>();
-
-  _MuvmWineProcess({required this.muvmProcess, required this.tempOutDir}) {
-    unawaited(
-      muvmProcess.exitCode
-          .then<void>((_) async {
-            // muvm's exit code seems to be always 0, so we ignore it.
-
-            final statusString = await File(
-              path.join(tempOutDir.path, 'status.txt'),
-            ).readAsString().catchError((e) => '');
-
-            final exitCode = int.tryParse(statusString.trim());
-
-            final stdout = await File(
-              path.join(tempOutDir.path, 'stdout.txt'),
-            ).readAsBytes().catchError((e) => Uint8List(0));
-
-            final stderr = await File(
-              path.join(tempOutDir.path, 'stderr.txt'),
-            ).readAsBytes().catchError((e) => Uint8List(0));
-
-            _completer.complete(
-              _WineProcessResult(
-                exitCode: exitCode,
-                stdout: stdout,
-                stderr: stderr,
-              ),
-            );
-          })
-          .catchError(
-            (e, stackTrace) => _completer.completeError(e, stackTrace),
-          ),
-    );
-  }
-
-  @override
-  Future<WineProcessResult> get result {
-    return _completer.future;
-  }
-
-  @override
-  bool kill([ProcessSignal signal = ProcessSignal.sigterm]) {
-    return muvmProcess.kill(signal);
   }
 }

@@ -16,23 +16,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:bloc/bloc.dart';
+#include "FdSetCloexecFlag.h"
 
-import '../../models/process_output.dart';
-import 'process_output_view_state.dart';
+#include <fcntl.h>
+#include <unistd.h>
 
-class ProcessOutputViewBloc extends Cubit<ProcessOutputViewState> {
-  ProcessOutputViewBloc({required ProcessOutput processOutput})
-    : super(
-        ProcessOutputViewState(
-          processOutput: processOutput,
-          selectedLogIndex: processOutput.logs.isEmpty ? null : 0,
-        ),
-      );
-
-  void setSelectedLogIndex(int logIndex) {
-    if (logIndex != state.selectedLogIndex) {
-      emit(state.copyWith(selectedLogIndexGetter: () => logIndex));
+bool
+fdSetCloexecFlag(int fd, bool flagValue)
+{
+    int const currentFlags = fcntl(fd, F_GETFD, 0);
+    if (currentFlags == -1)
+    {
+        return false;
     }
-  }
+
+    int newFlags = currentFlags;
+    if (flagValue)
+    {
+        newFlags |= FD_CLOEXEC;
+    }
+    else
+    {
+        newFlags &= ~FD_CLOEXEC;
+    }
+
+    if (fcntl(fd, F_SETFD, newFlags) == -1)
+    {
+        return false;
+    }
+
+    return true;
 }

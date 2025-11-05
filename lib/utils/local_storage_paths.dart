@@ -49,6 +49,14 @@ class LocalStoragePaths {
 
   LocalStoragePaths({required this.homeDir, required this.toplevelDataDir});
 
+  static String get logCapturingRunnerPath {
+    return path.join(
+      Directory(Platform.resolvedExecutable).parent.path,
+      'bin',
+      'log-capturing-runner',
+    );
+  }
+
   static String get runAndPinWin32LauncherPath {
     return path.join(
       Directory(Platform.resolvedExecutable).parent.path,

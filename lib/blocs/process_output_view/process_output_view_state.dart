@@ -20,37 +20,30 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:winebar/models/process_output.dart';
 
-enum ProcessOutputPage { stdout, stderr }
-
 @immutable
 class ProcessOutputViewState extends Equatable {
   final ProcessOutput processOutput;
-  final ProcessOutputPage page;
+
+  /// Indexes into processOutput.logs.
+  final int? selectedLogIndex;
 
   const ProcessOutputViewState({
     required this.processOutput,
-    required this.page,
+    required this.selectedLogIndex,
   });
 
-  String textForPage(ProcessOutputPage page) {
-    switch (page) {
-      case ProcessOutputPage.stdout:
-        return processOutput.stdout;
-      case ProcessOutputPage.stderr:
-        return processOutput.stderr;
-    }
-  }
-
   @override
-  List<Object?> get props => [processOutput, page];
+  List<Object?> get props => [processOutput, selectedLogIndex];
 
   ProcessOutputViewState copyWith({
     ProcessOutput? processOutput,
-    ProcessOutputPage? page,
+    ValueGetter<int?>? selectedLogIndexGetter,
   }) {
     return ProcessOutputViewState(
       processOutput: processOutput ?? this.processOutput,
-      page: page ?? this.page,
+      selectedLogIndex: selectedLogIndexGetter != null
+          ? selectedLogIndexGetter()
+          : selectedLogIndex,
     );
   }
 }

@@ -43,25 +43,25 @@ class ProcessOutputWidget extends StatelessWidget {
           actions: [
             BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
               builder: (context, state) {
-                return SegmentedButton<ProcessOutputPage>(
+                return SegmentedButton<int>(
                   showSelectedIcon: false,
-                  segments: [
-                    ButtonSegment<ProcessOutputPage>(
-                      value: ProcessOutputPage.stdout,
-                      label: Text('STDOUT'),
-                    ),
-                    ButtonSegment<ProcessOutputPage>(
-                      value: ProcessOutputPage.stderr,
-                      label: Text('STDERR'),
-                    ),
-                  ],
-                  selected: {state.page},
-                  onSelectionChanged: (Set<ProcessOutputPage> selection) {
-                    final firstElement = selection.elementAtOrNull(0);
+                  segments: state.processOutput.logs
+                      .asMap()
+                      .entries
+                      .map(
+                        (entry) => ButtonSegment<int>(
+                          value: entry.key,
+                          label: Text(entry.value.name),
+                        ),
+                      )
+                      .toList(),
+                  selected: {?state.selectedLogIndex},
+                  onSelectionChanged: (Set<int> selection) {
+                    final firstElement = selection.firstOrNull;
                     if (firstElement != null) {
                       BlocProvider.of<ProcessOutputViewBloc>(
                         context,
-                      ).selectPage(firstElement);
+                      ).setSelectedLogIndex(firstElement);
                     }
                   },
                 );
@@ -78,15 +78,24 @@ class ProcessOutputWidget extends StatelessWidget {
                   Expanded(
                     child: IndexedStack(
                       sizing: StackFit.expand,
-                      index: state.page.index,
-                      children: ProcessOutputPage.values
-                          .map<Widget>(
-                            (page) => SelectableText(
-                              state.textForPage(page),
-                              style: TextStyle(fontFamily: 'monospace'),
-                            ),
-                          )
-                          .toList(),
+                      index:
+                          state.selectedLogIndex ??
+                          state.processOutput.logs.length,
+                      children: [
+                        ...state.processOutput.logs.map(
+                          (log) => SelectableText(
+                            log.content,
+                            style: TextStyle(fontFamily: 'monospace'),
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            'No logs were captured from this process',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

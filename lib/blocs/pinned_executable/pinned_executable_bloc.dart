@@ -25,6 +25,7 @@ import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/repositories/running_pinned_executables_repo.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
+import 'package:winebar/utils/command_line_to_wine_args.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
 
@@ -134,15 +135,7 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
         );
 
     List<String> wineArgsForLaunchingExecutable(String executablePath) {
-      if (executablePath.toLowerCase().endsWith('.exe')) {
-        return [executablePath];
-      } else {
-        return [
-          'start',
-          if (executablePath.startsWith('/')) '/unix',
-          executablePath,
-        ];
-      }
+      return commandLineToWineArgs([executablePath]);
     }
 
     final wineProcess = await startupData.wineProcessRunnerService.start(

@@ -227,7 +227,7 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
     final envVars = <String, String>{};
 
     // This variable is used both by wine (not by Proton) and also by our
-    // muvm_wrapper.sh.
+    // log-capturing-runner executable.
     envVars['WINESERVER'] = wineAndWineserverExecutables.wineserverExecutable;
 
     // Wineprefix is needed even on Proton, as it's used by wineserver when

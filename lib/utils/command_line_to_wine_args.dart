@@ -16,23 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:bloc/bloc.dart';
+List<String> commandLineToWineArgs(List<String> commandLine) {
+  if (commandLine.isEmpty) {
+    return [];
+  }
 
-import '../../models/process_output.dart';
-import 'process_output_view_state.dart';
+  final executable = commandLine.first;
 
-class ProcessOutputViewBloc extends Cubit<ProcessOutputViewState> {
-  ProcessOutputViewBloc({required ProcessOutput processOutput})
-    : super(
-        ProcessOutputViewState(
-          processOutput: processOutput,
-          selectedLogIndex: processOutput.logs.isEmpty ? null : 0,
-        ),
-      );
-
-  void setSelectedLogIndex(int logIndex) {
-    if (logIndex != state.selectedLogIndex) {
-      emit(state.copyWith(selectedLogIndexGetter: () => logIndex));
-    }
+  if (executable.toLowerCase().endsWith('.exe')) {
+    return [...commandLine];
+  } else {
+    // It's tempting to add the '/wait' argument here, to make start.exe wait
+    // till it's child has finished, but ultimately that doesn't maater, as
+    // "wine" itself doesn't wait for the process it creates to finish.
+    return ['start', if (executable.startsWith('/')) '/unix', ...commandLine];
   }
 }

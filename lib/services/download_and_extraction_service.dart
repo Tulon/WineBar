@@ -27,8 +27,8 @@ abstract interface class DownloadAndExtractionService {
   });
 }
 
-typedef DownloadAndExtractionProgressCallback = void Function(
-    int bytesDownloaded, int? bytesTotal);
+typedef DownloadAndExtractionProgressCallback =
+    void Function(int bytesDownloaded, int? bytesTotal);
 
 /// Note that there is no failure case here. That's because failures
 /// are communicated as completions with error via

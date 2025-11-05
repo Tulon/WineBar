@@ -128,6 +128,14 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
 endif()
 
 
-#================= Custom build instructions below ================#
+#================= Custom Wine Bar build instructions below ================#
+
+enable_testing()
+
+add_custom_target(build_tests)
+add_custom_target(run_tests COMMAND ${CMAKE_CTEST_COMMAND})
+add_dependencies(run_tests build_tests)
 
 include(build-run-and-pin-launcher.cmake)
+
+add_subdirectory(../log-capturing-runner log-capturing-runner)

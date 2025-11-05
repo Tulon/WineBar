@@ -26,14 +26,8 @@ class WineRelease extends Equatable {
   final String releaseName;
   final List<WineBuild> builds;
 
-  const WineRelease({
-    required this.releaseName,
-    required this.builds,
-  });
+  const WineRelease({required this.releaseName, required this.builds});
 
   @override
-  List<Object> get props => [
-        releaseName,
-        builds,
-      ];
+  List<Object> get props => [releaseName, builds];
 }

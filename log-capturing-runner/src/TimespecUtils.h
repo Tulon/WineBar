@@ -16,23 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:bloc/bloc.dart';
+#pragma once
 
-import '../../models/process_output.dart';
-import 'process_output_view_state.dart';
+#include <stdbool.h>
+#include <stdint.h>
+#include <time.h>
 
-class ProcessOutputViewBloc extends Cubit<ProcessOutputViewState> {
-  ProcessOutputViewBloc({required ProcessOutput processOutput})
-    : super(
-        ProcessOutputViewState(
-          processOutput: processOutput,
-          selectedLogIndex: processOutput.logs.isEmpty ? null : 0,
-        ),
-      );
+/**
+ * Returns true if time.tv_sec == 0 && time.tv_nsec == 0.
+ */
+bool isZeroTimespec(struct timespec time);
 
-  void setSelectedLogIndex(int logIndex) {
-    if (logIndex != state.selectedLogIndex) {
-      emit(state.copyWith(selectedLogIndexGetter: () => logIndex));
-    }
-  }
-}
+/**
+ * Computes the number of milliseconds between @p timeFrom and @p timeTo.
+ *
+ * The returned value may be negative.
+ */
+int64_t msecsFromTo(struct timespec timeFrom, struct timespec timeTo);
+
+/**
+ * Adds or subtracts the given number of milliseconds to a timespec value.
+ */
+struct timespec timespecAddMsecs(struct timespec time, int64_t deltaMs);
+
+/**
+ * A convenience wrapper around glock_getttime(CLOCK_MONOTONIC).
+ */
+struct timespec monotonicTimeNow();

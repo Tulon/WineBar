@@ -17,21 +17,22 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
+import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/pinned_executable.dart';
+import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/process_output.dart';
-import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/repositories/running_special_executables_repo.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
+import 'package:winebar/utils/command_line_to_wine_args.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
@@ -87,16 +88,8 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
               emit(
                 state.copyWith(
                   isRunning: false,
-                  processOutputGetter: () => ProcessOutput(
-                    stdout: utf8.decode(
-                      processResult.stdout,
-                      allowMalformed: true,
-                    ),
-                    stderr: utf8.decode(
-                      processResult.stderr,
-                      allowMalformed: true,
-                    ),
-                  ),
+                  processOutputGetter: () =>
+                      ProcessOutput(logs: processResult.logs),
                 ),
               );
             },
@@ -107,8 +100,9 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
               emit(
                 state.copyWith(
                   isRunning: false,
-                  processOutputGetter: () =>
-                      ProcessOutput(stdout: '', stderr: e.toString()),
+                  processOutputGetter: () => ProcessOutput(
+                    logs: [ProcessLog(name: 'Error', content: e.toString())],
+                  ),
                 ),
               );
             },
@@ -135,11 +129,6 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
     }
 
     emit(state.copyWith(isRunning: true, processOutputGetter: () => null));
-
-    logger.i(
-      "Running special executable \"${executableSlot.name}\" "
-      "on prefix ${winePrefix.descriptor.name}",
-    );
 
     unawaited(
       _runProcess(
@@ -195,7 +184,7 @@ abstract class RegularSpecialExecutableBloc extends SpecialExecutableBloc {
   }) async {
     final wineProcess = await startupData.wineProcessRunnerService.start(
       commandLine: wineInstDescriptor.buildWineInvocationCommand(
-        wineArgs: _buildWineArgs(commandLine: commandLine),
+        wineArgs: commandLineToWineArgs(commandLine),
       ),
       envVars: wineInstDescriptor.getEnvVarsForWine(
         prefixDirStructure: winePrefix.dirStructure,
@@ -206,20 +195,6 @@ abstract class RegularSpecialExecutableBloc extends SpecialExecutableBloc {
     onProcessStarted(wineProcess);
 
     return wineProcess.result;
-  }
-
-  List<String> _buildWineArgs({required List<String> commandLine}) {
-    if (commandLine.isEmpty) {
-      throw GenericException("Can't execute an empty command line");
-    }
-
-    final executable = commandLine.first;
-
-    if (executable.toLowerCase().endsWith('.exe')) {
-      return [...commandLine];
-    } else {
-      return ['start', if (executable.startsWith('/')) '/unix', ...commandLine];
-    }
   }
 }
 
@@ -291,21 +266,11 @@ class RunAndPinExecutableBloc extends SpecialExecutableBloc {
 
     final executable = commandLine.first;
 
-    List<String> wineArgs = [...commandLine];
-
-    if (!executable.toLowerCase().endsWith('.exe')) {
-      wineArgs = [
-        'start',
-        if (executable.startsWith('/')) '/unix',
-        ...wineArgs,
-      ];
-    }
-
     return [
       startupData.runAndPinWin32LauncherPath,
       tempPinDir.path,
       executable,
-      ...wineArgs,
+      ...commandLineToWineArgs(commandLine),
     ];
   }
 

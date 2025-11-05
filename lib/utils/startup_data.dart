@@ -18,11 +18,8 @@
 
 import 'dart:io';
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
@@ -38,14 +35,14 @@ import 'settings_json_file.dart';
 class StartupData {
   final LocalStoragePaths localStoragePaths;
   final List<WinePrefix> winePrefixes;
-  final String muvmWrapperScriptPath;
+  final String logCapturingRunnerPath;
   final String runAndPinWin32LauncherPath;
   final WineProcessRunnerService wineProcessRunnerService;
 
   StartupData({
     required this.localStoragePaths,
     required this.winePrefixes,
-    required this.muvmWrapperScriptPath,
+    required this.logCapturingRunnerPath,
     required this.runAndPinWin32LauncherPath,
     required this.wineProcessRunnerService,
   });
@@ -84,17 +81,16 @@ class StartupData {
       localStoragePaths: localStoragePaths,
     );
 
-    final muvmWrapperScriptPath = await _prepareMuvmWrapperScript();
-    final wineProcessRunningService = _prepareWineProcessRunningService(
-      isMuvmRequired: muvmNeeded,
+    final wineProcessRunningService = WineProcessRunnerService(
       toplevelTempDir: localStoragePaths.tempDir,
-      muvmWrapperScriptPath: muvmWrapperScriptPath,
+      logCapturingRunnerPath: LocalStoragePaths.logCapturingRunnerPath,
+      runWithMuvm: muvmNeeded,
     );
 
     return StartupData(
       localStoragePaths: localStoragePaths,
       winePrefixes: winePrefixes,
-      muvmWrapperScriptPath: muvmWrapperScriptPath,
+      logCapturingRunnerPath: LocalStoragePaths.logCapturingRunnerPath,
       runAndPinWin32LauncherPath: LocalStoragePaths.runAndPinWin32LauncherPath,
       wineProcessRunnerService: wineProcessRunningService,
     );
@@ -214,30 +210,6 @@ class StartupData {
       // We add broken prefixes to the list anyway, to give the user the opportunity
       // to delete them manually.
       sink.add(WinePrefix.broken(outerDir: winePrefixOuterDir.path));
-    }
-  }
-
-  static Future<String> _prepareMuvmWrapperScript() async {
-    final supportDir = await getApplicationSupportDirectory();
-    final muvmWrapperFile = File(path.join(supportDir.path, 'muvm_wrapper.sh'));
-    final data = await rootBundle.load('assets/muvm_wrapper.sh');
-    await muvmWrapperFile.writeAsBytes(data.buffer.asInt8List(), flush: true);
-    await Process.run('chmod', ['+x', muvmWrapperFile.path]);
-    return muvmWrapperFile.path;
-  }
-
-  static WineProcessRunnerService _prepareWineProcessRunningService({
-    required bool isMuvmRequired,
-    required String toplevelTempDir,
-    required String muvmWrapperScriptPath,
-  }) {
-    if (isMuvmRequired) {
-      return MuvmWineProcessRunnerService(
-        toplevelTempDir: toplevelTempDir,
-        muvmWrapperScriptPath: muvmWrapperScriptPath,
-      );
-    } else {
-      return DirectWineProcessRunnerService();
     }
   }
 }

@@ -5,7 +5,7 @@ A Wine prefix manager for Linux with explicit support for Apple silicon Macs (th
 It should work on regular x86_64 Linux systems as well. Support for generic non-Apple
 arm64 systems is currently missing, though it shouldn't be hard to add - PRs are welcome!
 
-This project is mainly written in Dart / Flutter, with some C++ code that runs on the Windows side.
+This project is mainly written in Dart / Flutter, with some C and C++ code for auxilliary tools.
 
 The project was inspired by another project written in Flutter / Dart called [Wine Prefix Manager](https://github.com/CrownParkComputing/wine_prefix_manager), though it doesn't share any code with it.
 

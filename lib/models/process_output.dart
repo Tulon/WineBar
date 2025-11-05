@@ -18,14 +18,14 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:winebar/models/process_log.dart';
 
 @immutable
 class ProcessOutput extends Equatable {
-  final String stdout;
-  final String stderr;
+  final List<ProcessLog> logs;
 
-  const ProcessOutput({required this.stdout, required this.stderr});
+  const ProcessOutput({required this.logs});
 
   @override
-  List<Object> get props => [stdout, stderr];
+  List<Object> get props => [logs];
 }

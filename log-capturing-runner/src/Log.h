@@ -16,11 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-List<String> envVarsToMuvmArgs(Map<String, String> envVars) {
-  List<String> args = [];
-  for (final entry in envVars.entries) {
-    args.add('-e');
-    args.add('${entry.key}=${entry.value}');
-  }
-  return args;
-}
+#pragma once
+
+typedef struct Log Log;
+
+Log* logOpenFile(char const* outDir, char const* fileName);
+
+void logPrintf(Log* log, char const* format, ...) __attribute__((format(printf, 2, 3)));
+
+void logClose(Log* log);
