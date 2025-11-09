@@ -32,6 +32,7 @@ import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/repositories/running_pinned_executables_repo.dart';
 import 'package:winebar/utils/startup_data.dart';
+import 'package:winebar/utils/wine_installation_descriptor.dart';
 import 'package:winebar/widgets/run_process_chip.dart';
 
 import '../blocs/prefix_details/prefix_details_bloc.dart';
@@ -446,8 +447,17 @@ class WinePrefixPage extends StatelessWidget {
     FilePickerResult? filePickerResult;
 
     try {
+      WineInstallationDescriptor wineInstDesc =
+          await WineInstallationDescriptor.forWineInstallDir(
+            winePrefix.descriptor.getAbsPathToWineInstall(
+              toplevelDataDir: startupData.localStoragePaths.toplevelDataDir,
+            ),
+          );
+
       filePickerResult = await FilePicker.platform.pickFiles(
-        initialDirectory: winePrefix.dirStructure.innerDir,
+        initialDirectory: wineInstDesc.getInnermostPrefixDir(
+          prefixDirStructure: winePrefix.dirStructure,
+        ),
         type: FileType.custom,
         allowedExtensions: ['exe', 'msi', 'lnk'],
 
