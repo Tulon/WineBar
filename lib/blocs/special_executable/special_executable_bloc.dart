@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -44,6 +45,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
   final StartupData startupData;
   final WinePrefix winePrefix;
   WineProcess? _runningProcess;
+  CancelableOperation<WineProcessResult>? _cancellableProcessResultGetter;
 
   @protected
   SpecialExecutableBloc({required this.startupData, required this.winePrefix})
@@ -61,6 +63,15 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
   /// To be implemented in a subclass.
   SpecialExecutableSlot get executableSlot;
 
+  @override
+  Future<void> close() async {
+    if (_cancellableProcessResultGetter != null) {
+      await _cancellableProcessResultGetter!.cancel();
+      _cancellableProcessResultGetter = null;
+    }
+    return super.close();
+  }
+
   /// To be implemented in a subclasses.
   /// In case of launching the winetricks script, the [commandLine] shall
   /// not contain the winetricks script itself, only its arguments.
@@ -72,6 +83,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
 
   void _attachToRunningProcess(WineProcess runningProcess) {
     assert(_runningProcess == null);
+    assert(_cancellableProcessResultGetter == null);
 
     // This is necessary to be able to kill it while it's running.
     _runningProcess = runningProcess;
@@ -81,8 +93,12 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
       emit(state.copyWith(isRunning: true));
     }
 
+    _cancellableProcessResultGetter = CancelableOperation.fromFuture(
+      runningProcess.result,
+    );
+
     unawaited(
-      runningProcess.result
+      _cancellableProcessResultGetter!.value
           .then(
             (processResult) {
               emit(
@@ -109,6 +125,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
           )
           .whenComplete(() {
             _runningProcess = null;
+            _cancellableProcessResultGetter = null;
           }),
     );
   }

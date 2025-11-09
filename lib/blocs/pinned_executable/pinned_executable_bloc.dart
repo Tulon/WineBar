@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -39,53 +40,66 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
   final WinePrefix winePrefix;
   final PinnedExecutable pinnedExecutable;
   WineProcess? _runningProcess;
+  CancelableOperation<WineProcessResult>? _cancellableProcessResultGetter;
 
-  PinnedExecutableBloc._({
+  PinnedExecutableBloc({
     required this.startupData,
     required this.winePrefix,
     required this.pinnedExecutable,
-    required WineProcess? runningProcess,
   }) : super(PinnedExecutableState.defaultState()) {
-    _setRunningProcess(runningProcess);
-  }
-
-  factory PinnedExecutableBloc({
-    required StartupData startupData,
-    required WinePrefix winePrefix,
-    required PinnedExecutable pinnedExecutable,
-  }) {
-    final runningPinnedExecutablesRepo = GetIt.I
-        .get<RunningPinnedExecutablesRepo>();
-
     final runningProcess = runningPinnedExecutablesRepo.tryFind(
       prefix: winePrefix,
       pinnedExecutable: pinnedExecutable,
     );
 
-    return PinnedExecutableBloc._(
-      startupData: startupData,
-      winePrefix: winePrefix,
-      pinnedExecutable: pinnedExecutable,
-      runningProcess: runningProcess,
-    );
+    if (runningProcess != null) {
+      _attachToRunningProcess(runningProcess);
+    }
   }
 
-  void _setRunningProcess(WineProcess? runningProcess) {
-    if (identical(_runningProcess, runningProcess)) {
-      return;
+  @override
+  Future<void> close() async {
+    if (_cancellableProcessResultGetter != null) {
+      await _cancellableProcessResultGetter!.cancel();
+      _cancellableProcessResultGetter = null;
     }
+    return super.close();
+  }
 
+  void _attachToRunningProcess(WineProcess runningProcess) {
+    assert(_runningProcess == null);
+    assert(_cancellableProcessResultGetter == null);
+
+    // This is necessary to be able to kill it while it's running.
     _runningProcess = runningProcess;
 
-    if ((runningProcess != null) != state.isRunning) {
-      emit(state.copyWith(isRunning: runningProcess != null));
+    if (!state.isRunning) {
+      // This happens when we are called from a constructor.
+      emit(state.copyWith(isRunning: true));
     }
 
-    if (runningProcess != null) {
-      unawaited(
-        runningProcess.result.whenComplete(() => _setRunningProcess(null)),
-      );
-    }
+    _cancellableProcessResultGetter = CancelableOperation.fromFuture(
+      runningProcess.result,
+    );
+
+    unawaited(
+      _cancellableProcessResultGetter!.value
+          .then(
+            (processResult) {
+              emit(state.copyWith(isRunning: false));
+            },
+            onError: (e) {
+              logger.w(
+                'Error running executable ${pinnedExecutable.windowsPathToExecutable}:\n${e.toString()}',
+              );
+              emit(state.copyWith(isRunning: false));
+            },
+          )
+          .whenComplete(() {
+            _runningProcess = null;
+            _cancellableProcessResultGetter = null;
+          }),
+    );
   }
 
   void setMouseOver(bool mouseOver) {
@@ -99,7 +113,7 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
   }
 
   void launchPinnedExecutable() {
-    if (state.isRunning) {
+    if (state.isRunning || _runningProcess != null) {
       logger.w(
         "Trying to run pinned executable "
         "${pinnedExecutable.windowsPathToExecutable} that's already running",
@@ -110,19 +124,20 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
     emit(state.copyWith(isRunning: true));
 
     unawaited(
-      _startProcess().then(
-        (runningProcess) {
-          _setRunningProcess(runningProcess);
-        },
-        onError: (e) {
-          logger.w(
-            'Error running executable ${pinnedExecutable.windowsPathToExecutable}:\n${e.toString()}',
-          );
-          if (_runningProcess != null) {
-            emit(state.copyWith(isRunning: false));
-          }
-        },
-      ),
+      _startProcess()
+          .then((runningProcess) {
+            runningPinnedExecutablesRepo.add(
+              prefix: winePrefix,
+              pinnedExecutable: pinnedExecutable,
+              wineProcess: runningProcess,
+            );
+            _attachToRunningProcess(runningProcess);
+          })
+          .catchError((e, stackTrace) {
+            logger.w(
+              'Error starting executable ${pinnedExecutable.windowsPathToExecutable}:\n${e.toString()}',
+            );
+          }),
     );
   }
 
@@ -148,12 +163,6 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
         prefixDirStructure: winePrefix.dirStructure,
         tempDir: startupData.localStoragePaths.tempDir,
       ),
-    );
-
-    runningPinnedExecutablesRepo.add(
-      prefix: winePrefix,
-      pinnedExecutable: pinnedExecutable,
-      wineProcess: wineProcess,
     );
 
     return wineProcess;
