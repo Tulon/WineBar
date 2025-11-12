@@ -133,30 +133,23 @@ class WinePrefixPage extends StatelessWidget {
     required PrefixDetailsState state,
     required ColorScheme colorScheme,
   }) {
-    if (state.pinnedExecutables.pinnedExecutablesOrderedByLabel.isEmpty) {
-      return Center(
-        child: Text(
-          'Use the Run & Pin button below to populate this area',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16.0),
-        ),
-      );
-    } else {
-      return SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Wrap(
-            spacing: 16.0,
-            runSpacing: 16.0,
-            children: _buildPinnedExecutableWidgets(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Wrap(
+          spacing: 16.0,
+          runSpacing: 16.0,
+          children: [
+            ..._buildPinnedExecutableWidgets(
               context: context,
               state: state,
               colorScheme: colorScheme,
             ),
-          ),
+            _buildPinButton(context: context, colorScheme: colorScheme),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 
   Widget _buildBottomPanel({required ColorScheme colorScheme}) {
@@ -240,7 +233,7 @@ class WinePrefixPage extends StatelessWidget {
                         ),
                   if (state.mouseOver && !state.isRunning)
                     Positioned(
-                      key: ValueKey(_PinnedItemElement.pinAction),
+                      key: ValueKey(_PinnedItemElement.unpinAction),
                       top: 0.0,
                       right: 0.0,
                       child: IconButton(
@@ -322,6 +315,105 @@ class WinePrefixPage extends StatelessWidget {
         pinnedExecutable: pinnedExecutable,
       ),
       child: BlocBuilder<PinnedExecutableBloc, PinnedExecutableState>(
+        builder: (context, state) => buildWidgetTree(context, state),
+      ),
+    );
+  }
+
+  Widget _buildPinButton({
+    required BuildContext context,
+    required ColorScheme colorScheme,
+  }) {
+    Widget buildWidgetTree(BuildContext context, SpecialExecutableState state) {
+      final bloc = BlocProvider.of<PinExecutableBloc>(context);
+
+      return Stack(
+        children: [
+          Container(
+            key: ValueKey(_PinButtonElement.icon),
+            alignment: AlignmentGeometry.center,
+            width: 128,
+            height: 128 + 28,
+            child: FloatingActionButton.large(
+              tooltip: 'Pin executable',
+              onPressed: () => _selectSpecialExecutableToRun(
+                context: context,
+                specialExecutableBloc: bloc,
+              ),
+              child: const Icon(Icons.add, size: 40),
+            ),
+          ),
+          if (state.isRunning)
+            Positioned(
+              key: ValueKey(_PinButtonElement.killProcessButton),
+              bottom: 0.0,
+              right: 0.0,
+              child: IconButton(
+                icon: Icon(MdiIcons.close),
+                style: ButtonStyle(
+                  iconColor: WidgetStateProperty.resolveWith<Color?>((
+                    Set<WidgetState> states,
+                  ) {
+                    if (states.contains(WidgetState.hovered)) {
+                      return Colors.white;
+                    } else {
+                      return Colors.grey.shade900;
+                    }
+                  }),
+                  backgroundColor: WidgetStateProperty.resolveWith<Color?>((
+                    Set<WidgetState> states,
+                  ) {
+                    if (states.contains(WidgetState.hovered)) {
+                      return Colors.red.shade900;
+                    } else {
+                      return Colors.yellow.shade700;
+                    }
+                  }),
+                ),
+                tooltip: 'Kill process',
+                onPressed: () => bloc.killProcessIfRunning(),
+              ),
+            ),
+          if (!state.isRunning && state.processOutput != null)
+            Positioned(
+              key: ValueKey(_PinButtonElement.viewLogsButton),
+              bottom: 0.0,
+              right: 0.0,
+              child: IconButton.filledTonal(
+                icon: Icon(Icons.article),
+                style: ButtonStyle(
+                  iconColor: WidgetStateProperty.resolveWith<Color?>((
+                    Set<WidgetState> states,
+                  ) {
+                    return Colors.grey.shade900;
+                  }),
+                  backgroundColor: WidgetStateProperty.resolveWith<Color?>((
+                    Set<WidgetState> states,
+                  ) {
+                    return Colors.yellow.shade700;
+                  }),
+                ),
+                tooltip: 'View process output',
+                onPressed: () => _viewProcessOutput(
+                  context: context,
+                  specialExecutableState: state,
+                ),
+              ),
+            ),
+        ],
+      );
+    }
+
+    return BlocProvider(
+      create: (context) => PinExecutableBloc(
+        startupData: startupData,
+        winePrefix: winePrefix,
+        processExecutablePinnedInTempDir: (executablePinnedInTempDir) =>
+            BlocProvider.of<PrefixDetailsBloc>(
+              context,
+            ).pinExecutable(executablePinnedInTempDir),
+      ),
+      child: BlocBuilder<PinExecutableBloc, SpecialExecutableState>(
         builder: (context, state) => buildWidgetTree(context, state),
       ),
     );
@@ -494,4 +586,11 @@ class WinePrefixPage extends StatelessWidget {
   }
 }
 
-enum _PinnedItemElement { icon, iconPlaceholder, pinAction, killProcessAction }
+enum _PinnedItemElement {
+  icon,
+  iconPlaceholder,
+  unpinAction,
+  killProcessAction,
+}
+
+enum _PinButtonElement { icon, killProcessButton, viewLogsButton }

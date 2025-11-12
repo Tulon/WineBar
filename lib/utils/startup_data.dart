@@ -35,15 +35,11 @@ import 'settings_json_file.dart';
 class StartupData {
   final LocalStoragePaths localStoragePaths;
   final List<WinePrefix> winePrefixes;
-  final String logCapturingRunnerPath;
-  final String runAndPinWin32LauncherPath;
   final WineProcessRunnerService wineProcessRunnerService;
 
   StartupData({
     required this.localStoragePaths,
     required this.winePrefixes,
-    required this.logCapturingRunnerPath,
-    required this.runAndPinWin32LauncherPath,
     required this.wineProcessRunnerService,
   });
 
@@ -90,8 +86,6 @@ class StartupData {
     return StartupData(
       localStoragePaths: localStoragePaths,
       winePrefixes: winePrefixes,
-      logCapturingRunnerPath: LocalStoragePaths.logCapturingRunnerPath,
-      runAndPinWin32LauncherPath: LocalStoragePaths.runAndPinWin32LauncherPath,
       wineProcessRunnerService: wineProcessRunningService,
     );
   }

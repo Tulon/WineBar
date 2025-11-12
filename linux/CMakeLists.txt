@@ -136,6 +136,6 @@ add_custom_target(build_tests)
 add_custom_target(run_tests COMMAND ${CMAKE_CTEST_COMMAND})
 add_dependencies(run_tests build_tests)
 
-include(build-run-and-pin-launcher.cmake)
+include(build-win32-apps.cmake)
 
 add_subdirectory(../log-capturing-runner log-capturing-runner)

@@ -34,6 +34,7 @@ import 'package:winebar/repositories/running_special_executables_repo.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/utils/command_line_to_wine_args.dart';
+import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
@@ -228,6 +229,97 @@ class CustomExecutableBloc extends RegularSpecialExecutableBloc {
       SpecialExecutableSlot.customExecutable;
 }
 
+class PinExecutableBloc extends SpecialExecutableBloc {
+  final Future<void> Function(PinnedExecutable executablePinnedInTempDir)
+  processExecutablePinnedInTempDir;
+
+  PinExecutableBloc({
+    required super.startupData,
+    required super.winePrefix,
+    required this.processExecutablePinnedInTempDir,
+  });
+
+  @override
+  SpecialExecutableSlot get executableSlot =>
+      SpecialExecutableSlot.runAndPinExecutable;
+
+  @override
+  Future<WineProcessResult> runProcess({
+    required List<String> commandLine,
+    required WineInstallationDescriptor wineInstDescriptor,
+    required void Function(WineProcess) onProcessStarted,
+  }) async {
+    final tempPinDir = await Directory(
+      startupData.localStoragePaths.tempDir,
+    ).createTemp('pin-');
+
+    try {
+      final wineProcess = await startupData.wineProcessRunnerService.start(
+        commandLine: wineInstDescriptor.buildWineInvocationCommand(
+          wineArgs: _buildWineArgs(
+            commandLine: commandLine,
+            tempPinDir: tempPinDir,
+          ),
+        ),
+        envVars: wineInstDescriptor.getEnvVarsForWine(
+          prefixDirStructure: winePrefix.dirStructure,
+          tempDir: startupData.localStoragePaths.tempDir,
+        ),
+      );
+
+      onProcessStarted(wineProcess);
+
+      final processResult = await wineProcess.result;
+
+      await _tryPinningExecutable(tempPinDir: tempPinDir.path);
+
+      return processResult;
+    } finally {
+      await recursiveDeleteAndLogErrors(tempPinDir);
+    }
+  }
+
+  List<String> _buildWineArgs({
+    required List<String> commandLine,
+    required Directory tempPinDir,
+  }) {
+    if (commandLine.isEmpty) {
+      throw GenericException("Can't execute an empty command line");
+    }
+
+    final executable = commandLine.first;
+
+    return [
+      LocalStoragePaths.pinExecutableInfoExtractorPath,
+      tempPinDir.path,
+      executable,
+    ];
+  }
+
+  Future<void> _tryPinningExecutable({required String tempPinDir}) async {
+    PinnedExecutable? executablePinnedInTempDir;
+    try {
+      executablePinnedInTempDir = await PinnedExecutable.loadFromPinDirectory(
+        tempPinDir,
+      );
+    } catch (e, stackTrace) {
+      logger.e(
+        'Failed to read a pin from $tempPinDir',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      return;
+    }
+
+    try {
+      await processExecutablePinnedInTempDir(executablePinnedInTempDir);
+    } catch (e, stackTrace) {
+      logger.e('Failed to pin an executable', error: e, stackTrace: stackTrace);
+      return;
+    }
+  }
+}
+
 class RunAndPinExecutableBloc extends SpecialExecutableBloc {
   final Future<void> Function(PinnedExecutable executablePinnedInTempDir)
   processExecutablePinnedInTempDir;
@@ -289,7 +381,7 @@ class RunAndPinExecutableBloc extends SpecialExecutableBloc {
     final executable = commandLine.first;
 
     return [
-      startupData.runAndPinWin32LauncherPath,
+      LocalStoragePaths.runAndPinWin32LauncherPath,
       tempPinDir.path,
       executable,
       ...commandLineToWineArgs(commandLine),

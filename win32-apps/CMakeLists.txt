@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(run-and-pin-launcher LANGUAGES C CXX)
+project(win32-apps LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 find_library(GDIPLUS_LIB gdiplus REQUIRED)
 
-add_executable(
-    ${PROJECT_NAME}
+add_library(
+    common STATIC
     src/CaseInsensitiveCompare.cpp
     src/CaseInsensitiveCompare.h
     src/CoInitializer.cpp
@@ -33,7 +33,6 @@ add_executable(
     src/IconFromPortableExecutable.h
     src/IconFromPortableExecutableOrIcoFile.cpp
     src/IconFromPortableExecutableOrIcoFile.h
-    src/main.cpp
     src/PickIconGroupResource.cpp
     src/PickIconGroupResource.h
     src/ResourceNameHolder.cpp
@@ -56,23 +55,42 @@ add_executable(
 )
 
 target_compile_definitions(
-    ${PROJECT_NAME}
+    common
     PRIVATE -DUNICODE -D_UNICODE
 )
 
-target_link_libraries(
-    ${PROJECT_NAME}
+target_compile_options(
+    common
     PRIVATE
-        ${GDIPLUS_LIB} -lshlwapi
+        -ffunction-sections -fdata-sections
 )
 
-target_link_options(
-    ${PROJECT_NAME}
-    PRIVATE
-        -mwindows -municode -static -static-libgcc -static-libstdc++
-)
+foreach(target run-and-pin-launcher pin-executable-info-extractor)
+    add_executable(
+        ${target}
+        "src/${target}.cpp"
+    )
 
-install(
-    TARGETS ${PROJECT_NAME}
-    RUNTIME DESTINATION bin-win32
-)
+    target_compile_definitions(
+        ${target}
+        PRIVATE -DUNICODE -D_UNICODE
+    )
+
+    target_link_libraries(
+        ${target}
+        PRIVATE
+            common ${GDIPLUS_LIB} -lshlwapi
+    )
+
+    target_link_options(
+        ${target}
+        PRIVATE
+            -mwindows -municode -Wl,--gc-sections
+            -static -static-libgcc -static-libstdc++
+    )
+
+    install(
+        TARGETS ${target}
+        RUNTIME DESTINATION bin-win32
+    )
+endforeach()

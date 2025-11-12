@@ -57,6 +57,14 @@ class LocalStoragePaths {
     );
   }
 
+  static String get pinExecutableInfoExtractorPath {
+    return path.join(
+      Directory(Platform.resolvedExecutable).parent.path,
+      'bin-win32',
+      'pin-executable-info-extractor.exe',
+    );
+  }
+
   static String get runAndPinWin32LauncherPath {
     return path.join(
       Directory(Platform.resolvedExecutable).parent.path,
