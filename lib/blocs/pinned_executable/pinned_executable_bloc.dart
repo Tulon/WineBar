@@ -137,6 +137,11 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
             logger.w(
               'Error starting executable ${pinnedExecutable.windowsPathToExecutable}:\n${e.toString()}',
             );
+
+            // _attachToRunningProcess() does set isRunning to false in case of an error,
+            // but in case the exception was thrown before _attachToRunningProcess() is
+            // called, we still need this.
+            emit(state.copyWith(isRunning: false));
           }),
     );
   }
