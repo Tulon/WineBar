@@ -238,7 +238,7 @@ class WinePrefixPage extends StatelessWidget {
                           color: colorScheme.primary,
                           size: 128.0,
                         ),
-                  if (state.mouseOver)
+                  if (state.mouseOver && !state.isRunning)
                     Positioned(
                       key: ValueKey(_PinnedItemElement.pinAction),
                       top: 0.0,
