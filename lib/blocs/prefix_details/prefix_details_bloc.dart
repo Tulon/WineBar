@@ -19,7 +19,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -65,7 +64,12 @@ class PrefixDetailsBloc extends Cubit<PrefixDetailsState> {
             return;
           }
 
-          emit(state.copyWith(pinnedExecutables: newPinnedExecutables));
+          emit(
+            state.copyWith(
+              pinnedExecutables: newPinnedExecutables,
+              oldPinnedExecutablesGetter: () => state.pinnedExecutables,
+            ),
+          );
         })
         .catchError((e, stackTrace) {
           logger.e(
@@ -95,7 +99,12 @@ class PrefixDetailsBloc extends Cubit<PrefixDetailsState> {
             return;
           }
 
-          emit(state.copyWith(pinnedExecutables: newPinnedExecutables));
+          emit(
+            state.copyWith(
+              pinnedExecutables: newPinnedExecutables,
+              oldPinnedExecutablesGetter: () => state.pinnedExecutables,
+            ),
+          );
         })
         .catchError((e, stackTrace) {
           logger.e(
@@ -106,5 +115,9 @@ class PrefixDetailsBloc extends Cubit<PrefixDetailsState> {
         });
 
     return _lastPinUnpinOperationCompletion;
+  }
+
+  void forgetOldPinnedExecutables() {
+    emit(state.copyWith(oldPinnedExecutablesGetter: () => null));
   }
 }

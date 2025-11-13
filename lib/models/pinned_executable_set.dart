@@ -110,7 +110,7 @@ class PinnedExecutableSet extends Equatable {
       }
     }
 
-    pinnedExecutables.sort((a, b) => a.label.compareTo(b.label));
+    pinnedExecutables.sort();
 
     return PinnedExecutableSet._(
       pinsDir: pinsDir,

@@ -25,7 +25,8 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 
 @immutable
-class PinnedExecutable extends Equatable {
+class PinnedExecutable extends Equatable
+    implements Comparable<PinnedExecutable> {
   /// Inside this directory we have a pin.json file carrying the rest of our fields,
   /// and also the icon.png file if [hasIcon] is true.
   final String pinDirectory;
@@ -54,6 +55,17 @@ class PinnedExecutable extends Equatable {
     windowsPathToExecutable,
     hasIcon,
   ];
+
+  /// Compares by [label] and then by [windowsPathToExecutable].
+  @override
+  int compareTo(PinnedExecutable other) {
+    final labelComp = label.compareTo(other.label);
+    if (labelComp != 0) {
+      return labelComp;
+    }
+
+    return windowsPathToExecutable.compareTo(other.windowsPathToExecutable);
+  }
 
   static Future<PinnedExecutable> loadFromPinDirectory(
     String pinDirectory,

@@ -21,6 +21,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -183,21 +184,80 @@ class WinePrefixPage extends StatelessWidget {
     required PrefixDetailsState state,
     required ColorScheme colorScheme,
   }) {
-    return state.pinnedExecutables.pinnedExecutablesOrderedByLabel.map((
-      pinnedExecutable,
-    ) {
-      return _buildPinnedExecutableWidget(
-        context: context,
-        pinnedExecutable: pinnedExecutable,
-        colorScheme: colorScheme,
+    final widgets = <Widget>[];
+
+    final newItemsIter = _PinnedExecutablesIter(
+      state.pinnedExecutables.pinnedExecutablesOrderedByLabel,
+    );
+
+    final oldItemsIter = _PinnedExecutablesIter(
+      state.oldPinnedExecutables?.pinnedExecutablesOrderedByLabel ??
+          Iterable<PinnedExecutable>.empty(),
+    );
+
+    final haveOldSet = state.oldPinnedExecutables != null;
+
+    void addItem(
+      PinnedExecutable pinnedExecutable, {
+      required bool presentInOldSet,
+      required bool presentInNewSet,
+    }) {
+      _PinnedItemStatus itemStatus = _PinnedItemStatus.normal;
+      if (!presentInOldSet && haveOldSet) {
+        itemStatus = _PinnedItemStatus.justAdded;
+      } else if (!presentInNewSet) {
+        itemStatus = _PinnedItemStatus.justRemoved;
+      }
+
+      widgets.add(
+        _buildPinnedExecutableWidget(
+          context: context,
+          pinnedExecutable: pinnedExecutable,
+          colorScheme: colorScheme,
+          itemStatus: itemStatus,
+        ),
       );
-    }).toList();
+    }
+
+    // Below is essentially the merge part of merge sort.
+
+    while (newItemsIter.element != null && oldItemsIter.element != null) {
+      final newItem = newItemsIter.element!;
+      final oldItem = oldItemsIter.element!;
+      final comp = newItem.compareTo(oldItem);
+      if (comp < 0) {
+        addItem(newItem, presentInOldSet: false, presentInNewSet: true);
+        newItemsIter.next();
+      } else if (comp > 0) {
+        addItem(oldItem, presentInOldSet: true, presentInNewSet: false);
+        oldItemsIter.next();
+      } else {
+        addItem(newItem, presentInOldSet: true, presentInNewSet: true);
+        oldItemsIter.next();
+        newItemsIter.next();
+      }
+    }
+
+    while (newItemsIter.element != null) {
+      final newItem = newItemsIter.element!;
+      addItem(newItem, presentInOldSet: false, presentInNewSet: true);
+      newItemsIter.next();
+    }
+
+    while (oldItemsIter.element != null) {
+      final oldItem = oldItemsIter.element!;
+      addItem(oldItem, presentInOldSet: true, presentInNewSet: false);
+      oldItemsIter.next();
+    }
+
+    return widgets;
   }
 
   Widget _buildPinnedExecutableWidget({
     required BuildContext context,
     required PinnedExecutable pinnedExecutable,
     required ColorScheme colorScheme,
+    required _PinnedItemStatus itemStatus,
   }) {
     Widget buildWidgetTree(BuildContext context, PinnedExecutableState state) {
       final bloc = BlocProvider.of<PinnedExecutableBloc>(context);
@@ -206,12 +266,14 @@ class WinePrefixPage extends StatelessWidget {
           ? path.join(pinnedExecutable.pinDirectory, 'icon.png')
           : null;
 
-      return MouseRegion(
+      final widget = MouseRegion(
         cursor: SystemMouseCursors.click,
         onEnter: (_) => bloc.setMouseOver(true),
         onExit: (_) => bloc.setMouseOver(false),
         child: GestureDetector(
-          onTap: () => bloc.launchPinnedExecutable(),
+          onTap: () => itemStatus == _PinnedItemStatus.normal
+              ? bloc.launchPinnedExecutable()
+              : null,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -231,7 +293,9 @@ class WinePrefixPage extends StatelessWidget {
                           color: colorScheme.primary,
                           size: 128.0,
                         ),
-                  if (state.mouseOver && !state.isRunning)
+                  if (state.mouseOver &&
+                      !state.isRunning &&
+                      itemStatus == _PinnedItemStatus.normal)
                     Positioned(
                       key: ValueKey(_PinnedItemElement.unpinAction),
                       top: 0.0,
@@ -253,7 +317,7 @@ class WinePrefixPage extends StatelessWidget {
                         },
                       ),
                     ),
-                  if (state.isRunning)
+                  if (state.isRunning && itemStatus == _PinnedItemStatus.normal)
                     Positioned(
                       key: ValueKey(_PinnedItemElement.killProcessAction),
                       bottom: 0.0,
@@ -306,6 +370,33 @@ class WinePrefixPage extends StatelessWidget {
           ),
         ),
       );
+
+      switch (itemStatus) {
+        case _PinnedItemStatus.normal:
+          return widget;
+        case _PinnedItemStatus.justAdded:
+          return widget
+              .animate(
+                onComplete: (_) {
+                  BlocProvider.of<PrefixDetailsBloc>(
+                    context,
+                  ).forgetOldPinnedExecutables();
+                },
+              )
+              .fadeIn()
+              .scale();
+        case _PinnedItemStatus.justRemoved:
+          return widget
+              .animate(
+                onComplete: (_) {
+                  BlocProvider.of<PrefixDetailsBloc>(
+                    context,
+                  ).forgetOldPinnedExecutables();
+                },
+              )
+              .fadeOut()
+              .scaleXY(end: ScaleEffect.defaultScale);
+      }
     }
 
     return BlocProvider(
@@ -585,6 +676,26 @@ class WinePrefixPage extends StatelessWidget {
     }
   }
 }
+
+class _PinnedExecutablesIter {
+  final Iterator<PinnedExecutable> _it;
+  PinnedExecutable? element;
+
+  _PinnedExecutablesIter(Iterable<PinnedExecutable> iterable)
+    : _it = iterable.iterator {
+    next();
+  }
+
+  void next() {
+    if (_it.moveNext()) {
+      element = _it.current;
+    } else {
+      element = null;
+    }
+  }
+}
+
+enum _PinnedItemStatus { normal, justAdded, justRemoved }
 
 enum _PinnedItemElement {
   icon,
