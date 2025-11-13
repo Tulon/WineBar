@@ -17,22 +17,17 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 
-class RunProcessChip extends StatelessWidget {
-  static const double auxButtonIconSize = 18.0;
-  static const double chipExtraSpaceForAuxButton = 22.0;
-  final Widget? primaryButtonIcon;
-  final Widget primaryButtonLabel;
+class PinExecutableButton extends StatelessWidget {
   final SpecialExecutableState specialExecutableState;
   final void Function()? onPrimaryButtonPressed;
   final void Function()? onKillProcessPressed;
   final void Function()? onViewProcessOutputPressed;
 
-  const RunProcessChip({
+  const PinExecutableButton({
     super.key,
-    required this.primaryButtonIcon,
-    required this.primaryButtonLabel,
     required this.specialExecutableState,
     this.onPrimaryButtonPressed,
     this.onKillProcessPressed,
@@ -41,22 +36,26 @@ class RunProcessChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double extraSpace = 0.0;
-    if (specialExecutableState.isRunning ||
-        specialExecutableState.processOutput != null) {
-      extraSpace = chipExtraSpaceForAuxButton;
-    }
+    final auxButton = _maybeBuildAuxButton(context);
 
     return Stack(
       alignment: AlignmentGeometry.directional(1.0, 0.0),
       children: [
-        ActionChip(
-          avatar: primaryButtonIcon,
-          label: primaryButtonLabel,
-          labelPadding: EdgeInsetsDirectional.only(end: extraSpace),
-          onPressed: onPrimaryButtonPressed,
+        FloatingActionButton.extended(
+          extendedPadding: EdgeInsetsDirectional.only(
+            start: 20.0,
+            end: auxButton == null ? 20.0 : 10.0,
+          ),
+          label: Row(
+            spacing: 4.0,
+            mainAxisSize: MainAxisSize.min,
+            children: [const Text('Pin Executable'), ?auxButton],
+          ),
+          icon: Icon(MdiIcons.pin),
+          onPressed: specialExecutableState.isRunning
+              ? null
+              : onPrimaryButtonPressed,
         ),
-        ?_maybeBuildAuxButton(context),
       ],
     );
   }
@@ -81,7 +80,6 @@ class RunProcessChip extends StatelessWidget {
             onPressed: onKillProcessPressed,
             tooltip: 'Kill process',
             icon: Icon(Icons.cancel_outlined),
-            iconSize: auxButtonIconSize,
             padding: EdgeInsets.zero,
             style: _buttonStyleWithHoverColor(Colors.red),
           ),
@@ -89,7 +87,6 @@ class RunProcessChip extends StatelessWidget {
             onPressed: onViewProcessOutputPressed,
             tooltip: 'View process output',
             icon: Icon(Icons.article),
-            iconSize: auxButtonIconSize,
             padding: EdgeInsets.zero,
             style: _buttonStyleWithHoverColor(
               Theme.of(context).colorScheme.primary,
