@@ -56,15 +56,17 @@ class PinnedExecutable extends Equatable
     hasIcon,
   ];
 
-  /// Compares by [label] and then by [windowsPathToExecutable].
+  /// Compares by lower-cased [label] and then by lower-cased [windowsPathToExecutable].
   @override
   int compareTo(PinnedExecutable other) {
-    final labelComp = label.compareTo(other.label);
+    final labelComp = label.toLowerCase().compareTo(other.label.toLowerCase());
     if (labelComp != 0) {
       return labelComp;
     }
 
-    return windowsPathToExecutable.compareTo(other.windowsPathToExecutable);
+    return windowsPathToExecutable.toLowerCase().compareTo(
+      other.windowsPathToExecutable.toLowerCase(),
+    );
   }
 
   static Future<PinnedExecutable> loadFromPinDirectory(

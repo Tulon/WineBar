@@ -33,7 +33,8 @@ class PinnedExecutableSet extends Equatable {
   /// Corresponds to [WinePrefixDirStructure.pinsDir].
   final String pinsDir;
 
-  final List<PinnedExecutable> pinnedExecutablesOrderedByLabel;
+  /// Naturally ordered by PinnedExecutable.compareTo().
+  final List<PinnedExecutable> orderedPinnedExecutables;
 
   /// Pins are persistent in dictories which names are numbers. This member
   /// stores the largest of those number or 0 if nothing is persisted.
@@ -41,14 +42,14 @@ class PinnedExecutableSet extends Equatable {
 
   const PinnedExecutableSet._({
     required this.pinsDir,
-    required this.pinnedExecutablesOrderedByLabel,
+    required this.orderedPinnedExecutables,
     required this.largestPinNumber,
   });
 
   @override
   List<Object> get props => [
     pinsDir,
-    pinnedExecutablesOrderedByLabel,
+    orderedPinnedExecutables,
     largestPinNumber,
   ];
 
@@ -106,6 +107,9 @@ class PinnedExecutableSet extends Equatable {
             error: e,
             stackTrace: stackTrace,
           );
+          // We choose not to remove such a directory, as who knows: maybe we
+          // are trying to load pinned executables created by a newer version
+          // of the app with an older version?
         }
       }
     }
@@ -114,14 +118,13 @@ class PinnedExecutableSet extends Equatable {
 
     return PinnedExecutableSet._(
       pinsDir: pinsDir,
-      pinnedExecutablesOrderedByLabel: pinnedExecutables,
+      orderedPinnedExecutables: pinnedExecutables,
       largestPinNumber: largestPinNumber,
     );
   }
 
   /// Returns a new PinnedExecutableSet with a new PinnedExecutable either
-  /// added to the list or replacing and existing one having the same
-  /// [PinnedExecutable.windowsPathToExecutable].
+  /// added to the list or replacing and existing one.
   Future<PinnedExecutableSet> copyWithAdditionalPinnedExecutable(
     PinnedExecutable newPinInTempPinDir,
   ) async {
@@ -133,16 +136,19 @@ class PinnedExecutableSet extends Equatable {
       pinDirectory.path,
     );
 
-    final newExecutableLowerCaseLabel = newExecutable.label.toLowerCase();
+    await recursiveDeleteAndLogErrors(
+      Directory(newPinInTempPinDir.pinDirectory),
+    );
+
     final newExecutableLowerCaseExecutablePath = newExecutable
         .windowsPathToExecutable
         .toLowerCase();
 
-    final newPinnedExecutablesOrderedByLabel = <PinnedExecutable>[];
+    final newOrderedPinnedExecutables = <PinnedExecutable>[];
     bool newExecutableAdded = false;
 
     void addNewExecutable() {
-      newPinnedExecutablesOrderedByLabel.add(newExecutable);
+      newOrderedPinnedExecutables.add(newExecutable);
       newExecutableAdded = true;
     }
 
@@ -151,27 +157,37 @@ class PinnedExecutableSet extends Equatable {
     ) async {
       if (existingExecutable.windowsPathToExecutable.toLowerCase() !=
           newExecutableLowerCaseExecutablePath) {
-        newPinnedExecutablesOrderedByLabel.add(existingExecutable);
+        newOrderedPinnedExecutables.add(existingExecutable);
       } else {
+        // The existing executable is the same as the new one, so we
+        // delete the pin directory and don't add this pin to the list.
         await recursiveDeleteAndLogErrors(
           Directory(existingExecutable.pinDirectory),
         );
       }
     }
 
-    for (final existingExecutable in pinnedExecutablesOrderedByLabel) {
+    for (final existingExecutable in orderedPinnedExecutables) {
       if (newExecutableAdded) {
         await maybeAddExistingExecutable(existingExecutable);
       } else {
-        final int comp = existingExecutable.label.toLowerCase().compareTo(
-          newExecutableLowerCaseLabel,
-        );
+        final int comp = existingExecutable.compareTo(newExecutable);
         if (comp > 0) {
+          // This existing executable should go after the new one, so
+          // given that we haven't added the new executable yet, we
+          // add it now, followed by the existing one.
           addNewExecutable();
           await maybeAddExistingExecutable(existingExecutable);
         } else if (comp < 0) {
+          // This existing executable should go before the new one,
+          // so we just add it to the list.
           await maybeAddExistingExecutable(existingExecutable);
         } else {
+          // The new and the existing executables are indistinguishable
+          // from the perspective of sorting order. We try to add them both,
+          // though maybeAddExistingExecutable() is expected to detect the
+          // existing executable is the same as the new one and will delete
+          // the old pin instead of adding it to the list.
           await maybeAddExistingExecutable(existingExecutable);
           addNewExecutable();
         }
@@ -184,7 +200,7 @@ class PinnedExecutableSet extends Equatable {
 
     return PinnedExecutableSet._(
       pinsDir: pinsDir,
-      pinnedExecutablesOrderedByLabel: newPinnedExecutablesOrderedByLabel,
+      orderedPinnedExecutables: newOrderedPinnedExecutables,
       largestPinNumber: pinNumber,
     );
   }
@@ -196,12 +212,12 @@ class PinnedExecutableSet extends Equatable {
         .windowsPathToExecutable
         .toLowerCase();
 
-    final newPinnedExecutablesOrderedByLabel = <PinnedExecutable>[];
+    final newOrderedPinnedExecutables = <PinnedExecutable>[];
 
-    for (final existingExecutable in pinnedExecutablesOrderedByLabel) {
+    for (final existingExecutable in orderedPinnedExecutables) {
       if (existingExecutable.windowsPathToExecutable.toLowerCase() !=
           executableToRemoveLowerCasePath) {
-        newPinnedExecutablesOrderedByLabel.add(existingExecutable);
+        newOrderedPinnedExecutables.add(existingExecutable);
       } else {
         await recursiveDeleteAndLogErrors(
           Directory(existingExecutable.pinDirectory),
@@ -211,7 +227,7 @@ class PinnedExecutableSet extends Equatable {
 
     return PinnedExecutableSet._(
       pinsDir: pinsDir,
-      pinnedExecutablesOrderedByLabel: newPinnedExecutablesOrderedByLabel,
+      orderedPinnedExecutables: newOrderedPinnedExecutables,
       largestPinNumber: largestPinNumber,
     );
   }

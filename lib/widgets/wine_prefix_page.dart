@@ -220,11 +220,11 @@ class WinePrefixPage extends StatelessWidget {
     final widgets = <Widget>[];
 
     final newItemsIter = _PinnedExecutablesIter(
-      state.pinnedExecutables.pinnedExecutablesOrderedByLabel,
+      state.pinnedExecutables.orderedPinnedExecutables,
     );
 
     final oldItemsIter = _PinnedExecutablesIter(
-      state.oldPinnedExecutables?.pinnedExecutablesOrderedByLabel ??
+      state.oldPinnedExecutables?.orderedPinnedExecutables ??
           Iterable<PinnedExecutable>.empty(),
     );
 
