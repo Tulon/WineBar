@@ -20,6 +20,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
+import 'package:winebar/models/prefix_list_event.dart';
 
 import '../blocs/prefix_list/prefix_list_bloc.dart';
 import '../models/wine_prefix.dart';
@@ -43,36 +45,7 @@ class WinePrefixesPage extends StatelessWidget {
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               title: Text('Wine Prefixes'),
             ),
-            body: BlocBuilder<PrefixListBloc, List<WinePrefix>>(
-              builder: (context, prefixes) {
-                return ListView(
-                  children: ListTile.divideTiles(
-                    context: context,
-                    tiles: prefixes.map((prefix) {
-                      return ListTile(
-                        title: Text(prefix.descriptor.name),
-                        enabled: !prefix.isBroken,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 4.0,
-                        ),
-                        leading: _buildPrefixMenuButton(
-                          context: context,
-                          prefix: prefix,
-                        ),
-                        onTap: () => prefix.isBroken
-                            ? null
-                            : _startNavigatingToPrefix(
-                                context: context,
-                                startupData: startupData,
-                                winePrefix: prefix,
-                              ),
-                      );
-                    }).toList(),
-                  ).toList(),
-                );
-              },
-            ),
+            body: _WinePrefixesList(startupData: startupData),
             floatingActionButton: FloatingActionButton.extended(
               label: const Text('Add Wine Prefix'),
               icon: const Icon(Icons.add),
@@ -92,14 +65,137 @@ class WinePrefixesPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class _WinePrefixesList extends StatefulWidget {
+  final StartupData startupData;
+
+  const _WinePrefixesList({required this.startupData});
+
+  @override
+  State<_WinePrefixesList> createState() => _WinePrefixesListState();
+}
+
+class _WinePrefixesListState extends State<_WinePrefixesList> {
+  final GlobalKey<AnimatedListState> _prefixListKey =
+      GlobalKey<AnimatedListState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<PrefixListBloc, PrefixListState>(
+      listener: (context, state) => _reactToPrefixListChanges(state: state),
+      child: _buildAnimatedList(context),
+    );
+  }
+
+  Widget _buildAnimatedList(BuildContext context) {
+    final state = BlocProvider.of<PrefixListBloc>(context).state;
+
+    return AnimatedList.separated(
+      key: _prefixListKey,
+      initialItemCount: state.orderedPrefixes.length,
+      itemBuilder: (context, index, animation) {
+        // It's important to acquire the new state here, as it's subject
+        // to change.
+        final state = BlocProvider.of<PrefixListBloc>(context).state;
+        final prefix = state.orderedPrefixes[index];
+        return _buildPrefixWidget(
+          prefix: prefix,
+          animation: animation,
+          removedPrefix: false,
+        );
+      },
+      separatorBuilder: _buildListSeparator,
+      removedSeparatorBuilder: _buildListSeparator,
+    );
+  }
+
+  void _reactToPrefixListChanges({required PrefixListState state}) {
+    final animatedListState = _prefixListKey.currentState!;
+
+    switch (state.prefixListEvent) {
+      case PrefixAddedEvent evt:
+        animatedListState.insertItem(evt.prefixIndex);
+      case PrefixRemovedEvent evt:
+        animatedListState.removeItem(
+          evt.prefixIndex,
+          (context, animation) => _buildPrefixWidget(
+            prefix: evt.removedPrefix,
+            animation: animation,
+            removedPrefix: true,
+          ),
+        );
+      case null:
+    }
+
+    if (state.prefixListEvent != null) {
+      // This prevents a repeat reaction to the same event, should a widget
+      // be rebuilt for an unrelated reason.
+      BlocProvider.of<PrefixListBloc>(context).clearPrefixListEvent();
+    }
+  }
+
+  Widget _buildListSeparator(
+    BuildContext context,
+    int index,
+    Animation<double> animation,
+  ) {
+    return FadeTransition(
+      opacity: animation,
+      child: SizeTransition(
+        sizeFactor: animation,
+        axisAlignment: 0.0,
+        child: Divider(height: 4.0),
+      ),
+    );
+  }
+
+  Widget _buildPrefixWidget({
+    required WinePrefix prefix,
+    required Animation<double> animation,
+    required bool removedPrefix,
+  }) {
+    return FadeTransition(
+      opacity: animation,
+      child: SizeTransition(
+        sizeFactor: animation,
+        axisAlignment: 0.0,
+        child: ListTile(
+          title: Text(prefix.descriptor.name),
+          enabled: !prefix.isBroken,
+          contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          leading: _buildPrefixMenuButton(
+            context: context,
+            prefix: prefix,
+            removedPrefix: removedPrefix,
+          ),
+          onTap: () => prefix.isBroken || removedPrefix
+              ? null
+              : _startNavigatingToPrefix(
+                  context: context,
+                  startupData: widget.startupData,
+                  winePrefix: prefix,
+                ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildPrefixMenuButton({
     required BuildContext context,
     required WinePrefix prefix,
+    required bool removedPrefix,
   }) {
+    if (removedPrefix) {
+      return IconButton(icon: const Icon(Icons.more_vert), onPressed: null);
+    }
+
     return MenuAnchor(
       menuChildren: <Widget>[
         MenuItemButton(
+          // See here: https://stackoverflow.com/a/78692532
+          requestFocusOnHover: false,
+
           leadingIcon: const Icon(Icons.delete_outlined),
           child: const Text('Delete'),
           onPressed: () =>

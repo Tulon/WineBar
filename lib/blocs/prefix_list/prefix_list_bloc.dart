@@ -23,39 +23,63 @@ import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
 import 'package:winebar/models/pinned_executable_set.dart';
+import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 
 import '../../models/wine_prefix.dart';
 
-class PrefixListBloc extends Cubit<List<WinePrefix>> {
+class PrefixListBloc extends Cubit<PrefixListState> {
   final logger = GetIt.I.get<Logger>();
+
+  /// Prefix deletion operations are asynchronous but need to be executed
+  /// sequentially. This future corresponds to the completion of the last
+  /// of them.
+  var _lastPrefixDeletionOperationCompletion = Future<void>.value();
 
   CancelableOperation<PinnedExecutableSet>? _ongoingPinnedExecutablesLoadingOp;
 
-  PrefixListBloc(super.initialState);
+  PrefixListBloc(List<WinePrefix> prefixes)
+    : super(PrefixListState.initialState(prefixes: prefixes));
 
-  void addPrefix(WinePrefix prefix) {
-    emit([...state, prefix]);
+  /// See the docs for [PrefixListState.prefixListEvent] for why we need
+  /// such a method and when to call it.
+  void clearPrefixListEvent() {
+    emit(state.copyWith(prefixListEventGetter: () => null));
+  }
+
+  void addPrefix(WinePrefix newPrefix) {
+    emit(state.copyWithAdditionalPrefix(newPrefix));
   }
 
   void startDeletingPrefix(WinePrefix prefixToDelete) {
-    unawaited(
-      _deletePrefixDirectory(prefixToDelete)
-          .then((_) {
-            emit(state.where((prefix) => prefix != prefixToDelete).toList());
-          })
-          .onError((e, stackTrace) {
-            logger.e(
-              'Failed to delete wine prefix "${prefixToDelete.descriptor.name}"',
-              error: e,
-              stackTrace: stackTrace,
-            );
-          }),
-    );
+    unawaited(_deletePrefix(prefixToDelete));
   }
 
-  Future<void> _deletePrefixDirectory(WinePrefix prefix) async {
-    await Directory(prefix.dirStructure.outerDir).delete(recursive: true);
+  Future<void> _deletePrefix(WinePrefix prefixToDelete) async {
+    _lastPrefixDeletionOperationCompletion = _lastPrefixDeletionOperationCompletion
+        .then((_) async {
+          await recursiveDeleteAndLogErrors(
+            Directory(prefixToDelete.dirStructure.outerDir),
+          );
+
+          if (isClosed) {
+            return;
+          }
+
+          emit(
+            state.copyWithPrefixRemoved(
+              prefixOuterDir: prefixToDelete.dirStructure.outerDir,
+            ),
+          );
+        })
+        .catchError((e, stackTrace) {
+          logger.e(
+            'Failed to delete prefix at ${prefixToDelete.dirStructure.outerDir}',
+            error: e,
+            stackTrace: stackTrace,
+          );
+        });
   }
 
   Future<PinnedExecutableSet?> startLoadingPinnedExecutablesFor(

@@ -26,7 +26,7 @@ import '../utils/prefix_descriptor.dart';
 typedef WinePrefixCreatedCallback = void Function(WinePrefix prefix);
 
 @immutable
-class WinePrefix extends Equatable {
+class WinePrefix extends Equatable implements Comparable<WinePrefix> {
   final WinePrefixDirStructure dirStructure;
   final PrefixDescriptor descriptor;
 
@@ -44,4 +44,15 @@ class WinePrefix extends Equatable {
 
   @override
   List<Object> get props => [dirStructure, descriptor];
+
+  /// Compares by [PrefixDescriptor.name] and then by [WinePrefixDirStructure.outerDir].
+  @override
+  int compareTo(WinePrefix other) {
+    final nameComp = descriptor.name.compareTo(other.descriptor.name);
+    if (nameComp != 0) {
+      return nameComp;
+    }
+
+    return dirStructure.outerDir.compareTo(other.dirStructure.outerDir);
+  }
 }
