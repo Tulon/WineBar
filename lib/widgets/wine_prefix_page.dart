@@ -637,5 +637,3 @@ enum _PinnedItemElement {
   unpinAction,
   killProcessAction,
 }
-
-enum _PinButtonElement { icon, killProcessButton, viewLogsButton }
