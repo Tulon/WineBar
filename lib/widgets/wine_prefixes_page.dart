@@ -20,8 +20,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
 import 'package:winebar/models/prefix_list_event.dart';
+import 'package:winebar/repositories/running_pinned_executables_repo.dart';
+import 'package:winebar/repositories/running_special_executables_repo.dart';
 
 import '../blocs/prefix_list/prefix_list_bloc.dart';
 import '../models/wine_prefix.dart';
@@ -248,8 +251,12 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
               icon: const Icon(Icons.delete_outlined),
               label: const Text('Delete'),
               onPressed: () {
-                bloc.startDeletingPrefix(prefix);
                 Navigator.of(context).pop();
+                _startDeletingPrefixUnlessAppsAreRunningThere(
+                  context: context,
+                  prefix: prefix,
+                  bloc: bloc,
+                );
               },
             ),
             TextButton(
@@ -262,6 +269,75 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
         );
       },
     );
+  }
+
+  Future<void> _showUnableToDeletePrefixDialog({
+    required BuildContext context,
+    required WinePrefix prefix,
+    required Widget body,
+  }) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Unable to delete prefix'),
+          content: body,
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _startDeletingPrefixUnlessAppsAreRunningThere({
+    required BuildContext context,
+    required WinePrefix prefix,
+    required PrefixListBloc bloc,
+  }) {
+    final runningPinnedExecutablesRepo = GetIt.I
+        .get<RunningPinnedExecutablesRepo>();
+    final runningSpecialExecutablesRepo = GetIt.I
+        .get<RunningSpecialExecutablesRepo>();
+
+    final numPinnedExecutablesRunning = runningPinnedExecutablesRepo
+        .numProcessesRunningInPrefix(prefix);
+    final numSpecialExecutablesRunning = runningSpecialExecutablesRepo
+        .numProcessesRunningInPrefix(prefix);
+
+    if (numPinnedExecutablesRunning + numSpecialExecutablesRunning == 0) {
+      bloc.startDeletingPrefix(prefix);
+    } else {
+      final colorScheme = Theme.of(context).colorScheme;
+
+      final body = RichText(
+        text: TextSpan(
+          style: TextStyle(color: colorScheme.onSurface),
+          children: [
+            TextSpan(text: 'Failed to delete prefix '),
+            TextSpan(
+              text: prefix.descriptor.name,
+              style: TextStyle(color: colorScheme.primary),
+            ),
+            TextSpan(text: ' as apps are still running there.'),
+          ],
+        ),
+      );
+
+      unawaited(
+        _showUnableToDeletePrefixDialog(
+          context: context,
+          prefix: prefix,
+          body: body,
+        ),
+      );
+    }
   }
 
   static void _startNavigatingToPrefix({

@@ -21,7 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/repositories/running_pinned_executables_repo.dart';
-import 'package:winebar/repositories/running_pinned_executables_repo_impl.dart';
 import 'package:winebar/repositories/running_special_executables_repo.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/services/winetricks_download_service_impl.dart';
@@ -55,7 +54,7 @@ void main() {
     WinetricksDownloadServiceImpl(dio: dio),
   );
   GetIt.I.registerSingleton<RunningPinnedExecutablesRepo>(
-    RunningPinnedExecutablesRepoImpl(),
+    RunningPinnedExecutablesRepo(),
   );
   GetIt.I.registerSingleton<RunningSpecialExecutablesRepo>(
     RunningSpecialExecutablesRepo(),

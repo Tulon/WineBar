@@ -16,19 +16,72 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 
 abstract interface class RunningPinnedExecutablesRepo {
-  void add({
+  factory RunningPinnedExecutablesRepo() {
+    return _RunningPinnedExecutablesRepo();
+  }
+
+  void addRunningProcess({
     required WinePrefix prefix,
     required PinnedExecutable pinnedExecutable,
     required WineProcess wineProcess,
   });
 
-  WineProcess? tryFind({
+  WineProcess? tryFindRunningProcess({
     required WinePrefix prefix,
     required PinnedExecutable pinnedExecutable,
   });
+
+  int numProcessesRunningInPrefix(WinePrefix prefix);
+}
+
+typedef _RunningExecutablesInPrefix = Map<PinnedExecutable, WineProcess>;
+
+class _RunningPinnedExecutablesRepo implements RunningPinnedExecutablesRepo {
+  final runningExecutablesByPrefix =
+      <WinePrefix, _RunningExecutablesInPrefix>{};
+
+  @override
+  void addRunningProcess({
+    required WinePrefix prefix,
+    required PinnedExecutable pinnedExecutable,
+    required WineProcess wineProcess,
+  }) {
+    var runningExecutablesInPrefix = runningExecutablesByPrefix[prefix];
+    if (runningExecutablesInPrefix == null) {
+      runningExecutablesInPrefix = _RunningExecutablesInPrefix();
+      runningExecutablesByPrefix[prefix] = runningExecutablesInPrefix;
+    }
+
+    runningExecutablesInPrefix[pinnedExecutable] = wineProcess;
+
+    // Remove it when WineProcess has finished.
+    unawaited(
+      wineProcess.result.whenComplete(() {
+        runningExecutablesInPrefix!.remove(pinnedExecutable);
+        if (runningExecutablesInPrefix.isEmpty) {
+          runningExecutablesByPrefix.remove(prefix);
+        }
+      }),
+    );
+  }
+
+  @override
+  WineProcess? tryFindRunningProcess({
+    required WinePrefix prefix,
+    required PinnedExecutable pinnedExecutable,
+  }) {
+    return runningExecutablesByPrefix[prefix]?[pinnedExecutable];
+  }
+
+  @override
+  int numProcessesRunningInPrefix(WinePrefix prefix) {
+    return runningExecutablesByPrefix[prefix]?.length ?? 0;
+  }
 }

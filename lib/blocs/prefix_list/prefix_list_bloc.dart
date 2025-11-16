@@ -49,6 +49,13 @@ class PrefixListBloc extends Cubit<PrefixListState> {
   }
 
   void addPrefix(WinePrefix newPrefix) {
+    // Just in case such prefix was already there.
+    emit(
+      state.copyWithPrefixRemoved(
+        prefixOuterDir: newPrefix.dirStructure.outerDir,
+      ),
+    );
+
     emit(state.copyWithAdditionalPrefix(newPrefix));
   }
 

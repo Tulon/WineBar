@@ -32,16 +32,18 @@ abstract interface class RunningSpecialExecutablesRepo {
     return _RunningSpecialExecutablesRepo();
   }
 
-  void add({
+  void addRunningProcess({
     required WinePrefix prefix,
     required SpecialExecutableSlot executableSlot,
     required WineProcess wineProcess,
   });
 
-  WineProcess? tryFind({
+  WineProcess? tryFindRunningProcess({
     required WinePrefix prefix,
     required SpecialExecutableSlot executableSlot,
   });
+
+  int numProcessesRunningInPrefix(WinePrefix prefix);
 }
 
 typedef _RunningExecutablesInPrefix = Map<SpecialExecutableSlot, WineProcess>;
@@ -51,7 +53,7 @@ class _RunningSpecialExecutablesRepo implements RunningSpecialExecutablesRepo {
       <WinePrefix, _RunningExecutablesInPrefix>{};
 
   @override
-  void add({
+  void addRunningProcess({
     required WinePrefix prefix,
     required SpecialExecutableSlot executableSlot,
     required WineProcess wineProcess,
@@ -76,10 +78,15 @@ class _RunningSpecialExecutablesRepo implements RunningSpecialExecutablesRepo {
   }
 
   @override
-  WineProcess? tryFind({
+  WineProcess? tryFindRunningProcess({
     required WinePrefix prefix,
     required SpecialExecutableSlot executableSlot,
   }) {
     return runningExecutablesByPrefix[prefix]?[executableSlot];
+  }
+
+  @override
+  int numProcessesRunningInPrefix(WinePrefix prefix) {
+    return runningExecutablesByPrefix[prefix]?.length ?? 0;
   }
 }
