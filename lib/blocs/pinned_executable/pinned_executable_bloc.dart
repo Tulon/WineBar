@@ -164,10 +164,16 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
           pinnedExecutable.windowsPathToExecutable,
         ),
       ),
-      envVars: wineInstDescriptor.getEnvVarsForWine(
-        prefixDirStructure: winePrefix.dirStructure,
-        tempDir: startupData.localStoragePaths.tempDir,
-      ),
+      envVars: {
+        ...wineInstDescriptor.getEnvVarsForWine(
+          prefixDirStructure: winePrefix.dirStructure,
+          tempDir: startupData.localStoragePaths.tempDir,
+        ),
+
+        // For maximum performance, we disable capturing logs from pinned
+        // executables.
+        'LOG_CAPTURING_RUNNER_DISABLE_LOGGING': '1',
+      },
     );
 
     return wineProcess;

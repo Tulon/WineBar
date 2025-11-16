@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:winebar/models/process_log.dart';
 
 import '../blocs/process_output_view/process_output_view_bloc.dart';
 import '../blocs/process_output_view/process_output_view_state.dart';
@@ -35,14 +36,96 @@ class ProcessOutputWidget extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => ProcessOutputViewBloc(processOutput: processOutput),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: colorScheme.inversePrimary,
-          title: const Text('Process Output'),
-          actionsPadding: EdgeInsetsGeometry.symmetric(horizontal: 8.0),
-          actions: [
-            BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
-              builder: (context, state) {
+      child: BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: colorScheme.inversePrimary,
+              title: const Text('Process Output'),
+              actionsPadding: EdgeInsetsGeometry.symmetric(horizontal: 8.0),
+              actions: [_buildLogSelectionControls(context)],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
+                builder: (context, state) {
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: IndexedStack(
+                          sizing: StackFit.expand,
+                          index:
+                              state.selectedLogIndex ??
+                              state.processOutput.logs.length,
+                          children: [
+                            ...state.processOutput.logs.map(
+                              (log) => SelectableText(
+                                log.content,
+                                style: TextStyle(fontFamily: 'monospace'),
+                              ),
+                            ),
+                            Center(
+                              child: Text(
+                                'No logs were captured from this process',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLogSelectionControls(BuildContext context) {
+    return BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
+      builder: (context, state) {
+        return Wrap(
+          spacing: 4.0,
+          runSpacing: 4.0,
+          children: state.processOutput.logs
+              .asMap()
+              .entries
+              .map<Widget>(
+                (entry) => _buildLogSelectionChip(
+                  context: context,
+                  state: state,
+                  index: entry.key,
+                  log: entry.value,
+                ),
+              )
+              .toList(),
+        );
+      },
+    );
+  }
+
+  Widget _buildLogSelectionChip({
+    required BuildContext context,
+    required ProcessOutputViewState state,
+    required int index,
+    required ProcessLog log,
+  }) {
+    return ChoiceChip(
+      label: Text(log.name),
+      selected: state.selectedLogIndex == index,
+      onSelected: (bool selected) {
+        if (selected) {
+          BlocProvider.of<ProcessOutputViewBloc>(
+            context,
+          ).setSelectedLogIndex(index);
+        }
+      },
+    );
+    /*
                 return SegmentedButton<int>(
                   showSelectedIcon: false,
                   segments: state.processOutput.logs
@@ -67,43 +150,6 @@ class ProcessOutputWidget extends StatelessWidget {
                 );
               },
             ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
-            builder: (context, state) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: IndexedStack(
-                      sizing: StackFit.expand,
-                      index:
-                          state.selectedLogIndex ??
-                          state.processOutput.logs.length,
-                      children: [
-                        ...state.processOutput.logs.map(
-                          (log) => SelectableText(
-                            log.content,
-                            style: TextStyle(fontFamily: 'monospace'),
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            'No logs were captured from this process',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
-    );
+            */
   }
 }

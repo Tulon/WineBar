@@ -18,9 +18,11 @@
 
 #pragma once
 
+#include <stdbool.h>
+
 typedef struct Log Log;
 
-Log* logOpenFile(char const* outDir, char const* fileName);
+Log* logOpenFile(char const* outDir, char const* fileName, bool disableLogging);
 
 void logPrintf(Log* log, char const* format, ...) __attribute__((format(printf, 2, 3)));
 

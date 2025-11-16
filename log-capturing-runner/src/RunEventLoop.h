@@ -20,6 +20,7 @@
 
 #include "Log.h"
 
+#include <stdbool.h>
 #include <unistd.h>
 
 /**
@@ -41,8 +42,11 @@
  * @param signalFd The file descriptor returned from signalfd() through which we expect to
  *        be notified of SIGCHLD and SIGTERM signals.
  * @param log The log object.
+ * @param disableLogCapture If set to true, disables capturing stdout / stderr from the
+ *        child process.
  * @return The exit code of the child process.
  */
 int runEventLoop(
     char const* outDir, char* wineserverExecutablePath, pid_t mainChildPid,
-    int mainChildStdoutReadFd, int mainChildStderrReadFd, int signalFd, Log* log);
+    int mainChildStdoutReadFd, int mainChildStderrReadFd, int signalFd, Log* log,
+    bool disableLogCapture);

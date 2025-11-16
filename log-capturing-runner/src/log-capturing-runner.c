@@ -102,7 +102,10 @@ main(int argc, char* argv[])
         return exitCode;
     }
 
-    Log* log = logOpenFile(outDir, "log-capturing-runner.txt");
+    char const* const disableLoggingEnvVar = getenv("LOG_CAPTURING_RUNNER_DISABLE_LOGGING");
+    bool const disableLogging = disableLoggingEnvVar && atoi(disableLoggingEnvVar) != 0;
+
+    Log* log = logOpenFile(outDir, "log-capturing-runner.txt", disableLogging);
     if (!log)
     {
         return exitCode;
@@ -161,7 +164,7 @@ main(int argc, char* argv[])
 
     exitCode = runEventLoop(
         outDir, wineserverExecutablePath, spawnedProcess.pid, spawnedProcess.stdoutPipeFd,
-        spawnedProcess.stderrPipeFd, signalFd, log);
+        spawnedProcess.stderrPipeFd, signalFd, log, disableLogging);
 
     return exitCode;
 

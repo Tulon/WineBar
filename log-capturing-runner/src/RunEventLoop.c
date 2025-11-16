@@ -88,8 +88,11 @@ typedef struct EventLoopContext
 
     char* wineserverExecutablePath;
 
+    // Note: these members won't be initialized if disableLogCapture is set to false.
     StdioStream stdoutStream;
     StdioStream stderrStream;
+
+    bool disableLogCapture;
 } EventLoopContext;
 
 static bool
@@ -117,7 +120,7 @@ freeStdioStream(StdioStream* stream)
 static EventLoopContext*
 eventLoopContextNew(
     char const* outDir, char* wineserverExecutablePath, pid_t mainChildPid,
-    int mainChildStdoutReadFd, int mainChildStderrReadFd, int signalFd)
+    int mainChildStdoutReadFd, int mainChildStderrReadFd, int signalFd, bool disableLogCapture)
 {
     EventLoopContext* ctx = malloc(sizeof(EventLoopContext));
     if (!ctx)
@@ -136,14 +139,19 @@ eventLoopContextNew(
     ctx->wineserverKChildPid = -1;
     ctx->wineserverExecutablePath = wineserverExecutablePath;
 
-    if (!initStdioStream(&ctx->stdoutStream, "stdout.txt"))
-    {
-        goto skip_free_stdout_stream;
-    }
+    ctx->disableLogCapture = disableLogCapture;
 
-    if (!initStdioStream(&ctx->stderrStream, "stderr.txt"))
+    if (!disableLogCapture)
     {
-        goto skip_free_stderr_stream;
+        if (!initStdioStream(&ctx->stdoutStream, "stdout.txt"))
+        {
+            goto skip_free_stdout_stream;
+        }
+
+        if (!initStdioStream(&ctx->stderrStream, "stderr.txt"))
+        {
+            goto skip_free_stderr_stream;
+        }
     }
 
     return ctx;
@@ -163,8 +171,11 @@ skip_free_context:
 static void
 eventLoopContextFree(EventLoopContext* ctx)
 {
-    freeStdioStream(&ctx->stderrStream);
-    freeStdioStream(&ctx->stdoutStream);
+    if (!ctx->disableLogCapture)
+    {
+        freeStdioStream(&ctx->stderrStream);
+        freeStdioStream(&ctx->stdoutStream);
+    }
     free(ctx);
 }
 
@@ -467,6 +478,11 @@ msTillWriteToDisk(StdioStream const* stream, struct timespec now)
 static int
 computePollTimeoutMs(EventLoopContext const* ctx)
 {
+    if (ctx->disableLogCapture)
+    {
+        return -1; // No timeout.
+    }
+
     struct timespec const now = monotonicTimeNow();
 
     int64_t const msTillWriteStdout = msTillWriteToDisk(&ctx->stdoutStream, now);
@@ -504,7 +520,8 @@ maybeWriteStdioStreamToDisk(
 int
 runEventLoop(
     char const* outDir, char* wineserverExecutablePath, pid_t mainChildPid,
-    int mainChildStdoutReadFd, int mainChildStderrReadFd, int signalFd, Log* log)
+    int mainChildStdoutReadFd, int mainChildStderrReadFd, int signalFd, Log* log,
+    bool disableLogCapture)
 {
     enum
     {
@@ -518,14 +535,14 @@ runEventLoop(
 
     pollFds[SIGNAL_FD_IDX].fd = signalFd;
     pollFds[SIGNAL_FD_IDX].events = POLLIN;
-    pollFds[STDOUT_READ_FD_IDX].fd = mainChildStdoutReadFd;
+    pollFds[STDOUT_READ_FD_IDX].fd = disableLogCapture ? -1 : mainChildStdoutReadFd;
     pollFds[STDOUT_READ_FD_IDX].events = POLLIN;
-    pollFds[STDERR_READ_FD_IDX].fd = mainChildStderrReadFd;
+    pollFds[STDERR_READ_FD_IDX].fd = disableLogCapture ? -1 : mainChildStderrReadFd;
     pollFds[STDERR_READ_FD_IDX].events = POLLIN;
 
     EventLoopContext* ctx = eventLoopContextNew(
         outDir, wineserverExecutablePath, mainChildPid, mainChildStdoutReadFd,
-        mainChildStderrReadFd, signalFd);
+        mainChildStderrReadFd, signalFd, disableLogCapture);
     if (!ctx)
     {
         return EXIT_FAILURE;
@@ -559,26 +576,35 @@ runEventLoop(
 
             if (pollRes > 0)
             {
-                processStreamEvents(ctx, &ctx->stdoutStream, &pollFds[STDOUT_READ_FD_IDX], log);
-                processStreamEvents(ctx, &ctx->stderrStream, &pollFds[STDERR_READ_FD_IDX], log);
+                if (!ctx->disableLogCapture)
+                {
+                    processStreamEvents(ctx, &ctx->stdoutStream, &pollFds[STDOUT_READ_FD_IDX], log);
+                    processStreamEvents(ctx, &ctx->stderrStream, &pollFds[STDERR_READ_FD_IDX], log);
+                }
                 processSignalFdEvents(ctx, &pollFds[SIGNAL_FD_IDX], log);
             }
 
-            // Q: Why can't we simply write stdout.txt / stderr.txt once on exit?
-            // A: When we run under muvm and the user terminates the muvm process,
-            //    we get terminated in a way that doesn't let us react in any way.
-            //    Without periodic proactive writes, we'd have no logs at all in
-            //    such a case.
-            struct timespec const now = monotonicTimeNow();
-            maybeWriteStdioStreamToDisk(ctx, &ctx->stdoutStream, &now);
-            maybeWriteStdioStreamToDisk(ctx, &ctx->stderrStream, &now);
+            if (!disableLogCapture)
+            {
+                // Q: Why can't we simply write stdout.txt / stderr.txt once on exit?
+                // A: When we run under muvm and the user terminates the muvm process,
+                //    we get terminated in a way that doesn't let us react in any way.
+                //    Without periodic proactive writes, we'd have no logs at all in
+                //    such a case.
+                struct timespec const now = monotonicTimeNow();
+                maybeWriteStdioStreamToDisk(ctx, &ctx->stdoutStream, &now);
+                maybeWriteStdioStreamToDisk(ctx, &ctx->stderrStream, &now);
+            }
         }
     }
 
     writeExitStatus(ctx->mainChildExitCode, ctx->outDir, "status.txt", log);
 
-    maybeWriteStdioStreamToDisk(ctx, &ctx->stdoutStream, NULL);
-    maybeWriteStdioStreamToDisk(ctx, &ctx->stderrStream, NULL);
+    if (!disableLogCapture)
+    {
+        maybeWriteStdioStreamToDisk(ctx, &ctx->stdoutStream, NULL);
+        maybeWriteStdioStreamToDisk(ctx, &ctx->stderrStream, NULL);
+    }
 
     int const mainChildExitCode = ctx->mainChildExitCode;
 

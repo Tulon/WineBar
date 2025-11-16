@@ -53,12 +53,18 @@ markAsCloexec(FILE* file)
 }
 
 Log*
-logOpenFile(char const* outDir, char const* fileName)
+logOpenFile(char const* outDir, char const* fileName, bool disableLogging)
 {
     Log* log = malloc(sizeof(Log));
     if (!log)
     {
         return NULL;
+    }
+
+    if (disableLogging)
+    {
+        log->file = NULL;
+        return log;
     }
 
     size_t const outDirLen = strlen(outDir);
