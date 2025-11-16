@@ -559,11 +559,13 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
         label: Text('$scale'),
         avatar: !selected && isPerfectScale(scale) ? Icon(Icons.star) : null,
         selected: selected,
-        onSelected: (bool selected) {
-          if (selected) {
-            bloc.setHiDpiScale(scale);
-          }
-        },
+        onSelected: state.prefixCreationStatus.isInProgress
+            ? null
+            : (bool selected) {
+                if (selected) {
+                  bloc.setHiDpiScale(scale);
+                }
+              },
       );
     }
 
