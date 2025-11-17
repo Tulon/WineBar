@@ -18,20 +18,13 @@
 
 #pragma once
 
-#include "OwnedTypes.h"
-
-#include <windows.h>
+#include <string_view>
 
 /**
- * Retrieves an icon associated with a given file, similar to how Windows Explorer does that.
- *
- * @param filePath A Windows (not Unix) file path to get an icon for.
- * @param iconResolution The returned icon shall have a resolution of
- *        iconResolution x iconResolution pixels, possibly as a result
- *        of rescaling.
- *
- * @return An HICON wrapped into an unique_ptr. It shall never be null.
+ * Writes a pin.json file to the specified directory holding the provided information.
  *
  * @throw WStringException If anything goes wrong.
  */
-OwnedIcon iconForFile(wchar_t const* filePath, int desiredIconDim);
+void writePinJson(
+    std::wstring_view pinDirectory, std::wstring_view label,
+    std::wstring_view windowsPathToExecutable, bool hasIcon);

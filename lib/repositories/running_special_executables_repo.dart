@@ -23,7 +23,7 @@ import 'package:winebar/services/wine_process_runner_service.dart';
 
 enum SpecialExecutableSlot {
   customExecutable,
-  runAndPinExecutable,
+  runInstaller,
   winetricksExecutable,
 }
 

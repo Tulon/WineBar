@@ -28,7 +28,7 @@ ExternalProject_Add(
 # directory seems to get re-created on every build.
 install(
     PROGRAMS
-        "${install_dir}/bin-win32/run-and-pin-launcher.exe"
+        "${install_dir}/bin-win32/installer-runner.exe"
         "${install_dir}/bin-win32/pin-executable-info-extractor.exe"
     DESTINATION "${CMAKE_INSTALL_PREFIX}/bin-win32"
     COMPONENT Runtime

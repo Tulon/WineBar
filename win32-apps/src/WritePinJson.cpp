@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "WritePinnedExecutableJson.h"
+#include "WritePinJson.h"
 
 #include "EscapeAndQuoteJsonString.h"
 #include "WStringRuntimeError.h"
@@ -25,7 +25,7 @@
 #include <fstream>
 
 void
-writePinnedExecutableJsonToPinDirectory(
+writePinJson(
     std::wstring_view pinDirectory, std::wstring_view label,
     std::wstring_view windowsPathToExecutable, bool hasIcon)
 {

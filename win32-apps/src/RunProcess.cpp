@@ -25,18 +25,20 @@
 #include <windows.h>
 
 #include <cstdio>
+#include <cstring>
 #include <string>
 
 /**
  * Runs the executable at argv[0], waits for it to exit and returns its exit code.
  */
 int
-runProcess(int argc, wchar_t* argv[])
+runProcess(wchar_t const* windowsExecutable, wchar_t* args[], int numArgs)
 {
     CommandLineBuilder cmdLineBuilder;
-    for (int i = 0; i < argc; ++i)
+    cmdLineBuilder.addArg(windowsExecutable);
+    for (int i = 0; i < numArgs; ++i)
     {
-        cmdLineBuilder.addArg(argv[i]);
+        cmdLineBuilder.addArg(args[i]);
     }
 
     std::wstring commandLine = cmdLineBuilder.retrieveCommandLine();
@@ -52,13 +54,13 @@ runProcess(int argc, wchar_t* argv[])
 
     DWORD flags = 0;
 
-    if (argc > 0 && caseInsensitiveCompare(argv[0], L"start") == 0 ||
-        caseInsensitiveCompare(argv[0], L"start.exe"))
+    if (caseInsensitiveCompare(windowsExecutable, L"start") == 0 ||
+        caseInsensitiveCompare(windowsExecutable, L"start.exe") == 0)
     {
-        // start.exe is a console application, so we need to suppress its windows.
-        // When wine is told to launch start.exe, it seems to suppress the console
-        // on its own. However, in this case, start.exe is started by us, and so
-        // it's up to us to suppress that console window.
+        // start.exe is a console application, so we need to suppress its console
+        // window. When wine is told to launch start.exe, it seems to suppress the
+        // console on its own. However, in this case, start.exe is started by us,
+        // and so it's up to us to suppress it.
         flags |= CREATE_NO_WINDOW;
     }
 
@@ -70,6 +72,23 @@ runProcess(int argc, wchar_t* argv[])
         wprintf(L"CreateProcess failed: %ls\n", errorStringFromErrorCode(errorCode).get());
         return 1;
     }
+
+    // We create a job object in order to automatically kill our child process in case
+    // the parent (us) terminates.
+    HANDLE hJob = CreateJobObjectW(nullptr, nullptr);
+
+    // Configure the job object to kill all the processes associated with it when the
+    // job closes. The job is closed when the last handle to that job is closed. We never
+    // call CloseHandle(hJob), but the handle will be closed automatically when our process
+    // terminates, causing the child process to be terminated as well.
+    JOBOBJECT_EXTENDED_LIMIT_INFORMATION limitInfo;
+    memset(&limitInfo, 0, sizeof(limitInfo));
+    limitInfo.BasicLimitInformation.LimitFlags =
+        JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE | JOB_OBJECT_LIMIT_SILENT_BREAKAWAY_OK;
+    SetInformationJobObject(hJob, JobObjectExtendedLimitInformation, &limitInfo, sizeof(limitInfo));
+
+    // Finally, we assign our child process to the job.
+    AssignProcessToJobObject(hJob, pi.hProcess);
 
     // Wait until child process exits.
     WaitForSingleObject(pi.hProcess, INFINITE);

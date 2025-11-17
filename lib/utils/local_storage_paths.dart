@@ -65,11 +65,11 @@ class LocalStoragePaths {
     );
   }
 
-  static String get runAndPinWin32LauncherPath {
+  static String get installerRunnerPath {
     return path.join(
       Directory(Platform.resolvedExecutable).parent.path,
       'bin-win32',
-      'run-and-pin-launcher.exe',
+      'installer-runner.exe',
     );
   }
 

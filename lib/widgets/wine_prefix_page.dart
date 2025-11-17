@@ -77,8 +77,8 @@ class WinePrefixPage extends StatelessWidget {
             winePrefix: winePrefix,
           ),
         ),
-        BlocProvider<RunAndPinExecutableBloc>(
-          create: (context) => RunAndPinExecutableBloc(
+        BlocProvider<RunInstallerBloc>(
+          create: (context) => RunInstallerBloc(
             startupData: startupData,
             winePrefix: winePrefix,
             processExecutablePinnedInTempDir: (executablePinnedInTempDir) =>
@@ -168,9 +168,8 @@ class WinePrefixPage extends StatelessWidget {
             builder: (context, state) =>
                 _buildRunCustomExecutableChip(context, state),
           ),
-          BlocBuilder<RunAndPinExecutableBloc, SpecialExecutableState>(
-            builder: (context, state) =>
-                _buildRunAndPinExecutableChip(context, state),
+          BlocBuilder<RunInstallerBloc, SpecialExecutableState>(
+            builder: (context, state) => _buildRunInstallerChip(context, state),
           ),
           BlocBuilder<WinetricksExecutableBloc, SpecialExecutableState>(
             builder: (context, state) =>
@@ -512,17 +511,15 @@ class WinePrefixPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRunAndPinExecutableChip(
+  Widget _buildRunInstallerChip(
     BuildContext context,
     SpecialExecutableState state,
   ) {
-    final specialExecutableBloc = BlocProvider.of<RunAndPinExecutableBloc>(
-      context,
-    );
+    final specialExecutableBloc = BlocProvider.of<RunInstallerBloc>(context);
 
     return RunProcessChip(
-      primaryButtonIcon: Icon(MdiIcons.pin),
-      primaryButtonLabel: const Text('Run & Pin Executable'),
+      primaryButtonIcon: Icon(MdiIcons.packageVariantClosedPlus),
+      primaryButtonLabel: const Text('Run Installer'),
       specialExecutableState: state,
       onPrimaryButtonPressed: () => _selectSpecialExecutableToRun(
         context: context,

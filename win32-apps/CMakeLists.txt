@@ -17,10 +17,14 @@ add_library(
     src/CommandLineBuilder.h
     src/DefaultIconSelector.cpp
     src/DefaultIconSelector.h
+    src/EnumerateFilesOnDesktop.cpp
+    src/EnumerateFilesOnDesktop.h
     src/EscapeAndQuoteJsonString.cpp
     src/EscapeAndQuoteJsonString.h
     src/ErrorString.cpp
     src/ErrorString.h
+    src/FillPinDirectory.cpp
+    src/FillPinDirectory.h
     src/IconFromAssociatedApplication.cpp
     src/IconFromAssociatedApplication.h
     src/IconForFile.cpp
@@ -48,8 +52,8 @@ add_library(
     src/UnixToWindowsFilePath.h
     src/WriteIconToPng.cpp
     src/WriteIconToPng.h
-    src/WritePinnedExecutableJson.cpp
-    src/WritePinnedExecutableJson.h
+    src/WritePinJson.cpp
+    src/WritePinJson.h
     src/WStringException.h
     src/WStringRuntimeError.h
 )
@@ -65,7 +69,7 @@ target_compile_options(
         -ffunction-sections -fdata-sections
 )
 
-foreach(target run-and-pin-launcher pin-executable-info-extractor)
+foreach(target installer-runner pin-executable-info-extractor)
     add_executable(
         ${target}
         "src/${target}.cpp"

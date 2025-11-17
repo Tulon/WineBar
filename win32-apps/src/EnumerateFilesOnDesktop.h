@@ -18,13 +18,12 @@
 
 #pragma once
 
-#include <string_view>
+#include <string>
+#include <vector>
 
 /**
- * Writes a json file to the specified directory holding the provided information.
+ * Returns the list files in the Desktop folder. The full paths to files are returned.
  *
- * @throw WStringException If anything goes wrong.
+ * @throw WStringRuntimeError If anything goes wrong.
  */
-void writePinnedExecutableJsonToPinDirectory(
-    std::wstring_view pinDirectory, std::wstring_view label,
-    std::wstring_view windowsPathToExecutable, bool hasIcon);
+std::vector<std::wstring> enumerateFilesOnDesktop();

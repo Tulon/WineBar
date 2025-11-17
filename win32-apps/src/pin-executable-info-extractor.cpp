@@ -17,99 +17,19 @@
  */
 
 #include "CoInitializer.h"
-#include "CommandLineBuilder.h"
-#include "ErrorString.h"
-#include "IconForFile.h"
-#include "IconFromPortableExecutable.h"
-#include "OwnedTypes.h"
+#include "FillPinDirectory.h"
 #include "ScopeCleanup.h"
-#include "SignedIndexIconSelector.h"
 #include "ToWindowsFilePath.h"
 #include "WStringException.h"
-#include "WriteIconToPng.h"
-#include "WritePinnedExecutableJson.h"
 
-#include <shellapi.h>
-#include <shlwapi.h>
 #include <windows.h>
 
+// This one has to go after <windows.h>
+#include <shellapi.h>
+
 #include <cstdio>
-#include <cstring>
 #include <exception>
-#include <format>
 #include <iostream>
-#include <optional>
-
-namespace
-{
-
-bool
-tryExtractIconFromExecutable(
-    wchar_t const* windowsExecutableFilePath, wchar_t const* windowsPngOutputPath)
-{
-    int const iconResolution = 256;
-
-    OwnedIcon icon = makeOwnedIcon();
-
-    try
-    {
-        icon = iconForFile(windowsExecutableFilePath, iconResolution);
-    }
-    catch (WStringException const& e)
-    {
-        std::wcout << e.what() << std::endl;
-    }
-    catch (std::exception const& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-
-    if (!icon)
-    {
-        std::wcout
-            << std::format(
-                   L"Failed to get an icon for {}. Will try to get a default icon instead.",
-                   windowsExecutableFilePath)
-            << std::endl;
-
-        try
-        {
-            SignedIndexIconSelector iconSelector(-(INT_PTR)IDI_WINLOGO);
-            icon = iconFromPortableExecutable(L"user32", iconSelector, iconResolution);
-        }
-        catch (WStringException const& e)
-        {
-            std::wcout << L"Failed to get a default icon: " << e.what() << std::endl;
-        }
-        catch (std::exception const& e)
-        {
-            std::cout << "Failed to get a default icon: " << e.what() << std::endl;
-        }
-    }
-
-    if (!icon)
-    {
-        return false;
-    }
-
-    try
-    {
-        writeIconToPng(icon.get(), windowsPngOutputPath);
-        return true;
-    }
-    catch (WStringException const& e)
-    {
-        std::wcout << e.what() << std::endl;
-    }
-    catch (std::exception const& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-
-    return false;
-}
-
-} // namespace
 
 extern "C"
 {
@@ -136,39 +56,11 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
     wchar_t const* unixPinDir = argv[1];
     wchar_t const* unixOrWindowsExecutable = argv[2];
 
-    static wchar_t const kExtractedIconFileName[] = L"icon.png";
-
     try
     {
-        // Note that for these conversion to succeed, the directoryies / files have to exist.
         auto const windowsPinDir = toWindowsFilePath(unixPinDir);
-        auto const windowsExecutable = toWindowsFilePath(unixOrWindowsExecutable);
 
-        auto const windowsPngOutputPath =
-            std::format(L"{}\\{}", windowsPinDir, kExtractedIconFileName);
-
-        bool const iconExtracted =
-            tryExtractIconFromExecutable(windowsExecutable.c_str(), windowsPngOutputPath.c_str());
-
-        wchar_t const* windowsExecutableFileName = PathFindFileNameW(windowsExecutable.c_str());
-        wchar_t const* windowsExecutableExtension = PathFindExtensionW(windowsExecutableFileName);
-        std::wstring_view const label(windowsExecutableFileName, windowsExecutableExtension);
-
-        try
-        {
-            writePinnedExecutableJsonToPinDirectory(
-                windowsPinDir, label, windowsExecutable, iconExtracted);
-        }
-        catch (WStringException const& e)
-        {
-            std::wcout << e.what() << std::endl;
-            return 1;
-        }
-        catch (std::exception const& e)
-        {
-            std::cout << e.what() << std::endl;
-            return 1;
-        }
+        fillPinDirectory(windowsPinDir.c_str(), unixOrWindowsExecutable);
 
         return 0;
     }

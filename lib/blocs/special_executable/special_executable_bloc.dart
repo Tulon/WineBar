@@ -241,7 +241,7 @@ class PinExecutableBloc extends SpecialExecutableBloc {
 
   @override
   SpecialExecutableSlot get executableSlot =>
-      SpecialExecutableSlot.runAndPinExecutable;
+      SpecialExecutableSlot.runInstaller;
 
   @override
   Future<WineProcessResult> runProcess({
@@ -320,11 +320,11 @@ class PinExecutableBloc extends SpecialExecutableBloc {
   }
 }
 
-class RunAndPinExecutableBloc extends SpecialExecutableBloc {
+class RunInstallerBloc extends SpecialExecutableBloc {
   final Future<void> Function(PinnedExecutable executablePinnedInTempDir)
   processExecutablePinnedInTempDir;
 
-  RunAndPinExecutableBloc({
+  RunInstallerBloc({
     required super.startupData,
     required super.winePrefix,
     required this.processExecutablePinnedInTempDir,
@@ -332,7 +332,7 @@ class RunAndPinExecutableBloc extends SpecialExecutableBloc {
 
   @override
   SpecialExecutableSlot get executableSlot =>
-      SpecialExecutableSlot.runAndPinExecutable;
+      SpecialExecutableSlot.runInstaller;
 
   @override
   Future<WineProcessResult> runProcess({
@@ -340,16 +340,16 @@ class RunAndPinExecutableBloc extends SpecialExecutableBloc {
     required WineInstallationDescriptor wineInstDescriptor,
     required void Function(WineProcess) onProcessStarted,
   }) async {
-    final tempPinDir = await Directory(
+    final tempPinsDir = await Directory(
       startupData.localStoragePaths.tempDir,
-    ).createTemp('pin-');
+    ).createTemp('pins-');
 
     try {
       final wineProcess = await startupData.wineProcessRunnerService.start(
         commandLine: wineInstDescriptor.buildWineInvocationCommand(
           wineArgs: _buildWineArgs(
             commandLine: commandLine,
-            tempPinDir: tempPinDir,
+            tempPinsDir: tempPinsDir,
           ),
         ),
         envVars: wineInstDescriptor.getEnvVarsForWine(
@@ -362,28 +362,25 @@ class RunAndPinExecutableBloc extends SpecialExecutableBloc {
 
       final processResult = await wineProcess.result;
 
-      await _tryPinningExecutable(tempPinDir: tempPinDir.path);
+      await for (final tempPinDir in tempPinsDir.list()) {
+        if (tempPinDir is Directory) {
+          await _tryPinningExecutable(tempPinDir: tempPinDir.path);
+        }
+      }
 
       return processResult;
     } finally {
-      await recursiveDeleteAndLogErrors(tempPinDir);
+      await recursiveDeleteAndLogErrors(tempPinsDir);
     }
   }
 
   List<String> _buildWineArgs({
     required List<String> commandLine,
-    required Directory tempPinDir,
+    required Directory tempPinsDir,
   }) {
-    if (commandLine.isEmpty) {
-      throw GenericException("Can't execute an empty command line");
-    }
-
-    final executable = commandLine.first;
-
     return [
-      LocalStoragePaths.runAndPinWin32LauncherPath,
-      tempPinDir.path,
-      executable,
+      LocalStoragePaths.installerRunnerPath,
+      tempPinsDir.path,
       ...commandLineToWineArgs(commandLine),
     ];
   }

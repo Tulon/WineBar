@@ -18,20 +18,14 @@
 
 #pragma once
 
-#include "OwnedTypes.h"
-
-#include <windows.h>
-
 /**
- * Retrieves an icon associated with a given file, similar to how Windows Explorer does that.
+ * Writes pin.json and icon.png to @p windowsPinDir.
  *
- * @param filePath A Windows (not Unix) file path to get an icon for.
- * @param iconResolution The returned icon shall have a resolution of
- *        iconResolution x iconResolution pixels, possibly as a result
- *        of rescaling.
+ * @param windowsPinDir The Windows-style directory to write the files to.
+ * @param unixOrWindowsPinTargetPath The file to pin. Usually that's going to be an executable or
+ *        an .lnk file, but we allow pinning any kind of files.
  *
- * @return An HICON wrapped into an unique_ptr. It shall never be null.
- *
- * @throw WStringException If anything goes wrong.
+ * @throw WStringRuntimeError On failure. The non-existing @p unixOrWindowsPinTargetPath counts
+ *        as a failure, while not being able to extract an icon from it, is not.
  */
-OwnedIcon iconForFile(wchar_t const* filePath, int desiredIconDim);
+void fillPinDirectory(wchar_t const* windowsPinDir, wchar_t const* unixOrWindowsPinTargetPath);

@@ -19,6 +19,8 @@
 #pragma once
 
 /**
- * Runs the executable at argv[0], waits for it to exit and returns its exit code.
+ * Runs the given executable, passing it the given args and waits for it to exit.
+ *
+ * Returns the exit code of the executable.
  */
-int runProcess(int argc, wchar_t* argv[]);
+int runProcess(wchar_t const* windowsExecutable, wchar_t* args[], int numArgs);
