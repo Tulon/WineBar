@@ -21,25 +21,26 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/blocs/pinned_executable/pinned_executable_bloc.dart';
 import 'package:winebar/blocs/pinned_executable/pinned_executable_state.dart';
+import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/models/pinned_executable.dart';
+import 'package:winebar/models/pinned_executable_list_event.dart';
 import 'package:winebar/repositories/running_pinned_executables_repo.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
 import 'package:winebar/widgets/pin_executable_button.dart';
 import 'package:winebar/widgets/run_process_chip.dart';
 
+import '../blocs/pinned_executable_set/pinned_executable_set_state.dart';
 import '../blocs/prefix_details/prefix_details_bloc.dart';
 import '../blocs/prefix_details/prefix_details_state.dart';
-import '../models/pinned_executable_set.dart';
 import '../models/wine_prefix.dart';
 import '../widgets/process_output_widget.dart';
 
@@ -48,7 +49,8 @@ class WinePrefixPage extends StatelessWidget {
       .get<RunningPinnedExecutablesRepo>();
   final StartupData startupData;
   final WinePrefix winePrefix;
-  final PinnedExecutableSet initialPinnedExecutables;
+
+  final PinnedExecutableSetState initialPinnedExecutables;
 
   WinePrefixPage({
     super.key,
@@ -61,13 +63,21 @@ class WinePrefixPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
+    // We don't want this widget to be rebuilt every time PrefixDetailsBloc emits
+    // a new state, so we create it here.
+    final pinnedExecutablesWidget = _PinnedExecutablesGridWidget(
+      startupData: startupData,
+      winePrefix: winePrefix,
+    );
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<PrefixDetailsBloc>(
-          create: (context) => PrefixDetailsBloc(
-            PrefixDetailsState.initialState(
-              pinnedExecutables: initialPinnedExecutables,
-            ),
+          create: (context) => PrefixDetailsBloc(),
+        ),
+        BlocProvider<PinnedExecutableSetBloc>(
+          create: (context) => PinnedExecutableSetBloc(
+            initialState: initialPinnedExecutables,
             startupData: startupData,
           ),
         ),
@@ -82,7 +92,7 @@ class WinePrefixPage extends StatelessWidget {
             startupData: startupData,
             winePrefix: winePrefix,
             processExecutablePinnedInTempDir: (executablePinnedInTempDir) =>
-                BlocProvider.of<PrefixDetailsBloc>(
+                BlocProvider.of<PinnedExecutableSetBloc>(
                   context,
                 ).pinExecutable(executablePinnedInTempDir),
           ),
@@ -106,13 +116,7 @@ class WinePrefixPage extends StatelessWidget {
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: _buildCentralWidget(
-                        context: context,
-                        state: state,
-                        colorScheme: colorScheme,
-                      ),
-                    ),
+                    Expanded(child: pinnedExecutablesWidget),
                     _buildBottomPanel(colorScheme: colorScheme),
                   ],
                 ),
@@ -130,27 +134,6 @@ class WinePrefixPage extends StatelessWidget {
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildCentralWidget({
-    required BuildContext context,
-    required PrefixDetailsState state,
-    required ColorScheme colorScheme,
-  }) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Wrap(
-          spacing: 16.0,
-          runSpacing: 16.0,
-          children: _buildPinnedExecutableWidgets(
-            context: context,
-            state: state,
-            colorScheme: colorScheme,
-          ),
-        ),
       ),
     );
   }
@@ -201,291 +184,13 @@ class WinePrefixPage extends StatelessWidget {
         startupData: startupData,
         winePrefix: winePrefix,
         processExecutablePinnedInTempDir: (executablePinnedInTempDir) =>
-            BlocProvider.of<PrefixDetailsBloc>(
+            BlocProvider.of<PinnedExecutableSetBloc>(
               context,
             ).pinExecutable(executablePinnedInTempDir),
       ),
       child: BlocBuilder<PinExecutableBloc, SpecialExecutableState>(
         builder: (context, state) => buildButton(context, state),
       ),
-    );
-  }
-
-  List<Widget> _buildPinnedExecutableWidgets({
-    required BuildContext context,
-    required PrefixDetailsState state,
-    required ColorScheme colorScheme,
-  }) {
-    final widgets = <Widget>[];
-
-    final newItemsIter = _PinnedExecutablesIter(
-      state.pinnedExecutables.orderedPinnedExecutables,
-    );
-
-    final oldItemsIter = _PinnedExecutablesIter(
-      state.oldPinnedExecutables?.orderedPinnedExecutables ??
-          Iterable<PinnedExecutable>.empty(),
-    );
-
-    final haveOldSet = state.oldPinnedExecutables != null;
-
-    void addItem(
-      PinnedExecutable pinnedExecutable, {
-      required bool presentInOldSet,
-      required bool presentInNewSet,
-    }) {
-      _PinnedItemStatus itemStatus = _PinnedItemStatus.normal;
-      if (!presentInOldSet && haveOldSet) {
-        itemStatus = _PinnedItemStatus.justAdded;
-      } else if (!presentInNewSet) {
-        itemStatus = _PinnedItemStatus.justRemoved;
-      }
-
-      widgets.add(
-        _buildPinnedExecutableWidget(
-          context: context,
-          pinnedExecutable: pinnedExecutable,
-          colorScheme: colorScheme,
-          itemStatus: itemStatus,
-        ),
-      );
-    }
-
-    // Below is essentially the merge part of merge sort.
-
-    while (newItemsIter.element != null && oldItemsIter.element != null) {
-      final newItem = newItemsIter.element!;
-      final oldItem = oldItemsIter.element!;
-      final comp = newItem.compareTo(oldItem);
-      if (comp < 0) {
-        addItem(newItem, presentInOldSet: false, presentInNewSet: true);
-        newItemsIter.next();
-      } else if (comp > 0) {
-        addItem(oldItem, presentInOldSet: true, presentInNewSet: false);
-        oldItemsIter.next();
-      } else {
-        addItem(newItem, presentInOldSet: true, presentInNewSet: true);
-        oldItemsIter.next();
-        newItemsIter.next();
-      }
-    }
-
-    while (newItemsIter.element != null) {
-      final newItem = newItemsIter.element!;
-      addItem(newItem, presentInOldSet: false, presentInNewSet: true);
-      newItemsIter.next();
-    }
-
-    while (oldItemsIter.element != null) {
-      final oldItem = oldItemsIter.element!;
-      addItem(oldItem, presentInOldSet: true, presentInNewSet: false);
-      oldItemsIter.next();
-    }
-
-    return widgets;
-  }
-
-  Widget _buildPinnedExecutableWidget({
-    required BuildContext context,
-    required PinnedExecutable pinnedExecutable,
-    required ColorScheme colorScheme,
-    required _PinnedItemStatus itemStatus,
-  }) {
-    Widget buildWidgetTree(BuildContext context, PinnedExecutableState state) {
-      final bloc = BlocProvider.of<PinnedExecutableBloc>(context);
-
-      final String? imageFilePath = pinnedExecutable.hasIcon
-          ? path.join(pinnedExecutable.pinDirectory, 'icon.png')
-          : null;
-
-      final widget = MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onEnter: (_) => bloc.setMouseOver(true),
-        onExit: (_) => bloc.setMouseOver(false),
-        child: GestureDetector(
-          onTap: () => itemStatus == _PinnedItemStatus.normal
-              ? bloc.launchPinnedExecutable()
-              : null,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Stack(
-                children: [
-                  imageFilePath != null
-                      ? Image.file(
-                          key: ValueKey(_PinnedItemElement.icon),
-                          File(imageFilePath),
-                          isAntiAlias: true,
-                          width: 128.0,
-                          height: 128.0,
-                        )
-                      : Icon(
-                          key: ValueKey(_PinnedItemElement.iconPlaceholder),
-                          MdiIcons.applicationOutline,
-                          color: colorScheme.primary,
-                          size: 128.0,
-                        ),
-                  if (state.mouseOver &&
-                      !state.isRunning &&
-                      itemStatus == _PinnedItemStatus.normal)
-                    Positioned(
-                      key: ValueKey(_PinnedItemElement.unpinAction),
-                      top: 0.0,
-                      right: 0.0,
-                      child: IconButton(
-                        icon: Icon(MdiIcons.pinOff),
-                        style: IconButton.styleFrom(
-                          backgroundColor: colorScheme.primary,
-                          foregroundColor: colorScheme.onPrimary,
-                        ),
-                        tooltip: 'Unpin',
-                        onPressed: () {
-                          unawaited(
-                            _showUnpinConfirmationDialog(
-                              context: context,
-                              pinnedExecutable: pinnedExecutable,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  if (state.isRunning && itemStatus == _PinnedItemStatus.normal)
-                    Positioned(
-                      key: ValueKey(_PinnedItemElement.killProcessAction),
-                      bottom: 0.0,
-                      right: 0.0,
-                      child: IconButton(
-                        icon: Icon(MdiIcons.close),
-                        style: ButtonStyle(
-                          iconColor: WidgetStateProperty.resolveWith<Color?>((
-                            Set<WidgetState> states,
-                          ) {
-                            if (states.contains(WidgetState.hovered)) {
-                              return Colors.white;
-                            } else {
-                              return Colors.grey.shade900;
-                            }
-                          }),
-                          backgroundColor:
-                              WidgetStateProperty.resolveWith<Color?>((
-                                Set<WidgetState> states,
-                              ) {
-                                if (states.contains(WidgetState.hovered)) {
-                                  return Colors.red.shade900;
-                                } else {
-                                  return Colors.yellow.shade700;
-                                }
-                              }),
-                        ),
-                        tooltip: 'Kill process',
-                        onPressed: () => bloc.killProcessIfRunning(),
-                      ),
-                    ),
-                ],
-              ),
-              SizedBox(height: 4.0), // Space between image and text
-              SizedBox(
-                width: 128.0, // Set a fixed width for the text to elide
-                child: Tooltip(
-                  message: pinnedExecutable.label,
-                  child: Text(
-                    pinnedExecutable.label,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    softWrap: true,
-                    style: TextStyle(fontSize: 14.0),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-      switch (itemStatus) {
-        case _PinnedItemStatus.normal:
-          return widget;
-        case _PinnedItemStatus.justAdded:
-          return widget
-              .animate(
-                onComplete: (_) {
-                  BlocProvider.of<PrefixDetailsBloc>(
-                    context,
-                  ).forgetOldPinnedExecutables();
-                },
-              )
-              .fadeIn()
-              .scale();
-        case _PinnedItemStatus.justRemoved:
-          return widget
-              .animate(
-                onComplete: (_) {
-                  BlocProvider.of<PrefixDetailsBloc>(
-                    context,
-                  ).forgetOldPinnedExecutables();
-                },
-              )
-              .fadeOut()
-              .scaleXY(end: ScaleEffect.defaultScale);
-      }
-    }
-
-    return BlocProvider(
-      create: (context) => PinnedExecutableBloc(
-        startupData: startupData,
-        winePrefix: winePrefix,
-        pinnedExecutable: pinnedExecutable,
-      ),
-      child: BlocBuilder<PinnedExecutableBloc, PinnedExecutableState>(
-        builder: (context, state) => buildWidgetTree(context, state),
-      ),
-    );
-  }
-
-  Future<void> _showUnpinConfirmationDialog({
-    required BuildContext context,
-    required PinnedExecutable pinnedExecutable,
-  }) async {
-    final colorScheme = Theme.of(context).colorScheme;
-    final bloc = BlocProvider.of<PrefixDetailsBloc>(context);
-
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('App unpinning confirmation'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text('The following app is about to be unpinned:'),
-              Text(
-                pinnedExecutable.label,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: colorScheme.primary),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton.icon(
-              icon: Icon(MdiIcons.pinOff),
-              label: const Text('Unpin'),
-              onPressed: () {
-                bloc.initiateUnpinningExecutable(pinnedExecutable);
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -608,25 +313,300 @@ class WinePrefixPage extends StatelessWidget {
   }
 }
 
-class _PinnedExecutablesIter {
-  final Iterator<PinnedExecutable> _it;
-  PinnedExecutable? element;
+class _PinnedExecutablesGridWidget extends StatefulWidget {
+  final StartupData startupData;
+  final WinePrefix winePrefix;
 
-  _PinnedExecutablesIter(Iterable<PinnedExecutable> iterable)
-    : _it = iterable.iterator {
-    next();
-  }
+  const _PinnedExecutablesGridWidget({
+    required this.startupData,
+    required this.winePrefix,
+  });
 
-  void next() {
-    if (_it.moveNext()) {
-      element = _it.current;
-    } else {
-      element = null;
-    }
-  }
+  @override
+  State<_PinnedExecutablesGridWidget> createState() => _PinnedAppsGridState();
 }
 
-enum _PinnedItemStatus { normal, justAdded, justRemoved }
+class _PinnedAppsGridState extends State<_PinnedExecutablesGridWidget> {
+  final GlobalKey<AnimatedGridState> _animatedGridKey =
+      GlobalKey<AnimatedGridState>();
+
+  static const double _iconDim = 128.0;
+  static const double _tileWidth = _iconDim;
+  static const double _spaceBetweenIconAndText = 4.0;
+
+  static const double _textFontSize = 14.0;
+  static const int _maxTextLines = 2;
+
+  /// This number is a result of trial and error. It's roughly how high our
+  /// _maxTextLines at _textFontSize are going to be. If our guesstimate
+  /// is lower than the real figure (which we can't know for sure), the text
+  /// will be scaled to fit into this height. If our guesstimage is too high,
+  /// there will be higher than intended gap between rows.
+  static const double _maxTextHeight = 42.0;
+
+  static const double _maxTileHeight =
+      _iconDim + _spaceBetweenIconAndText + _maxTextHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<PinnedExecutableSetBloc, PinnedExecutableSetState>(
+      listener: (context, state) => _reactToPrefixListChanges(state: state),
+      child: _buildAnimatedGrid(context),
+    );
+  }
+
+  Widget _buildAnimatedGrid(BuildContext context) {
+    final state = BlocProvider.of<PinnedExecutableSetBloc>(context).state;
+
+    return AnimatedGrid(
+      key: _animatedGridKey,
+      padding: EdgeInsets.all(8.0),
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        mainAxisExtent: _maxTileHeight,
+        maxCrossAxisExtent: _tileWidth,
+        mainAxisSpacing: 8.0,
+        crossAxisSpacing: 8.0,
+      ),
+      initialItemCount: state.orderedPinnedExecutables.length,
+      itemBuilder: (context, index, animation) {
+        // It's important to acquire the new state here, as it's subject
+        // to change.
+        final state = BlocProvider.of<PinnedExecutableSetBloc>(context).state;
+        final pinnedExecutable = state.orderedPinnedExecutables[index];
+        return _buildPinnedExecutableWidget(
+          pinnedExecutable: pinnedExecutable,
+          animation: animation,
+          removedPinnedExecutable: false,
+        );
+      },
+    );
+  }
+
+  void _reactToPrefixListChanges({required PinnedExecutableSetState state}) {
+    final animatedGridState = _animatedGridKey.currentState!;
+
+    switch (state.pinnedExecutableListEvent) {
+      case PinnedExecutableAddedEvent evt:
+        animatedGridState.insertItem(evt.pinnedExecutableIndex);
+      case PinnedExecutableRemovedEvent evt:
+        animatedGridState.removeItem(
+          evt.pinnedExecutableIndex,
+          (context, animation) => _buildPinnedExecutableWidget(
+            pinnedExecutable: evt.removedPinnedExecutable,
+            animation: animation,
+            removedPinnedExecutable: true,
+          ),
+        );
+      case null:
+    }
+
+    if (state.pinnedExecutableListEvent != null) {
+      // This prevents a repeat reaction to the same event, should a widget
+      // be rebuilt for an unrelated reason.
+      BlocProvider.of<PinnedExecutableSetBloc>(
+        context,
+      ).clearPinnedExecutanleListEvent();
+    }
+  }
+
+  Widget _buildPinnedExecutableWidget({
+    required PinnedExecutable pinnedExecutable,
+    required Animation<double> animation,
+    required bool removedPinnedExecutable,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    Widget buildWidgetTree(BuildContext context, PinnedExecutableState state) {
+      final bloc = BlocProvider.of<PinnedExecutableBloc>(context);
+
+      final String? imageFilePath = pinnedExecutable.hasIcon
+          ? path.join(pinnedExecutable.pinDirectory, 'icon.png')
+          : null;
+
+      return FadeTransition(
+        opacity: animation,
+        child: ScaleTransition(
+          scale: animation,
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            onEnter: (_) => bloc.setMouseOver(true),
+            onExit: (_) => bloc.setMouseOver(false),
+            child: GestureDetector(
+              onTap: () => removedPinnedExecutable
+                  ? null
+                  : bloc.launchPinnedExecutable(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    children: [
+                      imageFilePath != null
+                          ? Image.file(
+                              key: ValueKey(_PinnedItemElement.icon),
+                              File(imageFilePath),
+                              isAntiAlias: true,
+                              width: _iconDim,
+                              height: _iconDim,
+                            )
+                          : Icon(
+                              key: ValueKey(_PinnedItemElement.iconPlaceholder),
+                              MdiIcons.applicationOutline,
+                              color: colorScheme.primary,
+                              size: _iconDim,
+                            ),
+                      if (state.mouseOver &&
+                          !state.isRunning &&
+                          !removedPinnedExecutable)
+                        Positioned(
+                          key: ValueKey(_PinnedItemElement.unpinAction),
+                          top: 0.0,
+                          right: 0.0,
+                          child: IconButton(
+                            icon: Icon(MdiIcons.pinOff),
+                            style: IconButton.styleFrom(
+                              backgroundColor: colorScheme.primary,
+                              foregroundColor: colorScheme.onPrimary,
+                            ),
+                            tooltip: 'Unpin',
+                            onPressed: () {
+                              unawaited(
+                                _showUnpinConfirmationDialog(
+                                  context: context,
+                                  pinnedExecutable: pinnedExecutable,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      if (state.isRunning && !removedPinnedExecutable)
+                        Positioned(
+                          key: ValueKey(_PinnedItemElement.killProcessAction),
+                          bottom: 0.0,
+                          right: 0.0,
+                          child: IconButton(
+                            icon: Icon(MdiIcons.close),
+                            style: ButtonStyle(
+                              iconColor:
+                                  WidgetStateProperty.resolveWith<Color?>((
+                                    Set<WidgetState> states,
+                                  ) {
+                                    if (states.contains(WidgetState.hovered)) {
+                                      return Colors.white;
+                                    } else {
+                                      return Colors.grey.shade900;
+                                    }
+                                  }),
+                              backgroundColor:
+                                  WidgetStateProperty.resolveWith<Color?>((
+                                    Set<WidgetState> states,
+                                  ) {
+                                    if (states.contains(WidgetState.hovered)) {
+                                      return Colors.red.shade900;
+                                    } else {
+                                      return Colors.yellow.shade700;
+                                    }
+                                  }),
+                            ),
+                            tooltip: 'Kill process',
+                            onPressed: () => bloc.killProcessIfRunning(),
+                          ),
+                        ),
+                    ],
+                  ),
+
+                  // Space between image and text
+                  SizedBox(height: _spaceBetweenIconAndText),
+
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: _maxTextHeight),
+                    child: FittedBox(
+                      // If the text exceeds _maxTextHeight (the maxHeight
+                      // constraint set by our parent), we scale it down.
+                      // To prevent the text from getting scaled down because
+                      // it's too wide, we apply a maxWidth constraint below.
+                      fit: BoxFit.scaleDown,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: _tileWidth),
+                        child: Tooltip(
+                          message: pinnedExecutable.label,
+                          child: Text(
+                            pinnedExecutable.label,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: _maxTextLines,
+                            softWrap: true,
+                            style: TextStyle(fontSize: _textFontSize),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return BlocProvider(
+      create: (context) => PinnedExecutableBloc(
+        startupData: widget.startupData,
+        winePrefix: widget.winePrefix,
+        pinnedExecutable: pinnedExecutable,
+      ),
+      child: BlocBuilder<PinnedExecutableBloc, PinnedExecutableState>(
+        builder: (context, state) => buildWidgetTree(context, state),
+      ),
+    );
+  }
+
+  Future<void> _showUnpinConfirmationDialog({
+    required BuildContext context,
+    required PinnedExecutable pinnedExecutable,
+  }) async {
+    final colorScheme = Theme.of(context).colorScheme;
+    final bloc = BlocProvider.of<PinnedExecutableSetBloc>(context);
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('App unpinning confirmation'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text('The following app is about to be unpinned:'),
+              Text(
+                pinnedExecutable.label,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: colorScheme.primary),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton.icon(
+              icon: Icon(MdiIcons.pinOff),
+              label: const Text('Unpin'),
+              onPressed: () {
+                bloc.initiateUnpinningExecutable(pinnedExecutable);
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
 
 enum _PinnedItemElement {
   icon,

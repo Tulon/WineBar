@@ -18,51 +18,23 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:winebar/models/pinned_executable_set.dart';
 
 @immutable
 class PrefixDetailsState extends Equatable {
   final bool fileSelectionInProgress;
-  final PinnedExecutableSet pinnedExecutables;
 
-  /// This one is used for animations. The items in this list which are not
-  /// in [pinnedExecutables] will get faded out while the ones present there
-  /// but missing here will be faded in.
-  final PinnedExecutableSet? oldPinnedExecutables;
+  const PrefixDetailsState({required this.fileSelectionInProgress});
 
-  const PrefixDetailsState({
-    required this.fileSelectionInProgress,
-    required this.pinnedExecutables,
-    required this.oldPinnedExecutables,
-  });
-
-  const PrefixDetailsState.initialState({
-    required PinnedExecutableSet pinnedExecutables,
-  }) : this(
-         fileSelectionInProgress: false,
-         pinnedExecutables: pinnedExecutables,
-         oldPinnedExecutables: null,
-       );
+  const PrefixDetailsState.initialState()
+    : this(fileSelectionInProgress: false);
 
   @override
-  List<Object?> get props => [
-    fileSelectionInProgress,
-    pinnedExecutables,
-    oldPinnedExecutables,
-  ];
+  List<Object?> get props => [fileSelectionInProgress];
 
-  PrefixDetailsState copyWith({
-    bool? fileSelectionInProgress,
-    PinnedExecutableSet? pinnedExecutables,
-    ValueGetter<PinnedExecutableSet?>? oldPinnedExecutablesGetter,
-  }) {
+  PrefixDetailsState copyWith({bool? fileSelectionInProgress}) {
     return PrefixDetailsState(
       fileSelectionInProgress:
           fileSelectionInProgress ?? this.fileSelectionInProgress,
-      pinnedExecutables: pinnedExecutables ?? this.pinnedExecutables,
-      oldPinnedExecutables: oldPinnedExecutablesGetter != null
-          ? oldPinnedExecutablesGetter()
-          : oldPinnedExecutables,
     );
   }
 }

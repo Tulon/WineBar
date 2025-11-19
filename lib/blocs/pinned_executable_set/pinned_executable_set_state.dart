@@ -19,41 +19,69 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:winebar/models/pinned_executable_list_event.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 
-import 'pinned_executable.dart';
-import 'wine_prefix_dir_structure.dart';
+import '../../models/pinned_executable.dart';
+import '../../models/wine_prefix_dir_structure.dart';
 
 @immutable
-class PinnedExecutableSet extends Equatable {
+class PinnedExecutableSetState extends Equatable {
   /// Corresponds to [WinePrefixDirStructure.pinsDir].
   final String pinsDir;
 
   /// Naturally ordered by PinnedExecutable.compareTo().
   final List<PinnedExecutable> orderedPinnedExecutables;
 
+  /// The event describing the change made to [orderedPinnedExecutables] by
+  /// this particular update. As a general rule, any new instance of a state
+  /// passed to emit() should discard the old value of this field.
+  /// In fact, as soon as the UI layer had a chance to react to this
+  /// field being set, it has to emit a new state with this field cleared,
+  /// as otherwise a widget being rebuilt for an unrelated reason will
+  /// cause a repeat reaction to the same event.
+  final PinnedExecutableListEvent? pinnedExecutableListEvent;
+
   /// Pins are persistent in dictories which names are numbers. This member
   /// stores the largest of those number or 0 if nothing is persisted.
   final int largestPinNumber;
 
-  const PinnedExecutableSet._({
+  const PinnedExecutableSetState._({
     required this.pinsDir,
     required this.orderedPinnedExecutables,
+    required this.pinnedExecutableListEvent,
     required this.largestPinNumber,
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     pinsDir,
     orderedPinnedExecutables,
+    pinnedExecutableListEvent,
     largestPinNumber,
   ];
 
-  static Future<PinnedExecutableSet> loadFromDisk(String pinsDir) async {
+  PinnedExecutableSetState copyWith({
+    String? pinsDir,
+    List<PinnedExecutable>? orderedPinnedExecutables,
+    required ValueGetter<PinnedExecutableListEvent?>
+    pinnedExecutableListEventGetter,
+    int? largestPinNumber,
+  }) {
+    return PinnedExecutableSetState._(
+      pinsDir: pinsDir ?? this.pinsDir,
+      orderedPinnedExecutables:
+          orderedPinnedExecutables ?? this.orderedPinnedExecutables,
+      pinnedExecutableListEvent: pinnedExecutableListEventGetter(),
+      largestPinNumber: largestPinNumber ?? this.largestPinNumber,
+    );
+  }
+
+  static Future<PinnedExecutableSetState> loadFromDisk(String pinsDir) async {
     final logger = GetIt.I.get<Logger>();
 
     final lowerCaseWindowsExecutablePathsSeen = <String>{};
@@ -116,16 +144,21 @@ class PinnedExecutableSet extends Equatable {
 
     pinnedExecutables.sort();
 
-    return PinnedExecutableSet._(
+    return PinnedExecutableSetState._(
       pinsDir: pinsDir,
       orderedPinnedExecutables: pinnedExecutables,
+      pinnedExecutableListEvent: null,
       largestPinNumber: largestPinNumber,
     );
   }
 
-  /// Returns a new PinnedExecutableSet with a new PinnedExecutable either
-  /// added to the list or replacing and existing one.
-  Future<PinnedExecutableSet> copyWithAdditionalPinnedExecutable(
+  /// Asynchronously returns a new [PinnedExecutableSetState] with a new
+  /// pinned executable added to the list of pinned executables at the correct
+  /// position, which is determined by the order imposed by
+  /// [PinnedExecutable.compareTo]. This method won't try to remove an
+  /// existing pinned executable pointing to the same location on disk,
+  /// should one exist.
+  Future<PinnedExecutableSetState> copyWithAdditionalPinnedExecutable(
     PinnedExecutable newPinInTempPinDir,
   ) async {
     final pinNumber = largestPinNumber + 1;
@@ -140,57 +173,33 @@ class PinnedExecutableSet extends Equatable {
       Directory(newPinInTempPinDir.pinDirectory),
     );
 
-    final newExecutableLowerCaseExecutablePath = newExecutable
-        .windowsPathToExecutable
-        .toLowerCase();
-
     final newOrderedPinnedExecutables = <PinnedExecutable>[];
+    PinnedExecutableListEvent? newPinnedExecutableListEvent;
     bool newExecutableAdded = false;
 
     void addNewExecutable() {
+      newPinnedExecutableListEvent = PinnedExecutableAddedEvent(
+        pinnedExecutableIndex: newOrderedPinnedExecutables.length,
+      );
       newOrderedPinnedExecutables.add(newExecutable);
       newExecutableAdded = true;
     }
 
-    Future<void> maybeAddExistingExecutable(
-      PinnedExecutable existingExecutable,
-    ) async {
-      if (existingExecutable.windowsPathToExecutable.toLowerCase() !=
-          newExecutableLowerCaseExecutablePath) {
-        newOrderedPinnedExecutables.add(existingExecutable);
-      } else {
-        // The existing executable is the same as the new one, so we
-        // delete the pin directory and don't add this pin to the list.
-        await recursiveDeleteAndLogErrors(
-          Directory(existingExecutable.pinDirectory),
-        );
-      }
+    void addExistingExecutable(PinnedExecutable existingExecutable) {
+      newOrderedPinnedExecutables.add(existingExecutable);
     }
 
     for (final existingExecutable in orderedPinnedExecutables) {
       if (newExecutableAdded) {
-        await maybeAddExistingExecutable(existingExecutable);
+        addExistingExecutable(existingExecutable);
       } else {
-        final int comp = existingExecutable.compareTo(newExecutable);
-        if (comp > 0) {
+        if (existingExecutable.compareTo(newExecutable) > 0) {
           // This existing executable should go after the new one, so
           // given that we haven't added the new executable yet, we
           // add it now, followed by the existing one.
           addNewExecutable();
-          await maybeAddExistingExecutable(existingExecutable);
-        } else if (comp < 0) {
-          // This existing executable should go before the new one,
-          // so we just add it to the list.
-          await maybeAddExistingExecutable(existingExecutable);
-        } else {
-          // The new and the existing executables are indistinguishable
-          // from the perspective of sorting order. We try to add them both,
-          // though maybeAddExistingExecutable() is expected to detect the
-          // existing executable is the same as the new one and will delete
-          // the old pin instead of adding it to the list.
-          await maybeAddExistingExecutable(existingExecutable);
-          addNewExecutable();
         }
+        addExistingExecutable(existingExecutable);
       }
     }
 
@@ -198,36 +207,47 @@ class PinnedExecutableSet extends Equatable {
       addNewExecutable();
     }
 
-    return PinnedExecutableSet._(
-      pinsDir: pinsDir,
+    return copyWith(
       orderedPinnedExecutables: newOrderedPinnedExecutables,
+      pinnedExecutableListEventGetter: () => newPinnedExecutableListEvent,
       largestPinNumber: pinNumber,
     );
   }
 
-  Future<PinnedExecutableSet> copyWithPinnedExecutableRemoved(
-    PinnedExecutable executableToRemove,
-  ) async {
-    final executableToRemoveLowerCasePath = executableToRemove
-        .windowsPathToExecutable
+  /// Asynchronously returns a new [PinnedExecutableSetState] with a single
+  /// pinned executable matching the provided [withdowsPathToExecutable]
+  /// removed. The paths are compared in a case-insensitive manner.
+  /// If no pinned executable matches the provided path,
+  /// [pinnedExecutableListEvent] is going to be null. This method won't try
+  /// to match more than one existing pinned executable to the provided path.
+  Future<PinnedExecutableSetState> copyWithPinnedExecutableRemoved({
+    required String windowsPathToExecutable,
+  }) async {
+    final executableToRemoveLowerCasePath = windowsPathToExecutable
         .toLowerCase();
 
     final newOrderedPinnedExecutables = <PinnedExecutable>[];
+    PinnedExecutableListEvent? newPinnedExecutableListEvent;
 
     for (final existingExecutable in orderedPinnedExecutables) {
-      if (existingExecutable.windowsPathToExecutable.toLowerCase() !=
-          executableToRemoveLowerCasePath) {
+      if (newPinnedExecutableListEvent != null ||
+          existingExecutable.windowsPathToExecutable.toLowerCase() !=
+              executableToRemoveLowerCasePath) {
         newOrderedPinnedExecutables.add(existingExecutable);
       } else {
+        newPinnedExecutableListEvent = PinnedExecutableRemovedEvent(
+          pinnedExecutableIndex: newOrderedPinnedExecutables.length,
+          removedPinnedExecutable: existingExecutable,
+        );
         await recursiveDeleteAndLogErrors(
           Directory(existingExecutable.pinDirectory),
         );
       }
     }
 
-    return PinnedExecutableSet._(
-      pinsDir: pinsDir,
+    return copyWith(
       orderedPinnedExecutables: newOrderedPinnedExecutables,
+      pinnedExecutableListEventGetter: () => newPinnedExecutableListEvent,
       largestPinNumber: largestPinNumber,
     );
   }

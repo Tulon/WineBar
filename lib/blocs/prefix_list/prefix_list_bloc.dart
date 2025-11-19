@@ -24,7 +24,7 @@ import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
-import 'package:winebar/models/pinned_executable_set.dart';
+import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 
 import '../../models/wine_prefix.dart';
@@ -37,7 +37,8 @@ class PrefixListBloc extends Cubit<PrefixListState> {
   /// of them.
   var _lastPrefixDeletionOperationCompletion = Future<void>.value();
 
-  CancelableOperation<PinnedExecutableSet>? _ongoingPinnedExecutablesLoadingOp;
+  CancelableOperation<PinnedExecutableSetState>?
+  _ongoingPinnedExecutablesLoadingOp;
 
   PrefixListBloc(List<WinePrefix> prefixes)
     : super(PrefixListState.initialState(prefixes: prefixes));
@@ -89,7 +90,7 @@ class PrefixListBloc extends Cubit<PrefixListState> {
         });
   }
 
-  Future<PinnedExecutableSet?> startLoadingPinnedExecutablesFor(
+  Future<PinnedExecutableSetState?> startLoadingPinnedExecutablesFor(
     WinePrefix prefix,
   ) async {
     if (_ongoingPinnedExecutablesLoadingOp != null) {
@@ -97,7 +98,7 @@ class PrefixListBloc extends Cubit<PrefixListState> {
     }
 
     _ongoingPinnedExecutablesLoadingOp = CancelableOperation.fromFuture(
-      PinnedExecutableSet.loadFromDisk(prefix.dirStructure.pinsDir),
+      PinnedExecutableSetState.loadFromDisk(prefix.dirStructure.pinsDir),
     );
 
     try {
