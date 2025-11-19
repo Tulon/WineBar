@@ -23,8 +23,8 @@ import 'package:async/async.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
+import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 
 import '../../models/wine_prefix.dart';
