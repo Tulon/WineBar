@@ -7,14 +7,25 @@ arm64 systems is currently missing, though it shouldn't be hard to add - PRs are
 
 This project is mainly written in Dart / Flutter, with some C and C++ code for auxilliary tools.
 
-The project was inspired by another project written in Flutter / Dart called [Wine Prefix Manager](https://github.com/CrownParkComputing/wine_prefix_manager), though it doesn't share any code with it.
+The project was inspired by another project written in Flutter / Dart called [Wine Prefix Manager](https://github.com/CrownParkComputing/wine_prefix_manager), though Wine Bar doesn't share any code with it.
 
 Why have I created something from scratch rather than contribute to the above mentioned project? I had two goals:
 
 1. To be able to run Windows software on my Linux-running Macbook Air M2, which is my daily driver. I didn't want to use Steam, yet I wanted a user-friendly solution.
 2. To learn Dart / Flutter. Normally I am a C++ guy.
 
-Creating something from scratch is a better way to achive the 2nd point.
+I concluded that creating something from scratch was a better way to achive the 2nd goal.
+
+## Limitations
+
+The only serious limitation of Wine Bar is how it handles running multiple apps simultaneously in the same Wine prefix. Perhaps I shouldn't have allowed that in the first place, but for those rare cases where you really need that, I made that possible. When you launch more than one executable in the same prefix, you'll notice some or all of the following symptoms:
+
+1. Wine Bar will think your executable is still running when it has actually exited.
+2. Force-stopping a running executable may do nothing or it may terminate all executables running in a prefix, not just the one you want to stop.
+
+On Apple silicon Macs, these symptoms appear even when running executables in different Wine prefixes simultaneously.
+
+The complexity here comes from the fact that the `wine` process starts the windows executable it was asked to run and then exits immediately without waiting for that windows executable to finish. That's not terribly hard to workaround with a single windows executable running, but very hard for more than one executable. Currently, I don't have plans to tackle this limitation.
 
 ## Running
 
@@ -32,6 +43,10 @@ On Fedora-based distros:
 ```bash
 sudo dnf install muvm fex-emu
 ```
+
+### Running an AppImage
+
+While AppImages can be run just by making them executable and double clicking them, pinning them to a taskbar doesn't work right in most (all?) desktop environments. The suggested solution is to use an app called [Gear Lever](https://mijorus.it/projects/gearlever/) to open and run AppImages. Install `Gear Level`, then right click an `.AppImage` file and select `Open with Gear Level`. An `.AppImage` started from `Gear Level` can be pinned to a taskbar just fine.
 
 ## Building
 
@@ -58,6 +73,13 @@ flutter build linux --release
 ```
 
 And we are done!
+
+### Building an AppImage
+
+```bash
+cd <project_folder>
+./packaging/scripts/build_appimage.sh <x64|arm64>
+```
 
 ## About the Author
 
