@@ -56,7 +56,7 @@ This project cross-compiles some C++ code targeting Windows, so we need some add
 
 On Debian-based distros:
 ```bash
-sudo apt-get install mingw32
+sudo apt-get install mingw-w64-i686-dev binutils-mingw-w64-i686
 ```
 
 On Fedora-based distros:
