@@ -39,12 +39,6 @@ jobs:
       - name: Build x64 AppImage
         run: ./packaging/scripts/build_appimage.sh x64 "${VERSION}"
 
-      - name: Diagnostic step
-        if: ${{ failure() }}
-        run: |
-          cd ./build/linux/x64/release
-          ninja
-
       - name: Build arm64 AppImage
         run: ./packaging/scripts/build_appimage.sh arm64 "${VERSION}"
 
