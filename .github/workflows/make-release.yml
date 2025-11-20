@@ -22,7 +22,7 @@ jobs:
       - name: "Install dependencies"
         run: |
           sudo apt-get update
-          sudo apt-get -y install mingw32
+          sudo apt-get -y install mingw-w64-i686-dev binutils-mingw-w64-i686
 
       - name: "Clone repository"
         uses: actions/checkout@v5
