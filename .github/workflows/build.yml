@@ -75,5 +75,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: "WineBar-${{ inputs.version }}-${{ inputs.arch }}.AppImage"
-          path: "build/linux/x64/WineBar-${{ inputs.version }}-${{ inputs.arch }}.AppImage"
+          path: "build/linux/${{ inputs.arch }}/release/WineBar-${{ inputs.version }}-${{ inputs.arch }}.AppImage"
           if-no-files-found: error
