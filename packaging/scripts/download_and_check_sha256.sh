@@ -30,7 +30,7 @@ else
 fi
 
 # Download the file
-curl -L -o "$DESTINATION" "$URL"
+curl --fail --retry 3 --retry-delay 5 -L -o "$DESTINATION" "$URL"
 if [ $? -ne 0 ]; then
     echo "Error: Failed to download $URL."
     exit 1
