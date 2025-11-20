@@ -16,6 +16,27 @@ on:
         type: string
         description: Github runner name
 
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: Version name (x.y.z)
+      arch:
+        required: true
+        type: choice
+        description: Architecture
+        options: 
+          - x64
+          - arm64
+      runs-on:
+        required: true
+        type: choice
+        description: Github runner name
+        options:
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
+
 jobs:
   build-x64:
     name: Build
