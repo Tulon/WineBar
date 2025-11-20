@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: Version name (x.y.z)
+      arch:
+        required: true
+        type: string
+        description: Architecture (x64|arm)
+      runs-on:
+        required: true
+        type: string
+        description: Github runner name
+
+jobs:
+  build-x64:
+    name: Build
+    runs-on: ${{ inputs.runs-on }}
+    timeout-minutes: 20
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install mingw-w64-i686-dev g++-mingw-w64-i686 binutils-mingw-w64-i686 \
+            libgtk-3-dev libglu1-mesa ninja-build desktop-file-utils
+
+      - name: Clone repository
+        uses: actions/checkout@v5
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+          # Take the Flutter SDK version from pubspec.yaml
+          flutter-version-file: pubspec.yaml
+
+      - name: Build AppImage
+        run: |
+          ./packaging/scripts/build_appimage.sh ${{ inputs.arch }} ${{ inputs.version }}
+
+      - name: Upload build artefacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "WineBar-${{ inputs.version }}-${{ inputs.arch }}-x64.AppImage"
+          path: "build/linux/x64/WineBar-${{ inputs.version }}-${{ inputs.arch }}-x64.AppImage"
+          if-no-files-found: error
