@@ -43,6 +43,8 @@ if [ "$NEW_HASH" == "$EXPECTED_HASH" ]; then
     exit 0
 else
     echo "Error: Downloaded file hash does not match the expected one."
+    echo "Expected hash: $EXPECTED_HASH"
+    echo "Actual hash:   $ACTUAL_HASH" 
     echo "Deleting the downloaded file."
     rm -f "$DESTINATION"
     exit 1
