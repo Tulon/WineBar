@@ -3,12 +3,13 @@
 # Exit on first error.
 set -e
 
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 x64|arm64"
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 x64|arm64 [version-name]"
     exit 1
 fi
 
 TARGET_ARCH="$1"
+VERSION_NAME="$2"
 HOST_ARCH="$(uname -m | awk '$0')"
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 RELEASE_OR_DEBUG="release"
@@ -39,6 +40,14 @@ case "$HOST_ARCH" in
         exit 1
 esac
 
+# On mobile platforms this would have to go up with every build.
+# Fortunately, on Linux, it's not used anywhere.
+BUILD_NUMBER=1
+
+BUILD_NAME="${VERSION_NAME:-0.0.0}"
+PREFIXED_BUILD_NAME="-$BUILD_NAME"
+OPTIONAL_BUILD_NAME="${VERSION_NAME:+$PREFIXED_BUILD_NAME}"
+
 cd "$SCRIPT_DIR/../.."
 
 mkdir -p build
@@ -48,11 +57,12 @@ mkdir -p build
 
 chmod +x "build/${APPIMAGETOOL_FILENAME}"
 
-flutter build linux "--${RELEASE_OR_DEBUG}" --target-platform "linux-${TARGET_ARCH}"
+flutter build linux "--${RELEASE_OR_DEBUG}" --target-platform "linux-${TARGET_ARCH}" \
+--build-name "${BUILD_NAME}" --build-number "${BUILD_NUMBER}"
 
 BUNDLE_DIR="build/linux/${TARGET_ARCH}/${RELEASE_OR_DEBUG}/bundle"
 APP_DIR="build/linux/${TARGET_ARCH}/${RELEASE_OR_DEBUG}/WineBar-${TARGET_ARCH}.AppDir"
-APP_IMAGE="build/linux/${TARGET_ARCH}/${RELEASE_OR_DEBUG}/WineBar-${TARGET_ARCH}.AppImage"
+APP_IMAGE="build/linux/${TARGET_ARCH}/${RELEASE_OR_DEBUG}/WineBar${OPTIONAL_BUILD_NAME}-${TARGET_ARCH}.AppImage"
 
 rm -rf "${APP_DIR}"
 mkdir -p "${APP_DIR}"
