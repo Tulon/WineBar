@@ -24,7 +24,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/wine_prefix.dart';
-import 'package:winebar/repositories/running_pinned_executables_repo.dart';
+import 'package:winebar/repositories/running_executables_repo.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/command_line_to_wine_args.dart';
 import 'package:winebar/utils/startup_data.dart';
@@ -35,7 +35,7 @@ import 'pinned_executable_state.dart';
 class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
   final logger = GetIt.I.get<Logger>();
   final runningPinnedExecutablesRepo = GetIt.I
-      .get<RunningPinnedExecutablesRepo>();
+      .get<RunningExecutablesRepo<PinnedExecutable>>();
   final StartupData startupData;
   final WinePrefix winePrefix;
   final PinnedExecutable pinnedExecutable;
@@ -49,7 +49,7 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
   }) : super(PinnedExecutableState.defaultState()) {
     final runningProcess = runningPinnedExecutablesRepo.tryFindRunningProcess(
       prefix: winePrefix,
-      pinnedExecutable: pinnedExecutable,
+      slot: pinnedExecutable,
     );
 
     if (runningProcess != null) {
@@ -128,7 +128,7 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
           .then((runningProcess) {
             runningPinnedExecutablesRepo.addRunningProcess(
               prefix: winePrefix,
-              pinnedExecutable: pinnedExecutable,
+              slot: pinnedExecutable,
               wineProcess: runningProcess,
             );
             _attachToRunningProcess(runningProcess);

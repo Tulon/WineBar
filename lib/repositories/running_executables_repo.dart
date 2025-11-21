@@ -21,41 +21,36 @@ import 'dart:async';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 
-enum SpecialExecutableSlot {
-  customExecutable,
-  runInstaller,
-  winetricksExecutable,
-}
-
-abstract interface class RunningSpecialExecutablesRepo {
-  factory RunningSpecialExecutablesRepo() {
-    return _RunningSpecialExecutablesRepo();
+abstract interface class RunningExecutablesRepo<SlotType> {
+  factory RunningExecutablesRepo() {
+    return _RunningExecutablesRepo<SlotType>();
   }
 
   void addRunningProcess({
     required WinePrefix prefix,
-    required SpecialExecutableSlot executableSlot,
+    required SlotType slot,
     required WineProcess wineProcess,
   });
 
   WineProcess? tryFindRunningProcess({
     required WinePrefix prefix,
-    required SpecialExecutableSlot executableSlot,
+    required SlotType slot,
   });
 
   int numProcessesRunningInPrefix(WinePrefix prefix);
 }
 
-typedef _RunningExecutablesInPrefix = Map<SpecialExecutableSlot, WineProcess>;
+typedef _RunningExecutablesInPrefix<SlotType> = Map<SlotType, WineProcess>;
 
-class _RunningSpecialExecutablesRepo implements RunningSpecialExecutablesRepo {
+class _RunningExecutablesRepo<SlotType>
+    implements RunningExecutablesRepo<SlotType> {
   final runningExecutablesByPrefix =
-      <WinePrefix, _RunningExecutablesInPrefix>{};
+      <WinePrefix, _RunningExecutablesInPrefix<SlotType>>{};
 
   @override
   void addRunningProcess({
     required WinePrefix prefix,
-    required SpecialExecutableSlot executableSlot,
+    required SlotType slot,
     required WineProcess wineProcess,
   }) {
     var runningExecutablesInPrefix = runningExecutablesByPrefix[prefix];
@@ -64,12 +59,12 @@ class _RunningSpecialExecutablesRepo implements RunningSpecialExecutablesRepo {
       runningExecutablesByPrefix[prefix] = runningExecutablesInPrefix;
     }
 
-    runningExecutablesInPrefix[executableSlot] = wineProcess;
+    runningExecutablesInPrefix[slot] = wineProcess;
 
     // Remove it when WineProcess has finished.
     unawaited(
       wineProcess.result.whenComplete(() {
-        runningExecutablesInPrefix!.remove(executableSlot);
+        runningExecutablesInPrefix!.remove(slot);
         if (runningExecutablesInPrefix.isEmpty) {
           runningExecutablesByPrefix.remove(prefix);
         }
@@ -80,9 +75,9 @@ class _RunningSpecialExecutablesRepo implements RunningSpecialExecutablesRepo {
   @override
   WineProcess? tryFindRunningProcess({
     required WinePrefix prefix,
-    required SpecialExecutableSlot executableSlot,
+    required SlotType slot,
   }) {
-    return runningExecutablesByPrefix[prefix]?[executableSlot];
+    return runningExecutablesByPrefix[prefix]?[slot];
   }
 
   @override

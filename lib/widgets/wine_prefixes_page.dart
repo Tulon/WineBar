@@ -22,9 +22,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
+import 'package:winebar/blocs/special_executable/special_executable_state.dart';
+import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/prefix_list_event.dart';
-import 'package:winebar/repositories/running_pinned_executables_repo.dart';
-import 'package:winebar/repositories/running_special_executables_repo.dart';
+import 'package:winebar/repositories/running_executables_repo.dart';
 
 import '../blocs/prefix_list/prefix_list_bloc.dart';
 import '../models/wine_prefix.dart';
@@ -302,9 +303,9 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     required PrefixListBloc bloc,
   }) {
     final runningPinnedExecutablesRepo = GetIt.I
-        .get<RunningPinnedExecutablesRepo>();
+        .get<RunningExecutablesRepo<PinnedExecutable>>();
     final runningSpecialExecutablesRepo = GetIt.I
-        .get<RunningSpecialExecutablesRepo>();
+        .get<RunningExecutablesRepo<SpecialExecutableState>>();
 
     final numPinnedExecutablesRunning = runningPinnedExecutablesRepo
         .numProcessesRunningInPrefix(prefix);

@@ -32,7 +32,6 @@ import 'package:winebar/blocs/special_executable/special_executable_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/pinned_executable_list_event.dart';
-import 'package:winebar/repositories/running_pinned_executables_repo.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
 import 'package:winebar/widgets/pin_executable_button.dart';
@@ -45,14 +44,12 @@ import '../models/wine_prefix.dart';
 import '../widgets/process_output_widget.dart';
 
 class WinePrefixPage extends StatelessWidget {
-  final runningPinnedExecutablesRepo = GetIt.I
-      .get<RunningPinnedExecutablesRepo>();
   final StartupData startupData;
   final WinePrefix winePrefix;
 
   final PinnedExecutableSetState initialPinnedExecutables;
 
-  WinePrefixPage({
+  const WinePrefixPage({
     super.key,
     required this.startupData,
     required this.winePrefix,

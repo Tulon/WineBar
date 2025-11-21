@@ -23,7 +23,6 @@ import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
-import 'package:winebar/repositories/running_pinned_executables_repo.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
 
@@ -31,8 +30,6 @@ import '../../../models/pinned_executable.dart';
 
 class PinnedExecutableSetBloc extends Cubit<PinnedExecutableSetState> {
   final logger = GetIt.I.get<Logger>();
-  final runningPinnedExecutablesRepo = GetIt.I
-      .get<RunningPinnedExecutablesRepo>();
   final StartupData startupData;
 
   /// Pinning and unpinning operations are asynchronous but need to be executed

@@ -29,8 +29,9 @@ import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/process_output.dart';
+import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix.dart';
-import 'package:winebar/repositories/running_special_executables_repo.dart';
+import 'package:winebar/repositories/running_executables_repo.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/utils/command_line_to_wine_args.dart';
@@ -42,7 +43,7 @@ import 'package:winebar/utils/wine_installation_descriptor.dart';
 abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
   final logger = GetIt.I.get<Logger>();
   final runningSpecialExecutablesRepo = GetIt.I
-      .get<RunningSpecialExecutablesRepo>();
+      .get<RunningExecutablesRepo<SpecialExecutableSlot>>();
   final StartupData startupData;
   final WinePrefix winePrefix;
   WineProcess? _runningProcess;
@@ -53,7 +54,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
     : super(SpecialExecutableState.defaultState()) {
     final runningProcess = runningSpecialExecutablesRepo.tryFindRunningProcess(
       prefix: winePrefix,
-      executableSlot: executableSlot,
+      slot: executableSlot,
     );
 
     if (runningProcess != null) {
@@ -154,7 +155,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
         onProcessStarted: (runningProcess) {
           runningSpecialExecutablesRepo.addRunningProcess(
             prefix: winePrefix,
-            executableSlot: executableSlot,
+            slot: executableSlot,
             wineProcess: runningProcess,
           );
           _attachToRunningProcess(runningProcess);
