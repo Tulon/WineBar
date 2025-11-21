@@ -36,11 +36,13 @@ class StartupData {
   final LocalStoragePaths localStoragePaths;
   final List<WinePrefix> winePrefixes;
   final WineProcessRunnerService wineProcessRunnerService;
+  final bool isNonIntelHost;
 
   StartupData({
     required this.localStoragePaths,
     required this.winePrefixes,
     required this.wineProcessRunnerService,
+    required this.isNonIntelHost,
   });
 
   static Future<StartupData> load() async {
@@ -49,6 +51,12 @@ class StartupData {
 
     final pageSize = await _getPageSize();
     final muvmNeeded = pageSize != 4096;
+
+    final archName = await _getArchNameFromUname();
+
+    // See the list of possible string returned from "uname -a":
+    // https://stackoverflow.com/a/78630608
+    final isNonIntelHost = !archName.contains('86');
 
     if (muvmNeeded) {
       if (!await _isMuvmAvailable()) {
@@ -87,6 +95,7 @@ class StartupData {
       localStoragePaths: localStoragePaths,
       winePrefixes: winePrefixes,
       wineProcessRunnerService: wineProcessRunningService,
+      isNonIntelHost: isNonIntelHost,
     );
   }
 
@@ -102,6 +111,23 @@ class StartupData {
         stackTrace: stackTrace,
       );
       throw GenericException('Unable to get the page size: ${e.toString()}');
+    }
+  }
+
+  static Future<String> _getArchNameFromUname() async {
+    try {
+      final processResult = await Process.run('uname', ['-m']);
+      return processResult.stdout.toString().trim();
+    } catch (e, stackTrace) {
+      final logger = GetIt.I.get<Logger>();
+      logger.e(
+        'Failed to get the host architecture name using "uname -m"',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      throw GenericException(
+        'Unable to get the architecture name: ${e.toString()}',
+      );
     }
   }
 

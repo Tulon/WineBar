@@ -50,6 +50,9 @@ dependencies:
   crypto: ^3.0.6
   convert: ^3.1.2
   posix: ^6.0.3
+  build_runner: ^2.10.4
+  mockito: ^5.6.1
+  rps: ^0.9.1
 
 dev_dependencies:
   flutter_test:

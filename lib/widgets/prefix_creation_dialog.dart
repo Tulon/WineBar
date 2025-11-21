@@ -317,32 +317,27 @@ class _WineReleaseSelectionStep extends _PrefixCreationStep {
     required PrefixCreationState state,
   }) {
     return [
-      IndexedStack(
-        index: state.wineBuildsFetchingInProgress ? 1 : 0,
-        alignment: Alignment.center,
-        children: [
-          OverflowPadding(
-            // We apply a negative padding in order to keep
-            // the step title height the same for all steps.
-            // Without that, the IconButton would force a
-            // taller page title for this particular step.
-            padding: EdgeInsets.all(-8.0),
-            child: IconButton(
-              icon: const Icon(Icons.refresh),
-              tooltip: 'Refresh wine releases',
-              onPressed: bloc.refreshWineBuilds,
+      state.wineBuildsFetchingInProgress
+          ? SizedBox(
+              width: 24.0,
+              height: 24.0,
+              child: CircularProgressIndicator(
+                strokeWidth: 3.0,
+                padding: EdgeInsets.all(4.0),
+              ),
+            )
+          : OverflowPadding(
+              // We apply a negative padding in order to keep
+              // the step title height the same for all steps.
+              // Without that, the IconButton would force a
+              // taller page title for this particular step.
+              padding: EdgeInsets.all(-8.0),
+              child: IconButton(
+                icon: const Icon(Icons.refresh),
+                tooltip: 'Refresh wine releases',
+                onPressed: bloc.refreshWineBuilds,
+              ),
             ),
-          ),
-          SizedBox(
-            width: 24.0,
-            height: 24.0,
-            child: CircularProgressIndicator(
-              strokeWidth: 3.0,
-              padding: EdgeInsets.all(4.0),
-            ),
-          ),
-        ],
-      ),
     ];
   }
 
@@ -391,7 +386,7 @@ class _WineBuildSelectionStep extends _PrefixCreationStep {
     required PrefixCreationBloc bloc,
     required PrefixCreationState state,
   }) {
-    return ListView(
+    final listView = ListView(
       children: state.wineBuildsToSelectFrom
           .map<Widget>(
             (build) => ListTile(
@@ -407,6 +402,55 @@ class _WineBuildSelectionStep extends _PrefixCreationStep {
           )
           .toList(),
     );
+
+    final colorScheme = Theme.of(context).colorScheme;
+
+    if (!state.wow64BuildThatWontWorkSelected) {
+      return listView;
+    } else {
+      return Column(
+        children: [
+          Expanded(child: listView),
+          Divider(height: 24.0),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(12.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              border: BoxBorder.all(color: colorScheme.error, width: 2.0),
+            ),
+            child: Column(
+              spacing: 8.0,
+              children: [
+                SelectableText(
+                  'A WOW64 build was selected. Those are known to have issues '
+                  'under emulation. Expect a broken installation.',
+                  style: TextStyle(fontSize: 16, color: colorScheme.error),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: bloc.proceedAnywayWithABrokenBuild,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
+                    ),
+                    child: Text(
+                      'Proceed Anyway',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
   }
 }
 

@@ -110,6 +110,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         wineReleasesToSelectFrom: const [],
         selectedWineReleaseGetter: () => null,
         wineBuildsToSelectFrom: const [],
+        wow64BuildThatWontWorkSelected: false,
         selectedWineBuildGetter: () => null,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
@@ -170,6 +171,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         selectedWineReleaseGetter: () => release,
         wineBuildsToSelectFrom: release?.builds ?? [],
         selectedWineBuildGetter: () => null,
+        wow64BuildThatWontWorkSelected: false,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
       ),
@@ -178,19 +180,30 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
 
   void selectWineBuild(WineBuild? build) {
     const currentStep = PrefixCreationStep.selectWineBuild;
-    final nextStep = build == null
-        ? currentStep
-        : PrefixCreationStep.setOptions;
     assert(currentStep == state.currentStep);
 
-    if (state.selectedWineBuild == build) {
+    PrefixCreationStep nextStep = build == null
+        ? currentStep
+        : PrefixCreationStep.setOptions;
+
+    bool wow64BuildThatWontWorkSelected = false;
+
+    if (build != null && build.isWow64Build && startupData.isNonIntelHost) {
+      // Unless something changed recently, wow64 builds don't work under emulation.
+      // In such a case, we don't advance to the next step but display a warning
+      // and a button to proceed anyway.
+      wow64BuildThatWontWorkSelected = true;
+      nextStep = currentStep;
+    }
+
+    if (state.selectedWineBuild == build && !wow64BuildThatWontWorkSelected) {
       // If the build hasn't changed, the only thing we need to do is to
       // advance the current step, unless the build is null, in which case
       // we don't have to do anything at all. Note that given the build
       // hasn't changed, we don't modify maxAccessibleStep, which may be
       // further than nextStep.
       if (build != null) {
-        state.copyWith(currentStep: nextStep);
+        emit(state.copyWith(currentStep: nextStep));
       }
       return;
     }
@@ -200,6 +213,28 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         currentStep: nextStep,
         maxAccessibleStep: nextStep,
         selectedWineBuildGetter: () => build,
+        wow64BuildThatWontWorkSelected: wow64BuildThatWontWorkSelected,
+        prefixCreationStatus: PrefixCreationStatus.notStarted,
+        prefixCreationFailureMessageGetter: () => null,
+      ),
+    );
+  }
+
+  void proceedAnywayWithABrokenBuild() {
+    const currentStep = PrefixCreationStep.selectWineBuild;
+    assert(currentStep == state.currentStep);
+    assert(state.selectedWineBuild != null);
+    assert(state.wow64BuildThatWontWorkSelected);
+
+    final PrefixCreationStep nextStep = PrefixCreationStep.setOptions;
+
+    emit(
+      state.copyWith(
+        currentStep: nextStep,
+        maxAccessibleStep: laterPrefixCreatonStepOfTwo(
+          nextStep,
+          state.maxAccessibleStep,
+        ),
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
       ),

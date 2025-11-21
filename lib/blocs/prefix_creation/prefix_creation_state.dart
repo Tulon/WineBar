@@ -30,6 +30,13 @@ enum PrefixCreationStep {
   setOptions,
 }
 
+PrefixCreationStep laterPrefixCreatonStepOfTwo(
+  PrefixCreationStep a,
+  PrefixCreationStep b,
+) {
+  return a.index > b.index ? a : b;
+}
+
 enum PrefixCreationStatus {
   notStarted,
   downloadingAndExtractingWineBuild,
@@ -61,6 +68,7 @@ class PrefixCreationState extends Equatable {
   final WineRelease? selectedWineRelease;
   final List<WineBuild> wineBuildsToSelectFrom;
   final WineBuild? selectedWineBuild;
+  final bool wow64BuildThatWontWorkSelected;
   final String prefixName;
   final String? prefixNameErrorMessage;
   final double hiDpiScale;
@@ -83,6 +91,7 @@ class PrefixCreationState extends Equatable {
     required this.selectedWineRelease,
     required this.wineBuildsToSelectFrom,
     required this.selectedWineBuild,
+    required this.wow64BuildThatWontWorkSelected,
     required this.prefixName,
     required this.prefixNameErrorMessage,
     required this.hiDpiScale,
@@ -104,6 +113,7 @@ class PrefixCreationState extends Equatable {
         selectedWineRelease: null,
         wineBuildsToSelectFrom: const [],
         selectedWineBuild: null,
+        wow64BuildThatWontWorkSelected: false,
         prefixName: '',
         prefixNameErrorMessage: null,
         hiDpiScale: 1.0,
@@ -123,6 +133,7 @@ class PrefixCreationState extends Equatable {
     selectedWineRelease,
     wineBuildsToSelectFrom,
     selectedWineBuild,
+    wow64BuildThatWontWorkSelected,
     prefixName,
     prefixNameErrorMessage,
     hiDpiScale,
@@ -141,6 +152,7 @@ class PrefixCreationState extends Equatable {
     ValueGetter<WineRelease?>? selectedWineReleaseGetter,
     List<WineBuild>? wineBuildsToSelectFrom,
     ValueGetter<WineBuild?>? selectedWineBuildGetter,
+    bool? wow64BuildThatWontWorkSelected,
     String? prefixName,
     ValueGetter<String?>? prefixNameErrorMessageGetter,
     double? hiDpiScale,
@@ -170,6 +182,8 @@ class PrefixCreationState extends Equatable {
       selectedWineBuild: selectedWineBuildGetter != null
           ? selectedWineBuildGetter()
           : selectedWineBuild,
+      wow64BuildThatWontWorkSelected:
+          wow64BuildThatWontWorkSelected ?? this.wow64BuildThatWontWorkSelected,
       prefixName: prefixName ?? this.prefixName,
       prefixNameErrorMessage: prefixNameErrorMessageGetter != null
           ? prefixNameErrorMessageGetter()
