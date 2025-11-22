@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:dbus/dbus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -23,6 +24,7 @@ import 'package:logger/logger.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/screensaver_inhibition_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/services/winetricks_download_service_impl.dart';
 
@@ -43,6 +45,13 @@ void main() {
     ..options.receiveTimeout = Duration(seconds: 5)
     ..options.sendTimeout = Duration(seconds: 5);
 
+  final dbusClient = DBusClient.session();
+
+  final runningPinnedExecutablesRepo =
+      RunningExecutablesRepo<PinnedExecutable>();
+  final runningSpecialExecutablesRepo =
+      RunningExecutablesRepo<SpecialExecutableSlot>();
+
   GetIt.I.registerSingleton<Logger>(logger);
   GetIt.I.registerSingleton<Dio>(dio);
   GetIt.I.registerSingleton<WineBuildSourceRepo>(
@@ -55,10 +64,19 @@ void main() {
     WinetricksDownloadServiceImpl(dio: dio),
   );
   GetIt.I.registerSingleton<RunningExecutablesRepo<PinnedExecutable>>(
-    RunningExecutablesRepo<PinnedExecutable>(),
+    runningPinnedExecutablesRepo,
   );
   GetIt.I.registerSingleton<RunningExecutablesRepo<SpecialExecutableSlot>>(
-    RunningExecutablesRepo<SpecialExecutableSlot>(),
+    runningSpecialExecutablesRepo,
+  );
+  GetIt.I.registerSingleton<ScreensaverInhibitionService>(
+    ScreensaverInhibitionService(
+      dbusClient: dbusClient,
+      runningExecutablesRepos: [
+        runningPinnedExecutablesRepo,
+        runningSpecialExecutablesRepo,
+      ],
+    ),
   );
 
   runApp(TopLevelWidget());

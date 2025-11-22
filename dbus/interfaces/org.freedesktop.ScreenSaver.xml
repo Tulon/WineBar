@@ -1,0 +1,40 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.freedesktop.ScreenSaver">
+    <signal name="ActiveChanged">
+      <arg type="b"/>
+    </signal>
+    <method name="Lock"/>
+    <method name="SimulateUserActivity"/>
+    <method name="GetActive">
+      <arg direction="out" type="b"/>
+    </method>
+    <method name="GetActiveTime">
+      <arg direction="out" type="u" name="seconds"/>
+    </method>
+    <method name="GetSessionIdleTime">
+      <arg direction="out" type="u" name="seconds"/>
+    </method>
+    <method name="SetActive">
+      <arg direction="out" type="b"/>
+      <arg direction="in" type="b" name="e"/>
+    </method>
+    <method name="Inhibit">
+      <arg direction="in" type="s" name="application_name"/>
+      <arg direction="in" type="s" name="reason_for_inhibit"/>
+      <arg direction="out" type="u" name="cookie"/>
+    </method>
+    <method name="UnInhibit">
+      <arg direction="in" type="u" name="cookie"/>
+    </method>
+    <method name="Throttle">
+      <arg direction="in" type="s" name="application_name"/>
+      <arg direction="in" type="s" name="reason_for_inhibit"/>
+      <arg direction="out" type="u" name="cookie"/>
+    </method>
+    <method name="UnThrottle">
+      <arg direction="in" type="u" name="cookie"/>
+    </method>
+  </interface>
+</node>

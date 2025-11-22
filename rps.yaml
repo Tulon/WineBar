@@ -1,2 +1,9 @@
 scripts:
-  generate: dart run build_runner build
+  generate: |
+    # Generates test mocks
+    dart run build_runner build
+
+    # Generates classes for DBus remote objects.
+    mkdir -p lib/dbus
+    dart-dbus generate-remote-object dbus/interfaces/org.freedesktop.ScreenSaver.xml \
+      -o lib/dbus/org_freedesktop_screensaver.dart

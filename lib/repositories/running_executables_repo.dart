@@ -18,10 +18,17 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 
-abstract interface class RunningExecutablesRepo<SlotType> {
+/// Keeps track of processes of a certain category (defined by SlotType) that
+/// are currently running.
+///
+/// The [ChangeNotifier] notifies its listeners whenever a process is added
+/// or removed from the set of tracked processes. Processes are removed from
+/// the set of tracked processes when they finish.
+abstract interface class RunningExecutablesRepo<SlotType> with ChangeNotifier {
   factory RunningExecutablesRepo() {
     return _RunningExecutablesRepo<SlotType>();
   }
@@ -38,11 +45,14 @@ abstract interface class RunningExecutablesRepo<SlotType> {
   });
 
   int numProcessesRunningInPrefix(WinePrefix prefix);
+
+  int totalRunningProcesses();
 }
 
 typedef _RunningExecutablesInPrefix<SlotType> = Map<SlotType, WineProcess>;
 
 class _RunningExecutablesRepo<SlotType>
+    with ChangeNotifier
     implements RunningExecutablesRepo<SlotType> {
   final runningExecutablesByPrefix =
       <WinePrefix, _RunningExecutablesInPrefix<SlotType>>{};
@@ -68,8 +78,11 @@ class _RunningExecutablesRepo<SlotType>
         if (runningExecutablesInPrefix.isEmpty) {
           runningExecutablesByPrefix.remove(prefix);
         }
+        notifyListeners();
       }),
     );
+
+    notifyListeners();
   }
 
   @override
@@ -83,5 +96,13 @@ class _RunningExecutablesRepo<SlotType>
   @override
   int numProcessesRunningInPrefix(WinePrefix prefix) {
     return runningExecutablesByPrefix[prefix]?.length ?? 0;
+  }
+
+  @override
+  int totalRunningProcesses() {
+    return runningExecutablesByPrefix.entries.fold(
+      0,
+      (sum, entry) => sum + entry.value.length,
+    );
   }
 }

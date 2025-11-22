@@ -17,6 +17,7 @@
  */
 
 class AppInfo {
+  static final String appName = 'Wine Bar';
   static final String appPackageId = 'io.github.tulon.winebar';
 
   static final String winetricksGithubRepoOwner = 'Winetricks';

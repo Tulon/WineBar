@@ -81,6 +81,15 @@ cd <project_folder>
 ./packaging/scripts/build_appimage.sh <x64|arm64>
 ```
 
+### Regenerating the Generated Files
+
+```bash
+cd <project_folder>
+dart pub global activate rps
+dart pub global activate dbus
+rps generate
+```
+
 ## About the Author
 
 Checkout out my [blog](https://tulon.github.io/) if you are interested!
