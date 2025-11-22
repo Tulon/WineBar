@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:winebar/utils/app_info.dart';
 
 import '../utils/startup_data.dart';
 import 'error_message_widget.dart';
@@ -30,7 +31,7 @@ class TopLevelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Wine Bar',
+      title: AppInfo.appName,
       theme: ThemeData.light(useMaterial3: true),
       darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: ThemeMode.system,
