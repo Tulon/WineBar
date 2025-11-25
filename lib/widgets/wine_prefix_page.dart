@@ -35,7 +35,6 @@ import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/pinned_executable_list_event.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/utils/startup_data.dart';
-import 'package:winebar/utils/wine_installation_descriptor.dart';
 import 'package:winebar/widgets/pin_executable_button.dart';
 import 'package:winebar/widgets/prefix_settings_dialog.dart';
 import 'package:winebar/widgets/run_process_chip.dart';
@@ -123,28 +122,17 @@ class WinePrefixPage extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  body: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        child: _PinnedExecutablesGridWidget(
-                          startupData: startupData,
-                          winePrefix: state.prefix,
-                        ),
-                      ),
-                      _buildBottomPanel(
-                        context: context,
-                        state: state,
-                        colorScheme: colorScheme,
-                      ),
-                    ],
+                  body: _PinnedExecutablesGridWidget(
+                    startupData: startupData,
+                    winePrefix: state.prefix,
                   ),
-                  floatingActionButton: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildPinExecutableButton(prefix: state.prefix),
-                      SizedBox(height: 50),
-                    ],
+                  bottomNavigationBar: _buildBottomPanel(
+                    context: context,
+                    state: state,
+                    colorScheme: colorScheme,
+                  ),
+                  floatingActionButton: _buildPinExecutableButton(
+                    prefix: state.prefix,
                   ),
                 ),
                 if (state.fileSelectionInProgress)
@@ -167,6 +155,11 @@ class WinePrefixPage extends StatelessWidget {
     required PrefixDetailsState state,
     required ColorScheme colorScheme,
   }) {
+    void showPrefixUpdatedSnackBar() {
+      const snackBar = SnackBar(content: Text('Wine prefix updated'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
     final prefixDetailsBloc = BlocProvider.of<PrefixDetailsBloc>(context);
 
     return Container(
@@ -210,6 +203,7 @@ class WinePrefixPage extends StatelessWidget {
                       prefix: state.prefix,
                       onPrefixUpdated: (prefix) {
                         prefixDetailsBloc.updatePrefix(prefix);
+                        showPrefixUpdatedSnackBar();
                         onPrefixUpdated(prefix);
                       },
                     ),
