@@ -17,6 +17,8 @@
  */
 
 enum SpecialExecutableSlot {
+  prefixCreationTask,
+  prefixUpdateTask,
   customExecutable,
   runInstaller,
   winetricksExecutable,

@@ -27,10 +27,15 @@ class PrefixAddedEvent extends Equatable implements PrefixListEvent {
   /// The zero-based index of the prefix that was just added.
   final int prefixIndex;
 
-  const PrefixAddedEvent({required this.prefixIndex});
+  final bool animatedInsertion;
+
+  const PrefixAddedEvent({
+    required this.prefixIndex,
+    required this.animatedInsertion,
+  });
 
   @override
-  List<Object?> get props => [prefixIndex];
+  List<Object?> get props => [prefixIndex, animatedInsertion];
 }
 
 @immutable
@@ -40,11 +45,14 @@ class PrefixRemovedEvent extends Equatable implements PrefixListEvent {
 
   final WinePrefix removedPrefix;
 
+  final bool animatedRemoval;
+
   const PrefixRemovedEvent({
     required this.prefixIndex,
     required this.removedPrefix,
+    required this.animatedRemoval,
   });
 
   @override
-  List<Object> get props => [prefixIndex, removedPrefix];
+  List<Object> get props => [prefixIndex, removedPrefix, animatedRemoval];
 }

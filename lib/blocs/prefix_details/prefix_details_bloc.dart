@@ -17,11 +17,17 @@
  */
 
 import 'package:bloc/bloc.dart';
+import 'package:winebar/models/wine_prefix.dart';
 
 import 'prefix_details_state.dart';
 
 class PrefixDetailsBloc extends Cubit<PrefixDetailsState> {
-  PrefixDetailsBloc() : super(PrefixDetailsState.initialState());
+  PrefixDetailsBloc({required WinePrefix prefix})
+    : super(PrefixDetailsState.initialState(prefix: prefix));
+
+  void updatePrefix(WinePrefix prefix) {
+    emit(state.copyWith(prefix: prefix));
+  }
 
   void setFileSelectionInProgress(bool inProgress) {
     emit(state.copyWith(fileSelectionInProgress: inProgress));

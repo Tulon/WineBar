@@ -18,21 +18,30 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:winebar/models/wine_prefix.dart';
 
 @immutable
 class PrefixDetailsState extends Equatable {
+  final WinePrefix prefix;
   final bool fileSelectionInProgress;
 
-  const PrefixDetailsState({required this.fileSelectionInProgress});
+  const PrefixDetailsState({
+    required this.prefix,
+    required this.fileSelectionInProgress,
+  });
 
-  const PrefixDetailsState.initialState()
-    : this(fileSelectionInProgress: false);
+  const PrefixDetailsState.initialState({required WinePrefix prefix})
+    : this(prefix: prefix, fileSelectionInProgress: false);
 
   @override
-  List<Object?> get props => [fileSelectionInProgress];
+  List<Object?> get props => [prefix, fileSelectionInProgress];
 
-  PrefixDetailsState copyWith({bool? fileSelectionInProgress}) {
+  PrefixDetailsState copyWith({
+    WinePrefix? prefix,
+    bool? fileSelectionInProgress,
+  }) {
     return PrefixDetailsState(
+      prefix: prefix ?? this.prefix,
       fileSelectionInProgress:
           fileSelectionInProgress ?? this.fileSelectionInProgress,
     );

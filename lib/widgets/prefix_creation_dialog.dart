@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:winebar/utils/startup_data.dart';
+import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 
 import '../blocs/prefix_creation/prefix_creation_bloc.dart';
 import '../blocs/prefix_creation/prefix_creation_state.dart';
@@ -508,7 +509,18 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
             errorText: state.prefixNameErrorMessage,
           ),
         ),
-        _buildHiDpiControls(context: context, bloc: bloc, state: state),
+        HiDpiScaleSelectionWidget(
+          initialScaleFactor: state.hiDpiScale,
+          onScaleFactorChanged: state.prefixCreationStatus.isInProgress
+              ? null
+              : (hiDpiScale) {
+                  bloc.setHiDpiScale(hiDpiScale);
+                },
+          // Our state.hiDpiScale is not nullable,
+          // so a value is always set, so requiredError
+          // is always false.
+          requiredError: false,
+        ),
         SizedBox(
           width: double.infinity,
           height: 50,
@@ -554,77 +566,6 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
             width: double.infinity,
           ),
       ],
-    );
-  }
-
-  Widget _buildHiDpiControls({
-    required BuildContext context,
-    required PrefixCreationBloc bloc,
-    required PrefixCreationState state,
-  }) {
-    final stepScaleDelta = 0.5;
-    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
-    final roundedDevicePixelRatio =
-        (devicePixelRatio / stepScaleDelta).round() * stepScaleDelta;
-
-    bool isPerfectScale(double scale) {
-      return scale == roundedDevicePixelRatio;
-    }
-
-    Widget? buildHelperWidget(double selectedScale) {
-      if (selectedScale == 1.0) {
-        if (roundedDevicePixelRatio > 1.0) {
-          return const Text(
-            "This will make the text too small but won't break older fullscreen apps",
-          );
-        } else {
-          return const Text("This is the perfect scale for your display");
-        }
-      } else {
-        if (selectedScale < roundedDevicePixelRatio) {
-          return const Text(
-            "This will help with text being too small but will break older fullscreen apps",
-          );
-        } else if (selectedScale == roundedDevicePixelRatio) {
-          return const Text(
-            "This is the perfect scale for your display, though it will break older fullscreen apps",
-          );
-        } else {
-          return const Text("This may produce text that's too large");
-        }
-      }
-    }
-
-    Widget buildChoiceChip(int step) {
-      final scale = 1.0 + step * stepScaleDelta;
-      final selected = scale == state.hiDpiScale;
-
-      return ChoiceChip(
-        label: Text('$scale'),
-        avatar: !selected && isPerfectScale(scale) ? Icon(Icons.star) : null,
-        selected: selected,
-        onSelected: state.prefixCreationStatus.isInProgress
-            ? null
-            : (bool selected) {
-                if (selected) {
-                  bloc.setHiDpiScale(scale);
-                }
-              },
-      );
-    }
-
-    return InputDecorator(
-      decoration: InputDecoration(
-        label: const Text('HiDPI scale'),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-        helper: buildHelperWidget(state.hiDpiScale),
-      ),
-      child: Wrap(
-        spacing: 8.0,
-        children: List<Widget>.generate(5, (int step) {
-          return buildChoiceChip(step);
-        }),
-      ),
     );
   }
 }

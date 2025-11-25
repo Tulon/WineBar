@@ -50,14 +50,20 @@ class PrefixListBloc extends Cubit<PrefixListState> {
   }
 
   void addPrefix(WinePrefix newPrefix) {
-    // Just in case such prefix was already there.
-    emit(
-      state.copyWithPrefixRemoved(
-        prefixOuterDir: newPrefix.dirStructure.outerDir,
-      ),
-    );
+    // Just in case such a prefix was already there.
+    _removeExistingPrefixIfPresent(newPrefix, animatedRemoval: false);
 
     emit(state.copyWithAdditionalPrefix(newPrefix));
+  }
+
+  void updatePrefix({
+    required WinePrefix oldPrefix,
+    required WinePrefix updatedPrefix,
+  }) {
+    _removeExistingPrefixIfPresent(oldPrefix, animatedRemoval: false);
+    emit(
+      state.copyWithAdditionalPrefix(updatedPrefix, animatedInsertion: false),
+    );
   }
 
   void startDeletingPrefix(WinePrefix prefixToDelete) {
@@ -75,11 +81,7 @@ class PrefixListBloc extends Cubit<PrefixListState> {
             return;
           }
 
-          emit(
-            state.copyWithPrefixRemoved(
-              prefixOuterDir: prefixToDelete.dirStructure.outerDir,
-            ),
-          );
+          _removeExistingPrefixIfPresent(prefixToDelete);
         })
         .catchError((e, stackTrace) {
           logger.e(
@@ -88,6 +90,19 @@ class PrefixListBloc extends Cubit<PrefixListState> {
             stackTrace: stackTrace,
           );
         });
+  }
+
+  void _removeExistingPrefixIfPresent(
+    WinePrefix prefixToRemove, {
+    bool animatedRemoval = true,
+  }) {
+    final newState = state.copyWithPrefixRemoved(
+      prefixOuterDir: prefixToRemove.dirStructure.outerDir,
+      animatedRemoval: animatedRemoval,
+    );
+    if (newState.prefixListEvent != null) {
+      emit(newState);
+    }
   }
 
   Future<PinnedExecutableSetState?> startLoadingPinnedExecutablesFor(

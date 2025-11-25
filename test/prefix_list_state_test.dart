@@ -8,7 +8,11 @@ import 'package:winebar/utils/prefix_descriptor.dart';
 WinePrefix _makePrefix({required String name, required String outerDir}) {
   return WinePrefix(
     dirStructure: WinePrefixDirStructure.fromOuterDir(outerDir),
-    descriptor: PrefixDescriptor(name: name, relPathToWineInstall: '..'),
+    descriptor: PrefixDescriptor(
+      name: name,
+      relPathToWineInstall: '..',
+      hiDpiScale: null,
+    ),
   );
 }
 
@@ -23,7 +27,10 @@ void main() {
     expect(newState.orderedPrefixes.length, 1);
     expect(newState.orderedPrefixes[0], newPrefix);
 
-    expect(newState.prefixListEvent, PrefixAddedEvent(prefixIndex: 0));
+    expect(
+      newState.prefixListEvent,
+      PrefixAddedEvent(prefixIndex: 0, animatedInsertion: true),
+    );
   });
 
   test('Adding a prefix between 2 existing ones', () {
@@ -42,7 +49,10 @@ void main() {
     expect(newState.orderedPrefixes[1], newPrefix2);
     expect(newState.orderedPrefixes[2], oldPrefix3);
 
-    expect(newState.prefixListEvent, PrefixAddedEvent(prefixIndex: 1));
+    expect(
+      newState.prefixListEvent,
+      PrefixAddedEvent(prefixIndex: 1, animatedInsertion: true),
+    );
   });
 
   test('Removing the middle prefix', () {
@@ -64,7 +74,11 @@ void main() {
 
     expect(
       newState.prefixListEvent,
-      PrefixRemovedEvent(prefixIndex: 1, removedPrefix: oldPrefix2),
+      PrefixRemovedEvent(
+        prefixIndex: 1,
+        removedPrefix: oldPrefix2,
+        animatedRemoval: true,
+      ),
     );
   });
 

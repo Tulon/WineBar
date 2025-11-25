@@ -65,6 +65,8 @@ abstract interface class WineInstallationDescriptor {
     required WinePrefixDirStructure prefixDirStructure,
   });
 
+  /// Don't use directly - use
+  /// [UtilityService.WineInstallationDescriptorForWineInstallDir] instead.
   static Future<WineInstallationDescriptor> forWineInstallDir(
     String wineInstallDir,
   ) async {

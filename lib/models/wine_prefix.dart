@@ -55,4 +55,14 @@ class WinePrefix extends Equatable implements Comparable<WinePrefix> {
 
     return dirStructure.outerDir.compareTo(other.dirStructure.outerDir);
   }
+
+  WinePrefix copyWith({
+    WinePrefixDirStructure? dirStructure,
+    PrefixDescriptor? descriptor,
+  }) {
+    return WinePrefix(
+      dirStructure: dirStructure ?? this.dirStructure,
+      descriptor: descriptor ?? this.descriptor,
+    );
+  }
 }

@@ -67,7 +67,10 @@ class PrefixListState extends Equatable {
   /// list of prefixes at the correct position which is determined by
   /// [WinePrefix.compareTo]. This method won't try to remove an existing
   /// prefix at the same location on disk, should one exist.
-  PrefixListState copyWithAdditionalPrefix(WinePrefix newPrefix) {
+  PrefixListState copyWithAdditionalPrefix(
+    WinePrefix newPrefix, {
+    bool animatedInsertion = true,
+  }) {
     final newOrderedPrefixes = <WinePrefix>[];
     PrefixListEvent? prefixListEvent;
     bool newPrefixAdded = false;
@@ -75,6 +78,7 @@ class PrefixListState extends Equatable {
     void addNewPrefix() {
       prefixListEvent = PrefixAddedEvent(
         prefixIndex: newOrderedPrefixes.length,
+        animatedInsertion: animatedInsertion,
       );
       newOrderedPrefixes.add(newPrefix);
       newPrefixAdded = true;
@@ -111,7 +115,10 @@ class PrefixListState extends Equatable {
   /// Returns a new [PrefixListState] with the given prefix removed.
   /// The prefix directory itself isn't removed. This method won't try
   /// to match more than one existing prefix to the argument.
-  PrefixListState copyWithPrefixRemoved({required String prefixOuterDir}) {
+  PrefixListState copyWithPrefixRemoved({
+    required String prefixOuterDir,
+    bool animatedRemoval = true,
+  }) {
     final newOrderedPrefixes = <WinePrefix>[];
     PrefixListEvent? prefixListEvent;
 
@@ -123,6 +130,7 @@ class PrefixListState extends Equatable {
         prefixListEvent = PrefixRemovedEvent(
           prefixIndex: newOrderedPrefixes.length,
           removedPrefix: existingPrefix,
+          animatedRemoval: animatedRemoval,
         );
       }
     }

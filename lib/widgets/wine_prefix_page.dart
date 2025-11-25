@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:boxy/padding.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,9 +33,11 @@ import 'package:winebar/blocs/special_executable/special_executable_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/pinned_executable_list_event.dart';
+import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
 import 'package:winebar/widgets/pin_executable_button.dart';
+import 'package:winebar/widgets/prefix_settings_dialog.dart';
 import 'package:winebar/widgets/run_process_chip.dart';
 
 import '../blocs/pinned_executable_set/pinned_executable_set_state.dart';
@@ -45,14 +48,23 @@ import '../widgets/process_output_widget.dart';
 
 class WinePrefixPage extends StatelessWidget {
   final StartupData startupData;
-  final WinePrefix winePrefix;
+  final void Function(WinePrefix) onPrefixUpdated;
 
+  /// This member is used only to initialize the PrefixDetailsBloc.
+  /// The wine prefix in the bloc may later change as a result of
+  /// the user updating a prefix. The initial value won't change.
+  final WinePrefix initialPrefix;
+
+  /// This member is used only to initialize the PinnedExecutableSetBloc.
+  /// The set of pinned executables may change later but this value
+  /// won't change.
   final PinnedExecutableSetState initialPinnedExecutables;
 
   const WinePrefixPage({
     super.key,
     required this.startupData,
-    required this.winePrefix,
+    required this.onPrefixUpdated,
+    required this.initialPrefix,
     required this.initialPinnedExecutables,
   });
 
@@ -60,17 +72,10 @@ class WinePrefixPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    // We don't want this widget to be rebuilt every time PrefixDetailsBloc emits
-    // a new state, so we create it here.
-    final pinnedExecutablesWidget = _PinnedExecutablesGridWidget(
-      startupData: startupData,
-      winePrefix: winePrefix,
-    );
-
     return MultiBlocProvider(
       providers: [
         BlocProvider<PrefixDetailsBloc>(
-          create: (context) => PrefixDetailsBloc(),
+          create: (context) => PrefixDetailsBloc(prefix: initialPrefix),
         ),
         BlocProvider<PinnedExecutableSetBloc>(
           create: (context) => PinnedExecutableSetBloc(
@@ -78,89 +83,147 @@ class WinePrefixPage extends StatelessWidget {
             startupData: startupData,
           ),
         ),
-        BlocProvider<CustomExecutableBloc>(
-          create: (context) => CustomExecutableBloc(
-            startupData: startupData,
-            winePrefix: winePrefix,
-          ),
-        ),
-        BlocProvider<RunInstallerBloc>(
-          create: (context) => RunInstallerBloc(
-            startupData: startupData,
-            winePrefix: winePrefix,
-            processExecutablePinnedInTempDir: (executablePinnedInTempDir) =>
-                BlocProvider.of<PinnedExecutableSetBloc>(
-                  context,
-                ).pinExecutable(executablePinnedInTempDir),
-          ),
-        ),
-        BlocProvider<WinetricksExecutableBloc>(
-          create: (context) => WinetricksExecutableBloc(
-            startupData: startupData,
-            winePrefix: winePrefix,
-          ),
-        ),
       ],
       child: BlocBuilder<PrefixDetailsBloc, PrefixDetailsState>(
         builder: (context, state) {
-          return Stack(
-            children: [
-              Scaffold(
-                appBar: AppBar(
-                  backgroundColor: colorScheme.inversePrimary,
-                  title: Text('Wine Prefix: ${winePrefix.descriptor.name}'),
-                ),
-                body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(child: pinnedExecutablesWidget),
-                    _buildBottomPanel(colorScheme: colorScheme),
-                  ],
-                ),
-                floatingActionButton: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [_buildPinExecutableButton(), SizedBox(height: 50)],
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<CustomExecutableBloc>(
+                create: (context) => CustomExecutableBloc(
+                  startupData: startupData,
+                  winePrefix: state.prefix,
                 ),
               ),
-              if (state.fileSelectionInProgress)
-                // Blocks all interactions.
-                ModalBarrier(
-                  dismissible: false,
-                  color: colorScheme.surface.withAlpha(128),
+              BlocProvider<RunInstallerBloc>(
+                create: (context) => RunInstallerBloc(
+                  startupData: startupData,
+                  winePrefix: state.prefix,
+                  processExecutablePinnedInTempDir:
+                      (executablePinnedInTempDir) =>
+                          BlocProvider.of<PinnedExecutableSetBloc>(
+                            context,
+                          ).pinExecutable(executablePinnedInTempDir),
                 ),
+              ),
+              BlocProvider<WinetricksExecutableBloc>(
+                create: (context) => WinetricksExecutableBloc(
+                  startupData: startupData,
+                  winePrefix: state.prefix,
+                ),
+              ),
             ],
+            child: Stack(
+              children: [
+                Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: colorScheme.inversePrimary,
+                    title: Text(
+                      'Wine Prefix: ${state.prefix.descriptor.name}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: _PinnedExecutablesGridWidget(
+                          startupData: startupData,
+                          winePrefix: state.prefix,
+                        ),
+                      ),
+                      _buildBottomPanel(
+                        context: context,
+                        state: state,
+                        colorScheme: colorScheme,
+                      ),
+                    ],
+                  ),
+                  floatingActionButton: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildPinExecutableButton(prefix: state.prefix),
+                      SizedBox(height: 50),
+                    ],
+                  ),
+                ),
+                if (state.fileSelectionInProgress)
+                  // Blocks all interactions.
+                  ModalBarrier(
+                    dismissible: false,
+                    color: Colors
+                        .black54, // Default barrier color for showDialog()
+                  ),
+              ],
+            ),
           );
         },
       ),
     );
   }
 
-  Widget _buildBottomPanel({required ColorScheme colorScheme}) {
+  Widget _buildBottomPanel({
+    required BuildContext context,
+    required PrefixDetailsState state,
+    required ColorScheme colorScheme,
+  }) {
+    final prefixDetailsBloc = BlocProvider.of<PrefixDetailsBloc>(context);
+
     return Container(
       padding: EdgeInsets.all(10.0),
-      alignment: Alignment.centerLeft,
       color: colorScheme.surfaceContainerHigh,
-      child: Wrap(
-        spacing: 8.0,
-        runSpacing: 8.0,
+      child: Row(
         children: [
-          BlocBuilder<CustomExecutableBloc, SpecialExecutableState>(
-            builder: (context, state) =>
-                _buildRunCustomExecutableChip(context, state),
+          Expanded(
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: [
+                BlocBuilder<CustomExecutableBloc, SpecialExecutableState>(
+                  builder: (context, state) =>
+                      _buildRunCustomExecutableChip(context, state),
+                ),
+                BlocBuilder<RunInstallerBloc, SpecialExecutableState>(
+                  builder: (context, state) =>
+                      _buildRunInstallerChip(context, state),
+                ),
+                BlocBuilder<WinetricksExecutableBloc, SpecialExecutableState>(
+                  builder: (context, state) =>
+                      _buildWinetricksGuiChip(context, state),
+                ),
+              ],
+            ),
           ),
-          BlocBuilder<RunInstallerBloc, SpecialExecutableState>(
-            builder: (context, state) => _buildRunInstallerChip(context, state),
-          ),
-          BlocBuilder<WinetricksExecutableBloc, SpecialExecutableState>(
-            builder: (context, state) =>
-                _buildWinetricksGuiChip(context, state),
+          OverflowPadding(
+            // We apply a negative padding in order to avoid
+            // enlarging the bottom panel.
+            padding: EdgeInsets.symmetric(vertical: -8.0),
+            child: IconButton.filledTonal(
+              icon: Icon(MdiIcons.cogs),
+              onPressed: () {
+                unawaited(
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => PrefixSettingsDialog(
+                      startupData: startupData,
+                      prefix: state.prefix,
+                      onPrefixUpdated: (prefix) {
+                        prefixDetailsBloc.updatePrefix(prefix);
+                        onPrefixUpdated(prefix);
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPinExecutableButton() {
+  Widget _buildPinExecutableButton({required WinePrefix prefix}) {
     Widget buildButton(BuildContext context, SpecialExecutableState state) {
       final bloc = BlocProvider.of<PinExecutableBloc>(context);
 
@@ -179,7 +242,7 @@ class WinePrefixPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => PinExecutableBloc(
         startupData: startupData,
-        winePrefix: winePrefix,
+        winePrefix: prefix,
         processExecutablePinnedInTempDir: (executablePinnedInTempDir) =>
             BlocProvider.of<PinnedExecutableSetBloc>(
               context,
@@ -257,22 +320,26 @@ class WinePrefixPage extends StatelessWidget {
     required BuildContext context,
     required SpecialExecutableBloc specialExecutableBloc,
   }) async {
+    final utilityService = GetIt.I.get<UtilityService>();
+
     final prefixDetailsBloc = BlocProvider.of<PrefixDetailsBloc>(context);
     prefixDetailsBloc.setFileSelectionInProgress(true);
 
     FilePickerResult? filePickerResult;
 
     try {
-      WineInstallationDescriptor wineInstDesc =
-          await WineInstallationDescriptor.forWineInstallDir(
-            winePrefix.descriptor.getAbsPathToWineInstall(
+      final WinePrefix prefix = prefixDetailsBloc.state.prefix;
+
+      final wineInstDesc = await utilityService
+          .wineInstallationDescriptorForWineInstallDir(
+            prefix.descriptor.getAbsPathToWineInstall(
               toplevelDataDir: startupData.localStoragePaths.toplevelDataDir,
             ),
           );
 
       filePickerResult = await FilePicker.platform.pickFiles(
         initialDirectory: wineInstDesc.getInnermostPrefixDir(
-          prefixDirStructure: winePrefix.dirStructure,
+          prefixDirStructure: prefix.dirStructure,
         ),
         type: FileType.custom,
         allowedExtensions: ['exe', 'msi', 'lnk'],

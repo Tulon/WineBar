@@ -22,9 +22,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
-import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/prefix_list_event.dart';
+import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
 
 import '../blocs/prefix_list/prefix_list_bloc.dart';
@@ -117,9 +117,17 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
   void _reactToPrefixListChanges({required PrefixListState state}) {
     final animatedListState = _prefixListKey.currentState!;
 
+    const instantTransitionDuration = Duration.zero;
+    const animatedTransitionDuration = Duration(milliseconds: 300);
+
     switch (state.prefixListEvent) {
       case PrefixAddedEvent evt:
-        animatedListState.insertItem(evt.prefixIndex);
+        animatedListState.insertItem(
+          evt.prefixIndex,
+          duration: evt.animatedInsertion
+              ? animatedTransitionDuration
+              : instantTransitionDuration,
+        );
       case PrefixRemovedEvent evt:
         animatedListState.removeItem(
           evt.prefixIndex,
@@ -128,6 +136,9 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
             animation: animation,
             removedPrefix: true,
           ),
+          duration: evt.animatedRemoval
+              ? animatedTransitionDuration
+              : instantTransitionDuration,
         );
       case null:
     }
@@ -305,7 +316,7 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     final runningPinnedExecutablesRepo = GetIt.I
         .get<RunningExecutablesRepo<PinnedExecutable>>();
     final runningSpecialExecutablesRepo = GetIt.I
-        .get<RunningExecutablesRepo<SpecialExecutableState>>();
+        .get<RunningExecutablesRepo<SpecialExecutableSlot>>();
 
     final numPinnedExecutablesRunning = runningPinnedExecutablesRepo
         .numProcessesRunningInPrefix(prefix);
@@ -358,8 +369,14 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
           MaterialPageRoute(
             builder: (_) => WinePrefixPage(
               startupData: startupData,
-              winePrefix: winePrefix,
+              initialPrefix: winePrefix,
               initialPinnedExecutables: pinnedExecutables,
+              onPrefixUpdated: (updatedPrefix) {
+                bloc.updatePrefix(
+                  oldPrefix: winePrefix,
+                  updatedPrefix: updatedPrefix,
+                );
+              },
             ),
           ),
         ),

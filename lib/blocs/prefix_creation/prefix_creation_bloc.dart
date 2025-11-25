@@ -26,12 +26,16 @@ import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/generic_prefix_creation_exception.dart';
+import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
+import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/utils/get_single_child_dir.dart';
 import 'package:winebar/utils/prefix_descriptor.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
+import 'package:winebar/utils/wine_tasks.dart';
 
 import '../../exceptions/prefix_already_exists_exception.dart';
 import '../../models/wine_build.dart';
@@ -321,12 +325,31 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         ),
       );
 
-      final wineInstDescriptor =
-          await WineInstallationDescriptor.forWineInstallDir(
-            wineInstallDir.path,
-          );
+      final utilityService = GetIt.I.get<UtilityService>();
+
+      final wineInstDescriptor = await utilityService
+          .wineInstallationDescriptorForWineInstallDir(wineInstallDir.path);
 
       await Directory(prefixDirStructure.innerDir).create(recursive: true);
+
+      final relWineInstallPath = path.relative(
+        wineInstallDir.path,
+        from: startupData.localStoragePaths.toplevelDataDir,
+      );
+
+      final prefixDescriptor = PrefixDescriptor(
+        name: state.prefixName,
+        relPathToWineInstall: relWineInstallPath,
+        hiDpiScale: state.hiDpiScale,
+      );
+
+      final winePrefix = WinePrefix(
+        dirStructure: prefixDirStructure,
+        descriptor: prefixDescriptor,
+      );
+
+      final runningSpecialExecutablesRepo = GetIt.I
+          .get<RunningExecutablesRepo<SpecialExecutableSlot>>();
 
       // Plain Wine installations (doesn't apply to Proton ones) show GUI
       // dialogs at prefix creation time. Ideally, we want our HiDPI settings
@@ -342,14 +365,16 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
 
       // Populate the prefix directory.
       await _initializeWinePrefix(
+        winePrefix: winePrefix,
         wineInstDescriptor: wineInstDescriptor,
-        prefixDirStructure: prefixDirStructure,
+        runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
       );
 
       // This time, apply the HiDPI settings the proper way.
       await _applyHiDpiSettings(
+        winePrefix: winePrefix,
         wineInstDescriptor: wineInstDescriptor,
-        prefixDirStructure: prefixDirStructure,
+        runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
       );
 
       // See the documentation for [WineInstallationDescriptor.needsHomeIsolation]
@@ -361,24 +386,11 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         );
       }
 
-      final relWineInstallPath = path.relative(
-        wineInstallDir.path,
-        from: startupData.localStoragePaths.toplevelDataDir,
-      );
-
-      final prefixJsonFile = PrefixDescriptor(
-        name: state.prefixName,
-        relPathToWineInstall: relWineInstallPath,
-      );
-
       await File(
         prefixDirStructure.prefixJsonFilePath,
-      ).writeAsString(prefixJsonFile.toJsonString());
+      ).writeAsString(prefixDescriptor.toJsonString());
 
-      return WinePrefix(
-        dirStructure: prefixDirStructure,
-        descriptor: prefixJsonFile,
-      );
+      return winePrefix;
     } catch (e, stackTrace) {
       logger.e('Prefix creation failed', error: e, stackTrace: stackTrace);
       await recursiveDeleteAndLogErrors(Directory(prefixDirStructure.outerDir));
@@ -439,17 +451,17 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
   }
 
   Future<void> _initializeWinePrefix({
+    required WinePrefix winePrefix,
     required WineInstallationDescriptor wineInstDescriptor,
-    required WinePrefixDirStructure prefixDirStructure,
+    required RunningExecutablesRepo<SpecialExecutableSlot>
+    runningSpecialExecutablesRepo,
   }) async {
-    final process = await startupData.wineProcessRunnerService.start(
-      commandLine: wineInstDescriptor.buildWineInvocationCommand(
-        wineArgs: ['wineboot', '-u'],
-      ),
-      envVars: wineInstDescriptor.getEnvVarsForWine(
-        prefixDirStructure: prefixDirStructure,
-        tempDir: startupData.localStoragePaths.tempDir,
-      ),
+    final process = await startTaskOfPrefixInitialization(
+      startupData: startupData,
+      winePrefix: winePrefix,
+      wineInstDescriptor: wineInstDescriptor,
+      runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+      specialExecutableSlot: SpecialExecutableSlot.prefixCreationTask,
     );
 
     final processResult = await process.result;
@@ -501,31 +513,18 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
   }
 
   Future<void> _applyHiDpiSettings({
+    required WinePrefix winePrefix,
     required WineInstallationDescriptor wineInstDescriptor,
-    required WinePrefixDirStructure prefixDirStructure,
+    required RunningExecutablesRepo<SpecialExecutableSlot>
+    runningSpecialExecutablesRepo,
   }) async {
-    final process = await startupData.wineProcessRunnerService.start(
-      commandLine: wineInstDescriptor.buildWineInvocationCommand(
-        wineArgs: [
-          // Invoking reg.exe rather than just 'reg' means we won't
-          // have to run this command through start.exe. See
-          // commandLineToWineArgs() for details.
-          'reg.exe',
-          'add',
-          'HKEY_CURRENT_USER\\Control Panel\\Desktop',
-          '/v',
-          'LogPixels',
-          '/t',
-          'REG_DWORD',
-          '/d',
-          _logPixels.toString(),
-          '/f',
-        ],
-      ),
-      envVars: wineInstDescriptor.getEnvVarsForWine(
-        prefixDirStructure: prefixDirStructure,
-        tempDir: startupData.localStoragePaths.tempDir,
-      ),
+    final process = await startTaskOfSettingHiDpiScale(
+      hiDpiScale: state.hiDpiScale,
+      startupData: startupData,
+      winePrefix: winePrefix,
+      wineInstDescriptor: wineInstDescriptor,
+      runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+      specialExecutableSlot: SpecialExecutableSlot.prefixCreationTask,
     );
 
     final processResult = await process.result;

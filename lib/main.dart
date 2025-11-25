@@ -25,6 +25,7 @@ import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
 import 'package:winebar/services/screensaver_inhibition_service.dart';
+import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/services/winetricks_download_service_impl.dart';
 
@@ -54,6 +55,7 @@ void main() {
 
   GetIt.I.registerSingleton<Logger>(logger);
   GetIt.I.registerSingleton<Dio>(dio);
+  GetIt.I.registerSingleton<UtilityService>(UtilityService());
   GetIt.I.registerSingleton<WineBuildSourceRepo>(
     WineBuildSourceRepoImpl(dio: dio),
   );

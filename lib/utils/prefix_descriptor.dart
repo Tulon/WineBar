@@ -19,7 +19,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 
 /// Represents the contents of the prefix.json file located in the
@@ -29,24 +29,28 @@ import 'package:path/path.dart' as path;
 class PrefixDescriptor extends Equatable {
   static const String _nameKey = 'name';
   static const String _relPathToWineInstallKey = 'relPathToWineInstall';
+  static const String _hiDpiScaleKey = 'hiDpiScale';
 
   final String name;
 
   /// This path is relative to the toplevel data directory.
   final String relPathToWineInstall;
 
+  final double? hiDpiScale;
+
   bool get isBroken => relPathToWineInstall == '';
 
   const PrefixDescriptor({
     required this.name,
     required this.relPathToWineInstall,
+    required this.hiDpiScale,
   });
 
   const PrefixDescriptor.brokenPrefix({required String name})
-    : this(name: name, relPathToWineInstall: '');
+    : this(name: name, relPathToWineInstall: '', hiDpiScale: null);
 
   @override
-  List<Object> get props => [name, relPathToWineInstall];
+  List<Object?> get props => [name, relPathToWineInstall, hiDpiScale];
 
   String getAbsPathToWineInstall({required String toplevelDataDir}) {
     return path.normalize(path.join(toplevelDataDir, relPathToWineInstall));
@@ -59,10 +63,12 @@ class PrefixDescriptor extends Equatable {
   factory PrefixDescriptor.fromJson(Map<String, dynamic> json) {
     final name = json[_nameKey] as String;
     final relPathToWineInstall = json[_relPathToWineInstallKey] as String;
+    final hiDpiScale = json[_hiDpiScaleKey] as double?;
 
     return PrefixDescriptor(
       name: name,
       relPathToWineInstall: relPathToWineInstall,
+      hiDpiScale: hiDpiScale,
     );
   }
 
@@ -70,9 +76,22 @@ class PrefixDescriptor extends Equatable {
     final Map<String, dynamic> json = {
       _nameKey: name,
       _relPathToWineInstallKey: relPathToWineInstall,
+      _hiDpiScaleKey: hiDpiScale,
     };
 
     final encoder = JsonEncoder.withIndent('  ');
     return encoder.convert(json);
+  }
+
+  PrefixDescriptor copyWith({
+    String? name,
+    String? relPathToWineInstall,
+    ValueGetter<double?>? hiDpiScaleGetter,
+  }) {
+    return PrefixDescriptor(
+      name: name ?? this.name,
+      relPathToWineInstall: relPathToWineInstall ?? this.relPathToWineInstall,
+      hiDpiScale: hiDpiScaleGetter != null ? hiDpiScaleGetter() : hiDpiScale,
+    );
   }
 }

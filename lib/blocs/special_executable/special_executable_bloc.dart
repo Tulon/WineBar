@@ -32,6 +32,7 @@ import 'package:winebar/models/process_output.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/utils/command_line_to_wine_args.dart';
@@ -178,8 +179,10 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
     required List<String> commandLine,
     required void Function(WineProcess) onProcessStarted,
   }) async {
-    final wineInstDescriptor =
-        await WineInstallationDescriptor.forWineInstallDir(
+    final utilityService = GetIt.I.get<UtilityService>();
+
+    final wineInstDescriptor = await utilityService
+        .wineInstallationDescriptorForWineInstallDir(
           winePrefix.descriptor.getAbsPathToWineInstall(
             toplevelDataDir: startupData.localStoragePaths.toplevelDataDir,
           ),

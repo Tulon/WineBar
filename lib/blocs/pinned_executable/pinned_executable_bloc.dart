@@ -25,6 +25,7 @@ import 'package:logger/logger.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/command_line_to_wine_args.dart';
 import 'package:winebar/utils/startup_data.dart';
@@ -147,8 +148,10 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
   }
 
   Future<WineProcess> _startProcess() async {
-    final wineInstDescriptor =
-        await WineInstallationDescriptor.forWineInstallDir(
+    final utilityService = GetIt.I.get<UtilityService>();
+
+    final wineInstDescriptor = await utilityService
+        .wineInstallationDescriptorForWineInstallDir(
           winePrefix.descriptor.getAbsPathToWineInstall(
             toplevelDataDir: startupData.localStoragePaths.toplevelDataDir,
           ),
