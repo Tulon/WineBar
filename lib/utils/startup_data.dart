@@ -37,12 +37,14 @@ class StartupData {
   final List<WinePrefix> winePrefixes;
   final WineProcessRunnerService wineProcessRunnerService;
   final bool isNonIntelHost;
+  final bool wineWillRunUnderMuvm;
 
   StartupData({
     required this.localStoragePaths,
     required this.winePrefixes,
     required this.wineProcessRunnerService,
     required this.isNonIntelHost,
+    required this.wineWillRunUnderMuvm,
   });
 
   static Future<StartupData> load() async {
@@ -96,6 +98,7 @@ class StartupData {
       winePrefixes: winePrefixes,
       wineProcessRunnerService: wineProcessRunningService,
       isNonIntelHost: isNonIntelHost,
+      wineWillRunUnderMuvm: muvmNeeded,
     );
   }
 

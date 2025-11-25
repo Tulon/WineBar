@@ -22,10 +22,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
-import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/prefix_list_event.dart';
-import 'package:winebar/models/special_executable_slot.dart';
-import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/running_wine_processes_tracker.dart';
+import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 
 import '../blocs/prefix_list/prefix_list_bloc.dart';
 import '../models/wine_prefix.dart';
@@ -53,19 +52,33 @@ class WinePrefixesPage extends StatelessWidget {
             floatingActionButton: FloatingActionButton.extended(
               label: const Text('Add Wine Prefix'),
               icon: const Icon(Icons.add),
-              onPressed: () => showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => PrefixCreationDialog(
-                  startupData: startupData,
-                  onPrefixCreated: (prefix) {
-                    BlocProvider.of<PrefixListBloc>(context).addPrefix(prefix);
-                  },
-                ),
-              ),
+              onPressed: () => _maybeShowPrefixCreationDialog(context),
             ),
           );
         },
+      ),
+    );
+  }
+
+  void _maybeShowPrefixCreationDialog(BuildContext context) {
+    if (maybeTellUserToFinishRunningApps(
+      context: context,
+      prefix: null,
+      wineWillRunUnderMuvm: startupData.wineWillRunUnderMuvm,
+    )) {
+      return;
+    }
+
+    unawaited(
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => PrefixCreationDialog(
+          startupData: startupData,
+          onPrefixCreated: (prefix) {
+            BlocProvider.of<PrefixListBloc>(context).addPrefix(prefix);
+          },
+        ),
       ),
     );
   }
@@ -313,17 +326,10 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     required WinePrefix prefix,
     required PrefixListBloc bloc,
   }) {
-    final runningPinnedExecutablesRepo = GetIt.I
-        .get<RunningExecutablesRepo<PinnedExecutable>>();
-    final runningSpecialExecutablesRepo = GetIt.I
-        .get<RunningExecutablesRepo<SpecialExecutableSlot>>();
+    final runningWineProcessesTracker = GetIt.I
+        .get<RunningWineProcessesTracker>();
 
-    final numPinnedExecutablesRunning = runningPinnedExecutablesRepo
-        .numProcessesRunningInPrefix(prefix);
-    final numSpecialExecutablesRunning = runningSpecialExecutablesRepo
-        .numProcessesRunningInPrefix(prefix);
-
-    if (numPinnedExecutablesRunning + numSpecialExecutablesRunning == 0) {
+    if (runningWineProcessesTracker.numProcessesRunningInPrefix(prefix) == 0) {
       bloc.startDeletingPrefix(prefix);
     } else {
       final colorScheme = Theme.of(context).colorScheme;

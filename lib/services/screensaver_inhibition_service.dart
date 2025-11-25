@@ -22,24 +22,24 @@ import 'package:dbus/dbus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/dbus/org_freedesktop_screensaver.dart';
-import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/running_wine_processes_tracker.dart';
 import 'package:winebar/utils/app_info.dart';
 
 abstract interface class ScreensaverInhibitionService {
   factory ScreensaverInhibitionService({
     required DBusClient dbusClient,
-    required List<RunningExecutablesRepo> runningExecutablesRepos,
+    required RunningWineProcessesTracker runningWineProcessesTracker,
   }) {
     return _ScreensaverInhibitionService(
       dbusClient: dbusClient,
-      runningExecutablesRepos: runningExecutablesRepos,
+      runningWineProcessesTracker: runningWineProcessesTracker,
     );
   }
 }
 
 class _ScreensaverInhibitionService implements ScreensaverInhibitionService {
   final logger = GetIt.I.get<Logger>();
-  final List<RunningExecutablesRepo> runningExecutablesRepos;
+  final RunningWineProcessesTracker runningWineProcessesTracker;
   final OrgFreedesktopScreenSaver screenSaver;
   int totalProcessesRunning = 0;
   int? inhibitionCookie;
@@ -47,23 +47,18 @@ class _ScreensaverInhibitionService implements ScreensaverInhibitionService {
 
   _ScreensaverInhibitionService({
     required DBusClient dbusClient,
-    required this.runningExecutablesRepos,
+    required this.runningWineProcessesTracker,
   }) : screenSaver = OrgFreedesktopScreenSaver(
          dbusClient,
          'org.freedesktop.ScreenSaver',
          DBusObjectPath('/org/freedesktop/ScreenSaver'),
        ) {
-    for (final repo in runningExecutablesRepos) {
-      repo.addListener(_onProcessListUpdated);
-    }
+    runningWineProcessesTracker.addListener(_onProcessListUpdated);
   }
 
   void _onProcessListUpdated() {
     final int oldTotalProcessesRunning = totalProcessesRunning;
-    totalProcessesRunning = runningExecutablesRepos.fold(
-      0,
-      (sum, repo) => sum + repo.totalRunningProcesses(),
-    );
+    totalProcessesRunning = runningWineProcessesTracker.totalRunningProcesses();
 
     if (oldTotalProcessesRunning == 0 && totalProcessesRunning != 0) {
       _disableScreenSaver();

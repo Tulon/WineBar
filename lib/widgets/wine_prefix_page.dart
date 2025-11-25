@@ -33,7 +33,9 @@ import 'package:winebar/blocs/special_executable/special_executable_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/pinned_executable_list_event.dart';
+import 'package:winebar/services/running_wine_processes_tracker.dart';
 import 'package:winebar/services/utility_service.dart';
+import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/pin_executable_button.dart';
 import 'package:winebar/widgets/prefix_settings_dialog.dart';
@@ -155,13 +157,6 @@ class WinePrefixPage extends StatelessWidget {
     required PrefixDetailsState state,
     required ColorScheme colorScheme,
   }) {
-    void showPrefixUpdatedSnackBar() {
-      const snackBar = SnackBar(content: Text('Wine prefix updated'));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-
-    final prefixDetailsBloc = BlocProvider.of<PrefixDetailsBloc>(context);
-
     return Container(
       padding: EdgeInsets.all(10.0),
       color: colorScheme.surfaceContainerHigh,
@@ -194,21 +189,7 @@ class WinePrefixPage extends StatelessWidget {
             child: IconButton.filledTonal(
               icon: Icon(MdiIcons.cogs),
               onPressed: () {
-                unawaited(
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => PrefixSettingsDialog(
-                      startupData: startupData,
-                      prefix: state.prefix,
-                      onPrefixUpdated: (prefix) {
-                        prefixDetailsBloc.updatePrefix(prefix);
-                        showPrefixUpdatedSnackBar();
-                        onPrefixUpdated(prefix);
-                      },
-                    ),
-                  ),
-                );
+                _maybeShowPrefixSettingsDialog(context: context, state: state);
               },
             ),
           ),
@@ -217,16 +198,66 @@ class WinePrefixPage extends StatelessWidget {
     );
   }
 
+  void _maybeShowPrefixSettingsDialog({
+    required BuildContext context,
+    required PrefixDetailsState state,
+  }) {
+    final prefixDetailsBloc = BlocProvider.of<PrefixDetailsBloc>(context);
+
+    if (maybeTellUserToFinishRunningApps(
+      context: context,
+      prefix: state.prefix,
+      wineWillRunUnderMuvm: startupData.wineWillRunUnderMuvm,
+    )) {
+      return;
+    }
+
+    void showPrefixUpdatedSnackBar() {
+      const snackBar = SnackBar(content: Text('Wine prefix updated'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
+    unawaited(
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => PrefixSettingsDialog(
+          startupData: startupData,
+          prefix: state.prefix,
+          onPrefixUpdated: (prefix) {
+            prefixDetailsBloc.updatePrefix(prefix);
+            showPrefixUpdatedSnackBar();
+            onPrefixUpdated(prefix);
+          },
+        ),
+      ),
+    );
+  }
+
   Widget _buildPinExecutableButton({required WinePrefix prefix}) {
     Widget buildButton(BuildContext context, SpecialExecutableState state) {
       final bloc = BlocProvider.of<PinExecutableBloc>(context);
 
+      void maybeSelectExecutableToPin() {
+        if (maybeTellUserToFinishRunningApps(
+          context: context,
+          prefix: prefix,
+          wineWillRunUnderMuvm: startupData.wineWillRunUnderMuvm,
+        )) {
+          return;
+        }
+
+        unawaited(
+          _selectSpecialExecutableToRun(
+            context: context,
+            specialExecutableBloc: bloc,
+          ),
+        );
+      }
+
       return PinExecutableButton(
         specialExecutableState: state,
-        onPrimaryButtonPressed: () => _selectSpecialExecutableToRun(
-          context: context,
-          specialExecutableBloc: bloc,
-        ),
+        onPrimaryButtonPressed: () => maybeSelectExecutableToPin(),
         onKillProcessPressed: () => bloc.killProcessIfRunning(),
         onViewProcessOutputPressed: () =>
             _viewProcessOutput(context: context, specialExecutableState: state),

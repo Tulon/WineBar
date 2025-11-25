@@ -24,6 +24,7 @@ import 'package:logger/logger.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/running_wine_processes_tracker.dart';
 import 'package:winebar/services/screensaver_inhibition_service.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
@@ -50,8 +51,14 @@ void main() {
 
   final runningPinnedExecutablesRepo =
       RunningExecutablesRepo<PinnedExecutable>();
+
   final runningSpecialExecutablesRepo =
       RunningExecutablesRepo<SpecialExecutableSlot>();
+
+  final runningWineProcessesTracker = RunningWineProcessesTracker([
+    runningPinnedExecutablesRepo,
+    runningSpecialExecutablesRepo,
+  ]);
 
   GetIt.I.registerSingleton<Logger>(logger);
   GetIt.I.registerSingleton<Dio>(dio);
@@ -71,13 +78,13 @@ void main() {
   GetIt.I.registerSingleton<RunningExecutablesRepo<SpecialExecutableSlot>>(
     runningSpecialExecutablesRepo,
   );
+  GetIt.I.registerSingleton<RunningWineProcessesTracker>(
+    runningWineProcessesTracker,
+  );
   GetIt.I.registerSingleton<ScreensaverInhibitionService>(
     ScreensaverInhibitionService(
       dbusClient: dbusClient,
-      runningExecutablesRepos: [
-        runningPinnedExecutablesRepo,
-        runningSpecialExecutablesRepo,
-      ],
+      runningWineProcessesTracker: runningWineProcessesTracker,
     ),
   );
 
