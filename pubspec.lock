@@ -82,7 +82,7 @@ packages:
     source: hosted
     version: "4.1.1"
   build_runner:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: build_runner
       sha256: "110c56ef29b5eb367b4d17fc79375fa8c18a6cd7acd92c05bb3986c17a079057"
@@ -441,7 +441,7 @@ packages:
     source: hosted
     version: "2.0.0"
   mockito:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: mockito
       sha256: dac24d461418d363778d53198d9ac0510b9d073869f078450f195766ec48d05e
@@ -593,7 +593,7 @@ packages:
     source: hosted
     version: "1.5.0"
   rps:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: rps
       sha256: eceae515b4f4c147017a347260440a43902b03d276b6dd860d06cd55a1c7bed3

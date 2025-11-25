@@ -50,9 +50,6 @@ dependencies:
   crypto: ^3.0.6
   convert: ^3.1.2
   posix: ^6.0.3
-  build_runner: ^2.10.4
-  mockito: ^5.6.1
-  rps: ^0.9.1
   dbus: ^0.7.11
 
 dev_dependencies:
@@ -65,6 +62,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  mockito: ^5.6.1
+  build_runner: ^2.10.4
+  rps: ^0.9.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
