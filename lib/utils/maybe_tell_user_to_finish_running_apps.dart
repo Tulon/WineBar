@@ -21,41 +21,45 @@ import 'package:get_it/get_it.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/services/running_wine_processes_tracker.dart';
 
-/// If there are apps running in the given prefix, tell the user (via a
-/// SnackBar) to finish them first. If the wine processes are run under
-/// muvm, tells the user to finish any apps running in any prefix, if
-/// any are running.
+/// May tell the user (via a SnackBar) to close the apps running in a
+/// particular prefix or in all prefixes (it checks if the apps are
+/// actually running there.
 ///
-/// If [prefix] is null, then we only check for situations requiring
-/// the user to finish the apps running in all prefixes.
+/// The [appsRunningInAnyPrefixAreAProblem] will often be set to
+/// [StartupData.wineWillRunUnderMuvm], as the issues arising from
+/// running multiple apps at the same time, as described in README.md,
+/// apply even to apps running in different prefixes, when wine is
+/// run under muvm.
 ///
 /// Returns whether the user was told to finish the running apps.
 bool maybeTellUserToFinishRunningApps({
   required BuildContext context,
-  required WinePrefix? prefix,
-  required bool wineWillRunUnderMuvm,
+  WinePrefix? appsRunningInThisPrefixAreAProblem,
+  bool appsRunningInAnyPrefixAreAProblem = false,
 }) {
-  final runningWineProcessTracker = GetIt.I.get<RunningWineProcessesTracker>();
+  final runningWineProcessesTracker = GetIt.I
+      .get<RunningWineProcessesTracker>();
 
-  if (wineWillRunUnderMuvm &&
-      runningWineProcessTracker.totalRunningProcesses() > 0) {
-    // Under muvm, running more that one wine process even across different
-    // prefixes leads to issues. In particural, we would only acknowledge
-    // the process as finished when *all* such processes finish. In the
-    // context of a prefix creation or prefix settings dialogs, which are
-    // modal and which run wine processes of their own, such a situation
-    // would lead to a hang.
-    const snackBar = SnackBar(
-      content: Text('Finish the apps running in all prefixes first'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    return true;
-  } else if (prefix != null &&
-      runningWineProcessTracker.numProcessesRunningInPrefix(prefix) > 0) {
-    const snackBar = SnackBar(content: Text('Finish the running apps first'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    return true;
-  } else {
+  final totalRunningApps = runningWineProcessesTracker.totalRunningProcesses();
+  final appsRunningInPrefix = appsRunningInThisPrefixAreAProblem == null
+      ? null
+      : runningWineProcessesTracker.numProcessesRunningInPrefix(
+          appsRunningInThisPrefixAreAProblem,
+        );
+
+  String? message;
+
+  if (appsRunningInAnyPrefixAreAProblem && totalRunningApps > 0) {
+    message = 'Finish the apps running in all prefixes first';
+  } else if (appsRunningInPrefix != null && appsRunningInPrefix > 0) {
+    message = 'Finish the running apps first';
+  }
+
+  if (message == null) {
     return false;
   }
+
+  final snackBar = SnackBar(content: Text(message));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  return true;
 }

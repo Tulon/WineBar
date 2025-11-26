@@ -63,8 +63,7 @@ class WinePrefixesPage extends StatelessWidget {
   void _maybeShowPrefixCreationDialog(BuildContext context) {
     if (maybeTellUserToFinishRunningApps(
       context: context,
-      prefix: null,
-      wineWillRunUnderMuvm: startupData.wineWillRunUnderMuvm,
+      appsRunningInAnyPrefixAreAProblem: startupData.wineWillRunUnderMuvm,
     )) {
       return;
     }
@@ -226,8 +225,10 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
 
           leadingIcon: const Icon(Icons.delete_outlined),
           child: const Text('Delete'),
-          onPressed: () =>
-              _showDeletionConfirmationDialog(context: context, prefix: prefix),
+          onPressed: () => _maybeShowPrefixDeletionConfirmationDialog(
+            context: context,
+            prefix: prefix,
+          ),
         ),
       ],
       builder:
@@ -246,10 +247,17 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     );
   }
 
-  Future<void> _showDeletionConfirmationDialog({
+  Future<void> _maybeShowPrefixDeletionConfirmationDialog({
     required BuildContext context,
     required WinePrefix prefix,
   }) async {
+    if (maybeTellUserToFinishRunningApps(
+      context: context,
+      appsRunningInThisPrefixAreAProblem: prefix,
+    )) {
+      return;
+    }
+
     final colorScheme = Theme.of(context).colorScheme;
     final bloc = BlocProvider.of<PrefixListBloc>(context);
 
@@ -296,66 +304,19 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     );
   }
 
-  Future<void> _showUnableToDeletePrefixDialog({
-    required BuildContext context,
-    required WinePrefix prefix,
-    required Widget body,
-  }) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Unable to delete prefix'),
-          content: body,
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _startDeletingPrefixUnlessAppsAreRunningThere({
     required BuildContext context,
     required WinePrefix prefix,
     required PrefixListBloc bloc,
   }) {
-    final runningWineProcessesTracker = GetIt.I
-        .get<RunningWineProcessesTracker>();
-
-    if (runningWineProcessesTracker.numProcessesRunningInPrefix(prefix) == 0) {
-      bloc.startDeletingPrefix(prefix);
-    } else {
-      final colorScheme = Theme.of(context).colorScheme;
-
-      final body = RichText(
-        text: TextSpan(
-          style: TextStyle(color: colorScheme.onSurface),
-          children: [
-            TextSpan(text: 'Failed to delete prefix '),
-            TextSpan(
-              text: prefix.descriptor.name,
-              style: TextStyle(color: colorScheme.primary),
-            ),
-            TextSpan(text: ' as apps are still running there.'),
-          ],
-        ),
-      );
-
-      unawaited(
-        _showUnableToDeletePrefixDialog(
-          context: context,
-          prefix: prefix,
-          body: body,
-        ),
-      );
+    if (maybeTellUserToFinishRunningApps(
+      context: context,
+      appsRunningInThisPrefixAreAProblem: prefix,
+    )) {
+      return;
     }
+
+    bloc.startDeletingPrefix(prefix);
   }
 
   static void _startNavigatingToPrefix({

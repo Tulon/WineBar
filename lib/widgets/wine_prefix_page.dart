@@ -206,8 +206,8 @@ class WinePrefixPage extends StatelessWidget {
 
     if (maybeTellUserToFinishRunningApps(
       context: context,
-      prefix: state.prefix,
-      wineWillRunUnderMuvm: startupData.wineWillRunUnderMuvm,
+      appsRunningInThisPrefixAreAProblem: state.prefix,
+      appsRunningInAnyPrefixAreAProblem: startupData.wineWillRunUnderMuvm,
     )) {
       return;
     }
@@ -241,8 +241,8 @@ class WinePrefixPage extends StatelessWidget {
       void maybeSelectExecutableToPin() {
         if (maybeTellUserToFinishRunningApps(
           context: context,
-          prefix: prefix,
-          wineWillRunUnderMuvm: startupData.wineWillRunUnderMuvm,
+          appsRunningInThisPrefixAreAProblem: prefix,
+          appsRunningInAnyPrefixAreAProblem: startupData.wineWillRunUnderMuvm,
         )) {
           return;
         }
