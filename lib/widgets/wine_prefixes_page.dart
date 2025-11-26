@@ -107,7 +107,9 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
   Widget _buildAnimatedList(BuildContext context) {
     final state = BlocProvider.of<PrefixListBloc>(context).state;
 
-    return AnimatedList.separated(
+    // We used to use AnimatedList.separated() here, but then I hit this bug:
+    // https://github.com/flutter/flutter/issues/179029
+    return AnimatedList(
       key: _prefixListKey,
       initialItemCount: state.orderedPrefixes.length,
       itemBuilder: (context, index, animation) {
@@ -121,8 +123,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
           removedPrefix: false,
         );
       },
-      separatorBuilder: _buildListSeparator,
-      removedSeparatorBuilder: _buildListSeparator,
     );
   }
 
@@ -162,21 +162,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     }
   }
 
-  Widget _buildListSeparator(
-    BuildContext context,
-    int index,
-    Animation<double> animation,
-  ) {
-    return FadeTransition(
-      opacity: animation,
-      child: SizeTransition(
-        sizeFactor: animation,
-        axisAlignment: 0.0,
-        child: Divider(height: 4.0),
-      ),
-    );
-  }
-
   Widget _buildPrefixWidget({
     required WinePrefix prefix,
     required Animation<double> animation,
@@ -187,22 +172,29 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
       child: SizeTransition(
         sizeFactor: animation,
         axisAlignment: 0.0,
-        child: ListTile(
-          title: Text(prefix.descriptor.name),
-          enabled: !prefix.isBroken,
-          contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          leading: _buildPrefixMenuButton(
-            context: context,
-            prefix: prefix,
-            removedPrefix: removedPrefix,
+        child: Card(
+          margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          elevation: 3.0,
+          child: ListTile(
+            title: Text(prefix.descriptor.name),
+            enabled: !prefix.isBroken,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 8.0,
+              vertical: 4.0,
+            ),
+            leading: _buildPrefixMenuButton(
+              context: context,
+              prefix: prefix,
+              removedPrefix: removedPrefix,
+            ),
+            onTap: () => prefix.isBroken || removedPrefix
+                ? null
+                : _startNavigatingToPrefix(
+                    context: context,
+                    startupData: widget.startupData,
+                    winePrefix: prefix,
+                  ),
           ),
-          onTap: () => prefix.isBroken || removedPrefix
-              ? null
-              : _startNavigatingToPrefix(
-                  context: context,
-                  startupData: widget.startupData,
-                  winePrefix: prefix,
-                ),
         ),
       ),
     );
