@@ -20,6 +20,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
+import 'package:simple_icons/simple_icons.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
 import 'package:winebar/models/prefix_list_event.dart';
 
@@ -46,6 +50,7 @@ class WinePrefixesPage extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               title: Text('Wine Prefixes'),
+              actions: [_buildDonationButton(context)],
             ),
             body: _WinePrefixesList(startupData: startupData),
             floatingActionButton: FloatingActionButton.extended(
@@ -55,6 +60,29 @@ class WinePrefixesPage extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildDonationButton(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: () {
+        unawaited(
+          launchUrlString('https://ko-fi.com/tulon')
+              .then<void>((_) {})
+              .catchError(
+                (e) => GetIt.I.get<Logger>().w(
+                  'Failed opening the donation URL',
+                  error: e,
+                ),
+              ),
+        );
+      },
+      icon: const Icon(SimpleIcons.kofi),
+      label: const Text('Support me on Ko-fi'),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.deepPurpleAccent,
       ),
     );
   }
