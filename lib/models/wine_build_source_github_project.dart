@@ -30,6 +30,12 @@ class WineBuildSourceGithubProject extends CachedWineBuildSource {
   final String label;
 
   @override
+  final String? details;
+
+  @override
+  final bool recommended;
+
+  @override
   final String directoryName;
 
   @override
@@ -48,6 +54,8 @@ class WineBuildSourceGithubProject extends CachedWineBuildSource {
 
   WineBuildSourceGithubProject({
     required this.label,
+    this.details,
+    this.recommended = false,
     required this.directoryName,
     required this.circleAvatarText,
     required this.githubRepoOwner,

@@ -16,8 +16,45 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:dio/dio.dart';
+import 'package:winebar/models/wine_build_source_github_project.dart';
+
 import '../models/wine_build_source.dart';
 
 abstract interface class WineBuildSourceRepo {
   List<WineBuildSource> get sources;
+
+  factory WineBuildSourceRepo({required Dio dio}) {
+    return _WineBuildSourceRepo(dio: dio);
+  }
+}
+
+class _WineBuildSourceRepo implements WineBuildSourceRepo {
+  @override
+  final List<WineBuildSource> sources;
+
+  _WineBuildSourceRepo({required Dio dio})
+    : sources = [
+        WineBuildSourceGithubProject(
+          label: 'Kronek',
+          details: 'Provides Vanilla, Staging, TkG and Proton Wine builds.',
+          directoryName: 'Kronek',
+          circleAvatarText: 'KR',
+          githubRepoOwner: 'Kron4ek',
+          githubProjectName: 'Wine-Builds',
+          dio: dio,
+        ),
+        WineBuildSourceGithubProject(
+          label: 'GE Proton',
+          details:
+              'Provides Proton builds with DXVK / VK3D included. '
+              'Recommended for games and other fullscreen apps.',
+          recommended: true,
+          directoryName: 'GE_Proton',
+          circleAvatarText: 'GE',
+          githubRepoOwner: 'GloriousEggroll',
+          githubProjectName: 'proton-ge-custom',
+          dio: dio,
+        ),
+      ];
 }

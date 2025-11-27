@@ -31,7 +31,6 @@ import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/services/winetricks_download_service_impl.dart';
 
 import 'repositories/wine_build_source_repo.dart';
-import 'repositories/wine_build_source_repo_impl.dart';
 import 'services/download_and_extraction_service.dart';
 import 'services/download_and_extraction_service_impl.dart';
 import 'widgets/top_level_widget.dart';
@@ -63,9 +62,7 @@ void main() {
   GetIt.I.registerSingleton<Logger>(logger);
   GetIt.I.registerSingleton<Dio>(dio);
   GetIt.I.registerSingleton<UtilityService>(UtilityService());
-  GetIt.I.registerSingleton<WineBuildSourceRepo>(
-    WineBuildSourceRepoImpl(dio: dio),
-  );
+  GetIt.I.registerSingleton<WineBuildSourceRepo>(WineBuildSourceRepo(dio: dio));
   GetIt.I.registerSingleton<DownloadAndExtractionService>(
     DownloadAndExtractionServiceImpl(dio: dio),
   );

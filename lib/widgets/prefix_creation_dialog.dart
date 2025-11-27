@@ -20,6 +20,8 @@ import 'package:boxy/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:icon_decoration/icon_decoration.dart';
+import 'package:winebar/models/wine_build_source.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 
@@ -282,24 +284,39 @@ class _WineBuildSourceSelectionStep extends _PrefixCreationStep {
     required PrefixCreationBloc bloc,
     required PrefixCreationState state,
   }) {
+    Widget listTileFromSource(WineBuildSource source) {
+      Widget title = Text(source.label);
+
+      if (source.recommended) {
+        title = Row(
+          spacing: 4.0,
+          children: [
+            title,
+            DecoratedIcon(
+              icon: Icon(Icons.star, color: Colors.yellow.shade600),
+              decoration: IconDecoration(border: IconBorder()),
+            ),
+          ],
+        );
+      }
+
+      return ListTile(
+        leading: CircleAvatar(child: Text(source.circleAvatarText)),
+        title: title,
+        subtitle: source.details != null ? Text(source.details!) : null,
+        onTap: () => bloc.selectWineBuildSource(source),
+        selected: state.selectedBuildSource == source,
+        trailing: state.selectedBuildSource == source
+            ? const Icon(Icons.radio_button_checked)
+            : null,
+      );
+    }
+
     final sources = GetIt.I.get<WineBuildSourceRepo>().sources;
 
-    return ListView(
-      children: sources
-          .map<Widget>(
-            (source) => ListTile(
-              leading: CircleAvatar(child: Text(source.circleAvatarText)),
-              title: Text(source.label),
-              onTap: () {
-                bloc.selectWineBuildSource(source);
-              },
-              selected: state.selectedBuildSource == source,
-              trailing: state.selectedBuildSource == source
-                  ? const Icon(Icons.radio_button_checked)
-                  : null,
-            ),
-          )
-          .toList(),
+    return ListView.builder(
+      itemCount: sources.length,
+      itemBuilder: (context, index) => listTileFromSource(sources[index]),
     );
   }
 }

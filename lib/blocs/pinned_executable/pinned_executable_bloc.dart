@@ -29,7 +29,6 @@ import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/command_line_to_wine_args.dart';
 import 'package:winebar/utils/startup_data.dart';
-import 'package:winebar/utils/wine_installation_descriptor.dart';
 
 import 'pinned_executable_state.dart';
 

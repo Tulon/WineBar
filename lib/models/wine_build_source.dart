@@ -21,6 +21,10 @@ import 'wine_release.dart';
 abstract interface class WineBuildSource {
   String get label;
 
+  String? get details;
+
+  bool get recommended;
+
   /// When we have a directory in the filesystem that corresponds to an
   /// instance of WineBuildSource, we name it according to this property.
   String get directoryName;
