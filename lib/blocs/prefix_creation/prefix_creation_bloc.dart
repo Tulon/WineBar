@@ -25,7 +25,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
-import 'package:winebar/exceptions/generic_prefix_creation_exception.dart';
+import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
@@ -467,7 +467,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     final processResult = await process.result;
 
     if (processResult.exitCode != 0) {
-      throw GenericPrefixCreationException(
+      throw GenericException(
         'The wineboot command exited with status '
         '${processResult.exitCode}',
       );
@@ -530,7 +530,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     final processResult = await process.result;
 
     if (processResult.exitCode != 0) {
-      throw GenericPrefixCreationException(
+      throw GenericException(
         'The wine reg command exited with status '
         '${processResult.exitCode}',
       );
