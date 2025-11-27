@@ -18,6 +18,7 @@
 
 import 'package:boxy/padding.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:icon_decoration/icon_decoration.dart';
@@ -516,6 +517,9 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
         TextField(
           enabled: !state.prefixCreationStatus.isInProgress,
           controller: widgetState.prefixNameController,
+          inputFormatters: <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(100),
+          ],
           onSubmitted: mayInitiatePrefixCreation
               ? (_) => bloc.startCreatingPrefix()
               : null,
