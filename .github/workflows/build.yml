@@ -63,6 +63,16 @@ jobs:
         run: |
           ./packaging/scripts/build_appimage.sh ${{ inputs.arch }} ${{ inputs.version }}
 
+      - name: Run Native Code Tests
+        env:
+          CTEST_OUTPUT_ON_FAILURE: 1
+        working-directory: ./build/linux/${{ inputs.arch }}/release
+        run: | 
+          cmake --build . --target run_tests
+
+      - name: Run Flutter Tests
+        run: flutter test
+
       - name: Upload build artefacts
         uses: actions/upload-artifact@v4
         with:
