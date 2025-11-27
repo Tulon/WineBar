@@ -20,10 +20,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
 import 'package:winebar/models/prefix_list_event.dart';
-import 'package:winebar/services/running_wine_processes_tracker.dart';
+
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 
 import '../blocs/prefix_list/prefix_list_bloc.dart';

@@ -33,7 +33,6 @@ import 'package:winebar/blocs/special_executable/special_executable_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/pinned_executable_list_event.dart';
-import 'package:winebar/services/running_wine_processes_tracker.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 import 'package:winebar/utils/startup_data.dart';
