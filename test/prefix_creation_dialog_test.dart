@@ -42,6 +42,7 @@ void main() {
 
     when(wineBuildSourceRepo.sources).thenReturn([wineBuildSource]);
     when(wineBuildSource.label).thenReturn(wineBuildSourceLabel);
+    when(wineBuildSource.recommended).thenReturn(false);
 
     when(
       wineBuildSource.getAvailableReleases(),

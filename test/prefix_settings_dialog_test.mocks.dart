@@ -214,6 +214,15 @@ class MockStartupData extends _i1.Mock implements _i11.StartupData {
             returnValueForMissingStub: false,
           )
           as bool);
+
+  @override
+  bool get wineWillRunUnderMuvm =>
+      (super.noSuchMethod(
+            Invocation.getter(#wineWillRunUnderMuvm),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
 }
 
 /// A class which mocks [LocalStoragePaths].

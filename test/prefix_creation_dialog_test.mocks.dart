@@ -95,6 +95,15 @@ class MockStartupData extends _i1.Mock implements _i4.StartupData {
             returnValueForMissingStub: false,
           )
           as bool);
+
+  @override
+  bool get wineWillRunUnderMuvm =>
+      (super.noSuchMethod(
+            Invocation.getter(#wineWillRunUnderMuvm),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
 }
 
 /// A class which mocks [WineBuildSourceRepo].
@@ -130,6 +139,15 @@ class MockWineBuildSource extends _i1.Mock implements _i7.WineBuildSource {
             ),
           )
           as String);
+
+  @override
+  bool get recommended =>
+      (super.noSuchMethod(
+            Invocation.getter(#recommended),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
 
   @override
   String get directoryName =>
