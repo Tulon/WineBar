@@ -50,11 +50,25 @@ jobs:
           sudo apt-get -y install mingw-w64-i686-dev g++-mingw-w64-i686 binutils-mingw-w64-i686 \
             libgtk-3-dev libglu1-mesa curl git unzip xz-utils zip ninja-build desktop-file-utils
 
+      # Installing Flutter from snap means we can't control the version we are installing,
+      # but on the positive side, the version from snap comes with older glib / gtk / whatever,
+      # so the binaries it builds are able to run on older distros.
       - name: Install Flutter SDK
-        uses: subosito/flutter-action@v2
-        with:
-          channel: main  # Has to be main for linux-arm64 to work.
-          flutter-version: 3.38.2
+        run: sudo snap install flutter --classic
+      
+      # Unfortunately, Flutter from snap brings an old version of CMake with it. We build
+      # a few C/C++ utilities in addition to our Flutter app and we need CMake 3.28 at least.
+      # To overcome this issue, we download and extract a newer version of CMake and overlay
+      # it on top of the Flutter installation from snap.
+      - name: Overlay a newer CMake on top of the one that comes with Flutter SDK
+        run: |
+          rm -rf ~/cmake ~/cmake-inst
+          mkdir -p ~/cmake ~/cmake-inst
+          cd ~/cmake
+          URL="https://github.com/Kitware/CMake/releases/download/v3.28.0/cmake-3.28.0-linux-$(uname -m).tar.gz"
+          curl -L -O "$URL"  # The -O flag saves the file with the original name from the URL
+          tar --strip-components=1 -axf * -C ~/cmake-inst/
+          sudo mount -t overlay overlay -o lowerdir=$HOME/cmake-inst:/snap/flutter/current/usr /snap/flutter/current/usr/
 
       - name: Clone repository
         uses: actions/checkout@v5
