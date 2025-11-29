@@ -1,0 +1,25 @@
+name: Automatic Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-x64:
+    name: Build x64 AppImage
+    uses: ./.github/workflows/build.yml
+    with:
+      version: 0.0.0
+      arch: x64
+      runs-on: ubuntu-24.04
+  
+  build-arm64:
+    name: Build arm64 AppImage
+    uses: ./.github/workflows/build.yml
+    with:
+      version: 0.0.0
+      arch: arm64
+      runs-on: ubuntu-24.04-arm
