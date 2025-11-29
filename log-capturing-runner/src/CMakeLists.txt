@@ -10,6 +10,7 @@ add_library(
     HeadTailBuffer.h
     Log.c
     Log.h
+    MinMax.h
     RunEventLoop.c
     RunEventLoop.h
     SpawnProcess.c

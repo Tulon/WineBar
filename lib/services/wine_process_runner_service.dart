@@ -145,7 +145,22 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
     required List<String> commandLine,
     required Map<String, String> envVars,
   }) {
-    final logCapturingRunnerArgs = [tempOutDir, ...commandLine];
+    // Q: Why do we have to pass the environment variables as arguments to
+    //    log-capturing-runner?
+    // A: When muvm is not used, we could just pass them to Process.start()
+    //    directly. However, muvm doesn't propagate the environment variables
+    //    to the process it starts in the virtual machine. We could pass
+    //    those environment variables to muvm itself, using the -e ENV=VAL
+    //    syntax, but it turns out the environment variables specified that
+    //    way in one muvm invocation may be visible in another [1]. Therefore,
+    //    the safest way that works in all cases is to pass them as arguments
+    //    to log-capturing-runner.
+    //    [1]: https://github.com/AsahiLinux/muvm/issues/206
+    final logCapturingRunnerArgs = [
+      tempOutDir,
+      ..._envVarsToLogCapturingRunnerArgs(envVars),
+      ...commandLine,
+    ];
 
     if (!runWithMuvm) {
       return (logCapturingRunnerPath, logCapturingRunnerArgs);
@@ -160,8 +175,6 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
         // will actually run in the existing virtual machine.
         '--interactive',
 
-        ..._envVarsToMuvmArgs(envVars),
-
         '--',
 
         logCapturingRunnerPath,
@@ -172,7 +185,9 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
     }
   }
 
-  static List<String> _envVarsToMuvmArgs(Map<String, String> envVars) {
+  static List<String> _envVarsToLogCapturingRunnerArgs(
+    Map<String, String> envVars,
+  ) {
     List<String> args = [];
     for (final entry in envVars.entries) {
       args.add('-e');

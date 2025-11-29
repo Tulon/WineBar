@@ -89,7 +89,7 @@ main(int argc, char* argv[])
 
     if (argc < 3)
     {
-        fprintf(stderr, "Usage: %s <outdir> <command> [args]\n", argv[0]);
+        fprintf(stderr, "Usage: %s <outdir> [-e ENV=VAL ...] <command> [args]\n", argv[0]);
         return exitCode;
     }
 
@@ -100,6 +100,46 @@ main(int argc, char* argv[])
     {
         fprintf(stderr, "Output directory %s doesn't exist or is not a directory\n", outDir);
         return exitCode;
+    }
+
+    char** mainChildCommandLine = argv + 2;
+
+    // Parse command-line options past <outdir>, which is at argv[1].
+    for (int i = 2; i < argc; ++i)
+    {
+        if (strcmp(argv[i], "-e") == 0)
+        {
+            if (i + 1 >= argc)
+            {
+                fprintf(stderr, "-e requires a NAME=VALUE argument.\n");
+                goto exit;
+            }
+
+            char* const nameVal = argv[i + 1];
+            char* const pEq = strchr(nameVal, '=');
+            if (!pEq || pEq == nameVal)
+            {
+                fprintf(
+                    stderr, "Invalid argument: -e %s\nThe NAME=VAL syntax was expected.\n",
+                    nameVal);
+                goto exit;
+            }
+            else
+            {
+                putenv(nameVal);
+                ++i;
+            }
+        }
+        else if (strcmp(argv[i], "--") == 0)
+        {
+            mainChildCommandLine = argv + i + 1;
+            break;
+        }
+        else
+        {
+            mainChildCommandLine = argv + i;
+            break;
+        }
     }
 
     char const* const disableLoggingEnvVar = getenv("LOG_CAPTURING_RUNNER_DISABLE_LOGGING");
@@ -129,8 +169,6 @@ main(int argc, char* argv[])
         logPrintf(log, "The required WINEPREFIX environment variable wasn't provided\n");
         goto close_log;
     }
-
-    char** mainChildCommandLine = argv + 2;
 
     sigset_t oldSigMask;
     int const signalFd = setupSignalsAndReturnSignalFd(&oldSigMask, log);
@@ -178,5 +216,6 @@ close_signalfd:
 close_log:
     logClose(log);
 
+exit:
     return exitCode;
 }
