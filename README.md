@@ -50,7 +50,7 @@ While AppImages can be run just by making them executable and double clicking th
 
 ## Building
 
-First, install Flutter (which also installs Dart) by following the [official instructions](https://docs.flutter.dev/install).
+First, install Flutter (which also installs Dart) by following the [official instructions](https://docs.flutter.dev/install). Don't install Flutter from Snap, as it brings an old version of CMake with it, and we need a newer version for building our C/C++ helper tools. However, we do use Flutter from Snap in CI. See [here](.github/workflows/build.yml) how we workaround the issue with CMake.
 
 This project cross-compiles some C++ code targeting Windows, so we need some additional dependencies to be able to do that:
 
