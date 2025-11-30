@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:winebar/services/wine_process_runner_service.dart';
 
 enum PrefixUpdateStatus {
   notStarted,
@@ -32,11 +33,13 @@ class PrefixSettingsState extends Equatable {
   final double? hiDpiScale;
   final PrefixUpdateStatus prefixUpdateStatus;
   final String? prefixUpdateFailureMessage;
+  final WineProcessResult? prefixUpdateFailedProcessResult;
 
   const PrefixSettingsState({
     required this.hiDpiScale,
     required this.prefixUpdateStatus,
     required this.prefixUpdateFailureMessage,
+    required this.prefixUpdateFailedProcessResult,
   });
 
   const PrefixSettingsState.initialState({required double? hiDpiScale})
@@ -44,6 +47,7 @@ class PrefixSettingsState extends Equatable {
         hiDpiScale: hiDpiScale,
         prefixUpdateStatus: PrefixUpdateStatus.notStarted,
         prefixUpdateFailureMessage: null,
+        prefixUpdateFailedProcessResult: null,
       );
 
   @override
@@ -51,12 +55,14 @@ class PrefixSettingsState extends Equatable {
     hiDpiScale,
     prefixUpdateStatus,
     prefixUpdateFailureMessage,
+    prefixUpdateFailedProcessResult,
   ];
 
   PrefixSettingsState copyWith({
     ValueGetter<double?>? hiDpiScaleGetter,
     PrefixUpdateStatus? prefixUpdateStatus,
     ValueGetter<String?>? prefixUpdateFailureMessageGetter,
+    ValueGetter<WineProcessResult?>? prefixUpdateFailedProcessResultGetter,
   }) {
     return PrefixSettingsState(
       hiDpiScale: hiDpiScaleGetter != null ? hiDpiScaleGetter() : hiDpiScale,
@@ -64,6 +70,10 @@ class PrefixSettingsState extends Equatable {
       prefixUpdateFailureMessage: prefixUpdateFailureMessageGetter != null
           ? prefixUpdateFailureMessageGetter()
           : prefixUpdateFailureMessage,
+      prefixUpdateFailedProcessResult:
+          prefixUpdateFailedProcessResultGetter != null
+          ? prefixUpdateFailedProcessResultGetter()
+          : prefixUpdateFailedProcessResult,
     );
   }
 }

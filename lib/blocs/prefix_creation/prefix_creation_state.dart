@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:winebar/services/wine_process_runner_service.dart';
 
 import '../../models/wine_build.dart';
 import '../../models/wine_build_source.dart';
@@ -74,6 +75,7 @@ class PrefixCreationState extends Equatable {
   final double hiDpiScale;
   final PrefixCreationStatus prefixCreationStatus;
   final String? prefixCreationFailureMessage;
+  final WineProcessResult? prefixCreationFailedProcessResult;
 
   /// Corresponds to a progress (between 0 and 1) in those states
   /// where prefixCretionStatus.isInProgress is true. A null value
@@ -97,6 +99,7 @@ class PrefixCreationState extends Equatable {
     required this.hiDpiScale,
     required this.prefixCreationStatus,
     required this.prefixCreationFailureMessage,
+    required this.prefixCreationFailedProcessResult,
     required this.prefixCreationOperationProgress,
   }) {
     assert(currentStep.index <= maxAccessibleStep.index);
@@ -119,6 +122,7 @@ class PrefixCreationState extends Equatable {
         hiDpiScale: 1.0,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessage: null,
+        prefixCreationFailedProcessResult: null,
         prefixCreationOperationProgress: null,
       );
 
@@ -139,6 +143,7 @@ class PrefixCreationState extends Equatable {
     hiDpiScale,
     prefixCreationStatus,
     prefixCreationFailureMessage,
+    prefixCreationFailedProcessResult,
     prefixCreationOperationProgress,
   ];
 
@@ -158,6 +163,7 @@ class PrefixCreationState extends Equatable {
     double? hiDpiScale,
     PrefixCreationStatus? prefixCreationStatus,
     ValueGetter<String?>? prefixCreationFailureMessageGetter,
+    ValueGetter<WineProcessResult?>? prefixCreationFailedProcessResultGetter,
     ValueGetter<double?>? prefixCreationOperationProgressGetter,
   }) {
     return PrefixCreationState(
@@ -193,6 +199,10 @@ class PrefixCreationState extends Equatable {
       prefixCreationFailureMessage: prefixCreationFailureMessageGetter != null
           ? prefixCreationFailureMessageGetter()
           : prefixCreationFailureMessage,
+      prefixCreationFailedProcessResult:
+          prefixCreationFailedProcessResultGetter != null
+          ? prefixCreationFailedProcessResultGetter()
+          : prefixCreationFailedProcessResult,
       prefixCreationOperationProgress:
           prefixCreationOperationProgressGetter != null
           ? prefixCreationOperationProgressGetter()

@@ -16,15 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:boxy/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:icon_decoration/icon_decoration.dart';
+import 'package:winebar/models/process_log.dart';
+import 'package:winebar/models/process_output.dart';
 import 'package:winebar/models/wine_build_source.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
+import 'package:winebar/widgets/process_output_widget.dart';
 
 import '../blocs/prefix_creation/prefix_creation_bloc.dart';
 import '../blocs/prefix_creation/prefix_creation_state.dart';
@@ -583,10 +588,31 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
         ),
         if (state.prefixCreationFailureMessage != null)
           ErrorMessageWidget(
-            text: state.prefixCreationFailureMessage!,
             width: double.infinity,
+            text: state.prefixCreationFailureMessage!,
+            onViewLogsPressed: state.prefixCreationFailedProcessResult == null
+                ? null
+                : () => _showWineProcessLogs(
+                    context: context,
+                    logs: state.prefixCreationFailedProcessResult!.logs,
+                  ),
           ),
       ],
+    );
+  }
+
+  void _showWineProcessLogs({
+    required BuildContext context,
+    required List<ProcessLog> logs,
+  }) {
+    unawaited(
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+              ProcessOutputWidget(processOutput: ProcessOutput(logs: logs)),
+        ),
+      ),
     );
   }
 }

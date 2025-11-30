@@ -25,7 +25,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
-import 'package:winebar/exceptions/generic_exception.dart';
+import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
@@ -118,6 +118,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         selectedWineBuildGetter: () => null,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
+        prefixCreationFailedProcessResultGetter: () => null,
       ),
     );
 
@@ -178,6 +179,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         wow64BuildThatWontWorkSelected: false,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
+        prefixCreationFailedProcessResultGetter: () => null,
       ),
     );
   }
@@ -220,6 +222,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         wow64BuildThatWontWorkSelected: wow64BuildThatWontWorkSelected,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
+        prefixCreationFailedProcessResultGetter: () => null,
       ),
     );
   }
@@ -241,6 +244,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         ),
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
+        prefixCreationFailedProcessResultGetter: () => null,
       ),
     );
   }
@@ -322,6 +326,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         state.copyWith(
           prefixCreationStatus: PrefixCreationStatus.creatingWinePrefix,
           prefixCreationOperationProgressGetter: () => null,
+          prefixCreationFailedProcessResultGetter: () => null,
         ),
       );
 
@@ -419,6 +424,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         prefixCreationStatus:
             PrefixCreationStatus.downloadingAndExtractingWineBuild,
         prefixCreationOperationProgressGetter: () => null,
+        prefixCreationFailedProcessResultGetter: () => null,
       ),
     );
 
@@ -467,9 +473,9 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     final processResult = await process.result;
 
     if (processResult.exitCode != 0) {
-      throw GenericException(
-        'The wineboot command exited with status '
-        '${processResult.exitCode}',
+      throw WineCommandFailedException(
+        'The "wineboot -u" command failed',
+        processResult: processResult,
       );
     }
   }
@@ -530,9 +536,9 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     final processResult = await process.result;
 
     if (processResult.exitCode != 0) {
-      throw GenericException(
-        'The wine reg command exited with status '
-        '${processResult.exitCode}',
+      throw WineCommandFailedException(
+        'The "wine reg" command failed',
+        processResult: processResult,
       );
     }
   }
@@ -601,6 +607,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
       state.copyWith(
         prefixCreationStatus: PrefixCreationStatus.succeeded,
         prefixCreationFailureMessageGetter: () => null,
+        prefixCreationFailedProcessResultGetter: () => null,
       ),
     );
 
@@ -608,10 +615,15 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
   }
 
   void _processPrefixCreationFailure(Object error) {
+    final processResult = error is WineCommandFailedException
+        ? error.processResult
+        : null;
+
     emit(
       state.copyWith(
         prefixCreationStatus: PrefixCreationStatus.failed,
         prefixCreationFailureMessageGetter: () => error.toString(),
+        prefixCreationFailedProcessResultGetter: () => processResult,
       ),
     );
   }

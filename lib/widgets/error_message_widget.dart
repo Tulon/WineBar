@@ -16,24 +16,56 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class ErrorMessageWidget extends StatelessWidget {
+class ErrorMessageWidget extends StatefulWidget {
   final String text;
   final double? width;
   final double? height;
+  final void Function()? onViewLogsPressed;
 
   const ErrorMessageWidget({
     super.key,
     required this.text,
     this.width,
     this.height,
+    this.onViewLogsPressed,
   });
+
+  @override
+  State<ErrorMessageWidget> createState() => _ErrorMessageWidgetState();
+}
+
+class _ErrorMessageWidgetState extends State<ErrorMessageWidget> {
+  late TapGestureRecognizer _viewLogsTapRecognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewLogsTapRecognizer = TapGestureRecognizer()
+      ..onTap = widget.onViewLogsPressed;
+  }
+
+  @override
+  void dispose() {
+    _viewLogsTapRecognizer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    String? adaptedText;
+    if (widget.onViewLogsPressed != null &&
+        widget.text.isNotEmpty &&
+        !widget.text.endsWith('.')) {
+      adaptedText = '${widget.text}. ';
+    } else {
+      adaptedText = '${widget.text} ';
+    }
 
     // The Column is necessary to prevent the SelectableText widget from
     // occupying all the available vertical space, should it be under
@@ -41,16 +73,26 @@ class ErrorMessageWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: width,
-          height: height,
+          width: widget.width,
+          height: widget.height,
           padding: EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             border: Border.all(color: colorScheme.error),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child: SelectableText(
-            text,
-            style: TextStyle(color: colorScheme.error, fontSize: 16),
+          child: SelectableText.rich(
+            TextSpan(
+              style: TextStyle(color: colorScheme.error, fontSize: 16),
+              children: [
+                TextSpan(text: adaptedText),
+                if (widget.onViewLogsPressed != null)
+                  TextSpan(
+                    text: 'View Logs.',
+                    style: TextStyle(color: theme.colorScheme.primary),
+                    recognizer: _viewLogsTapRecognizer,
+                  ),
+              ],
+            ),
           ),
         ),
       ],

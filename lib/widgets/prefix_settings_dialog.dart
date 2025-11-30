@@ -16,11 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:winebar/models/process_log.dart';
+import 'package:winebar/models/process_output.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/error_message_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
+import 'package:winebar/widgets/process_output_widget.dart';
 
 import '../blocs/prefix_settings/prefix_settings_bloc.dart';
 import '../blocs/prefix_settings/prefix_settings_state.dart';
@@ -112,8 +117,17 @@ class PrefixSettingsDialog extends StatelessWidget {
                         _buildUpdatePrefixButton(context, state),
                         if (state.prefixUpdateFailureMessage != null)
                           ErrorMessageWidget(
-                            text: state.prefixUpdateFailureMessage!,
                             width: double.infinity,
+                            text: state.prefixUpdateFailureMessage!,
+                            onViewLogsPressed:
+                                state.prefixUpdateFailedProcessResult == null
+                                ? null
+                                : () => _showWineProcessLogs(
+                                    context: context,
+                                    logs: state
+                                        .prefixUpdateFailedProcessResult!
+                                        .logs,
+                                  ),
                           ),
                       ],
                     ),
@@ -178,6 +192,21 @@ class PrefixSettingsDialog extends StatelessWidget {
         label: Text(
           getButtonText(),
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  void _showWineProcessLogs({
+    required BuildContext context,
+    required List<ProcessLog> logs,
+  }) {
+    unawaited(
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+              ProcessOutputWidget(processOutput: ProcessOutput(logs: logs)),
         ),
       ),
     );

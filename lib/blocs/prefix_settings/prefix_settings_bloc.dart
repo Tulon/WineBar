@@ -22,7 +22,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-import 'package:winebar/exceptions/generic_exception.dart';
+import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
 import 'package:winebar/services/utility_service.dart';
@@ -62,6 +62,7 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
       state.copyWith(
         prefixUpdateStatus: PrefixUpdateStatus.inProgress,
         prefixUpdateFailureMessageGetter: () => null,
+        prefixUpdateFailedProcessResultGetter: () => null,
       ),
     );
 
@@ -138,9 +139,9 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
     final processResult = await process.result;
 
     if (processResult.exitCode != 0) {
-      throw GenericException(
-        'The wine reg command exited with status '
-        '${processResult.exitCode}',
+      throw WineCommandFailedException(
+        'The "wine reg" command failed',
+        processResult: processResult,
       );
     }
   }
@@ -150,6 +151,7 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
       state.copyWith(
         prefixUpdateStatus: PrefixUpdateStatus.succeeded,
         prefixUpdateFailureMessageGetter: () => null,
+        prefixUpdateFailedProcessResultGetter: () => null,
       ),
     );
 
@@ -157,10 +159,15 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
   }
 
   void _processPrefixUpdateFailure(Object error) {
+    final processResult = error is WineCommandFailedException
+        ? error.processResult
+        : null;
+
     emit(
       state.copyWith(
         prefixUpdateStatus: PrefixUpdateStatus.failed,
         prefixUpdateFailureMessageGetter: () => error.toString(),
+        prefixUpdateFailedProcessResultGetter: () => processResult,
       ),
     );
   }
