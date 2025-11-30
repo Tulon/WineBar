@@ -24,13 +24,13 @@ import 'dart:typed_data';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
-import 'package:winebar/exceptions/generic_process_exception.dart';
+import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/process_log.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 
 void _validateCommandLine(List<String> commandLine) {
   if (commandLine.isEmpty) {
-    throw GenericProcessException("Command line can't be empty");
+    throw GenericException("Command line can't be empty");
   }
 }
 
