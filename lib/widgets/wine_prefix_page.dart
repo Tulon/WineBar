@@ -638,6 +638,13 @@ class _PinnedAppsGridState extends State<_PinnedExecutablesGridWidget> {
     }
 
     return BlocProvider(
+      // This helps with the create function provided below not being called
+      // in some cases, while BlocProvider.of<PinnedExecutableBloc>(context)
+      // in buildWidgetTree() returning the wrong instance of the same bloc.
+      // The fix was suggested in [1].
+      // [1]: https://github.com/felangel/bloc/issues/919
+      key: ValueKey(pinnedExecutable.pinDirectory),
+
       create: (context) => PinnedExecutableBloc(
         startupData: widget.startupData,
         winePrefix: widget.winePrefix,
