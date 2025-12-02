@@ -45,13 +45,6 @@ class WineBuildSourceGithubProject extends CachedWineBuildSource {
   final String githubProjectName;
   final Dio dio;
 
-  static const Map<String, ArchiveType> _archiveTypeByMimeType = {
-    'application/x-gtar': ArchiveType.tarGz,
-    'application/x-bzip2': ArchiveType.tarBz2,
-    'application/x-xz': ArchiveType.tarXz,
-    'application/zstd': ArchiveType.tarZstd,
-  };
-
   WineBuildSourceGithubProject({
     required this.label,
     this.details,
@@ -99,10 +92,9 @@ class WineBuildSourceGithubProject extends CachedWineBuildSource {
       for (final assetJson in assetsList) {
         final assetMap = assetJson as Map<String, dynamic>;
         final assetName = assetMap['name'] as String;
-        final assetContentType = assetMap['content_type'];
         final assetDownloadUrl = assetMap['browser_download_url'] as String;
 
-        final archiveType = _archiveTypeByMimeType[assetContentType];
+        final archiveType = ArchiveType.fromFileNameOrFilePath(assetName);
         if (archiveType != null) {
           wineBuilds.add(
             WineBuild(

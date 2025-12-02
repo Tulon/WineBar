@@ -17,12 +17,40 @@
  */
 
 enum ArchiveType {
-  tarGz(tarCompressionOption: '--gzip'),
-  tarBz2(tarCompressionOption: '--bzip2'),
-  tarXz(tarCompressionOption: '--xz'),
-  tarZstd(tarCompressionOption: '--zstd');
-
-  const ArchiveType({required this.tarCompressionOption});
+  tarGz(
+    tarCompressionOption: '--gzip',
+    lowerCaseExtensions: ['.tar.gz', '.tgz'],
+  ),
+  tarBz2(
+    tarCompressionOption: '--bzip2',
+    lowerCaseExtensions: ['.tar.bz2', '.tbz2'],
+  ),
+  tarXz(tarCompressionOption: '--xz', lowerCaseExtensions: ['.tar.xz', '.txz']),
+  tarZstd(
+    tarCompressionOption: '--zstd',
+    lowerCaseExtensions: ['.tar.zst', '.tzst'],
+  );
 
   final String tarCompressionOption;
+  final List<String> lowerCaseExtensions;
+
+  const ArchiveType({
+    required this.tarCompressionOption,
+    required this.lowerCaseExtensions,
+  });
+
+  static ArchiveType? fromFileNameOrFilePath(String fileName) {
+    final lowerCaseFileName = fileName.toLowerCase();
+
+    bool extensionMatches(String lowerCaseExtension) {
+      return lowerCaseFileName.endsWith(lowerCaseExtension);
+    }
+
+    for (final entry in values) {
+      if (entry.lowerCaseExtensions.any(extensionMatches)) {
+        return entry;
+      }
+    }
+    return null;
+  }
 }
