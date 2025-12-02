@@ -31,7 +31,7 @@ The complexity here comes from the fact that the `wine` process starts the windo
 
 On regular x86_64 Linux systems, you are good to go!
 
-On Apple hardware, you need to install a few dependencies first:
+On Apple silicon Macs, you need to install a few dependencies first:
 
 On Debian-based distros:
 ```bash
@@ -46,7 +46,14 @@ sudo dnf install muvm fex-emu
 
 ### Running an AppImage
 
-While AppImages can be run just by making them executable and double clicking them, pinning them to a taskbar doesn't work right in most (all?) desktop environments. The suggested solution is to use an app called [Gear Lever](https://mijorus.it/projects/gearlever/) to open and run AppImages. Install `Gear Level`, then right click an `.AppImage` file and select `Open with Gear Level`. An `.AppImage` started from `Gear Level` can be pinned to a taskbar just fine.
+While AppImages can be run just by making them executable and double clicking them, pinning them to a taskbar doesn't work in most (all?) desktop environments. The suggested solution is to use an app called [Gear Lever](https://mijorus.it/projects/gearlever/) to open and run AppImages:
+
+1. Install `Gear Level`.
+2. Right click an `.AppImage` file and select `Open with Gear Level` or similar.
+3. Click `Move to the app menu`.
+4. Click `Launch`.
+
+An `.AppImage` file started that way can be pinned to a taskbar just fine (on KDE at least). As a bonus, `Gear Level` can automatically update your AppImages. These URLs always point to the latest release of Wine Bar ([WineBar-x64.AppImage](https://github.com/Tulon/WineBar/releases/latest/download/WineBar-x64.AppImage), [WineBar-arm64.AppImage](https://github.com/Tulon/WineBar/releases/latest/download/WineBar-arm64.AppImage)) and may be used as update URLs in `Gear Level`.
 
 ## Building
 

@@ -45,8 +45,6 @@ esac
 BUILD_NUMBER=1
 
 BUILD_NAME="${VERSION_NAME:-0.0.0}"
-PREFIXED_BUILD_NAME="-$BUILD_NAME"
-OPTIONAL_BUILD_NAME="${VERSION_NAME:+$PREFIXED_BUILD_NAME}"
 
 cd "$SCRIPT_DIR/../.."
 
@@ -62,7 +60,7 @@ flutter build linux "--${RELEASE_OR_DEBUG}" --target-platform "linux-${TARGET_AR
 
 BUNDLE_DIR="build/linux/${TARGET_ARCH}/${RELEASE_OR_DEBUG}/bundle"
 APP_DIR="build/linux/${TARGET_ARCH}/${RELEASE_OR_DEBUG}/WineBar-${TARGET_ARCH}.AppDir"
-APP_IMAGE="build/linux/${TARGET_ARCH}/${RELEASE_OR_DEBUG}/WineBar${OPTIONAL_BUILD_NAME}-${TARGET_ARCH}.AppImage"
+APP_IMAGE="build/linux/${TARGET_ARCH}/${RELEASE_OR_DEBUG}/WineBar-${TARGET_ARCH}.AppImage"
 
 rm -rf "${APP_DIR}"
 mkdir -p "${APP_DIR}"
