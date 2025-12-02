@@ -23,19 +23,22 @@
 #include "WStringRuntimeError.h"
 
 #include <shlobj.h>
+#include <shlwapi.h>
 #include <windows.h>
 
+#include <algorithm>
 #include <filesystem>
 #include <format>
 
-std::vector<std::wstring>
-enumerateFilesOnDesktop()
+namespace
 {
-    std::vector<std::wstring> files;
 
+void
+enumerateFilesInKnownFolder(REFKNOWNFOLDERID knownFolderId, std::vector<std::wstring>& sink)
+{
     PWSTR desktopFolder = nullptr;
 
-    HRESULT hr = SHGetKnownFolderPath(FOLDERID_Desktop, KF_FLAG_DEFAULT, nullptr, &desktopFolder);
+    HRESULT hr = SHGetKnownFolderPath(knownFolderId, KF_FLAG_DEFAULT, nullptr, &desktopFolder);
 
     // The docs say to call CoTaskMemFree() even if SHGetKnownFolderPath fails.
     ScopeCleanup desktopFolderCleanup([desktopFolder] { CoTaskMemFree(desktopFolder); });
@@ -50,8 +53,32 @@ enumerateFilesOnDesktop()
 
     for (auto const& entry : std::filesystem::directory_iterator(desktopFolder))
     {
-        files.push_back(entry.path().wstring());
+        sink.push_back(entry.path().wstring());
     }
+}
+
+bool
+fileNameLess(std::wstring const& lhsPath, std::wstring const& rhsPath)
+{
+    wchar_t const* lhsFileName = PathFindFileNameW(lhsPath.c_str());
+    wchar_t const* rhsFileName = PathFindFileNameW(rhsPath.c_str());
+
+    return lstrcmpW(lhsFileName, rhsFileName) < 0;
+}
+
+} // namespace
+
+std::vector<std::wstring>
+enumerateFilesOnDesktop()
+{
+    std::vector<std::wstring> files;
+
+    enumerateFilesInKnownFolder(FOLDERID_Desktop, files);
+    enumerateFilesInKnownFolder(FOLDERID_PublicDesktop, files);
+
+    std::sort(files.begin(), files.end(), &fileNameLess);
+
+    files.erase(std::unique(files.begin(), files.end(), &fileNameLess), files.end());
 
     return files;
 }
