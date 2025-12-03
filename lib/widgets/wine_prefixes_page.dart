@@ -17,7 +17,9 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -26,8 +28,10 @@ import 'package:simple_icons/simple_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
 import 'package:winebar/models/prefix_list_event.dart';
-
+import 'package:winebar/utils/app_info.dart';
+import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
+import 'package:winebar/widgets/gesture_recognizer_holder.dart';
 
 import '../blocs/prefix_list/prefix_list_bloc.dart';
 import '../models/wine_prefix.dart';
@@ -48,6 +52,7 @@ class WinePrefixesPage extends StatelessWidget {
         builder: (context) {
           return Scaffold(
             appBar: AppBar(
+              leading: _buildAppMenuButton(context),
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               title: Text('Wine Prefixes'),
               actions: [_buildDonationButton(context)],
@@ -61,6 +66,34 @@ class WinePrefixesPage extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildAppMenuButton(BuildContext context) {
+    return MenuAnchor(
+      menuChildren: <Widget>[
+        MenuItemButton(
+          // See here: https://stackoverflow.com/a/78692532
+          requestFocusOnHover: false,
+
+          leadingIcon: const Icon(Icons.info),
+          child: const Text('About'),
+          onPressed: () => _showAboutDialog(context),
+        ),
+      ],
+      builder:
+          (BuildContext context, MenuController controller, Widget? child) {
+            return IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                if (controller.isOpen) {
+                  controller.close();
+                } else {
+                  controller.open();
+                }
+              },
+            );
+          },
     );
   }
 
@@ -84,6 +117,77 @@ class WinePrefixesPage extends StatelessWidget {
         foregroundColor: Colors.white,
         backgroundColor: Colors.deepPurpleAccent,
       ),
+    );
+  }
+
+  Future<void> _showAboutDialog(BuildContext context) async {
+    final versionTxtFilePath = LocalStoragePaths.versionTxtFilePath;
+    final versionString = (await File(
+      versionTxtFilePath,
+    ).readAsString().catchError((e) => '0.0.0')).trim();
+
+    if (!context.mounted) {
+      return;
+    }
+
+    final licenseTapRecognizer = TapGestureRecognizer()
+      ..onTap = () {
+        unawaited(
+          launchUrlString(
+            'https://www.gnu.org/licenses/gpl-3.0-standalone.html',
+          ).then<void>((_) {}).catchError((_) {}),
+        );
+      };
+
+    final authorNameTapRecognizer = TapGestureRecognizer()
+      ..onTap = () {
+        unawaited(
+          launchUrlString(
+            'https://tulon.github.io/about/',
+          ).then<void>((_) {}).catchError((_) {}),
+        );
+      };
+
+    const linkStyle = TextStyle(
+      decoration: TextDecoration.underline,
+      color: Colors.blue,
+      decorationColor: Colors.blue,
+    );
+
+    showAboutDialog(
+      context: context,
+      applicationName: AppInfo.appName,
+      applicationVersion: versionString,
+      applicationIcon: Image(
+        width: 64,
+        height: 64,
+        image: AssetImage('packaging/resources/common/wine_bar.png'),
+      ),
+      children: [
+        GestureRecognizerHolder(
+          recognizers: [licenseTapRecognizer, authorNameTapRecognizer],
+          child: SelectableText.rich(
+            textAlign: TextAlign.center,
+            TextSpan(
+              children: [
+                TextSpan(text: 'License: '),
+                TextSpan(
+                  text: 'GPLv3',
+                  recognizer: licenseTapRecognizer,
+                  style: linkStyle,
+                ),
+                TextSpan(text: '\n'),
+                TextSpan(text: 'Author: '),
+                TextSpan(
+                  text: 'Joseph Artsimovich',
+                  recognizer: authorNameTapRecognizer,
+                  style: linkStyle,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

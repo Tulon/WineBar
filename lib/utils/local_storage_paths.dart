@@ -73,6 +73,14 @@ class LocalStoragePaths {
     );
   }
 
+  static String get versionTxtFilePath {
+    return path.join(
+      Directory(Platform.resolvedExecutable).parent.path,
+      'data',
+      'version.txt',
+    );
+  }
+
   static Future<LocalStoragePaths> get() async {
     final homeDir = Platform.environment['HOME'];
     if (homeDir == null) {
