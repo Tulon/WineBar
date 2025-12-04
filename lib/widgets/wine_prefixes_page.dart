@@ -56,6 +56,7 @@ class WinePrefixesPage extends StatelessWidget {
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               title: Text('Wine Prefixes'),
               actions: [_buildDonationButton(context)],
+              actionsPadding: EdgeInsetsDirectional.only(end: 8.0),
             ),
             body: _WinePrefixesList(startupData: startupData),
             floatingActionButton: FloatingActionButton.extended(
@@ -122,9 +123,10 @@ class WinePrefixesPage extends StatelessWidget {
 
   Future<void> _showAboutDialog(BuildContext context) async {
     final versionTxtFilePath = LocalStoragePaths.versionTxtFilePath;
-    final versionString = (await File(
+    final rawVersionString = await File(
       versionTxtFilePath,
-    ).readAsString().catchError((e) => '0.0.0')).trim();
+    ).readAsString().catchError((e) => '0.0.0');
+    final versionString = 'v${rawVersionString.trim()}';
 
     if (!context.mounted) {
       return;
@@ -150,8 +152,8 @@ class WinePrefixesPage extends StatelessWidget {
 
     const linkStyle = TextStyle(
       decoration: TextDecoration.underline,
-      color: Colors.blue,
-      decorationColor: Colors.blue,
+      color: Color(0xff1e88e5),
+      decorationColor: Color(0xff1e88e5),
     );
 
     showAboutDialog(
@@ -159,8 +161,8 @@ class WinePrefixesPage extends StatelessWidget {
       applicationName: AppInfo.appName,
       applicationVersion: versionString,
       applicationIcon: Image(
-        width: 64,
-        height: 64,
+        width: 56,
+        height: 56,
         image: AssetImage('packaging/resources/common/wine_bar.png'),
       ),
       children: [

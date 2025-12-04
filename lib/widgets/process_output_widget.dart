@@ -41,7 +41,7 @@ class ProcessOutputWidget extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: colorScheme.inversePrimary,
-              title: const Text('Process Output'),
+              title: const Text('Process Logs'),
               actionsPadding: EdgeInsetsGeometry.symmetric(horizontal: 8.0),
               actions: [_buildLogSelectionControls(context)],
             ),

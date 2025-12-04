@@ -24,14 +24,14 @@ class PinExecutableButton extends StatelessWidget {
   final SpecialExecutableState specialExecutableState;
   final void Function()? onPrimaryButtonPressed;
   final void Function()? onKillProcessPressed;
-  final void Function()? onViewProcessOutputPressed;
+  final void Function()? onViewLogsPressed;
 
   const PinExecutableButton({
     super.key,
     required this.specialExecutableState,
     this.onPrimaryButtonPressed,
     this.onKillProcessPressed,
-    this.onViewProcessOutputPressed,
+    this.onViewLogsPressed,
   });
 
   @override
@@ -65,7 +65,7 @@ class PinExecutableButton extends StatelessWidget {
     if (specialExecutableState.isRunning) {
       stackIndex = 0; // The "Kill process" page.
     } else if (specialExecutableState.processOutput != null) {
-      stackIndex = 1; // The "View process output" page.
+      stackIndex = 1; // The "View Logs" page.
     } else {
       return null; // No aux button needed.
     }
@@ -84,8 +84,8 @@ class PinExecutableButton extends StatelessWidget {
             style: _buttonStyleWithHoverColor(Colors.red),
           ),
           IconButton(
-            onPressed: onViewProcessOutputPressed,
-            tooltip: 'View process output',
+            onPressed: onViewLogsPressed,
+            tooltip: 'View Logs',
             icon: Icon(Icons.article),
             padding: EdgeInsets.zero,
             style: _buttonStyleWithHoverColor(

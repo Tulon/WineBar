@@ -258,8 +258,8 @@ class WinePrefixPage extends StatelessWidget {
         specialExecutableState: state,
         onPrimaryButtonPressed: () => maybeSelectExecutableToPin(),
         onKillProcessPressed: () => bloc.killProcessIfRunning(),
-        onViewProcessOutputPressed: () =>
-            _viewProcessOutput(context: context, specialExecutableState: state),
+        onViewLogsPressed: () =>
+            _viewProcessLogs(context: context, specialExecutableState: state),
       );
     }
 
@@ -295,8 +295,8 @@ class WinePrefixPage extends StatelessWidget {
         specialExecutableBloc: specialExecutableBloc,
       ),
       onKillProcessPressed: () => specialExecutableBloc.killProcessIfRunning(),
-      onViewProcessOutputPressed: () =>
-          _viewProcessOutput(context: context, specialExecutableState: state),
+      onViewLogsPressed: () =>
+          _viewProcessLogs(context: context, specialExecutableState: state),
     );
   }
 
@@ -315,8 +315,8 @@ class WinePrefixPage extends StatelessWidget {
         specialExecutableBloc: specialExecutableBloc,
       ),
       onKillProcessPressed: () => specialExecutableBloc.killProcessIfRunning(),
-      onViewProcessOutputPressed: () =>
-          _viewProcessOutput(context: context, specialExecutableState: state),
+      onViewLogsPressed: () =>
+          _viewProcessLogs(context: context, specialExecutableState: state),
     );
   }
 
@@ -335,8 +335,8 @@ class WinePrefixPage extends StatelessWidget {
       onPrimaryButtonPressed: () =>
           specialExecutableBloc.startProcess(['--gui']),
       onKillProcessPressed: () => specialExecutableBloc.killProcessIfRunning(),
-      onViewProcessOutputPressed: () =>
-          _viewProcessOutput(context: context, specialExecutableState: state),
+      onViewLogsPressed: () =>
+          _viewProcessLogs(context: context, specialExecutableState: state),
     );
   }
 
@@ -382,7 +382,7 @@ class WinePrefixPage extends StatelessWidget {
     }
   }
 
-  void _viewProcessOutput({
+  void _viewProcessLogs({
     required BuildContext context,
     required SpecialExecutableState specialExecutableState,
   }) {

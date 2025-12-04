@@ -67,6 +67,12 @@ class _ErrorMessageWidgetState extends State<ErrorMessageWidget> {
       adaptedText = '${widget.text} ';
     }
 
+    const linkStyle = TextStyle(
+      decoration: TextDecoration.underline,
+      color: Color(0xff1e88e5),
+      decorationColor: Color(0xff1e88e5),
+    );
+
     // The Column is necessary to prevent the SelectableText widget from
     // occupying all the available vertical space, should it be under
     // a Column -> Expanded.
@@ -88,7 +94,7 @@ class _ErrorMessageWidgetState extends State<ErrorMessageWidget> {
                 if (widget.onViewLogsPressed != null)
                   TextSpan(
                     text: 'View Logs.',
-                    style: TextStyle(color: theme.colorScheme.primary),
+                    style: linkStyle,
                     recognizer: _viewLogsTapRecognizer,
                   ),
               ],
