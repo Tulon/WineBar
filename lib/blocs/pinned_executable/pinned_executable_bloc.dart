@@ -160,22 +160,25 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
       return commandLineToWineArgs([executablePath]);
     }
 
+    final processOutputDir = await startupData.localStoragePaths
+        .createProcessOutputDir();
+
     final wineProcess = await startupData.wineProcessRunnerService.start(
+      processOutputDir: processOutputDir,
       commandLine: wineInstDescriptor.buildWineInvocationCommand(
         wineArgs: wineArgsForLaunchingExecutable(
           pinnedExecutable.windowsPathToExecutable,
         ),
       ),
-      envVars: {
-        ...wineInstDescriptor.getEnvVarsForWine(
-          prefixDirStructure: winePrefix.dirStructure,
-          tempDir: startupData.localStoragePaths.tempDir,
-        ),
+      envVars: wineInstDescriptor.getEnvVarsForWine(
+        prefixDirStructure: winePrefix.dirStructure,
+        processOutputDir: processOutputDir.path,
+        forWinetricks: false,
 
         // For maximum performance, we disable capturing logs from pinned
         // executables.
-        'LOG_CAPTURING_RUNNER_DISABLE_LOGGING': '1',
-      },
+        disableLogs: true,
+      ),
     );
 
     return wineProcess;

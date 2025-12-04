@@ -56,13 +56,16 @@ abstract interface class WineInstallationDescriptor {
     required List<String> winetricksArgs,
   });
 
+  /// Returns the map of environment variables for starting a Wine or Proton
+  /// process.
+  ///
+  /// The [processOutputDir] is a directory where process logs are to be
+  /// written.
   Map<String, String> getEnvVarsForWine({
     required WinePrefixDirStructure prefixDirStructure,
-    required String tempDir,
-  });
-
-  Map<String, String> getEnvVarsForWinetricks({
-    required WinePrefixDirStructure prefixDirStructure,
+    required String processOutputDir,
+    required bool forWinetricks,
+    required bool disableLogs,
   });
 
   /// Don't use directly - use
@@ -220,13 +223,32 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
   @override
   Map<String, String> getEnvVarsForWine({
     required WinePrefixDirStructure prefixDirStructure,
-    required String tempDir,
+    required String processOutputDir,
+    required bool forWinetricks,
+    required bool disableLogs,
   }) {
     final wineAndWineserverExecutables = _findWineAndWineserverExecutables(
       forWinetricks: true,
     );
 
     final envVars = <String, String>{};
+
+    if (forWinetricks) {
+      envVars['WINE'] = wineAndWineserverExecutables.wineExecutable;
+
+      envVars['WINETRICKS_LATEST_VERSION_CHECK'] = 'disabled';
+
+      // I hoped this would get rid of UI messages like
+      // 'winetricks latest version check update disabled', but unfortunately
+      // it doesn't. I've opened a ticket to address this:
+      // https://github.com/Winetricks/winetricks/issues/2430
+      envVars['WINETRICKS_SUPER_QUIET'] = '1';
+
+      if (protonLauncherScript != null) {
+        // For winetricks to be able to find the user directory under C:\Users.
+        envVars['LOGNAME'] = 'steamuser';
+      }
+    }
 
     // This variable is used both by wine (not by Proton) and also by our
     // log-capturing-runner executable.
@@ -239,8 +261,19 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
       prefixDirStructure: prefixDirStructure,
     );
 
-    if (protonLauncherScript != null) {
-      envVars['STEAM_COMPAT_CLIENT_INSTALL_PATH'] = tempDir;
+    if (disableLogs) {
+      envVars['LOG_CAPTURING_RUNNER_DISABLE_LOGGING'] = '1';
+    }
+
+    if (protonLauncherScript == null) {
+      envVars['WINEDLLOVERRIDES'] = 'winemenubuilder.exe=d';
+    } else if (!forWinetricks) {
+      // Winetricks doesn't run the "proton" script, so it doesn't need any
+      // of the following variables.
+
+      // Any temporary directory would do here.
+      envVars['STEAM_COMPAT_CLIENT_INSTALL_PATH'] = processOutputDir;
+
       envVars['STEAM_COMPAT_DATA_PATH'] = prefixDirStructure.innerDir;
 
       // Without the UMU_ID environment variable, the proton launcher script
@@ -250,42 +283,28 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
       // waste to have an extra executable running.
       envVars['UMU_ID'] = '1';
 
-      envVars['PROTON_FORCE_LARGE_ADDRESS_AWARE'] = '1';
-    } else {
-      envVars['WINEPREFIX'] = prefixDirStructure.innerDir;
-      envVars['WINEDLLOVERRIDES'] = 'winemenubuilder.exe=d';
+      // Not sure if this one does more good or bad.
+      //envVars['PROTON_FORCE_LARGE_ADDRESS_AWARE'] = '1';
+
+      if (!disableLogs) {
+        envVars['PROTON_LOG'] = '1';
+
+        // This could result in steam-proton.log file appearing in
+        // processOutputDir, but in practice, that doesn't happen.
+        // Check out the setup_logging() function in the `proton`
+        // script and the way it's called to understand why.
+        //
+        // If we were setting the `StreamGameId`, environment variable,
+        // then a `stream-${StreamGameId}.log` would be created.
+        //
+        // In any case, it's a good idea to set this variable whenever
+        // wet set `PROTON_LOG`, as should the logic in the `proton` script
+        // change, we may end up polluting the user's home directory with
+        // proton logs.
+        envVars['PROTON_LOG_DIR'] = processOutputDir;
+      }
     }
-    return envVars;
-  }
 
-  @override
-  Map<String, String> getEnvVarsForWinetricks({
-    required WinePrefixDirStructure prefixDirStructure,
-  }) {
-    final wineAndWineserverExecutables = _findWineAndWineserverExecutables(
-      forWinetricks: true,
-    );
-
-    final envVars = <String, String>{};
-
-    if (protonLauncherScript != null) {
-      envVars['LOGNAME'] = 'steamuser';
-    }
-
-    envVars['WINEPREFIX'] = getInnermostPrefixDir(
-      prefixDirStructure: prefixDirStructure,
-    );
-    envVars['WINE'] = wineAndWineserverExecutables.wineExecutable;
-    envVars['WINESERVER'] = wineAndWineserverExecutables.wineserverExecutable;
-    envVars['WINEDLLOVERRIDES'] = 'winemenubuilder.exe=d';
-
-    // I hoped this would get rid of UI messages like
-    // 'winetricks latest version check update disabled', but unfortunately
-    // it doesn't. I've opened the ticket to address this:
-    // https://github.com/Winetricks/winetricks/issues/2430
-    //envVars['WINETRICKS_SUPER_QUIET'] = '1';
-
-    envVars['WINETRICKS_LATEST_VERSION_CHECK'] = 'disabled';
     return envVars;
   }
 

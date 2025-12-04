@@ -94,6 +94,20 @@ class LocalStoragePaths {
     );
   }
 
+  /// Creates a temporary directory where logs and other process outputs
+  /// are to be written.
+  ///
+  /// As muvm doesn't propagate the stdout, stderr or even the exit code
+  /// of the process it runs, we obtain the logs differently. We create
+  /// a temporary directory and wrap the command with log-capturing-runner
+  /// that writes the logs and the exit code to files in this directory.
+  /// In the non-muvm case we still use the tempory directory and
+  /// log-capturing-runner, just to avoid having a separate logic for such
+  /// a case.
+  Future<Directory> createProcessOutputDir() async {
+    return await Directory(tempDir).createTemp('process-outdir-');
+  }
+
   String getWineInstallDir({
     required WineBuildSource wineBuildSource,
     required WineRelease wineRelease,

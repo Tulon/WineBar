@@ -209,13 +209,19 @@ abstract class RegularSpecialExecutableBloc extends SpecialExecutableBloc {
     required WineInstallationDescriptor wineInstDescriptor,
     required void Function(WineProcess) onProcessStarted,
   }) async {
+    final processOutputDir = await startupData.localStoragePaths
+        .createProcessOutputDir();
+
     final wineProcess = await startupData.wineProcessRunnerService.start(
+      processOutputDir: processOutputDir,
       commandLine: wineInstDescriptor.buildWineInvocationCommand(
         wineArgs: commandLineToWineArgs(commandLine),
       ),
       envVars: wineInstDescriptor.getEnvVarsForWine(
         prefixDirStructure: winePrefix.dirStructure,
-        tempDir: startupData.localStoragePaths.tempDir,
+        processOutputDir: processOutputDir.path,
+        forWinetricks: false,
+        disableLogs: false,
       ),
     );
 
@@ -253,12 +259,19 @@ class PinExecutableBloc extends SpecialExecutableBloc {
     required WineInstallationDescriptor wineInstDescriptor,
     required void Function(WineProcess) onProcessStarted,
   }) async {
+    // Note that we can't place the pin directory inside the processOutputDir,
+    // as the processOutputDir is deleted by the time
+    // `await wineProcess.result;` below returns.
     final tempPinDir = await Directory(
       startupData.localStoragePaths.tempDir,
     ).createTemp('pin-');
 
     try {
+      final processOutputDir = await startupData.localStoragePaths
+          .createProcessOutputDir();
+
       final wineProcess = await startupData.wineProcessRunnerService.start(
+        processOutputDir: processOutputDir,
         commandLine: wineInstDescriptor.buildWineInvocationCommand(
           wineArgs: _buildWineArgs(
             commandLine: commandLine,
@@ -267,7 +280,9 @@ class PinExecutableBloc extends SpecialExecutableBloc {
         ),
         envVars: wineInstDescriptor.getEnvVarsForWine(
           prefixDirStructure: winePrefix.dirStructure,
-          tempDir: startupData.localStoragePaths.tempDir,
+          processOutputDir: processOutputDir.path,
+          forWinetricks: false,
+          disableLogs: false,
         ),
       );
 
@@ -344,12 +359,19 @@ class RunInstallerBloc extends SpecialExecutableBloc {
     required WineInstallationDescriptor wineInstDescriptor,
     required void Function(WineProcess) onProcessStarted,
   }) async {
+    // Note that we can't place the pins directory inside the processOutputDir,
+    // as the processOutputDir is deleted by the time
+    // `await wineProcess.result;` below returns.
     final tempPinsDir = await Directory(
       startupData.localStoragePaths.tempDir,
     ).createTemp('pins-');
 
     try {
+      final processOutputDir = await startupData.localStoragePaths
+          .createProcessOutputDir();
+
       final wineProcess = await startupData.wineProcessRunnerService.start(
+        processOutputDir: processOutputDir,
         commandLine: wineInstDescriptor.buildWineInvocationCommand(
           wineArgs: _buildWineArgs(
             commandLine: commandLine,
@@ -358,7 +380,9 @@ class RunInstallerBloc extends SpecialExecutableBloc {
         ),
         envVars: wineInstDescriptor.getEnvVarsForWine(
           prefixDirStructure: winePrefix.dirStructure,
-          tempDir: startupData.localStoragePaths.tempDir,
+          processOutputDir: processOutputDir.path,
+          forWinetricks: false,
+          disableLogs: false,
         ),
       );
 
@@ -449,13 +473,20 @@ class WinetricksExecutableBloc extends SpecialExecutableBloc {
       );
     }
 
+    final processOutputDir = await startupData.localStoragePaths
+        .createProcessOutputDir();
+
     final wineProcess = await startupData.wineProcessRunnerService.start(
+      processOutputDir: processOutputDir,
       commandLine: wineInstDescriptor.buildWinetricksInvocationCommand(
         externalWinetricksScriptPath: externalWinetricksScriptPath,
         winetricksArgs: commandLine,
       ),
-      envVars: wineInstDescriptor.getEnvVarsForWinetricks(
+      envVars: wineInstDescriptor.getEnvVarsForWine(
         prefixDirStructure: winePrefix.dirStructure,
+        processOutputDir: processOutputDir.path,
+        forWinetricks: true,
+        disableLogs: false,
       ),
     );
 

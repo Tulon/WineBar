@@ -26,6 +26,7 @@ import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/process_log.dart';
+import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 
 void _validateCommandLine(List<String> commandLine) {
@@ -58,7 +59,20 @@ abstract interface class WineProcessRunnerService {
     );
   }
 
+  /// Starts a Wine or Proton executable or another executable that wraps them.
+  ///
+  /// The [processOutputDir] is the directory returned from
+  /// [LocalStoragePaths.createProcessOutputDir]. This method takes ownership
+  /// of that directory and will delete it when it's no longer needed.
+  ///
+  /// The [commandLine] contains the executable to run and its arguments.
+  ///
+  /// The [envVars] is a map of environment variables to set for the process.
+  /// It has to be noted that muvm doesn't propagate its environment to the
+  /// process it starts inside a virtual machine, but this method works around
+  /// that.
   Future<WineProcess> start({
+    required Directory processOutputDir,
     required List<String> commandLine,
     required Map<String, String> envVars,
   });
@@ -98,50 +112,46 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
 
   @override
   Future<WineProcess> start({
+    required Directory processOutputDir,
     required List<String> commandLine,
     required Map<String, String> envVars,
   }) async {
     _validateCommandLine(commandLine);
 
-    // muvm doesn't propagate the stdout, stderr or even the exit code of the
-    // process it runs. So, we create a temporary directory and wrap the
-    // command with log-capturing-runner that writes the logs and the exit
-    // code to files in that directory. In the non-muvm case we still use the
-    // tempory directory and log-capturing-runner, just to avoid having a
-    // separate logic for such a case.
-    final tempOutDir = await Directory(
-      toplevelTempDir,
-    ).createTemp('process-outdir-');
+    try {
+      final (executable, args) = _buildExecutableAndArgs(
+        commandLine: commandLine,
+        processOutputDir: processOutputDir.path,
+        envVars: envVars,
+      );
 
-    final (executable, args) = _buildExecutableAndArgs(
-      tempOutDir: tempOutDir.path,
-      commandLine: commandLine,
-      envVars: envVars,
-    );
+      logger.i(
+        'Running command:\n'
+        '${[executable, ...args].join(' ')}',
+      );
 
-    logger.i(
-      'Running command:\n'
-      '${[executable, ...args].join(' ')}',
-    );
+      final process = await Process.start(
+        executable,
+        args,
 
-    final process = await Process.start(
-      executable,
-      args,
+        // Muvm doesn't pass its environment to the child, so in this case,
+        // we pass the environment through the command-line arguments
+        // (see _buildExecutableAndArgs()).
+        environment: runWithMuvm ? null : envVars,
+      );
 
-      // Muvm doesn't pass its environment to the child, so in this case,
-      // we pass the environment through the command-line arguments
-      // (see _buildExecutableAndArgs()).
-      environment: runWithMuvm ? null : envVars,
-    );
-
-    return _WineProcessWithLogCapturingRunner(
-      process: process,
-      tempOutDir: tempOutDir,
-    );
+      return _WineProcessWithLogCapturingRunner(
+        process: process,
+        processOutputDir: processOutputDir,
+      );
+    } catch (e) {
+      await recursiveDeleteAndLogErrors(processOutputDir);
+      rethrow;
+    }
   }
 
   (String, List<String>) _buildExecutableAndArgs({
-    required String tempOutDir,
+    required String processOutputDir,
     required List<String> commandLine,
     required Map<String, String> envVars,
   }) {
@@ -157,7 +167,7 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
     //    to log-capturing-runner.
     //    [1]: https://github.com/AsahiLinux/muvm/issues/206
     final logCapturingRunnerArgs = [
-      tempOutDir,
+      processOutputDir,
       ..._envVarsToLogCapturingRunnerArgs(envVars),
       ...commandLine,
     ];
@@ -199,12 +209,12 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
 
 class _WineProcessWithLogCapturingRunner implements WineProcess {
   final Process process;
-  final Directory tempOutDir;
+  final Directory processOutputDir;
   final _completer = Completer<WineProcessResult>();
 
   _WineProcessWithLogCapturingRunner({
     required this.process,
-    required this.tempOutDir,
+    required this.processOutputDir,
   }) {
     unawaited(
       process.exitCode
@@ -220,7 +230,7 @@ class _WineProcessWithLogCapturingRunner implements WineProcess {
     // the exitCode argument and instead read it form status.txt.
 
     final statusString = await File(
-      path.join(tempOutDir.path, 'status.txt'),
+      path.join(processOutputDir.path, 'status.txt'),
     ).readAsString().catchError((e) => '');
 
     final exitCode = int.tryParse(statusString.trim());
@@ -228,26 +238,26 @@ class _WineProcessWithLogCapturingRunner implements WineProcess {
     // The log files are size-limted, so it's totally fine
     // to read them into memory.
     final stdout = await File(
-      path.join(tempOutDir.path, 'stdout.txt'),
+      path.join(processOutputDir.path, 'stdout.txt'),
     ).readAsBytes().catchError((e) => Uint8List(0));
 
     final stderr = await File(
-      path.join(tempOutDir.path, 'stderr.txt'),
+      path.join(processOutputDir.path, 'stderr.txt'),
     ).readAsBytes().catchError((e) => Uint8List(0));
 
     final logCapturingRunnerLog = await File(
-      path.join(tempOutDir.path, 'log-capturing-runner.txt'),
+      path.join(processOutputDir.path, 'log-capturing-runner.txt'),
     ).readAsBytes().catchError((e) => Uint8List(0));
 
-    await recursiveDeleteAndLogErrors(tempOutDir);
+    await recursiveDeleteAndLogErrors(processOutputDir);
 
     _completer.complete(
       WineProcessResult(
         exitCode: exitCode,
         logs: [
-          ?_maybeBuildLog("STDOUT", stdout),
-          ?_maybeBuildLog("STDERR", stderr),
-          ?_maybeBuildLog("Log capturing runner", logCapturingRunnerLog),
+          ?_maybeBuildLog('STDOUT', stdout),
+          ?_maybeBuildLog('STDERR', stderr),
+          ?_maybeBuildLog('log-capturing-runner', logCapturingRunnerLog),
         ],
       ),
     );

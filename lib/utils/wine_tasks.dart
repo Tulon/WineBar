@@ -88,13 +88,19 @@ Future<WineProcess> _startWineProcess<SlotType>({
   required RunningExecutablesRepo<SlotType> runningSpecialExecutablesRepo,
   required SlotType slot,
 }) async {
+  final processOutputDir = await startupData.localStoragePaths
+      .createProcessOutputDir();
+
   final wineProcess = await startupData.wineProcessRunnerService.start(
+    processOutputDir: processOutputDir,
     commandLine: wineInstDescriptor.buildWineInvocationCommand(
       wineArgs: wineArgs,
     ),
     envVars: wineInstDescriptor.getEnvVarsForWine(
       prefixDirStructure: winePrefix.dirStructure,
-      tempDir: startupData.localStoragePaths.tempDir,
+      processOutputDir: processOutputDir.path,
+      forWinetricks: false,
+      disableLogs: false,
     ),
   );
 
