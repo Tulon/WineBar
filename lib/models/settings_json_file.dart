@@ -20,10 +20,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:winebar/models/suppressable_warning.dart';
 import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/cast_or_null.dart';
+import 'package:winebar/utils/settings_file_helper.dart';
 
 /// Represents the contents of the settings.json file located at the root of
 /// the app's data directory.
@@ -45,25 +48,58 @@ class SettingsJsonFile extends Equatable {
   @override
   List<Object> get props => [appPackageId, suppressedWarnings];
 
-  factory SettingsJsonFile.fromJsonString(String jsonString) {
-    return SettingsJsonFile.fromJson(jsonDecode(jsonString));
+  factory SettingsJsonFile._fromJsonString(
+    String jsonString, {
+    required SettingsFileHelper settingsFileHelper,
+  }) {
+    return SettingsJsonFile._fromJson(
+      jsonDecode(jsonString),
+      settingsFileHelper: settingsFileHelper,
+    );
   }
 
-  factory SettingsJsonFile.fromJson(Map<String, dynamic> json) {
+  factory SettingsJsonFile._fromJson(
+    Map<String, dynamic> json, {
+    required SettingsFileHelper settingsFileHelper,
+  }) {
     final applicationId = json[_appPackageIdKey] as String;
 
     return SettingsJsonFile(
       appPackageId: applicationId,
-      suppressedWarnings: _readJsonSuppressedWarnings(
-        castOrNull<List<dynamic>>(json[_suppressedWarningsKey]),
-      ),
+      suppressedWarnings:
+          _readJsonSuppressedWarnings(
+            castOrNull<List<dynamic>>(json[_suppressedWarningsKey]),
+          ) ??
+          settingsFileHelper.buildDefaultSetOfSuppressedWarnings(),
     );
   }
 
-  static Future<SettingsJsonFile> load(String filePath) async {
+  static Future<SettingsJsonFile> loadAndUpgrade(
+    String filePath, {
+    required SettingsFileHelper settingsFileHelper,
+  }) async {
     final file = File(filePath);
     final fileAsString = await file.readAsString();
-    return SettingsJsonFile.fromJsonString(fileAsString);
+
+    final settings = SettingsJsonFile._fromJsonString(
+      fileAsString,
+      settingsFileHelper: settingsFileHelper,
+    );
+
+    final settingsAsString = settings.toJsonString();
+    if (fileAsString != settingsAsString) {
+      try {
+        await file.writeAsString(settingsAsString);
+      } catch (e, stackTrace) {
+        GetIt.I.get<Logger>().e(
+          'Failed to write the settings file',
+          error: e,
+          stackTrace: stackTrace,
+        );
+      }
+    }
+
+    return settings;
   }
 
   Future<void> save(String filePath) async {
@@ -106,11 +142,11 @@ class SettingsJsonFile extends Equatable {
     );
   }
 
-  static Set<SuppressableWarning> _readJsonSuppressedWarnings(
+  static Set<SuppressableWarning>? _readJsonSuppressedWarnings(
     List<dynamic>? jsonSuppressedWarningsList,
   ) {
     if (jsonSuppressedWarningsList == null) {
-      return {};
+      return null;
     }
 
     final suppressedWarnings = <SuppressableWarning>{};
