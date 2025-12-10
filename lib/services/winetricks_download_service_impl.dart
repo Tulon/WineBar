@@ -28,7 +28,6 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:posix/posix.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
-import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 
 import '../utils/app_info.dart';
 import '../utils/compute_digest_of_file_contents.dart';

@@ -30,6 +30,7 @@ class PrefixDescriptor extends Equatable {
   static const String _nameKey = 'name';
   static const String _relPathToWineInstallKey = 'relPathToWineInstall';
   static const String _hiDpiScaleKey = 'hiDpiScale';
+  static const String _wow64ModePreferredKey = 'wow64ModePreferred';
 
   final String name;
 
@@ -38,19 +39,35 @@ class PrefixDescriptor extends Equatable {
 
   final double? hiDpiScale;
 
+  /// Whether to use the wow64 mode on Wine builds that support both the
+  /// win64 and the wow64 modes (think GE Proton). Null here indicates that
+  /// we are using a build that only supports a single mode.
+  final bool? wow64ModePreferred;
+
   bool get isBroken => relPathToWineInstall == '';
 
   const PrefixDescriptor({
     required this.name,
     required this.relPathToWineInstall,
     required this.hiDpiScale,
+    required this.wow64ModePreferred,
   });
 
   const PrefixDescriptor.brokenPrefix({required String name})
-    : this(name: name, relPathToWineInstall: '', hiDpiScale: null);
+    : this(
+        name: name,
+        relPathToWineInstall: '',
+        hiDpiScale: null,
+        wow64ModePreferred: null,
+      );
 
   @override
-  List<Object?> get props => [name, relPathToWineInstall, hiDpiScale];
+  List<Object?> get props => [
+    name,
+    relPathToWineInstall,
+    hiDpiScale,
+    wow64ModePreferred,
+  ];
 
   String getAbsPathToWineInstall({required String toplevelDataDir}) {
     return path.normalize(path.join(toplevelDataDir, relPathToWineInstall));
@@ -64,11 +81,13 @@ class PrefixDescriptor extends Equatable {
     final name = json[_nameKey] as String;
     final relPathToWineInstall = json[_relPathToWineInstallKey] as String;
     final hiDpiScale = json[_hiDpiScaleKey] as double?;
+    final wow64ModePreferred = json[_wow64ModePreferredKey] as bool?;
 
     return PrefixDescriptor(
       name: name,
       relPathToWineInstall: relPathToWineInstall,
       hiDpiScale: hiDpiScale,
+      wow64ModePreferred: wow64ModePreferred,
     );
   }
 
@@ -77,6 +96,7 @@ class PrefixDescriptor extends Equatable {
       _nameKey: name,
       _relPathToWineInstallKey: relPathToWineInstall,
       _hiDpiScaleKey: hiDpiScale,
+      _wow64ModePreferredKey: wow64ModePreferred,
     };
 
     final encoder = JsonEncoder.withIndent('  ');
@@ -87,11 +107,15 @@ class PrefixDescriptor extends Equatable {
     String? name,
     String? relPathToWineInstall,
     ValueGetter<double?>? hiDpiScaleGetter,
+    ValueGetter<bool?>? wow64ModePreferredGetter,
   }) {
     return PrefixDescriptor(
       name: name ?? this.name,
       relPathToWineInstall: relPathToWineInstall ?? this.relPathToWineInstall,
       hiDpiScale: hiDpiScaleGetter != null ? hiDpiScaleGetter() : hiDpiScale,
+      wow64ModePreferred: wow64ModePreferredGetter != null
+          ? wow64ModePreferredGetter()
+          : wow64ModePreferred,
     );
   }
 }

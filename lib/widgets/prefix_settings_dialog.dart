@@ -26,6 +26,7 @@ import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/error_message_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 import 'package:winebar/widgets/process_output_widget.dart';
+import 'package:winebar/widgets/wow64_preference_toggle.dart';
 
 import '../blocs/prefix_settings/prefix_settings_bloc.dart';
 import '../blocs/prefix_settings/prefix_settings_state.dart';
@@ -99,21 +100,21 @@ class PrefixSettingsDialog extends StatelessWidget {
                           ],
                         ),
                         HiDpiScaleSelectionWidget(
+                          enabled:
+                              state.prefixUpdateStatus !=
+                              PrefixUpdateStatus.inProgress,
                           initialScaleFactor: state.hiDpiScale,
-                          onScaleFactorChanged:
-                              state.prefixUpdateStatus ==
-                                  PrefixUpdateStatus.inProgress
-                              ? null
-                              : (hiDpiScale) {
-                                  BlocProvider.of<PrefixSettingsBloc>(
-                                    context,
-                                  ).setHiDpiScale(hiDpiScale);
-                                },
+                          onScaleFactorChanged: (hiDpiScale) {
+                            BlocProvider.of<PrefixSettingsBloc>(
+                              context,
+                            ).setHiDpiScale(hiDpiScale);
+                          },
                           requiredError:
                               state.prefixUpdateStatus ==
                                   PrefixUpdateStatus.validationFailed &&
                               state.hiDpiScale == null,
                         ),
+                        ?_maybeBuildWow64PreferenceToggle(context, state),
                         _buildUpdatePrefixButton(context, state),
                         if (state.prefixUpdateFailureMessage != null)
                           ErrorMessageWidget(
@@ -138,6 +139,28 @@ class PrefixSettingsDialog extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget? _maybeBuildWow64PreferenceToggle(
+    BuildContext context,
+    PrefixSettingsState state,
+  ) {
+    final wow64ModePreferred = state.wow64ModePreferred;
+    if (wow64ModePreferred == null) {
+      return null;
+    }
+
+    final bloc = BlocProvider.of<PrefixSettingsBloc>(context);
+
+    return Wow64PreferenceToggle(
+      enabled: state.prefixUpdateStatus != PrefixUpdateStatus.inProgress,
+      wow64ModePreferred: state.wow64ModePreferred!,
+      onWow64ModePreferredToggled: bloc.setWow64ModePreferred,
+      warningToShow: state.wow64ModePreferenceWarning,
+      isWarningToBeSuppressed: state.wow64ModePreferenceWarningToBeSuppressed,
+      onWarningToBeSuppressedToggled:
+          bloc.setWow64ModePreferenceWarningToBeSuppressed,
     );
   }
 

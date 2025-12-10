@@ -19,12 +19,14 @@
 import 'package:flutter/material.dart';
 
 class HiDpiScaleSelectionWidget extends StatelessWidget {
+  final bool enabled;
   final double? initialScaleFactor;
-  final void Function(double)? onScaleFactorChanged;
+  final void Function(double) onScaleFactorChanged;
   final bool requiredError;
 
   const HiDpiScaleSelectionWidget({
     super.key,
+    required this.enabled,
     required this.initialScaleFactor,
     required this.onScaleFactorChanged,
     required this.requiredError,
@@ -41,28 +43,41 @@ class HiDpiScaleSelectionWidget extends StatelessWidget {
       return scale == roundedDevicePixelRatio;
     }
 
-    Widget? buildHelperWidget(double? selectedScale) {
+    Widget? buildInfoWidget(double? selectedScale) {
+      final textStyle = enabled
+          ? null
+          : TextStyle(color: Theme.of(context).disabledColor);
+
       if (selectedScale == null) {
         return null;
       } else if (selectedScale == 1.0) {
         if (roundedDevicePixelRatio > 1.0) {
-          return const Text(
+          return Text(
             "This will make the text too small but won't break older fullscreen apps",
+            style: textStyle,
           );
         } else {
-          return const Text("This is the perfect scale for your display");
+          return Text(
+            "This is the perfect scale for your display",
+            style: textStyle,
+          );
         }
       } else {
         if (selectedScale < roundedDevicePixelRatio) {
-          return const Text(
+          return Text(
             "This will help with text being too small but will break older fullscreen apps",
+            style: textStyle,
           );
         } else if (selectedScale == roundedDevicePixelRatio) {
-          return const Text(
+          return Text(
             "This is the perfect scale for your display, though it will break older fullscreen apps",
+            style: textStyle,
           );
         } else {
-          return const Text("This may produce text that's too large");
+          return Text(
+            "This may produce text that's too large",
+            style: textStyle,
+          );
         }
       }
     }
@@ -75,28 +90,36 @@ class HiDpiScaleSelectionWidget extends StatelessWidget {
         label: Text('$scale'),
         avatar: !selected && isPerfectScale(scale) ? Icon(Icons.star) : null,
         selected: selected,
-        onSelected: onScaleFactorChanged == null
-            ? null
-            : (bool selected) {
+        onSelected: enabled
+            ? (bool selected) {
                 if (selected) {
-                  onScaleFactorChanged!(scale);
+                  onScaleFactorChanged(scale);
                 }
-              },
+              }
+            : null,
       );
     }
 
     return InputDecorator(
       decoration: InputDecoration(
+        enabled: enabled,
         label: const Text('HiDPI scale'),
         errorText: requiredError ? 'Please select' : null,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-        helper: buildHelperWidget(initialScaleFactor),
       ),
-      child: Wrap(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 8.0,
-        children: List<Widget>.generate(5, (int step) {
-          return buildChoiceChip(step);
-        }),
+        children: [
+          Wrap(
+            spacing: 8.0,
+            runSpacing: 8.0,
+            children: List<Widget>.generate(5, (int step) {
+              return buildChoiceChip(step);
+            }),
+          ),
+          ?buildInfoWidget(initialScaleFactor),
+        ],
       ),
     );
   }

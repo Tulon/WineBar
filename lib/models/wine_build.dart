@@ -36,5 +36,5 @@ class WineBuild extends Equatable {
   @override
   List<Object> get props => [archiveFileName, downloadUrl];
 
-  bool get isWow64Build => archiveFileName.toLowerCase().contains('wow64');
+  bool get hasWow64InName => archiveFileName.toLowerCase().contains('wow64');
 }

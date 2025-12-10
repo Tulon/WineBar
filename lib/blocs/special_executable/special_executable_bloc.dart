@@ -215,10 +215,11 @@ abstract class RegularSpecialExecutableBloc extends SpecialExecutableBloc {
     final wineProcess = await startupData.wineProcessRunnerService.start(
       processOutputDir: processOutputDir,
       commandLine: wineInstDescriptor.buildWineInvocationCommand(
+        winePrefix: winePrefix,
         wineArgs: commandLineToWineArgs(commandLine),
       ),
       envVars: wineInstDescriptor.getEnvVarsForWine(
-        prefixDirStructure: winePrefix.dirStructure,
+        winePrefix: winePrefix,
         processOutputDir: processOutputDir.path,
         forWinetricks: false,
         disableLogs: false,
@@ -273,13 +274,14 @@ class PinExecutableBloc extends SpecialExecutableBloc {
       final wineProcess = await startupData.wineProcessRunnerService.start(
         processOutputDir: processOutputDir,
         commandLine: wineInstDescriptor.buildWineInvocationCommand(
+          winePrefix: winePrefix,
           wineArgs: _buildWineArgs(
             commandLine: commandLine,
             tempPinDir: tempPinDir,
           ),
         ),
         envVars: wineInstDescriptor.getEnvVarsForWine(
-          prefixDirStructure: winePrefix.dirStructure,
+          winePrefix: winePrefix,
           processOutputDir: processOutputDir.path,
           forWinetricks: false,
           disableLogs: false,
@@ -373,13 +375,14 @@ class RunInstallerBloc extends SpecialExecutableBloc {
       final wineProcess = await startupData.wineProcessRunnerService.start(
         processOutputDir: processOutputDir,
         commandLine: wineInstDescriptor.buildWineInvocationCommand(
+          winePrefix: winePrefix,
           wineArgs: _buildWineArgs(
             commandLine: commandLine,
             tempPinsDir: tempPinsDir,
           ),
         ),
         envVars: wineInstDescriptor.getEnvVarsForWine(
-          prefixDirStructure: winePrefix.dirStructure,
+          winePrefix: winePrefix,
           processOutputDir: processOutputDir.path,
           forWinetricks: false,
           disableLogs: false,
@@ -483,7 +486,7 @@ class WinetricksExecutableBloc extends SpecialExecutableBloc {
         winetricksArgs: commandLine,
       ),
       envVars: wineInstDescriptor.getEnvVarsForWine(
-        prefixDirStructure: winePrefix.dirStructure,
+        winePrefix: winePrefix,
         processOutputDir: processOutputDir.path,
         forWinetricks: true,
         disableLogs: false,

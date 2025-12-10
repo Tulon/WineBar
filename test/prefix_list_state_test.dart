@@ -12,6 +12,7 @@ WinePrefix _makePrefix({required String name, required String outerDir}) {
       name: name,
       relPathToWineInstall: '..',
       hiDpiScale: null,
+      wow64ModePreferred: null,
     ),
   );
 }

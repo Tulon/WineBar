@@ -20,7 +20,9 @@ import 'dart:io';
 
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/generic_exception.dart';
+import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
+import 'package:winebar/utils/prefix_descriptor.dart';
 
 abstract interface class WineInstallationDescriptor {
   /// Regular Wine (not Proton) creates symlinks for folders liks Desktop and
@@ -44,7 +46,10 @@ abstract interface class WineInstallationDescriptor {
 
   /// Takes the list of arguments for the wine executable and prepends the
   /// appropriate executable or a wrapper script to them.
-  List<String> buildWineInvocationCommand({required List<String> wineArgs});
+  List<String> buildWineInvocationCommand({
+    required WinePrefix winePrefix,
+    required List<String> wineArgs,
+  });
 
   /// Takes the list of arguments for the winetricks script and prepends the
   /// appropriate version of the winetricks script - either the external one
@@ -62,7 +67,7 @@ abstract interface class WineInstallationDescriptor {
   /// The [processOutputDir] is a directory where process logs are to be
   /// written.
   Map<String, String> getEnvVarsForWine({
-    required WinePrefixDirStructure prefixDirStructure,
+    required WinePrefix winePrefix,
     required String processOutputDir,
     required bool forWinetricks,
     required bool disableLogs,
@@ -189,12 +194,18 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
   }
 
   @override
-  List<String> buildWineInvocationCommand({required List<String> wineArgs}) {
+  List<String> buildWineInvocationCommand({
+    required WinePrefix winePrefix,
+    required List<String> wineArgs,
+  }) {
     if (protonLauncherScript != null) {
       return [protonLauncherScript!, 'run', ...wineArgs];
     } else {
       return [
-        _findWineAndWineserverExecutables(forWinetricks: false).wineExecutable,
+        _findWineAndWineserverExecutables(
+          prefixDescriptor: winePrefix.descriptor,
+          forWinetricks: false,
+        ).wineExecutable,
         ...wineArgs,
       ];
     }
@@ -222,12 +233,13 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
 
   @override
   Map<String, String> getEnvVarsForWine({
-    required WinePrefixDirStructure prefixDirStructure,
+    required WinePrefix winePrefix,
     required String processOutputDir,
     required bool forWinetricks,
     required bool disableLogs,
   }) {
     final wineAndWineserverExecutables = _findWineAndWineserverExecutables(
+      prefixDescriptor: winePrefix.descriptor,
       forWinetricks: true,
     );
 
@@ -258,7 +270,7 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
     // we invoke it with -w in order to make it exit gracefully rather than
     // getting killed by muvm.
     envVars['WINEPREFIX'] = getInnermostPrefixDir(
-      prefixDirStructure: prefixDirStructure,
+      prefixDirStructure: winePrefix.dirStructure,
     );
 
     if (disableLogs) {
@@ -274,7 +286,7 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
       // Any temporary directory would do here.
       envVars['STEAM_COMPAT_CLIENT_INSTALL_PATH'] = processOutputDir;
 
-      envVars['STEAM_COMPAT_DATA_PATH'] = prefixDirStructure.innerDir;
+      envVars['STEAM_COMPAT_DATA_PATH'] = winePrefix.dirStructure.innerDir;
 
       // Without the UMU_ID environment variable, the proton launcher script
       // tries to launch all executables through stream.exe. That's not a problem
@@ -282,6 +294,10 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
       // in Proton builds and supports running non-steam apps, yet it's simply a
       // waste to have an extra executable running.
       envVars['UMU_ID'] = '1';
+
+      if (winePrefix.descriptor.wow64ModePreferred == true) {
+        envVars['PROTON_USE_WOW64'] = '1';
+      }
 
       // Not sure if this one does more good or bad.
       //envVars['PROTON_FORCE_LARGE_ADDRESS_AWARE'] = '1';
@@ -309,18 +325,38 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
   }
 
   _WineAndWineserverExecutables _findWineAndWineserverExecutables({
+    required PrefixDescriptor prefixDescriptor,
     required bool forWinetricks,
   }) {
-    // For winetricks, we want a 32-bit wine, if the prefix provides both a
-    // 32-bit one and a 64-bit one. At least, that's what proton does.
+    _WineAndWineserverExecutables? maybeTryWow64WineAndWineserver() {
+      if (prefixDescriptor.wow64ModePreferred == true) {
+        return _WineAndWineserverExecutables.tryCombination(
+          // GE Proton build, wow64 mode.
+          filesBinWow64WineExecutable,
+          filesBinWow64WineserverExecutable,
+        );
+      }
+
+      return null;
+    }
+
     if (forWinetricks) {
+      // For winetricks, the order of preference is:
+      // 1. Wow64, if configured as a preferred mode.
+      // 2. Win32.
+      // 3. Win64.
+      // Not sure why Win32 is preferred over Win64,
+      // but Proton does it like that.
       return _checkValueNotNull(
         value:
+            maybeTryWow64WineAndWineserver() ??
             _WineAndWineserverExecutables.tryCombination(
+              // Single-mode builds or Kronek Proton build in win32 mode.
               binWineExecutable,
               binWineserverExecutable,
             ) ??
             _WineAndWineserverExecutables.tryCombination(
+              // GE Proton build in win32 mode.
               filesBinWineExecutable,
               filesBinWineserverExecutable,
             ),
@@ -328,34 +364,32 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
             'Failed to locate the wine / wineserver executables for '
             'winetricks',
       );
-    } else if (protonLauncherScript != null &&
-        false /*use_wow64_mode_in_proton*/ ) {
-      return _checkValueNotNull(
-        value: _WineAndWineserverExecutables.tryCombination(
-          filesBinWow64WineExecutable,
-          filesBinWow64WineserverExecutable,
-        ),
-        errMsgIfNull:
-            'Failed to locate the wine / wineserver executables for wow64 bit '
-            'mode on proton',
-      );
     } else {
-      // Otherwise, we pick a 64-bit one or whichever is available.
+      // For launching anything other than winetricks, the order of
+      // preference is:
+      // 1. Wow64, if configured as a preferred mode.
+      // 2. Win64.
+      // 3. Win32.
       return _checkValueNotNull(
         value:
+            maybeTryWow64WineAndWineserver() ??
             _WineAndWineserverExecutables.tryCombination(
+              // Kronek Proton build in win64 mode.
               binWine64Executable,
               binWineserverExecutable,
             ) ??
             _WineAndWineserverExecutables.tryCombination(
+              // GE Proton build in win64 mode.
               filesBinWine64Executable,
               filesBinWineserverExecutable,
             ) ??
             _WineAndWineserverExecutables.tryCombination(
+              // Single-mode builds.
               binWineExecutable,
               binWineserverExecutable,
             ) ??
             _WineAndWineserverExecutables.tryCombination(
+              // GE Proton build in win32 mode.
               filesBinWineExecutable,
               filesBinWineserverExecutable,
             ),

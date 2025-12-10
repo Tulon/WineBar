@@ -18,6 +18,8 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:winebar/models/settings_json_file.dart';
+import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 
 import '../../models/wine_build.dart';
@@ -69,10 +71,43 @@ class PrefixCreationState extends Equatable {
   final WineRelease? selectedWineRelease;
   final List<WineBuild> wineBuildsToSelectFrom;
   final WineBuild? selectedWineBuild;
-  final bool wow64BuildThatWontWorkSelected;
+
+  /// Depending on the type of the selected build (win32, win64, wow64,
+  /// win64/wow64 switchable), a warning may be raised. This field stores
+  /// that warning, unless the warning in question is suppressed via
+  /// [SettingsJsonFile.suppressedWarnings].
+  final WineArchWarning? selectedWineBuildArchWarning;
+
+  /// If set to true, [selectedWineBuildArchWarning.suppressableWarning] is to
+  /// be suppressed when the 'Proceed Anyway' button is pressed. If
+  /// [selectedWineBuildArchWarning] is null or
+  /// [selectedWineBuildArchWarning.suppressableWarning] is null, this value
+  /// plays no role.
+  final bool selectedWineBuildArchWarningToBeSuppressed;
+
   final String prefixName;
   final String? prefixNameErrorMessage;
   final double hiDpiScale;
+
+  /// Whether to use the wow64 mode on Wine builds that support both the
+  /// win64 and the wow64 modes (think GE Proton).  Null here indicates that
+  /// we are creating a prefix that uses a Wine build that only supports a
+  /// single mode.
+  final bool? wow64ModePreferred;
+
+  /// On Wine builds that support both the win64 and the wow64 modes (think
+  /// GE Proton), whether [wow64ModePreferred] is set to true or to false,
+  /// a warning may be raised. This field stores that warning, unless the
+  /// warning in question is suppressed via
+  /// [SettingsJsonFile.suppressedWarnings].
+  final WineArchWarning? wow64ModePreferenceWarning;
+
+  /// If set to true, [wow64ModePreferenceWarning.suppressableWarning] is to
+  /// be suppressed at prefix creation time. If [wow64ModePreferenceWarning]
+  /// is null or [wow64ModePreferenceWarning.suppressableWarning] is null,
+  /// this value plays no role.
+  final bool wow64ModePreferenceWarningToBeSuppressed;
+
   final PrefixCreationStatus prefixCreationStatus;
   final String? prefixCreationFailureMessage;
   final WineProcessResult? prefixCreationFailedProcessResult;
@@ -93,10 +128,14 @@ class PrefixCreationState extends Equatable {
     required this.selectedWineRelease,
     required this.wineBuildsToSelectFrom,
     required this.selectedWineBuild,
-    required this.wow64BuildThatWontWorkSelected,
+    required this.selectedWineBuildArchWarning,
+    required this.selectedWineBuildArchWarningToBeSuppressed,
     required this.prefixName,
     required this.prefixNameErrorMessage,
     required this.hiDpiScale,
+    required this.wow64ModePreferred,
+    required this.wow64ModePreferenceWarning,
+    required this.wow64ModePreferenceWarningToBeSuppressed,
     required this.prefixCreationStatus,
     required this.prefixCreationFailureMessage,
     required this.prefixCreationFailedProcessResult,
@@ -116,10 +155,14 @@ class PrefixCreationState extends Equatable {
         selectedWineRelease: null,
         wineBuildsToSelectFrom: const [],
         selectedWineBuild: null,
-        wow64BuildThatWontWorkSelected: false,
+        selectedWineBuildArchWarning: null,
+        selectedWineBuildArchWarningToBeSuppressed: false,
         prefixName: '',
         prefixNameErrorMessage: null,
         hiDpiScale: 1.0,
+        wow64ModePreferred: null,
+        wow64ModePreferenceWarning: null,
+        wow64ModePreferenceWarningToBeSuppressed: false,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessage: null,
         prefixCreationFailedProcessResult: null,
@@ -137,10 +180,14 @@ class PrefixCreationState extends Equatable {
     selectedWineRelease,
     wineBuildsToSelectFrom,
     selectedWineBuild,
-    wow64BuildThatWontWorkSelected,
+    selectedWineBuildArchWarning,
+    selectedWineBuildArchWarningToBeSuppressed,
     prefixName,
     prefixNameErrorMessage,
     hiDpiScale,
+    wow64ModePreferred,
+    wow64ModePreferenceWarning,
+    wow64ModePreferenceWarningToBeSuppressed,
     prefixCreationStatus,
     prefixCreationFailureMessage,
     prefixCreationFailedProcessResult,
@@ -157,10 +204,14 @@ class PrefixCreationState extends Equatable {
     ValueGetter<WineRelease?>? selectedWineReleaseGetter,
     List<WineBuild>? wineBuildsToSelectFrom,
     ValueGetter<WineBuild?>? selectedWineBuildGetter,
-    bool? wow64BuildThatWontWorkSelected,
+    ValueGetter<WineArchWarning?>? selectedWineBuildArchWarningGetter,
+    bool? selectedWineBuildArchWarningToBeSuppressed,
     String? prefixName,
     ValueGetter<String?>? prefixNameErrorMessageGetter,
     double? hiDpiScale,
+    ValueGetter<bool?>? wow64ModePreferredGetter,
+    ValueGetter<WineArchWarning?>? wow64ModePreferenceWarningGetter,
+    bool? wow64ModePreferenceWarningToBeSuppressed,
     PrefixCreationStatus? prefixCreationStatus,
     ValueGetter<String?>? prefixCreationFailureMessageGetter,
     ValueGetter<WineProcessResult?>? prefixCreationFailedProcessResultGetter,
@@ -188,13 +239,26 @@ class PrefixCreationState extends Equatable {
       selectedWineBuild: selectedWineBuildGetter != null
           ? selectedWineBuildGetter()
           : selectedWineBuild,
-      wow64BuildThatWontWorkSelected:
-          wow64BuildThatWontWorkSelected ?? this.wow64BuildThatWontWorkSelected,
+      selectedWineBuildArchWarning: selectedWineBuildArchWarningGetter != null
+          ? selectedWineBuildArchWarningGetter()
+          : selectedWineBuildArchWarning,
+      selectedWineBuildArchWarningToBeSuppressed:
+          selectedWineBuildArchWarningToBeSuppressed ??
+          this.selectedWineBuildArchWarningToBeSuppressed,
       prefixName: prefixName ?? this.prefixName,
       prefixNameErrorMessage: prefixNameErrorMessageGetter != null
           ? prefixNameErrorMessageGetter()
           : prefixNameErrorMessage,
       hiDpiScale: hiDpiScale ?? this.hiDpiScale,
+      wow64ModePreferred: wow64ModePreferredGetter != null
+          ? wow64ModePreferredGetter()
+          : wow64ModePreferred,
+      wow64ModePreferenceWarning: wow64ModePreferenceWarningGetter != null
+          ? wow64ModePreferenceWarningGetter()
+          : wow64ModePreferenceWarning,
+      wow64ModePreferenceWarningToBeSuppressed:
+          wow64ModePreferenceWarningToBeSuppressed ??
+          this.wow64ModePreferenceWarningToBeSuppressed,
       prefixCreationStatus: prefixCreationStatus ?? this.prefixCreationStatus,
       prefixCreationFailureMessage: prefixCreationFailureMessageGetter != null
           ? prefixCreationFailureMessageGetter()

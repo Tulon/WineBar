@@ -21,29 +21,31 @@ import 'dart:io';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
+import 'package:winebar/models/suppressable_warning.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
+import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/prefix_descriptor.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 
 import '../exceptions/data_dir_not_recognized_exception.dart';
+import '../models/settings_json_file.dart';
 import '../models/wine_prefix.dart';
 import 'app_info.dart';
 import 'local_storage_paths.dart';
-import 'settings_json_file.dart';
 
 class StartupData {
   final LocalStoragePaths localStoragePaths;
   final List<WinePrefix> winePrefixes;
   final WineProcessRunnerService wineProcessRunnerService;
-  final bool isNonIntelHost;
+  final bool isIntelHost;
   final bool wineWillRunUnderMuvm;
 
   StartupData({
     required this.localStoragePaths,
     required this.winePrefixes,
     required this.wineProcessRunnerService,
-    required this.isNonIntelHost,
+    required this.isIntelHost,
     required this.wineWillRunUnderMuvm,
   });
 
@@ -58,7 +60,7 @@ class StartupData {
 
     // See the list of possible string returned from "uname -a":
     // https://stackoverflow.com/a/78630608
-    final isNonIntelHost = !archName.contains('86');
+    final isIntelHost = archName.contains('86');
 
     if (muvmNeeded) {
       if (!await _isMuvmAvailable()) {
@@ -70,10 +72,15 @@ class StartupData {
     }
 
     if (await toplevelDataDirectory.exists()) {
-      await _checkExistingOwnersJsonFile(localStoragePaths: localStoragePaths);
+      await _loadSettingsFromExistingDataDir(
+        localStoragePaths: localStoragePaths,
+      );
     } else {
       await toplevelDataDirectory.create();
-      await _createNewSettingsJsonFile(localStoragePaths: localStoragePaths);
+      await _createNewSettingsJsonFile(
+        localStoragePaths: localStoragePaths,
+        muvmNeeded: muvmNeeded,
+      );
     }
 
     final tempDir = Directory(localStoragePaths.tempDir);
@@ -97,7 +104,7 @@ class StartupData {
       localStoragePaths: localStoragePaths,
       winePrefixes: winePrefixes,
       wineProcessRunnerService: wineProcessRunningService,
-      isNonIntelHost: isNonIntelHost,
+      isIntelHost: isIntelHost,
       wineWillRunUnderMuvm: muvmNeeded,
     );
   }
@@ -151,18 +158,24 @@ class StartupData {
     }
   }
 
-  static Future<void> _checkExistingOwnersJsonFile({
+  static Future<void> _loadSettingsFromExistingDataDir({
     required LocalStoragePaths localStoragePaths,
   }) async {
-    final settingsJsonFile = File(localStoragePaths.settingsJsonFilePath);
-
     try {
-      final fileAsString = await settingsJsonFile.readAsString();
-      final fileData = SettingsJsonFile.fromJsonString(fileAsString);
+      final settingsJsonFile = await SettingsJsonFile.load(
+        localStoragePaths.settingsJsonFilePath,
+      );
 
-      if (fileData.appPackageId != AppInfo.appPackageId) {
+      if (settingsJsonFile.appPackageId != AppInfo.appPackageId) {
         throw DataDirNotRecognizedException(localStoragePaths.toplevelDataDir);
       }
+
+      GetIt.I.registerSingleton<AppSettingsService>(
+        AppSettingsService(
+          initialSettings: settingsJsonFile,
+          localStoragePaths: localStoragePaths,
+        ),
+      );
     } catch (e) {
       throw DataDirNotRecognizedException(localStoragePaths.toplevelDataDir);
     }
@@ -170,11 +183,28 @@ class StartupData {
 
   static Future<void> _createNewSettingsJsonFile({
     required LocalStoragePaths localStoragePaths,
+    required bool muvmNeeded,
   }) async {
-    final fileData = SettingsJsonFile(appPackageId: AppInfo.appPackageId);
+    final settingsJsonFile = SettingsJsonFile(
+      appPackageId: AppInfo.appPackageId,
+      suppressedWarnings: {
+        // Muvm means Apple silicon hardware (think Asahi Linux).
+        // On such systems, 32-bit libraries are installed along
+        // with FEX / muvm. That means in practice, the user is
+        // going to have the 32-bit libraries, so there is no need
+        // to warn them about them.
+        if (muvmNeeded) SuppressableWarning.nonWow64ModesRequire32BitLibs,
+      },
+    );
 
-    final settingsJsonFile = File(localStoragePaths.settingsJsonFilePath);
-    await settingsJsonFile.writeAsString(fileData.toJsonString());
+    await settingsJsonFile.save(localStoragePaths.settingsJsonFilePath);
+
+    GetIt.I.registerSingleton<AppSettingsService>(
+      AppSettingsService(
+        initialSettings: settingsJsonFile,
+        localStoragePaths: localStoragePaths,
+      ),
+    );
   }
 
   static Future<List<WinePrefix>> _loadWinePrefixes({

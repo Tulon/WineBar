@@ -27,8 +27,11 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/special_executable_slot.dart';
+import 'package:winebar/models/suppressable_warning.dart';
+import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/utils/get_single_child_dir.dart';
 import 'package:winebar/utils/prefix_descriptor.dart';
@@ -48,6 +51,7 @@ import 'prefix_creation_state.dart';
 class PrefixCreationBloc extends Cubit<PrefixCreationState> {
   final logger = GetIt.I.get<Logger>();
   final StartupData startupData;
+  final Set<SuppressableWarning> warningsSuppressedAtBlocCreationTime;
 
   @protected
   final void Function(WinePrefix) onPrefixCreated;
@@ -55,7 +59,11 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
   CancelableOperation<List<WineRelease>>? _ongoingReleaseLoadingOp;
 
   PrefixCreationBloc({required this.startupData, required this.onPrefixCreated})
-    : super(PrefixCreationState.defaultState());
+    : warningsSuppressedAtBlocCreationTime = GetIt.I
+          .get<AppSettingsService>()
+          .settings
+          .suppressedWarnings,
+      super(PrefixCreationState.defaultState());
 
   void navigateToStep(PrefixCreationStep step) {
     emit(state.copyWith(currentStep: step));
@@ -104,6 +112,19 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
       return;
     }
 
+    // If a build can't support both win64 and wow64 modes, then wow64Preferred
+    // will be null. Otherwise, it will be true on Intel hosts only, as wow64
+    // currently doesn't work under emulation.
+    final bool? wow64ModePreferred =
+        source != null && source.buildsMaySupportBothWin64AndWow64Modes
+        ? startupData.isIntelHost
+        : null;
+
+    final wow64ModePreferenceWarning = wineArchWarningToShowForDualModeBuild(
+      startupData: startupData,
+      wow64ModeSelected: wow64ModePreferred,
+    );
+
     emit(
       state.copyWith(
         currentStep: nextStep,
@@ -114,8 +135,12 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         wineReleasesToSelectFrom: const [],
         selectedWineReleaseGetter: () => null,
         wineBuildsToSelectFrom: const [],
-        wow64BuildThatWontWorkSelected: false,
         selectedWineBuildGetter: () => null,
+        selectedWineBuildArchWarningGetter: () => null,
+        selectedWineBuildArchWarningToBeSuppressed: false,
+        wow64ModePreferredGetter: () => wow64ModePreferred,
+        wow64ModePreferenceWarningGetter: () => wow64ModePreferenceWarning,
+        wow64ModePreferenceWarningToBeSuppressed: false,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
         prefixCreationFailedProcessResultGetter: () => null,
@@ -176,7 +201,8 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         selectedWineReleaseGetter: () => release,
         wineBuildsToSelectFrom: release?.builds ?? [],
         selectedWineBuildGetter: () => null,
-        wow64BuildThatWontWorkSelected: false,
+        selectedWineBuildArchWarningGetter: () => null,
+        selectedWineBuildArchWarningToBeSuppressed: false,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
         prefixCreationFailedProcessResultGetter: () => null,
@@ -192,17 +218,16 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         ? currentStep
         : PrefixCreationStep.setOptions;
 
-    bool wow64BuildThatWontWorkSelected = false;
+    final selectedWineBuildArchWarning = _wineArchWarningToShowForSelectedBuild(
+      build,
+    );
 
-    if (build != null && build.isWow64Build && startupData.isNonIntelHost) {
-      // Unless something changed recently, wow64 builds don't work under emulation.
-      // In such a case, we don't advance to the next step but display a warning
-      // and a button to proceed anyway.
-      wow64BuildThatWontWorkSelected = true;
+    if (selectedWineBuildArchWarning != null) {
       nextStep = currentStep;
     }
 
-    if (state.selectedWineBuild == build && !wow64BuildThatWontWorkSelected) {
+    if (state.selectedWineBuild == build &&
+        selectedWineBuildArchWarning == null) {
       // If the build hasn't changed, the only thing we need to do is to
       // advance the current step, unless the build is null, in which case
       // we don't have to do anything at all. Note that given the build
@@ -219,7 +244,8 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         currentStep: nextStep,
         maxAccessibleStep: nextStep,
         selectedWineBuildGetter: () => build,
-        wow64BuildThatWontWorkSelected: wow64BuildThatWontWorkSelected,
+        selectedWineBuildArchWarningGetter: () => selectedWineBuildArchWarning,
+        selectedWineBuildArchWarningToBeSuppressed: false,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
         prefixCreationFailedProcessResultGetter: () => null,
@@ -227,11 +253,64 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     );
   }
 
-  void proceedAnywayWithABrokenBuild() {
+  WineArchWarning? _wineArchWarningToShowForSelectedBuild(
+    WineBuild? selectedBuild,
+  ) {
+    WineArchWarning? warningToShow;
+
+    void setWarningUnlessSuppressed(WineArchWarning warning) {
+      // Q: Why are we checking the suppression state at the bloc creation
+      //    time and not the current suppression state?
+      // A: First of all, note the warning in question is suppressed when
+      //    the 'Proceed Anyway' button is pressed on the wine build
+      //    selection page. Now, consider the following sequence of events:
+      //
+      //    1. The user presses 'Proceed Anyway' and the warning is
+      //       suppressed. The user is automatically taken to the next page.
+      //    2. The user returns to the previous page. The user would expect
+      //       the previous page to look exactly like when they left it,
+      //       including the presense of the warning and the checkbox to
+      //       suppress it in the future.
+      //
+      //    Checking the suppression state at the bloc creation time achieves
+      //    the desired result.
+      if (!warningsSuppressedAtBlocCreationTime.contains(
+        warning.suppressableWarning,
+      )) {
+        warningToShow = warning;
+      }
+    }
+
+    if (selectedBuild != null &&
+        selectedBuild.hasWow64InName &&
+        !startupData.isIntelHost) {
+      setWarningUnlessSuppressed(WineArchWarning.wow64ModeUnderEmulation);
+    } else if (selectedBuild != null &&
+        !selectedBuild.hasWow64InName &&
+        !state.selectedBuildSource!.buildsMaySupportBothWin64AndWow64Modes) {
+      setWarningUnlessSuppressed(WineArchWarning.nonWow64ModesRequire32BitLibs);
+    }
+
+    return warningToShow;
+  }
+
+  void setSelectedWineBuildArchWarningToBeSuppressed(bool toBeSuppressed) {
+    if (state.selectedWineBuildArchWarningToBeSuppressed == toBeSuppressed) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        selectedWineBuildArchWarningToBeSuppressed: toBeSuppressed,
+      ),
+    );
+  }
+
+  void proceedAnywayWithSelectedBuild() {
     const currentStep = PrefixCreationStep.selectWineBuild;
     assert(currentStep == state.currentStep);
     assert(state.selectedWineBuild != null);
-    assert(state.wow64BuildThatWontWorkSelected);
+    assert(state.selectedWineBuildArchWarning != null);
 
     final PrefixCreationStep nextStep = PrefixCreationStep.setOptions;
 
@@ -247,6 +326,16 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         prefixCreationFailedProcessResultGetter: () => null,
       ),
     );
+
+    // Maybe suppress the warning raised for the selected build.
+    final selectedBuildSuppressableWarning =
+        state.selectedWineBuildArchWarning?.suppressableWarning;
+    if (selectedBuildSuppressableWarning != null) {
+      GetIt.I.get<AppSettingsService>().setWarningSuppressed(
+        selectedBuildSuppressableWarning,
+        suppressed: state.selectedWineBuildArchWarningToBeSuppressed,
+      );
+    }
   }
 
   static final _validPrefixPattern = RegExp(
@@ -278,6 +367,39 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
 
   void setHiDpiScale(double scaleFactor) {
     emit(state.copyWith(hiDpiScale: scaleFactor));
+  }
+
+  void setWow64ModePreferred(bool wow64ModePreferred) {
+    assert(state.wow64ModePreferred != null);
+
+    if (state.wow64ModePreferred == wow64ModePreferred) {
+      return;
+    }
+
+    final wow64ModePreferenceWarning = wineArchWarningToShowForDualModeBuild(
+      startupData: startupData,
+      wow64ModeSelected: wow64ModePreferred,
+    );
+
+    emit(
+      state.copyWith(
+        wow64ModePreferredGetter: () => wow64ModePreferred,
+        wow64ModePreferenceWarningGetter: () => wow64ModePreferenceWarning,
+        wow64ModePreferenceWarningToBeSuppressed: false,
+      ),
+    );
+  }
+
+  void setWow64ModePreferenceWarningToBeSuppressed(bool toBeSuppressed) {
+    assert(state.wow64ModePreferred != null);
+
+    if (state.wow64ModePreferenceWarningToBeSuppressed == toBeSuppressed) {
+      return;
+    }
+
+    emit(
+      state.copyWith(wow64ModePreferenceWarningToBeSuppressed: toBeSuppressed),
+    );
   }
 
   void startCreatingPrefix() {
@@ -346,6 +468,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         name: state.prefixName,
         relPathToWineInstall: relWineInstallPath,
         hiDpiScale: state.hiDpiScale,
+        wow64ModePreferred: state.wow64ModePreferred,
       );
 
       final winePrefix = WinePrefix(
@@ -394,6 +517,16 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
       await File(
         prefixDirStructure.prefixJsonFilePath,
       ).writeAsString(prefixDescriptor.toJsonString());
+
+      // Maybe suppress the warning related to the wow64 preference toggle.
+      final wow64PreferenceSuppressableWarning =
+          state.wow64ModePreferenceWarning?.suppressableWarning;
+      if (wow64PreferenceSuppressableWarning != null) {
+        GetIt.I.get<AppSettingsService>().setWarningSuppressed(
+          wow64PreferenceSuppressableWarning,
+          suppressed: state.wow64ModePreferenceWarningToBeSuppressed,
+        );
+      }
 
       return winePrefix;
     } catch (e, stackTrace) {
