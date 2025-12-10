@@ -41,6 +41,9 @@ class WineBuildSourceGithubProject extends CachedWineBuildSource {
   @override
   final String circleAvatarText;
 
+  @override
+  final bool buildsMaySupportBothWin64AndWow64Modes;
+
   final String githubRepoOwner;
   final String githubProjectName;
   final Dio dio;
@@ -51,6 +54,7 @@ class WineBuildSourceGithubProject extends CachedWineBuildSource {
     this.recommended = false,
     required this.directoryName,
     required this.circleAvatarText,
+    required this.buildsMaySupportBothWin64AndWow64Modes,
     required this.githubRepoOwner,
     required this.githubProjectName,
     required this.dio,

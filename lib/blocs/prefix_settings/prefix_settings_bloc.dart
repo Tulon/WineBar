@@ -24,7 +24,9 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/special_executable_slot.dart';
+import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
@@ -45,12 +47,47 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
     required this.onPrefixUpdated,
   }) : super(
          PrefixSettingsState.initialState(
+           startupData: startupData,
            hiDpiScale: prefix.descriptor.hiDpiScale,
+           wow64ModePreferred: prefix.descriptor.wow64ModePreferred,
          ),
        );
 
   void setHiDpiScale(double scaleFactor) {
     emit(state.copyWith(hiDpiScaleGetter: () => scaleFactor));
+  }
+
+  void setWow64ModePreferred(bool wow64ModePreferred) {
+    assert(state.wow64ModePreferred != null);
+
+    if (state.wow64ModePreferred == wow64ModePreferred) {
+      return;
+    }
+
+    final wow64ModePreferenceWarning = wineArchWarningToShowForDualModeBuild(
+      startupData: startupData,
+      wow64ModeSelected: wow64ModePreferred,
+    );
+
+    emit(
+      state.copyWith(
+        wow64ModePreferredGetter: () => wow64ModePreferred,
+        wow64ModePreferenceWarningGetter: () => wow64ModePreferenceWarning,
+        wow64ModePreferenceWarningToBeSuppressed: false,
+      ),
+    );
+  }
+
+  void setWow64ModePreferenceWarningToBeSuppressed(bool toBeSuppressed) {
+    assert(state.wow64ModePreferred != null);
+
+    if (state.wow64ModePreferenceWarningToBeSuppressed == toBeSuppressed) {
+      return;
+    }
+
+    emit(
+      state.copyWith(wow64ModePreferenceWarningToBeSuppressed: toBeSuppressed),
+    );
   }
 
   void startUpdatingPrefix() {
@@ -98,23 +135,38 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
       final wineInstDescriptor = await utilityService
           .wineInstallationDescriptorForWineInstallDir(wineInstallDir);
 
+      // Update the prefix. Eventually it will be passed to the
+      // onPrefixUpdated() callback, but we also want the "wine reg"
+      // command that runs under the hood of _applyHiDpiSettings()
+      // below to take the current value of state.wow64ModePreferred
+      // into account.
+      prefix = prefix.copyWith(
+        descriptor: prefix.descriptor.copyWith(
+          hiDpiScaleGetter: () => state.hiDpiScale,
+          wow64ModePreferredGetter: () => state.wow64ModePreferred,
+        ),
+      );
+
       await _applyHiDpiSettings(
         winePrefix: prefix,
         wineInstDescriptor: wineInstDescriptor,
         runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
       );
 
-      // Update the prefix. It will be passed to the onPrefixUpdated() callback.
-      prefix = prefix.copyWith(
-        descriptor: prefix.descriptor.copyWith(
-          hiDpiScaleGetter: () => state.hiDpiScale,
-        ),
-      );
-
       // Write a new prefox.json file.
       await File(
         prefix.dirStructure.prefixJsonFilePath,
       ).writeAsString(prefix.descriptor.toJsonString());
+
+      // Maybe suppress the warning related to the wow64 preference toggle.
+      final wow64PreferenceSuppressableWarning =
+          state.wow64ModePreferenceWarning?.suppressableWarning;
+      if (wow64PreferenceSuppressableWarning != null) {
+        GetIt.I.get<AppSettingsService>().setWarningSuppressed(
+          wow64PreferenceSuppressableWarning,
+          suppressed: state.wow64ModePreferenceWarningToBeSuppressed,
+        );
+      }
     } catch (e, stackTrace) {
       logger.e('Updating prefix failed', error: e, stackTrace: stackTrace);
       rethrow;

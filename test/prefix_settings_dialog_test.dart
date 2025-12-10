@@ -11,6 +11,7 @@ import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
@@ -20,12 +21,14 @@ import 'package:winebar/utils/wine_installation_descriptor.dart';
 import 'package:winebar/widgets/prefix_settings_dialog.dart';
 
 @GenerateNiceMocks([
+  MockSpec<AppSettingsService>(),
   MockSpec<UpdatedPrefixReceiver>(),
   MockSpec<UtilityService>(),
   MockSpec<StartupData>(),
   MockSpec<LocalStoragePaths>(),
   MockSpec<IoOps>(),
   MockSpec<File>(),
+  MockSpec<Directory>(),
   MockSpec<RunningExecutablesRepo>(),
   MockSpec<WineInstallationDescriptor>(),
   MockSpec<WineProcessRunnerService>(),
@@ -46,6 +49,7 @@ void main() {
       relPathToWineInstall,
     );
 
+    final appSettingsService = MockAppSettingsService();
     final updatedPrefixReceiver = MockUpdatedPrefixReceiver();
     final utilityService = MockUtilityService();
     final startupData = MockStartupData();
@@ -59,6 +63,7 @@ void main() {
 
     final ioOps = MockIoOps();
     final prefixJsonFile = MockFile();
+    final processOutputDir = MockDirectory();
 
     when(
       utilityService.wineInstallationDescriptorForWineInstallDir(
@@ -73,7 +78,12 @@ void main() {
     ).thenReturn(wineProcessRunnerService);
 
     when(
+      localStoragePaths.createProcessOutputDir(),
+    ).thenAnswer((_) async => processOutputDir);
+
+    when(
       wineProcessRunnerService.start(
+        processOutputDir: anyNamed('processOutputDir'),
         commandLine: anyNamed('commandLine'),
         envVars: anyNamed('envVars'),
       ),
@@ -92,6 +102,7 @@ void main() {
     ).thenAnswer((_) async => prefixJsonFile);
 
     GetIt.I.registerSingleton<Logger>(Logger());
+    GetIt.I.registerSingleton<AppSettingsService>(appSettingsService);
     GetIt.I.registerSingleton<UtilityService>(utilityService);
     GetIt.I.registerSingleton<RunningExecutablesRepo<SpecialExecutableSlot>>(
       runningSpecialExecutablesRepo,
@@ -103,6 +114,7 @@ void main() {
         name: 'Prefix',
         relPathToWineInstall: relPathToWineInstall,
         hiDpiScale: 1.5, // The value to be picked up.
+        wow64ModePreferred: null,
       ),
     );
 

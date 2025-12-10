@@ -16,23 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
+enum SuppressableWarning {
+  /// Unless something changed recently, the WOW64-only Wine builds or
+  /// dual-mode builds in WOW64 mode don't work under emulation (fex-emu).
+  /// To be more precise, they can't launch 32-bit apps, which includes
+  /// WineBar's own helper apps.
+  wow64ModeUnderEmulation(jsonString: 'wow64ModeUnderEmulation'),
 
-import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
+  /// A non-WOW64-capable build or a dual-mode build not in WOW64 mode,
+  /// requires 32-bit libraries installed on the host system.
+  nonWow64ModesRequire32BitLibs(jsonString: 'nonWow64ModesRequire32BitLibs');
 
-/// Deletes a file or a directory with all its contents.
-/// Does nothing if [fsEntity] doesn't exist.
-/// Errors are logged but otherwise ignored.
-Future<void> recursiveDeleteAndLogErrors(FileSystemEntity fsEntity) async {
-  try {
-    await fsEntity.delete(recursive: true);
-  } catch (e, stackTrace) {
-    final logger = GetIt.I.get<Logger>();
-    logger.i(
-      'Failed to remove ${fsEntity.path}',
-      error: e,
-      stackTrace: stackTrace,
-    );
-  }
+  final String jsonString;
+
+  const SuppressableWarning({required this.jsonString});
 }

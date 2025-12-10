@@ -31,6 +31,18 @@ abstract interface class WineBuildSource {
 
   String get circleAvatarText;
 
+  /// This will be true for the "GE Proton" build source. Newer GE Proton
+  /// builds support the WOW64 mode by setting the environment variable
+  /// PROTON_USE_WOW64=1.
+  /// This variable being set to true makes the "Prefer WOW64 mode" toggle
+  /// to appear on the prefix creation dialog. If the build in question
+  /// doesn't actually support the WOW64 mode, the state of that toggle
+  /// won't hany consequences.
+  /// As for the prefix settings dialog, we determine whether to show that
+  /// toggle by examining the directory structure of the wine installation
+  /// in question.
+  bool get buildsMaySupportBothWin64AndWow64Modes;
+
   /// Fetches or returns a cached list of Wine releases, where each release
   /// holds a list of builds (think Github assets).
   ///

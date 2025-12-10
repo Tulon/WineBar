@@ -94,10 +94,11 @@ Future<WineProcess> _startWineProcess<SlotType>({
   final wineProcess = await startupData.wineProcessRunnerService.start(
     processOutputDir: processOutputDir,
     commandLine: wineInstDescriptor.buildWineInvocationCommand(
+      winePrefix: winePrefix,
       wineArgs: wineArgs,
     ),
     envVars: wineInstDescriptor.getEnvVarsForWine(
-      prefixDirStructure: winePrefix.dirStructure,
+      winePrefix: winePrefix,
       processOutputDir: processOutputDir.path,
       forWinetricks: false,
       disableLogs: false,

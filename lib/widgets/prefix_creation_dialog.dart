@@ -26,10 +26,13 @@ import 'package:get_it/get_it.dart';
 import 'package:icon_decoration/icon_decoration.dart';
 import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/process_output.dart';
+import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_build_source.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 import 'package:winebar/widgets/process_output_widget.dart';
+import 'package:winebar/widgets/warning_widget.dart';
+import 'package:winebar/widgets/wow64_preference_toggle.dart';
 
 import '../blocs/prefix_creation/prefix_creation_bloc.dart';
 import '../blocs/prefix_creation/prefix_creation_state.dart';
@@ -54,13 +57,15 @@ class PrefixCreationDialog extends StatelessWidget {
         startupData: startupData,
         onPrefixCreated: onPrefixCreated,
       ),
-      child: _PrefixCreationStatefulDialog(),
+      child: _PrefixCreationStatefulDialog(startupData: startupData),
     );
   }
 }
 
 class _PrefixCreationStatefulDialog extends StatefulWidget {
-  const _PrefixCreationStatefulDialog();
+  final StartupData startupData;
+
+  const _PrefixCreationStatefulDialog({required this.startupData});
 
   @override
   State createState() => _PrefixCreationDialogState();
@@ -410,7 +415,84 @@ class _WineBuildSelectionStep extends _PrefixCreationStep {
     required PrefixCreationBloc bloc,
     required PrefixCreationState state,
   }) {
-    final listView = ListView(
+    final colorScheme = Theme.of(context).colorScheme;
+    final warning = state.selectedWineBuildArchWarning;
+
+    switch (warning) {
+      case null:
+        return _makeWineBuildSelectionWidget(
+          context: context,
+          bloc: bloc,
+          state: state,
+        );
+      case WineArchWarning.wow64ModeUnderEmulation:
+        return _makeWineBuildListWithWarning(
+          key: ValueKey(warning),
+          context: context,
+          bloc: bloc,
+          state: state,
+          warning: warning,
+          warningContent: SelectableText(
+            'A WOW64 build was selected. Those are known to have issues '
+            'under emulation. Expect a broken installation.',
+            style: TextStyle(color: colorScheme.error),
+          ),
+        );
+      case WineArchWarning.nonWow64ModesRequire32BitLibs:
+        return _makeWineBuildListWithWarning(
+          key: ValueKey(warning),
+          context: context,
+          bloc: bloc,
+          state: state,
+          warning: warning,
+          warningContent: SelectableText(
+            'This build requires 32-bit libraries to be present on your system. '
+            'If you have them already, you can ignore this warning. '
+            "Otherwise, install Wine from your distro's repository (which will "
+            'bring in those 32-bit libraries) or alternatively, select a WOW64 '
+            'build from the list above if one is available.',
+            style: TextStyle(color: colorScheme.error),
+          ),
+        );
+    }
+  }
+
+  Widget _makeWineBuildListWithWarning({
+    required Key key,
+    required BuildContext context,
+    required PrefixCreationBloc bloc,
+    required PrefixCreationState state,
+    required WineArchWarning warning,
+    required Widget warningContent,
+  }) {
+    return Column(
+      key: key,
+      children: [
+        Expanded(
+          child: _makeWineBuildSelectionWidget(
+            context: context,
+            bloc: bloc,
+            state: state,
+          ),
+        ),
+        Divider(height: 24.0),
+        _buildWarningWidget(
+          context: context,
+          bloc: bloc,
+          state: state,
+          warning: warning,
+          warningContent: warningContent,
+        ),
+      ],
+    );
+  }
+
+  Widget _makeWineBuildSelectionWidget({
+    required BuildContext context,
+    required PrefixCreationBloc bloc,
+    required PrefixCreationState state,
+  }) {
+    return ListView(
       children: state.wineBuildsToSelectFrom
           .map<Widget>(
             (build) => ListTile(
@@ -426,53 +508,48 @@ class _WineBuildSelectionStep extends _PrefixCreationStep {
           )
           .toList(),
     );
+  }
 
+  Widget _buildWarningWidget({
+    required BuildContext context,
+    required PrefixCreationBloc bloc,
+    required PrefixCreationState state,
+    required WineArchWarning warning,
+    required Widget warningContent,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (!state.wow64BuildThatWontWorkSelected) {
-      return listView;
+    final proceedAnywayButtonWidget = SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: ElevatedButton(
+        onPressed: bloc.proceedAnywayWithSelectedBuild,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+        ),
+        child: Text(
+          'Proceed Anyway',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+
+    final suppressableWarning = warning.suppressableWarning;
+
+    if (suppressableWarning == null) {
+      return WarningWidget(
+        topWidget: warningContent,
+        bottomWidget: proceedAnywayButtonWidget,
+      );
     } else {
-      return Column(
-        children: [
-          Expanded(child: listView),
-          Divider(height: 24.0),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(12.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              border: BoxBorder.all(color: colorScheme.error, width: 2.0),
-            ),
-            child: Column(
-              spacing: 8.0,
-              children: [
-                SelectableText(
-                  'A WOW64 build was selected. Those are known to have issues '
-                  'under emulation. Expect a broken installation.',
-                  style: TextStyle(fontSize: 16, color: colorScheme.error),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: bloc.proceedAnywayWithABrokenBuild,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                    ),
-                    child: Text(
-                      'Proceed Anyway',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      return WarningWidget.withSuppressionOption(
+        topWidget: warningContent,
+        bottomWidget: proceedAnywayButtonWidget,
+        isWarningToBeSuppressed:
+            state.selectedWineBuildArchWarningToBeSuppressed,
+        onWarningToBeSuppressedToggled:
+            bloc.setSelectedWineBuildArchWarningToBeSuppressed,
       );
     }
   }
@@ -515,89 +592,100 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
         state.prefixNameErrorMessage == null &&
         !state.prefixCreationStatus.isInProgress;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      spacing: 16.0,
-      children: [
-        TextField(
-          enabled: !state.prefixCreationStatus.isInProgress,
-          controller: widgetState.prefixNameController,
-          inputFormatters: <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(100),
-          ],
-          onSubmitted: mayInitiatePrefixCreation
-              ? (_) => bloc.startCreatingPrefix()
-              : null,
-          decoration: InputDecoration(
-            hintText: 'Enter a name for the prefix',
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            prefixIcon: const Icon(Icons.create_new_folder),
-            errorText: state.prefixNameErrorMessage,
-          ),
-        ),
-        HiDpiScaleSelectionWidget(
-          initialScaleFactor: state.hiDpiScale,
-          onScaleFactorChanged: state.prefixCreationStatus.isInProgress
-              ? null
-              : (hiDpiScale) {
-                  bloc.setHiDpiScale(hiDpiScale);
-                },
-          // Our state.hiDpiScale is not nullable,
-          // so a value is always set, so requiredError
-          // is always false.
-          requiredError: false,
-        ),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton.icon(
-            onPressed: mayInitiatePrefixCreation
-                ? () => bloc.startCreatingPrefix()
-                : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: theme.colorScheme.primary,
-              foregroundColor: theme.colorScheme.onPrimary,
-              disabledBackgroundColor: state.prefixCreationStatus.isInProgress
-                  ? theme.colorScheme.primary
-                  : null,
-              disabledForegroundColor: state.prefixCreationStatus.isInProgress
-                  ? theme.colorScheme.onPrimary
-                  : null,
-            ),
-            icon: state.prefixCreationStatus.isInProgress
-                ? AspectRatio(
-                    aspectRatio: 1.0,
-                    child: CircularProgressIndicator(
-                      color: theme.colorScheme.onPrimary,
-                      backgroundColor: theme.colorScheme.onPrimary.withAlpha(
-                        100,
-                      ),
-                      strokeWidth: 3.0,
-                      padding: EdgeInsets.all(12.0),
-                      value: state.prefixCreationStatus.isInProgress
-                          ? state.prefixCreationOperationProgress
-                          : null,
-                    ),
-                  )
-                : const Icon(Icons.add_circle),
-            label: Text(
-              getPrefixCreationButtonText(),
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: 16.0,
+        children: [
+          TextField(
+            enabled: !state.prefixCreationStatus.isInProgress,
+            controller: widgetState.prefixNameController,
+            inputFormatters: <TextInputFormatter>[
+              LengthLimitingTextInputFormatter(100),
+            ],
+            decoration: InputDecoration(
+              hintText: 'Enter a name for the prefix',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              prefixIcon: const Icon(Icons.create_new_folder),
+              errorText: state.prefixNameErrorMessage,
             ),
           ),
-        ),
-        if (state.prefixCreationFailureMessage != null)
-          ErrorMessageWidget(
+          HiDpiScaleSelectionWidget(
+            enabled: !state.prefixCreationStatus.isInProgress,
+            initialScaleFactor: state.hiDpiScale,
+            onScaleFactorChanged: (hiDpiScale) {
+              bloc.setHiDpiScale(hiDpiScale);
+            },
+            // Our state.hiDpiScale is not nullable,
+            // so a value is always set, so requiredError
+            // is always false.
+            requiredError: false,
+          ),
+          if (state.wow64ModePreferred != null)
+            Wow64PreferenceToggle(
+              enabled: !state.prefixCreationStatus.isInProgress,
+              wow64ModePreferred: state.wow64ModePreferred!,
+              onWow64ModePreferredToggled: bloc.setWow64ModePreferred,
+              warningToShow: state.wow64ModePreferenceWarning,
+              isWarningToBeSuppressed:
+                  state.wow64ModePreferenceWarningToBeSuppressed,
+              onWarningToBeSuppressedToggled:
+                  bloc.setWow64ModePreferenceWarningToBeSuppressed,
+            ),
+          SizedBox(
             width: double.infinity,
-            text: state.prefixCreationFailureMessage!,
-            onViewLogsPressed: state.prefixCreationFailedProcessResult == null
-                ? null
-                : () => _showWineProcessLogs(
-                    context: context,
-                    logs: state.prefixCreationFailedProcessResult!.logs,
-                  ),
+            height: 50,
+            child: ElevatedButton.icon(
+              onPressed: mayInitiatePrefixCreation
+                  ? () => bloc.startCreatingPrefix()
+                  : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                foregroundColor: theme.colorScheme.onPrimary,
+                disabledBackgroundColor: state.prefixCreationStatus.isInProgress
+                    ? theme.colorScheme.primary
+                    : null,
+                disabledForegroundColor: state.prefixCreationStatus.isInProgress
+                    ? theme.colorScheme.onPrimary
+                    : null,
+              ),
+              icon: state.prefixCreationStatus.isInProgress
+                  ? AspectRatio(
+                      aspectRatio: 1.0,
+                      child: CircularProgressIndicator(
+                        color: theme.colorScheme.onPrimary,
+                        backgroundColor: theme.colorScheme.onPrimary.withAlpha(
+                          100,
+                        ),
+                        strokeWidth: 3.0,
+                        padding: EdgeInsets.all(12.0),
+                        value: state.prefixCreationStatus.isInProgress
+                            ? state.prefixCreationOperationProgress
+                            : null,
+                      ),
+                    )
+                  : const Icon(Icons.add_circle),
+              label: Text(
+                getPrefixCreationButtonText(),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
-      ],
+          if (state.prefixCreationFailureMessage != null)
+            ErrorMessageWidget(
+              width: double.infinity,
+              text: state.prefixCreationFailureMessage!,
+              onViewLogsPressed: state.prefixCreationFailedProcessResult == null
+                  ? null
+                  : () => _showWineProcessLogs(
+                      context: context,
+                      logs: state.prefixCreationFailedProcessResult!.logs,
+                    ),
+            ),
+        ],
+      ),
     );
   }
 

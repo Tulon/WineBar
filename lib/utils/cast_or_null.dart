@@ -16,23 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
-
-import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
-
-/// Deletes a file or a directory with all its contents.
-/// Does nothing if [fsEntity] doesn't exist.
-/// Errors are logged but otherwise ignored.
-Future<void> recursiveDeleteAndLogErrors(FileSystemEntity fsEntity) async {
-  try {
-    await fsEntity.delete(recursive: true);
-  } catch (e, stackTrace) {
-    final logger = GetIt.I.get<Logger>();
-    logger.i(
-      'Failed to remove ${fsEntity.path}',
-      error: e,
-      stackTrace: stackTrace,
-    );
+T? castOrNull<T>(dynamic value) {
+  if (value is T) {
+    return value;
   }
+  return null;
 }

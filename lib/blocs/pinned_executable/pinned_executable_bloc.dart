@@ -166,12 +166,13 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
     final wineProcess = await startupData.wineProcessRunnerService.start(
       processOutputDir: processOutputDir,
       commandLine: wineInstDescriptor.buildWineInvocationCommand(
+        winePrefix: winePrefix,
         wineArgs: wineArgsForLaunchingExecutable(
           pinnedExecutable.windowsPathToExecutable,
         ),
       ),
       envVars: wineInstDescriptor.getEnvVarsForWine(
-        prefixDirStructure: winePrefix.dirStructure,
+        winePrefix: winePrefix,
         processOutputDir: processOutputDir.path,
         forWinetricks: false,
 
