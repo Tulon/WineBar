@@ -27,6 +27,7 @@ import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/prefix_descriptor.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
+import 'package:winebar/utils/settings_file_helper.dart';
 
 import '../exceptions/data_dir_not_recognized_exception.dart';
 import '../models/settings_json_file.dart';
@@ -71,15 +72,20 @@ class StartupData {
       }
     }
 
+    final settingsFileHelper = SettingsFileHelper(
+      wineWillRunUnderMuvm: muvmNeeded,
+    );
+
     if (await toplevelDataDirectory.exists()) {
       await _loadSettingsFromExistingDataDir(
         localStoragePaths: localStoragePaths,
+        settingsFileHelper: settingsFileHelper,
       );
     } else {
       await toplevelDataDirectory.create();
       await _createNewSettingsJsonFile(
         localStoragePaths: localStoragePaths,
-        muvmNeeded: muvmNeeded,
+        settingsFileHelper: settingsFileHelper,
       );
     }
 
@@ -160,10 +166,12 @@ class StartupData {
 
   static Future<void> _loadSettingsFromExistingDataDir({
     required LocalStoragePaths localStoragePaths,
+    required SettingsFileHelper settingsFileHelper,
   }) async {
     try {
-      final settingsJsonFile = await SettingsJsonFile.load(
+      final settingsJsonFile = await SettingsJsonFile.loadAndUpgrade(
         localStoragePaths.settingsJsonFilePath,
+        settingsFileHelper: settingsFileHelper,
       );
 
       if (settingsJsonFile.appPackageId != AppInfo.appPackageId) {
@@ -183,18 +191,12 @@ class StartupData {
 
   static Future<void> _createNewSettingsJsonFile({
     required LocalStoragePaths localStoragePaths,
-    required bool muvmNeeded,
+    required SettingsFileHelper settingsFileHelper,
   }) async {
     final settingsJsonFile = SettingsJsonFile(
       appPackageId: AppInfo.appPackageId,
-      suppressedWarnings: {
-        // Muvm means Apple silicon hardware (think Asahi Linux).
-        // On such systems, 32-bit libraries are installed along
-        // with FEX / muvm. That means in practice, the user is
-        // going to have the 32-bit libraries, so there is no need
-        // to warn them about them.
-        if (muvmNeeded) SuppressableWarning.nonWow64ModesRequire32BitLibs,
-      },
+      suppressedWarnings: settingsFileHelper
+          .buildDefaultSetOfSuppressedWarnings(),
     );
 
     await settingsJsonFile.save(localStoragePaths.settingsJsonFilePath);
