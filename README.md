@@ -2,12 +2,11 @@
 
 A Wine prefix manager for Linux with explicit support for Apple silicon Macs (think Asahi Linux).
 
-It should work on regular x86_64 Linux systems as well. Support for generic non-Apple
-arm64 systems is currently missing, though it shouldn't be hard to add - PRs are welcome!
+It works on regular x86_64 Linux systems as well, though this configuration receives less testing. Support for generic non-Apple arm64 systems is currently missing, though it shouldn't be hard to add - PRs are welcome!
 
 This project is mainly written in Dart / Flutter, with some C and C++ code for auxilliary tools.
 
-The project was inspired by another project written in Flutter / Dart called [Wine Prefix Manager](https://github.com/CrownParkComputing/wine_prefix_manager), though Wine Bar doesn't share any code with it.
+The project was inspired by another project written in Flutter / Dart called [Wine Prefix Manager](https://github.com/CrownParkComputing/wine_prefix_manager), though no code from that project was used in this one.
 
 Why have I created something from scratch rather than contribute to the above mentioned project? I had two goals:
 
@@ -55,9 +54,11 @@ While AppImages can be run just by making them executable and double clicking th
 
 An `.AppImage` file started that way can be pinned to a taskbar just fine (on KDE at least). As a bonus, `Gear Level` can automatically update your AppImages. These URLs always point to the latest release of Wine Bar ([WineBar-x64.AppImage](https://github.com/Tulon/WineBar/releases/latest/download/WineBar-x64.AppImage), [WineBar-arm64.AppImage](https://github.com/Tulon/WineBar/releases/latest/download/WineBar-arm64.AppImage)) and may be used as update URLs in `Gear Level`.
 
+Another option is the [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) app, which works similarly to `Gear Level`.
+
 ## Building
 
-First, install Flutter (which also installs Dart) by following the [official instructions](https://docs.flutter.dev/install). Don't install Flutter from Snap, as it brings an old version of CMake with it, and we need a newer version for building our C/C++ helper tools. However, we do use Flutter from Snap in CI. See [here](.github/workflows/build.yml) how we workaround the issue with CMake.
+First, install Flutter (which also installs Dart) by following the [official instructions](https://docs.flutter.dev/install). Don't install Flutter from Snap, as it brings an old version of CMake with it, while we need a newer version for building our C/C++ helper tools. However, we do use Flutter from Snap in CI. See [here](.github/workflows/build.yml) how we workaround the issue with CMake.
 
 This project cross-compiles some C++ code targeting Windows, so we need some additional dependencies to be able to do that:
 
@@ -94,6 +95,19 @@ cd <project_folder>
 cd <project_folder>
 dart pub global activate rps
 dart pub global activate dbus
+```
+
+Now, we have to add `$HOME/.pub-cache/bin` to `PATH`. The way to do that depends on the shell you are running. For Bash, the following will do the trick:
+
+```bash
+echo 'export PATH=$PATH:$HOME/.pub-cache/bin' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Now, let's generate the generated files.
+
+```bash
+cd <project_folder>
 rps generate
 ```
 
