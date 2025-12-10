@@ -55,7 +55,7 @@ jobs:
       # so the binaries it builds are able to run on older distros.
       - name: Install Flutter SDK
         run: sudo snap install flutter --classic
-      
+
       # Unfortunately, Flutter from snap brings an old version of CMake with it. We build
       # a few C/C++ utilities in addition to our Flutter app and we need CMake 3.28 at least.
       # To overcome this issue, we download and extract a newer version of CMake and overlay
@@ -70,8 +70,31 @@ jobs:
           tar --strip-components=1 -axf * -C ~/cmake-inst/
           sudo mount -t overlay overlay -o lowerdir=$HOME/cmake-inst:/snap/flutter/current/usr /snap/flutter/current/usr/
 
+      # This is necessary to be able to run the tools we use for code generation
+      - name: Add $HOME/.pub-cache/bin to PATH
+        run: |
+          echo "PATH=$PATH:$HOME/.pub-cache/bin" >> $GITHUB_ENV
+
       - name: Clone repository
         uses: actions/checkout@v5
+
+      - name: Regenerate generated files
+        run: |
+          flutter pub get
+          dart pub global activate rps
+          dart pub global activate dbus
+          rps generate
+
+      - name: Verify the generated files were up to date
+        run: |
+          # Note that pubspec.lock is ignored because "flutter pub get" may modify
+          # it when Dart SDK is upgraded.
+          NUM_MODIFIED_FILES=$(git status --porcelain | grep -v pubspec.lock | wc -l)
+          if [ "$NUM_MODIFIED_FILES" != "0" ]; then
+            echo "The working tree is not clean. The following files were modified:"
+            git status --porcelain | grep -v pubspec.lock
+            exit 1
+          fi
 
       - name: Build AppImage
         run: |
