@@ -21,7 +21,6 @@ import 'dart:io';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
-import 'package:winebar/models/suppressable_warning.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
