@@ -142,7 +142,23 @@ MyApplication *my_application_new() {
   // the application to be recognized beyond its binary name.
   g_set_prgname(APPLICATION_ID);
 
+  gtk_window_set_default_icon_name("winebar");
+  gtk_window_set_default_icon_from_file(
+      "data/flutter_assets/packaging/resources/common/winebar.png", NULL);
+
+  // The flutter generated code passes G_APPLICATION_NON_UNIQUE to
+  // g_object_new(). We don't want to allow several instances of this app,
+  // so we can't use that. We could pass G_APPLICATION_FLAGS_NONE, but
+  // then we get a warning on newer versions of gtk that this flag is
+  // deprecated in favour of G_APPLICATION_DEFAULT_FLAGS. Flutter's
+  // build system apparently promotes warnings to errors, so that's not
+  // an option. Setting this value to G_APPLICATION_DEFAULT_FLAGS doesn't
+  // work when building on older versions of gtk, such as the one that
+  // comes with the Flutter SDK installed from Snap. So, our only option
+  // is to set the flags to the literal 0.
+  const int app_flags = 0;
+
   return MY_APPLICATION(g_object_new(my_application_get_type(),
                                      "application-id", APPLICATION_ID, "flags",
-                                     G_APPLICATION_NON_UNIQUE, nullptr));
+                                     app_flags, nullptr));
 }
