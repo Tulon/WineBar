@@ -552,6 +552,7 @@ class _PinnedAppsGridState extends State<_PinnedExecutablesGridWidget> {
                           child: IconButton(
                             icon: Icon(MdiIcons.pinOff),
                             style: IconButton.styleFrom(
+                              side: BorderSide(),
                               backgroundColor: colorScheme.primary,
                               foregroundColor: colorScheme.onPrimary,
                             ),
@@ -574,6 +575,18 @@ class _PinnedAppsGridState extends State<_PinnedExecutablesGridWidget> {
                           child: IconButton(
                             icon: Icon(MdiIcons.close),
                             style: ButtonStyle(
+                              side:
+                                  WidgetStateProperty.resolveWith<BorderSide?>((
+                                    Set<WidgetState> states,
+                                  ) {
+                                    if (states.contains(WidgetState.hovered)) {
+                                      return BorderSide.none;
+                                    } else {
+                                      return BorderSide(
+                                        color: Colors.grey.shade900,
+                                      );
+                                    }
+                                  }),
                               iconColor:
                                   WidgetStateProperty.resolveWith<Color?>((
                                     Set<WidgetState> states,
