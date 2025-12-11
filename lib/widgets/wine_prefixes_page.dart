@@ -163,7 +163,7 @@ class WinePrefixesPage extends StatelessWidget {
       applicationIcon: Image(
         width: 56,
         height: 56,
-        image: AssetImage('packaging/resources/common/wine_bar.png'),
+        image: AssetImage('packaging/resources/common/winebar.png'),
       ),
       children: [
         GestureRecognizerHolder(

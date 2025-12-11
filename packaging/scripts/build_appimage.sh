@@ -66,9 +66,9 @@ rm -rf "${APP_DIR}"
 mkdir -p "${APP_DIR}"
 
 cp -rp "${BUNDLE_DIR}/." "${APP_DIR}/"
-cp -rp packaging/resources/common/wine_bar.desktop "${APP_DIR}/"
-ln -s data/flutter_assets/packaging/resources/common/wine_bar.png "${APP_DIR}/wine_bar.png"
-ln -s data/flutter_assets/packaging/resources/common/wine_bar.png "${APP_DIR}/.DirIcon"
+cp -rp packaging/resources/common/winebar.desktop "${APP_DIR}/"
+ln -s data/flutter_assets/packaging/resources/common/winebar.png "${APP_DIR}/winebar.png"
+ln -s data/flutter_assets/packaging/resources/common/winebar.png "${APP_DIR}/.DirIcon"
 cp -rp packaging/resources/AppImage/. "${APP_DIR}/"
 
 "build/${APPIMAGETOOL_FILENAME}" "${APP_DIR}" "${APP_IMAGE}"
