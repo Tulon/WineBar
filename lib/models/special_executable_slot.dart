@@ -22,4 +22,5 @@ enum SpecialExecutableSlot {
   customExecutable,
   runInstaller,
   winetricksExecutable,
+  winecfgExecutable,
 }

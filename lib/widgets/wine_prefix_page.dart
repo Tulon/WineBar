@@ -106,6 +106,12 @@ class WinePrefixPage extends StatelessWidget {
                           ).pinExecutable(executablePinnedInTempDir),
                 ),
               ),
+              BlocProvider<WinecfgExecutableBloc>(
+                create: (context) => WinecfgExecutableBloc(
+                  startupData: startupData,
+                  winePrefix: state.prefix,
+                ),
+              ),
               BlocProvider<WinetricksExecutableBloc>(
                 create: (context) => WinetricksExecutableBloc(
                   startupData: startupData,
@@ -174,6 +180,10 @@ class WinePrefixPage extends StatelessWidget {
                 BlocBuilder<RunInstallerBloc, SpecialExecutableState>(
                   builder: (context, state) =>
                       _buildRunInstallerChip(context, state),
+                ),
+                BlocBuilder<WinecfgExecutableBloc, SpecialExecutableState>(
+                  builder: (context, state) =>
+                      _buildWinecfgChip(context, state),
                 ),
                 BlocBuilder<WinetricksExecutableBloc, SpecialExecutableState>(
                   builder: (context, state) =>
@@ -319,6 +329,25 @@ class WinePrefixPage extends StatelessWidget {
         context: context,
         specialExecutableBloc: specialExecutableBloc,
       ),
+      onKillProcessPressed: () => specialExecutableBloc.killProcessIfRunning(),
+      onViewLogsPressed: () =>
+          _viewProcessLogs(context: context, specialExecutableState: state),
+    );
+  }
+
+  Widget _buildWinecfgChip(BuildContext context, SpecialExecutableState state) {
+    final specialExecutableBloc = BlocProvider.of<WinecfgExecutableBloc>(
+      context,
+    );
+
+    final icon = Icon(MdiIcons.cog);
+
+    return RunProcessChip(
+      primaryButtonIcon: state.isRunning ? BouncingWidget(child: icon) : icon,
+      primaryButtonLabel: const Text('Winecfg'),
+      specialExecutableState: state,
+      onPrimaryButtonPressed: () =>
+          specialExecutableBloc.startProcess(['winecfg.exe']),
       onKillProcessPressed: () => specialExecutableBloc.killProcessIfRunning(),
       onViewLogsPressed: () =>
           _viewProcessLogs(context: context, specialExecutableState: state),
