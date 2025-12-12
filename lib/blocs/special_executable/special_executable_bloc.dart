@@ -240,6 +240,17 @@ class CustomExecutableBloc extends RegularSpecialExecutableBloc {
       SpecialExecutableSlot.customExecutable;
 }
 
+class WinecfgExecutableBloc extends RegularSpecialExecutableBloc {
+  WinecfgExecutableBloc({
+    required super.startupData,
+    required super.winePrefix,
+  });
+
+  @override
+  SpecialExecutableSlot get executableSlot =>
+      SpecialExecutableSlot.winecfgExecutable;
+}
+
 class PinExecutableBloc extends SpecialExecutableBloc {
   final Future<void> Function(PinnedExecutable executablePinnedInTempDir)
   processExecutablePinnedInTempDir;
