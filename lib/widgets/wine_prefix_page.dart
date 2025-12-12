@@ -36,6 +36,7 @@ import 'package:winebar/models/pinned_executable_list_event.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 import 'package:winebar/utils/startup_data.dart';
+import 'package:winebar/widgets/bouncing_widget.dart';
 import 'package:winebar/widgets/pin_executable_button.dart';
 import 'package:winebar/widgets/prefix_settings_dialog.dart';
 import 'package:winebar/widgets/run_process_chip.dart';
@@ -286,8 +287,10 @@ class WinePrefixPage extends StatelessWidget {
       context,
     );
 
+    final icon = Icon(MdiIcons.rocketLaunch);
+
     return RunProcessChip(
-      primaryButtonIcon: Icon(MdiIcons.rocketLaunch),
+      primaryButtonIcon: state.isRunning ? BouncingWidget(child: icon) : icon,
       primaryButtonLabel: const Text('Run Executable'),
       specialExecutableState: state,
       onPrimaryButtonPressed: () => _selectSpecialExecutableToRun(
@@ -306,8 +309,10 @@ class WinePrefixPage extends StatelessWidget {
   ) {
     final specialExecutableBloc = BlocProvider.of<RunInstallerBloc>(context);
 
+    final icon = Icon(MdiIcons.packageVariantClosedPlus);
+
     return RunProcessChip(
-      primaryButtonIcon: Icon(MdiIcons.packageVariantClosedPlus),
+      primaryButtonIcon: state.isRunning ? BouncingWidget(child: icon) : icon,
       primaryButtonLabel: const Text('Run Installer'),
       specialExecutableState: state,
       onPrimaryButtonPressed: () => _selectSpecialExecutableToRun(
@@ -328,8 +333,10 @@ class WinePrefixPage extends StatelessWidget {
       context,
     );
 
+    final icon = Icon(MdiIcons.hammerScrewdriver);
+
     return RunProcessChip(
-      primaryButtonIcon: Icon(MdiIcons.hammerScrewdriver),
+      primaryButtonIcon: state.isRunning ? BouncingWidget(child: icon) : icon,
       primaryButtonLabel: const Text('Winetricks GUI'),
       specialExecutableState: state,
       onPrimaryButtonPressed: () =>

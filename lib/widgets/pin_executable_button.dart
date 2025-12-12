@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
+import 'package:winebar/widgets/bouncing_widget.dart';
 
 class PinExecutableButton extends StatelessWidget {
   final SpecialExecutableState specialExecutableState;
@@ -38,6 +39,8 @@ class PinExecutableButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final auxButton = _maybeBuildAuxButton(context);
 
+    final icon = Icon(MdiIcons.pin);
+
     return Stack(
       alignment: AlignmentGeometry.directional(1.0, 0.0),
       children: [
@@ -51,7 +54,9 @@ class PinExecutableButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [const Text('Pin Executable'), ?auxButton],
           ),
-          icon: Icon(MdiIcons.pin),
+          icon: specialExecutableState.isRunning
+              ? BouncingWidget(child: icon)
+              : icon,
           onPressed: specialExecutableState.isRunning
               ? null
               : onPrimaryButtonPressed,
