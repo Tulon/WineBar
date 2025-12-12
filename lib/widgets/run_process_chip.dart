@@ -21,6 +21,7 @@ import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 
 class RunProcessChip extends StatelessWidget {
   static const double auxButtonIconSize = 18.0;
+  static const double extraSpaceBetweenIconAndLabel = 3.0;
   static const double chipExtraSpaceForAuxButton = 22.0;
   final Widget? primaryButtonIcon;
   final Widget primaryButtonLabel;
@@ -41,10 +42,10 @@ class RunProcessChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double extraSpace = 0.0;
+    double extraTrailingSpace = 0.0;
     if (specialExecutableState.isRunning ||
         specialExecutableState.processOutput != null) {
-      extraSpace = chipExtraSpaceForAuxButton;
+      extraTrailingSpace = chipExtraSpaceForAuxButton;
     }
 
     return Stack(
@@ -53,7 +54,10 @@ class RunProcessChip extends StatelessWidget {
         ActionChip(
           avatar: primaryButtonIcon,
           label: primaryButtonLabel,
-          labelPadding: EdgeInsetsDirectional.only(end: extraSpace),
+          labelPadding: EdgeInsetsDirectional.only(
+            start: extraSpaceBetweenIconAndLabel,
+            end: extraTrailingSpace,
+          ),
           onPressed: onPrimaryButtonPressed,
         ),
         ?_maybeBuildAuxButton(context),
