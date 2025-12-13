@@ -126,7 +126,9 @@ class SettingsJsonFile extends Equatable {
   }) {
     return copyWith(
       suppressedWarnings: {
-        ...suppressedWarnings.where((warning) => warning != warning),
+        ...suppressedWarnings.where(
+          (existingWarning) => existingWarning != warning,
+        ),
         if (suppressed) warning,
       },
     );
