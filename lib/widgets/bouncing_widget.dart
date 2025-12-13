@@ -16,7 +16,7 @@ class BouncingWidget extends StatefulWidget {
     super.key,
     required this.child,
     this.singleBounceDuration = const Duration(milliseconds: 600),
-    this.maxRelativeBounceHeight = 0.25,
+    this.maxRelativeBounceHeight = 0.15,
     this.transformHitTests = false,
   });
 
@@ -42,14 +42,14 @@ class _BouncingWidgetState extends State<BouncingWidget>
         tween: Tween<double>(
           begin: 0.0,
           end: -widget.maxRelativeBounceHeight,
-        ).chain(CurveTween(curve: Curves.easeOutQuad)),
+        ).chain(CurveTween(curve: Curves.easeOut)),
         weight: 50.0,
       ),
       TweenSequenceItem<double>(
         tween: Tween<double>(
           begin: -widget.maxRelativeBounceHeight,
           end: 0.0,
-        ).chain(CurveTween(curve: Curves.easeInQuad)),
+        ).chain(CurveTween(curve: Curves.easeIn)),
         weight: 50.0,
       ),
     ]).animate(_controller);
