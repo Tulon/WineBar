@@ -15,6 +15,10 @@ Why have I created something from scratch rather than contribute to the above me
 
 I concluded that creating something from scratch was a better way to achive the 2nd goal.
 
+## Demo Video
+
+https://github.com/user-attachments/assets/08b0a19b-c84c-4866-a8b9-622f12874666
+
 ## Limitations
 
 The only serious limitation of Wine Bar is how it handles running multiple apps simultaneously in the same Wine prefix. Perhaps I shouldn't have allowed that in the first place, but for those rare cases where you really need that, I made that possible. When you launch more than one executable in the same prefix, you'll notice some or all of the following symptoms:
