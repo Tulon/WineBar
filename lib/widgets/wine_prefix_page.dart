@@ -90,12 +90,20 @@ class WinePrefixPage extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<CustomExecutableBloc>(
+                // We provide a key in order to force the bloc to be recreated
+                // when the prefix is modified.
+                key: ValueKey(state.prefix),
+
                 create: (context) => CustomExecutableBloc(
                   startupData: startupData,
                   winePrefix: state.prefix,
                 ),
               ),
               BlocProvider<RunInstallerBloc>(
+                // We provide a key in order to force the bloc to be recreated
+                // when the prefix is modified.
+                key: ValueKey(state.prefix),
+
                 create: (context) => RunInstallerBloc(
                   startupData: startupData,
                   winePrefix: state.prefix,
@@ -107,12 +115,20 @@ class WinePrefixPage extends StatelessWidget {
                 ),
               ),
               BlocProvider<WinecfgExecutableBloc>(
+                // We provide a key in order to force the bloc to be recreated
+                // when the prefix is modified.
+                key: ValueKey(state.prefix),
+
                 create: (context) => WinecfgExecutableBloc(
                   startupData: startupData,
                   winePrefix: state.prefix,
                 ),
               ),
               BlocProvider<WinetricksExecutableBloc>(
+                // We provide a key in order to force the bloc to be recreated
+                // when the prefix is modified.
+                key: ValueKey(state.prefix),
+
                 create: (context) => WinetricksExecutableBloc(
                   startupData: startupData,
                   winePrefix: state.prefix,
@@ -275,6 +291,10 @@ class WinePrefixPage extends StatelessWidget {
     }
 
     return BlocProvider(
+      // We provide a key in order to force the bloc to be recreated
+      // when the prefix is modified.
+      key: ValueKey(prefix),
+
       create: (context) => PinExecutableBloc(
         startupData: startupData,
         winePrefix: prefix,
@@ -687,12 +707,18 @@ class _PinnedAppsGridState extends State<_PinnedExecutablesGridWidget> {
     }
 
     return BlocProvider(
-      // This helps with the create function provided below not being called
-      // in some cases, while BlocProvider.of<PinnedExecutableBloc>(context)
-      // in buildWidgetTree() returning the wrong instance of the same bloc.
-      // The fix was suggested in [1].
-      // [1]: https://github.com/felangel/bloc/issues/919
-      key: ValueKey(pinnedExecutable.pinDirectory),
+      // The thing is, re-creating the BlocProvider doesn't re-create the
+      // bloc [1], unless you force that to happen [2]. Here, we force it
+      // to be re-created when the pinDirectory or the winePrefix change.
+      // The winePrefix carries important information used for running
+      // Wine apps. Some of that information may change at runtime
+      // (the WOW64 preference for GE Proton builds comes to mind).
+      // As for matching the pinDirectory, the failure to do so may
+      // cause a newly created widget that represents a pinned executable
+      // to bind to the wrong instance of PinnedExecutableBloc.
+      // [1]: https://github.com/felangel/bloc/issues/1223#issuecomment-635577618
+      // [2]: https://github.com/felangel/bloc/issues/1223#issuecomment-1999875271
+      key: ValueKey((pinnedExecutable.pinDirectory, widget.winePrefix)),
 
       create: (context) => PinnedExecutableBloc(
         startupData: widget.startupData,
