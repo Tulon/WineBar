@@ -62,7 +62,9 @@ Another option is the [AppImageLauncher](https://github.com/TheAssassin/AppImage
 
 ## Building
 
-First, install Flutter (which also installs Dart) by following the [official instructions](https://docs.flutter.dev/install). Don't install Flutter from Snap, as it brings an old version of CMake with it, while we need a newer version for building our C/C++ helper tools. However, we do use Flutter from Snap in CI. See [here](.github/workflows/build.yml) how we workaround the issue with CMake.
+First, install Flutter (which also installs Dart) by following the [official instructions](https://docs.flutter.dev/install). In addition to the prerequisite packages listed in the installation instructions, I also had to install the following ones: `cmake`, `ninja` (`ninja-build` on Ubuntu), `clang++`, `gtk3-devel` (`libgtk-3-dev` on Ubuntu).
+
+Don't install Flutter from Snap, as it brings an old version of CMake with it, while we need a newer version for building our C/C++ helper tools. However, we do use Flutter from Snap in CI. See [here](.github/workflows/build.yml) how we workaround the issue with CMake.
 
 This project cross-compiles some C++ code targeting Windows, so we need some additional dependencies to be able to do that:
 
