@@ -1,5 +1,4 @@
 #include "my_application.h"
-#include "utils.h"
 
 #include <flutter_linux/flutter_linux.h>
 #ifdef GDK_WINDOWING_X11
@@ -142,14 +141,6 @@ MyApplication *my_application_new() {
   // corresponding .desktop file. This ensures better integration by allowing
   // the application to be recognized beyond its binary name.
   g_set_prgname(APPLICATION_ID);
-
-  gtk_window_set_default_icon_name("winebar");
-
-  char buf[4096];
-  if (resolve_path_relative_to_executable_dir("winebar.png", buf,
-                                              sizeof(buf))) {
-    gtk_window_set_default_icon_from_file(buf, NULL);
-  }
 
   // The flutter generated code passes G_APPLICATION_NON_UNIQUE to
   // g_object_new(). We don't want to allow several instances of this app,
