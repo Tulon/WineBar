@@ -146,8 +146,9 @@ MyApplication *my_application_new() {
   gtk_window_set_default_icon_name("winebar");
 
   char buf[4096];
-  if (resolve_path_relative_to_executable_dir("winebar.png", buf,
-                                              sizeof(buf))) {
+  if (resolve_path_relative_to_executable_dir(
+          "/data/flutter_assets/packaging/resources/common/winebar.png", buf,
+          sizeof(buf))) {
     gtk_window_set_default_icon_from_file(buf, NULL);
   }
 
