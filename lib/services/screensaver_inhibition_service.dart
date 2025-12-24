@@ -91,7 +91,7 @@ class _ScreensaverInhibitionService implements ScreensaverInhibitionService {
     if (cookie == null) {
       logger.i(
         "Can't re-enable the screensaver as the previous "
-        "attempt to enable it failed",
+        "attempt to disable it failed",
       );
       return;
     }
