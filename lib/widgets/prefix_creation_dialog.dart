@@ -206,6 +206,7 @@ class _PrefixCreationDialogState extends State<_PrefixCreationStatefulDialog> {
 
 abstract class _PrefixCreationStep {
   PrefixCreationStep get step;
+  PrefixCreationStep? get prevStep;
   String get title;
 
   List<Widget> buildPageTitleTrailingWidgets({
@@ -258,7 +259,9 @@ abstract class _PrefixCreationStep {
           spacing: 8.0,
           children: [
             Row(
+              spacing: 8.0,
               children: [
+                ?_maybeCreateBackButton(bloc: bloc),
                 Expanded(child: Text(title, style: textTheme.titleLarge)),
                 ...buildPageTitleTrailingWidgets(
                   context: context,
@@ -280,11 +283,37 @@ abstract class _PrefixCreationStep {
       ),
     );
   }
+
+  Widget? _maybeCreateBackButton({required PrefixCreationBloc bloc}) {
+    final prevStep = this.prevStep;
+
+    if (prevStep == null) {
+      return null;
+    }
+
+    // We apply a negative padding in order to keep
+    // the step title height the same for all steps.
+    // Without that, the BackButton would force a
+    // taller page title for all steps but the first one,
+    // which won't have a BackButton.
+    return OverflowPadding(
+      padding: EdgeInsetsDirectional.only(
+        start: -4.0,
+        end: -4.0,
+        top: -8.0,
+        bottom: -8.0,
+      ),
+      child: BackButton(onPressed: () => bloc.navigateToStep(prevStep)),
+    );
+  }
 }
 
 class _WineBuildSourceSelectionStep extends _PrefixCreationStep {
   @override
   final PrefixCreationStep step = PrefixCreationStep.selectWineBuildSource;
+
+  @override
+  final PrefixCreationStep? prevStep = null;
 
   @override
   final String title = 'Select wine build provider';
@@ -335,6 +364,9 @@ class _WineBuildSourceSelectionStep extends _PrefixCreationStep {
 class _WineReleaseSelectionStep extends _PrefixCreationStep {
   @override
   final PrefixCreationStep step = PrefixCreationStep.selectWineRelease;
+
+  @override
+  final PrefixCreationStep? prevStep = PrefixCreationStep.selectWineBuildSource;
 
   @override
   final String title = 'Select wine release';
@@ -405,6 +437,9 @@ class _WineReleaseSelectionStep extends _PrefixCreationStep {
 class _WineBuildSelectionStep extends _PrefixCreationStep {
   @override
   final PrefixCreationStep step = PrefixCreationStep.selectWineBuild;
+
+  @override
+  final PrefixCreationStep? prevStep = PrefixCreationStep.selectWineRelease;
 
   @override
   final String title = 'Select wine build';
@@ -558,6 +593,9 @@ class _WineBuildSelectionStep extends _PrefixCreationStep {
 class _WinePrefixOptionsStep extends _PrefixCreationStep {
   @override
   final PrefixCreationStep step = PrefixCreationStep.setOptions;
+
+  @override
+  final PrefixCreationStep? prevStep = PrefixCreationStep.selectWineRelease;
 
   @override
   final String title = 'Set options';
