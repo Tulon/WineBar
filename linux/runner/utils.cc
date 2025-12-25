@@ -10,12 +10,19 @@ bool resolve_path_relative_to_executable_dir(const char *rel_path, char *buf,
     return false;
   }
 
-  size_t rel_path_len = strlen(rel_path);
-
-  if (bytes_read + rel_path_len + 1 > buf_size) {
+  char *last_slash_ptr = strrchr(buf, '/');
+  if (!last_slash_ptr) {
     return false;
   }
 
-  memcpy(buf + bytes_read, rel_path, rel_path_len + 1);
+  size_t rel_path_insertion_pos = (last_slash_ptr - buf) + 1;
+
+  size_t rel_path_len = strlen(rel_path);
+
+  if (rel_path_insertion_pos + rel_path_len + 1 > buf_size) {
+    return false;
+  }
+
+  memcpy(buf + rel_path_insertion_pos, rel_path, rel_path_len + 1);
   return true;
 }
