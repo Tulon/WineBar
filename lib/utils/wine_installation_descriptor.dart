@@ -18,8 +18,12 @@
 
 import 'dart:io';
 
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/generic_exception.dart';
+import 'package:winebar/models/gpu_info.dart';
+import 'package:winebar/models/pinned_executable_settings.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/utils/prefix_descriptor.dart';
@@ -66,9 +70,10 @@ abstract interface class WineInstallationDescriptor {
   ///
   /// The [processOutputDir] is a directory where process logs are to be
   /// written.
-  Map<String, String> getEnvVarsForWine({
+  Future<Map<String, String>> getEnvVarsForWine({
     required WinePrefix winePrefix,
     required String processOutputDir,
+    required PinnedExecutableSettings? pinnedExecutableSettings,
     required bool forWinetricks,
     required bool disableLogs,
   });
@@ -232,12 +237,13 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
   }
 
   @override
-  Map<String, String> getEnvVarsForWine({
+  Future<Map<String, String>> getEnvVarsForWine({
     required WinePrefix winePrefix,
     required String processOutputDir,
+    required PinnedExecutableSettings? pinnedExecutableSettings,
     required bool forWinetricks,
     required bool disableLogs,
-  }) {
+  }) async {
     final wineAndWineserverExecutables = _findWineAndWineserverExecutables(
       prefixDescriptor: winePrefix.descriptor,
       forWinetricks: true,
@@ -272,6 +278,13 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
     envVars['WINEPREFIX'] = getInnermostPrefixDir(
       prefixDirStructure: winePrefix.dirStructure,
     );
+
+    if (pinnedExecutableSettings != null) {
+      await _populateEnvVarsForPinnedExecutableSettings(
+        envVars,
+        pinnedExecutableSettings,
+      );
+    }
 
     if (disableLogs) {
       envVars['LOG_CAPTURING_RUNNER_DISABLE_LOGGING'] = '1';
@@ -404,5 +417,45 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
     } else {
       return value;
     }
+  }
+
+  Future<void> _populateEnvVarsForPinnedExecutableSettings(
+    Map<String, String> envVars,
+    PinnedExecutableSettings settings,
+  ) async {
+    final desiredGpuUuid = settings.desiredGpuUuid;
+    if (desiredGpuUuid != null) {
+      await _populateEnvVarsForDesiredGpuUuid(envVars, desiredGpuUuid);
+    }
+  }
+
+  Future<void> _populateEnvVarsForDesiredGpuUuid(
+    Map<String, String> envVars,
+    String desiredGpuUuid,
+  ) async {
+    final availableGpus = await GetIt.I.getAsync<List<GpuInfo>>();
+    final matchingGpus = availableGpus.where(
+      (gpu) => gpu.deviceUuid == desiredGpuUuid,
+    );
+
+    if (matchingGpus.isEmpty) {
+      GetIt.I.get<Logger>().w(
+        "Ignoring the GPU preference, as the "
+        "preferred one doesn't match any of the available ones",
+      );
+    }
+
+    final matchingGpu = matchingGpus.first;
+    final matchingGpuVidDid = '${matchingGpu.vendorId}:${matchingGpu.deviceId}';
+
+    // These works for Vulkan-based backends.
+    envVars['MESA_VK_DEVICE_SELECT'] = matchingGpuVidDid;
+    envVars['MESA_VK_DEVICE_SELECT_FORCE_DEFAULT_DEVICE'] = '1';
+
+    // Unfortunately, this one doesn't help (though maybe it does in some
+    // cases), as it merely puts the desired device as the first in the list
+    // of EGL devices. It doesn't hide the other ones in EGL, as
+    // MESA_VK_DEVICE_SELECT_FORCE_DEFAULT_DEVICE does for Vulkan.
+    envVars['DRI_PRIME'] = matchingGpuVidDid;
   }
 }

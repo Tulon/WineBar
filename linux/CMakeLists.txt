@@ -139,5 +139,6 @@ add_dependencies(run_tests build_tests)
 include(build-win32-apps.cmake)
 
 add_subdirectory(../log-capturing-runner log-capturing-runner)
+add_subdirectory(../gpu-enumerator gpu-enumerator)
 
 add_subdirectory(write-version-info)

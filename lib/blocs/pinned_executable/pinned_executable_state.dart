@@ -22,23 +22,27 @@ import 'package:meta/meta.dart';
 @immutable
 class PinnedExecutableState extends Equatable {
   final bool isRunning;
-  final bool mouseOver;
+  final bool isContextMenuOpen;
+  final bool isMouseOver;
 
   const PinnedExecutableState({
     required this.isRunning,
-    required this.mouseOver,
+    required this.isContextMenuOpen,
+    required this.isMouseOver,
   });
 
-  const PinnedExecutableState.defaultState()
-    : this(isRunning: false, mouseOver: false);
-
   @override
-  List<Object> get props => [isRunning, mouseOver];
+  List<Object> get props => [isRunning, isContextMenuOpen, isMouseOver];
 
-  PinnedExecutableState copyWith({bool? isRunning, bool? mouseOver}) {
+  PinnedExecutableState copyWith({
+    bool? isRunning,
+    bool? isContextMenuOpen,
+    bool? isMouseOver,
+  }) {
     return PinnedExecutableState(
       isRunning: isRunning ?? this.isRunning,
-      mouseOver: mouseOver ?? this.mouseOver,
+      isContextMenuOpen: isContextMenuOpen ?? this.isContextMenuOpen,
+      isMouseOver: isMouseOver ?? this.isMouseOver,
     );
   }
 }

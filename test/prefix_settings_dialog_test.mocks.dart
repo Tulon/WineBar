@@ -11,6 +11,7 @@ import 'dart:ui' as _i22;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i15;
+import 'package:winebar/models/pinned_executable_settings.dart' as _i23;
 import 'package:winebar/models/settings_json_file.dart' as _i2;
 import 'package:winebar/models/suppressable_warning.dart' as _i9;
 import 'package:winebar/models/wine_build.dart' as _i18;
@@ -1550,9 +1551,10 @@ class MockWineInstallationDescriptor extends _i1.Mock
           as List<String>);
 
   @override
-  Map<String, String> getEnvVarsForWine({
+  _i13.Future<Map<String, String>> getEnvVarsForWine({
     required _i11.WinePrefix? winePrefix,
     required String? processOutputDir,
+    required _i23.PinnedExecutableSettings? pinnedExecutableSettings,
     required bool? forWinetricks,
     required bool? disableLogs,
   }) =>
@@ -1560,13 +1562,18 @@ class MockWineInstallationDescriptor extends _i1.Mock
             Invocation.method(#getEnvVarsForWine, [], {
               #winePrefix: winePrefix,
               #processOutputDir: processOutputDir,
+              #pinnedExecutableSettings: pinnedExecutableSettings,
               #forWinetricks: forWinetricks,
               #disableLogs: disableLogs,
             }),
-            returnValue: <String, String>{},
-            returnValueForMissingStub: <String, String>{},
+            returnValue: _i13.Future<Map<String, String>>.value(
+              <String, String>{},
+            ),
+            returnValueForMissingStub: _i13.Future<Map<String, String>>.value(
+              <String, String>{},
+            ),
           )
-          as Map<String, String>);
+          as _i13.Future<Map<String, String>>);
 }
 
 /// A class which mocks [WineProcessRunnerService].

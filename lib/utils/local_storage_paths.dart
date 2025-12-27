@@ -57,6 +57,14 @@ class LocalStoragePaths {
     );
   }
 
+  static String get gpuEnumeratorPath {
+    return path.join(
+      Directory(Platform.resolvedExecutable).parent.path,
+      'bin',
+      'gpu-enumerator',
+    );
+  }
+
   static String get pinExecutableInfoExtractorPath {
     return path.join(
       Directory(Platform.resolvedExecutable).parent.path,

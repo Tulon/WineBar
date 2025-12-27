@@ -66,16 +66,16 @@ First, install Flutter (which also installs Dart) by following the [official ins
 
 Don't install Flutter from Snap, as it brings an old version of CMake with it, while we need a newer version for building our C/C++ helper tools. However, we do use Flutter from Snap in CI. See [here](.github/workflows/build.yml) how we workaround the issue with CMake.
 
-This project cross-compiles some C++ code targeting Windows, so we need some additional dependencies to be able to do that:
+This project builds some helper tools written in C and C++, including cross-compiled Win32 executables, so we need some additional dependencies to be able to build them:
 
 On Debian-based distros:
 ```bash
-sudo apt-get install mingw-w64-i686-dev g++-mingw-w64-i686 binutils-mingw-w64-i686
+sudo apt-get install mingw-w64-i686-dev g++-mingw-w64-i686 binutils-mingw-w64-i686 libvulkan-dev
 ```
 
 On Fedora-based distros:
 ```bash
-sudo dnf install mingw32-gcc-c++ mingw32-binutils
+sudo dnf install mingw32-gcc-c++ mingw32-binutils vulkan-loader-devel
 ```
 
 Now, we are ready to build Wine Bar itself:
