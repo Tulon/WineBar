@@ -97,7 +97,7 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
         std::vector<std::wstring> desktopFilesBefore = enumerateFilesOnDesktop();
         std::sort(desktopFilesBefore.begin(), desktopFilesBefore.end());
 
-        int const exitCode = runProcess(windowsExecutable.c_str(), argv + 4, argc - 4);
+        int const exitCode = runProcess(windowsExecutable.c_str(), argv + 4, argc - 4, *logger);
 
         logger->writeFormatted(L"Installer finished with status {}.\n", exitCode);
 

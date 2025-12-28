@@ -18,9 +18,11 @@
 
 #pragma once
 
+class Logger;
+
 /**
  * Runs the given executable, passing it the given args and waits for it to exit.
  *
  * Returns the exit code of the executable.
  */
-int runProcess(wchar_t const* windowsExecutable, wchar_t* args[], int numArgs);
+int runProcess(wchar_t const* windowsExecutable, wchar_t* args[], int numArgs, Logger& logger);
