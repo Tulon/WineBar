@@ -16,20 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "ToUtf8.h"
 
-class Logger;
+#include <windows.h>
 
-/**
- * Writes pin.json and icon.png to @p windowsPinDir.
- *
- * @param windowsPinDir The Windows-style directory to write the files to.
- * @param unixOrWindowsPinTargetPath The file to pin. Usually that's going to be an executable or
- *        an .lnk file, but we allow pinning any kind of files.
- * @param logger The logger to use.
- *
- * @throw WStringRuntimeError On failure. The non-existing @p unixOrWindowsPinTargetPath counts
- *        as a failure, while not being able to extract an icon from it, is not.
- */
-void fillPinDirectory(
-    wchar_t const* windowsPinDir, wchar_t const* unixOrWindowsPinTargetPath, Logger& logger);
+std::string
+toUtf8(std::wstring_view wideString)
+{
+    int const sizeNeeded = WideCharToMultiByte(
+        CP_UTF8, 0, wideString.data(), (int)wideString.size(), nullptr, 0, nullptr, nullptr);
+
+    std::string utf8String(sizeNeeded, '\0');
+
+    WideCharToMultiByte(
+        CP_UTF8, 0, wideString.data(), (int)wideString.size(), utf8String.data(), sizeNeeded,
+        nullptr, nullptr);
+
+    return utf8String;
+}

@@ -18,29 +18,9 @@
 
 #include "EscapeAndQuoteJsonString.h"
 
-#include <windows.h>
+#include "ToUtf8.h"
 
 #include <iterator> // for std::size()
-
-namespace
-{
-
-std::string
-toUtf8(std::wstring_view wideString)
-{
-    int const sizeNeeded = WideCharToMultiByte(
-        CP_UTF8, 0, wideString.data(), (int)wideString.size(), nullptr, 0, nullptr, nullptr);
-
-    std::string utf8String(sizeNeeded, '\0');
-
-    WideCharToMultiByte(
-        CP_UTF8, 0, wideString.data(), (int)wideString.size(), utf8String.data(), sizeNeeded,
-        nullptr, nullptr);
-
-    return utf8String;
-}
-
-} // namespace
 
 std::string
 escapeAndQuoteJsonString(std::wstring_view wideString)

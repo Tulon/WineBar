@@ -18,6 +18,7 @@
 
 #include "IconForFile.h"
 #include "IconFromPortableExecutable.h"
+#include "Logger.h"
 #include "OwnedTypes.h"
 #include "SignedIndexIconSelector.h"
 #include "ToWindowsFilePath.h"
@@ -29,7 +30,6 @@
 
 #include <exception>
 #include <format>
-#include <iostream>
 #include <string>
 #include <string_view>
 
@@ -38,7 +38,7 @@ namespace
 
 bool
 tryExtractIconFromExecutable(
-    wchar_t const* windowsExecutableFilePath, wchar_t const* windowsPngOutputPath)
+    wchar_t const* windowsExecutableFilePath, wchar_t const* windowsPngOutputPath, Logger& logger)
 {
     int const iconResolution = 256;
 
@@ -50,20 +50,18 @@ tryExtractIconFromExecutable(
     }
     catch (WStringException const& e)
     {
-        std::wcout << e.what() << std::endl;
+        logger.writeFormatted(L"{}\n", e.what());
     }
     catch (std::exception const& e)
     {
-        std::cout << e.what() << std::endl;
+        logger.writeFormatted("{}\n", e.what());
     }
 
     if (!icon)
     {
-        std::wcout
-            << std::format(
-                   L"Failed to get an icon for {}. Will try to get a default icon instead.",
-                   windowsExecutableFilePath)
-            << std::endl;
+        logger.writeFormatted(
+            L"Failed to get an icon for {}. Will try to get a default icon instead.\n",
+            windowsExecutableFilePath);
 
         try
         {
@@ -72,11 +70,11 @@ tryExtractIconFromExecutable(
         }
         catch (WStringException const& e)
         {
-            std::wcout << L"Failed to get a default icon: " << e.what() << std::endl;
+            logger.writeFormatted(L"Failed to get a default icon: {}\n", e.what());
         }
         catch (std::exception const& e)
         {
-            std::cout << "Failed to get a default icon: " << e.what() << std::endl;
+            logger.writeFormatted("Failed to get a default icon: {}\n", e.what());
         }
     }
 
@@ -92,11 +90,11 @@ tryExtractIconFromExecutable(
     }
     catch (WStringException const& e)
     {
-        std::wcout << e.what() << std::endl;
+        logger.writeFormatted(L"{}\n", e.what());
     }
     catch (std::exception const& e)
     {
-        std::cout << e.what() << std::endl;
+        logger.writeFormatted("{}\n", e.what());
     }
 
     return false;
@@ -105,7 +103,8 @@ tryExtractIconFromExecutable(
 } // namespace
 
 void
-fillPinDirectory(wchar_t const* windowsPinDir, wchar_t const* unixOrWindowsPinTargetPath)
+fillPinDirectory(
+    wchar_t const* windowsPinDir, wchar_t const* unixOrWindowsPinTargetPath, Logger& logger)
 {
     static wchar_t const kExtractedIconFileName[] = L"icon.png";
 
@@ -113,8 +112,8 @@ fillPinDirectory(wchar_t const* windowsPinDir, wchar_t const* unixOrWindowsPinTa
 
     auto const windowsPngOutputPath = std::format(L"{}\\{}", windowsPinDir, kExtractedIconFileName);
 
-    bool const iconExtracted =
-        tryExtractIconFromExecutable(windowsPinTargetPath.c_str(), windowsPngOutputPath.c_str());
+    bool const iconExtracted = tryExtractIconFromExecutable(
+        windowsPinTargetPath.c_str(), windowsPngOutputPath.c_str(), logger);
 
     wchar_t const* windowsPinTargetFileName = PathFindFileNameW(windowsPinTargetPath.c_str());
     wchar_t const* windowsPinTargetExtension = PathFindExtensionW(windowsPinTargetFileName);

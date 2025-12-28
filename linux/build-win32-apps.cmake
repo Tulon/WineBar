@@ -40,6 +40,8 @@ ExternalProject_Add(
     COMMAND_EXPAND_LISTS
 )
 
+add_dependencies(${BINARY_NAME} win32-apps)
+
 # We do need this separate install() call. If we try to make ExternalProject_Add() to install
 # the executable at its final destination within the bundle, that doesn't work, as the bundle
 # directory seems to get re-created on every build.

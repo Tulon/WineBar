@@ -18,7 +18,10 @@
 
 #include "CoInitializer.h"
 #include "EnumerateFilesOnDesktop.h"
+#include "FileLogger.h"
 #include "FillPinDirectory.h"
+#include "Logger.h"
+#include "NoOpLogger.h"
 #include "RunProcess.h"
 #include "ScopeCleanup.h"
 #include "ToWindowsFilePath.h"
@@ -34,8 +37,8 @@
 #include <exception>
 #include <filesystem>
 #include <format>
-#include <iostream>
 #include <iterator>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -58,14 +61,32 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
 
     ScopeCleanup const argvCleanup([argv] { LocalFree(argv); });
 
-    if (argc < 3)
+    if (argc < 4)
     {
-        wprintf(L"Usage: %ls <unix_pins_dir> <unix_or_windows_executable> [args...]\n", argv[0]);
+        fwprintf(
+            stderr,
+            L"Usage: %ls <unix_logs_dir> <unix_pins_dir> <unix_or_windows_executable> [args...]\n",
+            argv[0]);
         return 1;
     }
 
-    wchar_t const* unixPinsDir = argv[1];
-    wchar_t const* unixOrWindowsExecutable = argv[2];
+    wchar_t const* unixLogsDir = argv[1];
+    wchar_t const* unixPinsDir = argv[2];
+    wchar_t const* unixOrWindowsExecutable = argv[3];
+
+    std::unique_ptr<Logger> logger;
+
+    try
+    {
+        // toWindowFilePath() throws if the path doesn't exist.
+        logger = std::make_unique<FileLogger>(
+            std::format(L"{}\\installer-runner.txt", toWindowsFilePath(unixLogsDir)).c_str());
+    }
+    catch (std::exception const& e)
+    {
+        fprintf(stderr, "Failed to create a log file: %s\n", e.what());
+        logger = std::make_unique<NoOpLogger>();
+    }
 
     try
     {
@@ -76,7 +97,9 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
         std::vector<std::wstring> desktopFilesBefore = enumerateFilesOnDesktop();
         std::sort(desktopFilesBefore.begin(), desktopFilesBefore.end());
 
-        int const exitCode = runProcess(windowsExecutable.c_str(), argv + 3, argc - 3);
+        int const exitCode = runProcess(windowsExecutable.c_str(), argv + 4, argc - 4);
+
+        logger->writeFormatted(L"Installer finished with status {}.\n", exitCode);
 
         std::vector<std::wstring> desktopFilesAfter = enumerateFilesOnDesktop();
         std::sort(desktopFilesAfter.begin(), desktopFilesAfter.end());
@@ -86,6 +109,11 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
             desktopFilesAfter.begin(), desktopFilesAfter.end(), desktopFilesBefore.begin(),
             desktopFilesBefore.end(), std::back_inserter(addedDesktopFiles));
 
+        logger->writeFormatted(
+            L"Detected {} freshly installed items on the desktop.\n", addedDesktopFiles.size());
+
+        int numPinsExtracted = 0;
+        int numPinsFailedToExtract = 0;
         int pinSubdirNumber = 0;
         for (auto const& pinTargetFile : addedDesktopFiles)
         {
@@ -97,15 +125,32 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
             try
             {
                 std::filesystem::create_directory(windowsPinSubdir);
-                fillPinDirectory(windowsPinSubdir.c_str(), pinTargetFile.c_str());
+                fillPinDirectory(windowsPinSubdir.c_str(), pinTargetFile.c_str(), *logger);
+                ++numPinsExtracted;
             }
             catch (WStringException const& e)
             {
-                std::wcout << e.what() << std::endl;
+                ++numPinsFailedToExtract;
+                logger->writeFormatted(L"{}\n", e.what());
             }
             catch (std::exception const& e)
             {
-                std::cout << e.what() << std::endl;
+                ++numPinsFailedToExtract;
+                logger->writeFormatted("{}\n", e.what());
+            }
+        }
+
+        if (!addedDesktopFiles.empty())
+        {
+            if (numPinsFailedToExtract == 0)
+            {
+                logger->writeFormatted(L"\nExtracted pinning info for all apps.\n");
+            }
+            else
+            {
+                logger->writeFormatted(
+                    L"\nExtracted pinning info for {} apps. Failed to extract for {} apps.\n",
+                    numPinsExtracted, numPinsFailedToExtract);
             }
         }
 
@@ -113,12 +158,12 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
     }
     catch (WStringException const& e)
     {
-        std::wcout << e.what() << std::endl;
+        logger->writeFormatted(L"{}\n", e.what());
         return 1;
     }
     catch (std::exception const& e)
     {
-        std::cout << e.what() << std::endl;
+        logger->writeFormatted("{}\n", e.what());
         return 1;
     }
 }

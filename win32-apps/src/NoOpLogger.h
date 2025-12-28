@@ -18,18 +18,18 @@
 
 #pragma once
 
-class Logger;
+#include <exception>
+#include <string>
 
-/**
- * Writes pin.json and icon.png to @p windowsPinDir.
- *
- * @param windowsPinDir The Windows-style directory to write the files to.
- * @param unixOrWindowsPinTargetPath The file to pin. Usually that's going to be an executable or
- *        an .lnk file, but we allow pinning any kind of files.
- * @param logger The logger to use.
- *
- * @throw WStringRuntimeError On failure. The non-existing @p unixOrWindowsPinTargetPath counts
- *        as a failure, while not being able to extract an icon from it, is not.
- */
-void fillPinDirectory(
-    wchar_t const* windowsPinDir, wchar_t const* unixOrWindowsPinTargetPath, Logger& logger);
+#include "NoOpLogger.h"
+
+class NoOpLogger : public Logger
+{
+public:
+    virtual void writeString(std::string const&) override {}
+
+    virtual void writeString(std::wstring const&) override {}
+
+protected:
+    virtual void writeException(std::exception const&) {}
+};
