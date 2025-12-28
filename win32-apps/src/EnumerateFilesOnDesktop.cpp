@@ -47,7 +47,7 @@ enumerateFilesInKnownFolder(REFKNOWNFOLDERID knownFolderId, std::vector<std::wst
     {
         throw WStringRuntimeError(
             std::format(
-                L"SHGetKnownFolderPath(FOLDERID_Desktop) failed: {}",
+                L"SHGetKnownFolderPath(Desktop or PublicDesktop) failed: {}",
                 errorStringFromErrorCode(GetLastError()).get()));
     }
 
@@ -57,13 +57,25 @@ enumerateFilesInKnownFolder(REFKNOWNFOLDERID knownFolderId, std::vector<std::wst
     }
 }
 
-bool
-fileNameLess(std::wstring const& lhsPath, std::wstring const& rhsPath)
+int
+fileNameCompare(std::wstring const& lhsPath, std::wstring const& rhsPath)
 {
     wchar_t const* lhsFileName = PathFindFileNameW(lhsPath.c_str());
     wchar_t const* rhsFileName = PathFindFileNameW(rhsPath.c_str());
 
-    return lstrcmpW(lhsFileName, rhsFileName) < 0;
+    return lstrcmpW(lhsFileName, rhsFileName);
+}
+
+bool
+fileNameLess(std::wstring const& lhsPath, std::wstring const& rhsPath)
+{
+    return fileNameCompare(lhsPath, rhsPath) < 0;
+}
+
+bool
+fileNamesEqual(std::wstring const& lhsPath, std::wstring const& rhsPath)
+{
+    return fileNameCompare(lhsPath, rhsPath) == 0;
 }
 
 } // namespace
@@ -76,9 +88,11 @@ enumerateFilesOnDesktop()
     enumerateFilesInKnownFolder(FOLDERID_Desktop, files);
     enumerateFilesInKnownFolder(FOLDERID_PublicDesktop, files);
 
-    std::sort(files.begin(), files.end(), &fileNameLess);
+    // We do a stable sort in order to always prefer a file on user's Desktop
+    // to an identically named file on Public Desktop.
+    std::stable_sort(files.begin(), files.end(), &fileNameLess);
 
-    files.erase(std::unique(files.begin(), files.end(), &fileNameLess), files.end());
+    files.erase(std::unique(files.begin(), files.end(), &fileNamesEqual), files.end());
 
     return files;
 }
