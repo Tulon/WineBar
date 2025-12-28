@@ -288,6 +288,7 @@ class PinExecutableBloc extends SpecialExecutableBloc {
           winePrefix: winePrefix,
           wineArgs: _buildWineArgs(
             commandLine: commandLine,
+            logsDir: processOutputDir,
             tempPinDir: tempPinDir,
           ),
         ),
@@ -313,6 +314,7 @@ class PinExecutableBloc extends SpecialExecutableBloc {
 
   List<String> _buildWineArgs({
     required List<String> commandLine,
+    required Directory logsDir,
     required Directory tempPinDir,
   }) {
     if (commandLine.isEmpty) {
@@ -323,6 +325,7 @@ class PinExecutableBloc extends SpecialExecutableBloc {
 
     return [
       LocalStoragePaths.pinExecutableInfoExtractorPath,
+      logsDir.path,
       tempPinDir.path,
       executable,
     ];
@@ -389,6 +392,7 @@ class RunInstallerBloc extends SpecialExecutableBloc {
           winePrefix: winePrefix,
           wineArgs: _buildWineArgs(
             commandLine: commandLine,
+            processOutputDir: processOutputDir,
             tempPinsDir: tempPinsDir,
           ),
         ),
@@ -418,10 +422,12 @@ class RunInstallerBloc extends SpecialExecutableBloc {
 
   List<String> _buildWineArgs({
     required List<String> commandLine,
+    required Directory processOutputDir,
     required Directory tempPinsDir,
   }) {
     return [
       LocalStoragePaths.installerRunnerPath,
+      processOutputDir.path,
       tempPinsDir.path,
       ...commandLineToWineArgs(commandLine),
     ];

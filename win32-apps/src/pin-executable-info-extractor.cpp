@@ -17,7 +17,10 @@
  */
 
 #include "CoInitializer.h"
+#include "FileLogger.h"
 #include "FillPinDirectory.h"
+#include "Logger.h"
+#include "NoOpLogger.h"
 #include "ScopeCleanup.h"
 #include "ToWindowsFilePath.h"
 #include "WStringException.h"
@@ -29,7 +32,8 @@
 
 #include <cstdio>
 #include <exception>
-#include <iostream>
+#include <format>
+#include <memory>
 
 extern "C"
 {
@@ -47,30 +51,48 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
 
     ScopeCleanup const argvCleanup([argv] { LocalFree(argv); });
 
-    if (argc < 3)
+    if (argc < 4)
     {
-        wprintf(L"Usage: %ls <unix_pin_dir> <unix_or_windows_executable>\n", argv[0]);
+        wprintf(
+            L"Usage: %ls <unix_log_dir> <unix_pin_dir> <unix_or_windows_executable>\n", argv[0]);
         return 1;
     }
 
-    wchar_t const* unixPinDir = argv[1];
-    wchar_t const* unixOrWindowsExecutable = argv[2];
+    wchar_t const* unixLogsDir = argv[1];
+    wchar_t const* unixPinDir = argv[2];
+    wchar_t const* unixOrWindowsExecutable = argv[3];
+
+    std::unique_ptr<Logger> logger;
+
+    try
+    {
+        // toWindowFilePath() throws if the path doesn't exist.
+        logger = std::make_unique<FileLogger>(
+            std::format(L"{}\\pin-info-extractor.txt", toWindowsFilePath(unixLogsDir)).c_str());
+    }
+    catch (std::exception const& e)
+    {
+        fprintf(stderr, "Failed to create a log file: %s\n", e.what());
+        logger = std::make_unique<NoOpLogger>();
+    }
 
     try
     {
         auto const windowsPinDir = toWindowsFilePath(unixPinDir);
 
-        fillPinDirectory(windowsPinDir.c_str(), unixOrWindowsExecutable);
+        fillPinDirectory(windowsPinDir.c_str(), unixOrWindowsExecutable, *logger);
+
+        logger->writeFormatted(L"Pin information extracted successfully\n");
 
         return 0;
     }
     catch (WStringException const& e)
     {
-        std::wcout << e.what() << std::endl;
+        logger->writeFormatted(L"{}\n", e.what());
     }
     catch (std::exception const& e)
     {
-        std::cout << e.what() << std::endl;
+        logger->writeFormatted("{}\n", e.what());
     }
 
     return 1;

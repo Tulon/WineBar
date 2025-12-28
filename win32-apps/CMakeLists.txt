@@ -23,6 +23,8 @@ add_library(
     src/EscapeAndQuoteJsonString.h
     src/ErrorString.cpp
     src/ErrorString.h
+    src/FileLogger.cpp
+    src/FileLogger.h
     src/FillPinDirectory.cpp
     src/FillPinDirectory.h
     src/IconFromAssociatedApplication.cpp
@@ -37,6 +39,8 @@ add_library(
     src/IconFromPortableExecutable.h
     src/IconFromPortableExecutableOrIcoFile.cpp
     src/IconFromPortableExecutableOrIcoFile.h
+    src/Logger.h
+    src/NoOpLogger.h
     src/PickIconGroupResource.cpp
     src/PickIconGroupResource.h
     src/ResourceNameHolder.cpp
@@ -46,6 +50,8 @@ add_library(
     src/ScopeCleanup.h
     src/SignedIndexIconSelector.cpp
     src/SignedIndexIconSelector.h
+    src/ToUtf8.cpp
+    src/ToUtf8.h
     src/ToWindowsFilePath.cpp
     src/ToWindowsFilePath.h
     src/UnixToWindowsFilePath.cpp

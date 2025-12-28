@@ -249,6 +249,14 @@ class _WineProcessWithLogCapturingRunner implements WineProcess {
       path.join(processOutputDir.path, 'log-capturing-runner.txt'),
     ).readAsBytes().catchError((e) => Uint8List(0));
 
+    final installerRunnerLog = await File(
+      path.join(processOutputDir.path, 'installer-runner.txt'),
+    ).readAsBytes().catchError((e) => Uint8List(0));
+
+    final pinInfoExtractorLog = await File(
+      path.join(processOutputDir.path, 'pin-info-extractor.txt'),
+    ).readAsBytes().catchError((e) => Uint8List(0));
+
     await recursiveDeleteAndLogErrors(processOutputDir);
 
     _completer.complete(
@@ -258,6 +266,8 @@ class _WineProcessWithLogCapturingRunner implements WineProcess {
           ?_maybeBuildLog('STDOUT', stdout),
           ?_maybeBuildLog('STDERR', stderr),
           ?_maybeBuildLog('log-capturing-runner', logCapturingRunnerLog),
+          ?_maybeBuildLog('installer-runner', installerRunnerLog),
+          ?_maybeBuildLog('pin-info-extractor', pinInfoExtractorLog),
         ],
       ),
     );
