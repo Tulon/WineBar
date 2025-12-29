@@ -17,6 +17,8 @@ add_library(
     src/CommandLineBuilder.h
     src/DefaultIconSelector.cpp
     src/DefaultIconSelector.h
+    src/DetectAddedOrUpdatedFilesOnDesktop.cpp
+    src/DetectAddedOrUpdatedFilesOnDesktop.h
     src/EnumerateFilesOnDesktop.cpp
     src/EnumerateFilesOnDesktop.h
     src/EscapeAndQuoteJsonString.cpp
@@ -25,6 +27,7 @@ add_library(
     src/ErrorString.h
     src/FileLogger.cpp
     src/FileLogger.h
+    src/FileOnDesktop.h
     src/FillPinDirectory.cpp
     src/FillPinDirectory.h
     src/IconFromAssociatedApplication.cpp

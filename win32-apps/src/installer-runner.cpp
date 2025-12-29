@@ -17,8 +17,10 @@
  */
 
 #include "CoInitializer.h"
+#include "DetectAddedOrUpdatedFilesOnDesktop.h"
 #include "EnumerateFilesOnDesktop.h"
 #include "FileLogger.h"
+#include "FileOnDesktop.h"
 #include "FillPinDirectory.h"
 #include "Logger.h"
 #include "NoOpLogger.h"
@@ -40,6 +42,7 @@
 #include <iterator>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 extern "C"
@@ -94,38 +97,39 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
         auto const windowsPinsDir = toWindowsFilePath(unixPinsDir);
         auto const windowsExecutable = toWindowsFilePath(unixOrWindowsExecutable);
 
-        std::vector<std::wstring> desktopFilesBefore = enumerateFilesOnDesktop();
-        std::sort(desktopFilesBefore.begin(), desktopFilesBefore.end());
+        std::vector<FileOnDesktop> desktopFilesBefore = enumerateFilesOnDesktop();
 
         int const exitCode = runProcess(windowsExecutable.c_str(), argv + 4, argc - 4, *logger);
 
         logger->writeFormatted(L"Installer finished with status {}.\n", exitCode);
 
-        std::vector<std::wstring> desktopFilesAfter = enumerateFilesOnDesktop();
-        std::sort(desktopFilesAfter.begin(), desktopFilesAfter.end());
+        std::vector<FileOnDesktop> desktopFilesAfter = enumerateFilesOnDesktop();
 
-        std::vector<std::wstring> addedDesktopFiles;
-        std::set_difference(
-            desktopFilesAfter.begin(), desktopFilesAfter.end(), desktopFilesBefore.begin(),
-            desktopFilesBefore.end(), std::back_inserter(addedDesktopFiles));
+        std::vector<FileOnDesktop> const newDesktopFiles = detectAddedOrUpdatedFilesOnDesktop(
+            std::move(desktopFilesBefore), std::move(desktopFilesAfter),
+            /*removeDuplicates=*/true);
 
         logger->writeFormatted(
-            L"Detected {} freshly installed items on the desktop.\n", addedDesktopFiles.size());
+            L"Detected {} added or updated files on the desktop.\n", newDesktopFiles.size());
 
         int numPinsExtracted = 0;
         int numPinsFailedToExtract = 0;
         int pinSubdirNumber = 0;
-        for (auto const& pinTargetFile : addedDesktopFiles)
+        for (FileOnDesktop const& fileOnDesktop : newDesktopFiles)
         {
             ++pinSubdirNumber;
 
             std::wstring const windowsPinSubdir =
                 std::format(L"{}\\{}", windowsPinsDir, pinSubdirNumber);
 
+            std::wstring const pinTargetFilePath = fileOnDesktop.filePath();
+
+            logger->writeFormatted(L"Extracting information from {}.\n", pinTargetFilePath);
+
             try
             {
                 std::filesystem::create_directory(windowsPinSubdir);
-                fillPinDirectory(windowsPinSubdir.c_str(), pinTargetFile.c_str(), *logger);
+                fillPinDirectory(windowsPinSubdir.c_str(), pinTargetFilePath.c_str(), *logger);
                 ++numPinsExtracted;
             }
             catch (WStringException const& e)
@@ -140,17 +144,14 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
             }
         }
 
-        if (!addedDesktopFiles.empty())
+        if (!newDesktopFiles.empty())
         {
-            if (numPinsFailedToExtract == 0)
-            {
-                logger->writeFormatted(L"\nExtracted pinning info for all apps.\n");
-            }
-            else
+            logger->writeFormatted(L"\nExtracted pinning info for {} apps.\n", numPinsExtracted);
+
+            if (numPinsFailedToExtract > 0)
             {
                 logger->writeFormatted(
-                    L"\nExtracted pinning info for {} apps. Failed to extract for {} apps.\n",
-                    numPinsExtracted, numPinsFailedToExtract);
+                    L"Failed to extract pinning info for {} apps.\n", numPinsFailedToExtract);
             }
         }
 
