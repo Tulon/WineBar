@@ -38,7 +38,7 @@ public:
      * Should a file fail to open, prints a message to stderr and becomes
      * a no-op logger.
      */
-    FileLogger(wchar_t const* filePath);
+    explicit FileLogger(wchar_t const* filePath);
 
     ~FileLogger();
 

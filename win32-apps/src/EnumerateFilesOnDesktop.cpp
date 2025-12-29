@@ -26,7 +26,6 @@
 #include <shlwapi.h>
 #include <windows.h>
 
-#include <algorithm>
 #include <filesystem>
 #include <format>
 
@@ -34,7 +33,7 @@ namespace
 {
 
 void
-enumerateFilesInKnownFolder(REFKNOWNFOLDERID knownFolderId, std::vector<std::wstring>& sink)
+enumerateFilesInKnownFolder(REFKNOWNFOLDERID knownFolderId, std::vector<FileOnDesktop>& sink)
 {
     PWSTR desktopFolder = nullptr;
 
@@ -53,46 +52,22 @@ enumerateFilesInKnownFolder(REFKNOWNFOLDERID knownFolderId, std::vector<std::wst
 
     for (auto const& entry : std::filesystem::directory_iterator(desktopFolder))
     {
-        sink.push_back(entry.path().wstring());
+        if (entry.is_regular_file())
+        {
+            sink.emplace_back(entry);
+        }
     }
-}
-
-int
-fileNameCompare(std::wstring const& lhsPath, std::wstring const& rhsPath)
-{
-    wchar_t const* lhsFileName = PathFindFileNameW(lhsPath.c_str());
-    wchar_t const* rhsFileName = PathFindFileNameW(rhsPath.c_str());
-
-    return lstrcmpW(lhsFileName, rhsFileName);
-}
-
-bool
-fileNameLess(std::wstring const& lhsPath, std::wstring const& rhsPath)
-{
-    return fileNameCompare(lhsPath, rhsPath) < 0;
-}
-
-bool
-fileNamesEqual(std::wstring const& lhsPath, std::wstring const& rhsPath)
-{
-    return fileNameCompare(lhsPath, rhsPath) == 0;
 }
 
 } // namespace
 
-std::vector<std::wstring>
+std::vector<FileOnDesktop>
 enumerateFilesOnDesktop()
 {
-    std::vector<std::wstring> files;
+    std::vector<FileOnDesktop> files;
 
     enumerateFilesInKnownFolder(FOLDERID_Desktop, files);
     enumerateFilesInKnownFolder(FOLDERID_PublicDesktop, files);
-
-    // We do a stable sort in order to always prefer a file on user's Desktop
-    // to an identically named file on Public Desktop.
-    std::stable_sort(files.begin(), files.end(), &fileNameLess);
-
-    files.erase(std::unique(files.begin(), files.end(), &fileNamesEqual), files.end());
 
     return files;
 }

@@ -18,12 +18,13 @@
 
 #pragma once
 
-#include <string>
+#include "FileOnDesktop.h"
+
 #include <vector>
 
 /**
- * Returns the list files in the Desktop folder. The full paths to files are returned.
+ * Returns the files in the Desktop and the Public Desktop folders.
  *
- * @throw WStringRuntimeError If anything goes wrong.
+ * @throw WStringException or std::exception If anything goes wrong.
  */
-std::vector<std::wstring> enumerateFilesOnDesktop();
+std::vector<FileOnDesktop> enumerateFilesOnDesktop();
