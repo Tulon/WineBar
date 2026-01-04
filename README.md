@@ -64,9 +64,22 @@ Another option is the [AppImageLauncher](https://github.com/TheAssassin/AppImage
 
 First, install Flutter (which also installs Dart) by following the [official instructions](https://docs.flutter.dev/install). In addition to the prerequisite packages listed in the installation instructions, I also had to install the following ones: `cmake`, `ninja` (`ninja-build` on Ubuntu), `clang++`, `gtk3-devel` (`libgtk-3-dev` on Ubuntu).
 
-Don't install Flutter from Snap, as it brings an old version of CMake with it, while we need a newer version for building our C/C++ helper tools. However, we do use Flutter from Snap in CI. See [here](.github/workflows/build.yml) how we workaround the issue with CMake.
+Don't install Flutter from Snap, see below why.
 
-This project builds some helper tools written in C and C++, including cross-compiled Win32 executables, so we need some additional dependencies to be able to build them:
+### The Flutter from Snap
+
+In general, using the Flutter from Snap to build Flutter software on Linux is a good idea, as that makes your app compatible with older distros. In practice though, the Flutter from Snap can't be used to build Wine Bar, as Wine Bar also builds some C and C++ helper tools (some of them cross-compiled to Win32) that have some special needs:
+
+1. They need a newer version of CMake than the one provided (and imposed on you) by the Flutter Snap.
+2. One of the helper tools uses the Vulkan API and so needs the `libvulkan-dev` package to be included as part of the Flutter Snap.
+
+Therefore, for development, I suggest simply installing the upstream version of Flutter, as mentioned above. For distribution though, we do want compatibility with older distros, as provided by the Flutter from Snap. The solution adopted by Wine Bar is to fork the [Flutter Snap](https://github.com/canonical/flutter-snap) and build and install it as part of the Wine Bar CI build process. See [here](.github/workflows/build.yml) for more details.
+
+Another option would be doing a Docker build on an older distro or a regular build on an older Github Actions runner. Unfortunately, that option is also problematic, as our cross-compiled Win32 helper tools happen to use C++23, which is simply not available on older distros.
+
+### Additional Dependencies
+
+The helper tools we build require some additional dependencies:
 
 On Debian-based distros:
 ```bash
@@ -78,7 +91,9 @@ On Fedora-based distros:
 sudo dnf install mingw32-gcc-c++ mingw32-binutils vulkan-loader-devel
 ```
 
-Now, we are ready to build Wine Bar itself:
+### Making a Build
+
+Now, we are ready to build Wine Bar:
 
 ```bash
 cd <project_folder>
@@ -86,7 +101,7 @@ flutter pub get
 flutter build linux --release
 ```
 
-And we are done!
+The build will go to `<project_folder>/build/linux/$arch/release/bundle`.
 
 ### Building an AppImage
 
@@ -94,6 +109,8 @@ And we are done!
 cd <project_folder>
 ./packaging/scripts/build_appimage.sh <x64|arm64>
 ```
+
+The AppImage will end up in `<project_folder>/build/linux/$arch/release`.
 
 ### Regenerating the Generated Files
 

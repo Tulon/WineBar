@@ -41,34 +41,57 @@ jobs:
   build-x64:
     name: Build
     runs-on: ${{ inputs.runs-on }}
-    timeout-minutes: 20
+    timeout-minutes: 40
 
     steps:
+      - name: Install and configure snapcraft
+        run: |
+          sudo snap install snapcraft --classic
+          sudo snap set snapcraft provider=lxd
+      
+      - name: Install and configure LXD
+        run: |
+          sudo snap install lxd
+          sudo lxd init --auto
+
+          # From here: https://documentation.ubuntu.com/lxd/latest/howto/network_bridge_firewalld/#prevent-connectivity-issues-with-lxd-and-docker
+          sudo iptables -I DOCKER-USER -i lxdbr0 -j ACCEPT
+          sudo ip6tables -I DOCKER-USER -i lxdbr0 -j ACCEPT
+          sudo iptables  -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+          sudo ip6tables -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+      - name: Check out the winebar-flutter-snap repo
+        uses: actions/checkout@v5
+        with:
+          repository: Tulon/winebar-flutter-snap
+          ref: winebar
+      
+      - name: Build the winebar-flutter snap
+        run: |
+          sudo usermod -a -G lxd $USER
+
+          # newgrp doesn't work in Github Actions, though sg does.
+          sg lxd -c "snapcraft pack -o winebar-flutter.snap"
+
+      # This one is usefull for debugging
+      #- name: Upload the built winebar-flutter snap
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: "winebar-flutter-${{ inputs.arch }}.snap"
+      #    path: "winebar-flutter.snap"
+      #    if-no-files-found: error
+
+      - name: Instal the winebar-flutter snap
+        run: |
+          sudo snap install winebar-flutter.snap --classic --dangerous
+          sudo snap alias winebar-flutter.dart dart
+          sudo snap alias winebar-flutter.flutter flutter
+
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get -y install mingw-w64-i686-dev g++-mingw-w64-i686 binutils-mingw-w64-i686 \
-            libgtk-3-dev libglu1-mesa curl git unzip xz-utils zip ninja-build desktop-file-utils
-
-      # Installing Flutter from snap means we can't control the version we are installing,
-      # but on the positive side, the version from snap comes with older glib / gtk / whatever,
-      # so the binaries it builds are able to run on older distros.
-      - name: Install Flutter SDK
-        run: sudo snap install flutter --classic
-
-      # Unfortunately, Flutter from snap brings an old version of CMake with it. We build
-      # a few C/C++ utilities in addition to our Flutter app and we need CMake 3.28 at least.
-      # To overcome this issue, we download and extract a newer version of CMake and overlay
-      # it on top of the Flutter installation from snap.
-      - name: Overlay a newer CMake on top of the one that comes with Flutter SDK
-        run: |
-          rm -rf ~/cmake ~/cmake-inst
-          mkdir -p ~/cmake ~/cmake-inst
-          cd ~/cmake
-          URL="https://github.com/Kitware/CMake/releases/download/v3.28.0/cmake-3.28.0-linux-$(uname -m).tar.gz"
-          curl -L -O "$URL"  # The -O flag saves the file with the original name from the URL
-          tar --strip-components=1 -axf * -C ~/cmake-inst/
-          sudo mount -t overlay overlay -o lowerdir=$HOME/cmake-inst:/snap/flutter/current/usr /snap/flutter/current/usr/
+            ninja-build desktop-file-utils
 
       # This is necessary to be able to run the tools we use for code generation
       - name: Add $HOME/.pub-cache/bin to PATH
@@ -97,8 +120,14 @@ jobs:
           fi
 
       - name: Build AppImage
+        id: build-appimage
         run: |
           ./packaging/scripts/build_appimage.sh ${{ inputs.arch }} ${{ inputs.version }}
+
+      - name: Run ninja manually on a failed build to get better diagnostics 
+        if: failure() && steps.build-appimage.outcome == 'failure'
+        working-directory: ./build/linux/${{ inputs.arch }}/release
+        run: ninja
 
       - name: Run Native Code Tests
         env:
