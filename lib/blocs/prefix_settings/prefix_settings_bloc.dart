@@ -153,7 +153,7 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
         runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
       );
 
-      // Write a new prefox.json file.
+      // Write a new prefix.json file.
       await File(
         prefix.dirStructure.prefixJsonFilePath,
       ).writeAsString(prefix.descriptor.toJsonString());

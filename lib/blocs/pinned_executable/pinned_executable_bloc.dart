@@ -46,7 +46,14 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
     required this.startupData,
     required this.winePrefix,
     required this.pinnedExecutable,
-  }) : super(PinnedExecutableState.defaultState()) {
+    required bool isContextMenuOpen,
+  }) : super(
+         PinnedExecutableState(
+           isRunning: false,
+           isContextMenuOpen: isContextMenuOpen,
+           isMouseOver: false,
+         ),
+       ) {
     final runningProcess = runningPinnedExecutablesRepo.tryFindRunningProcess(
       prefix: winePrefix,
       slot: pinnedExecutable,
@@ -102,8 +109,16 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
     );
   }
 
+  void setContextMenuOpen(bool contextMenuOpen) {
+    if (contextMenuOpen != state.isContextMenuOpen) {
+      emit(state.copyWith(isContextMenuOpen: contextMenuOpen));
+    }
+  }
+
   void setMouseOver(bool mouseOver) {
-    emit(state.copyWith(mouseOver: mouseOver));
+    if (mouseOver != state.isMouseOver) {
+      emit(state.copyWith(isMouseOver: mouseOver));
+    }
   }
 
   void killProcessIfRunning() {
@@ -171,9 +186,10 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
           pinnedExecutable.windowsPathToExecutable,
         ),
       ),
-      envVars: wineInstDescriptor.getEnvVarsForWine(
+      envVars: await wineInstDescriptor.getEnvVarsForWine(
         winePrefix: winePrefix,
         processOutputDir: processOutputDir.path,
+        pinnedExecutableSettings: pinnedExecutable.settings,
         forWinetricks: false,
 
         // For maximum performance, we disable capturing logs from pinned

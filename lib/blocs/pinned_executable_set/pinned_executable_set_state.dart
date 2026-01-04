@@ -155,24 +155,71 @@ class PinnedExecutableSetState extends Equatable {
   /// Asynchronously returns a new [PinnedExecutableSetState] with a new
   /// pinned executable added to the list of pinned executables at the correct
   /// position, which is determined by the order imposed by
-  /// [PinnedExecutable.compareTo]. This method won't try to remove an
-  /// existing pinned executable pointing to the same location on disk,
-  /// should one exist.
-  Future<PinnedExecutableSetState> copyWithAdditionalPinnedExecutable(
-    PinnedExecutable newPinInTempPinDir,
-  ) async {
+  /// [PinnedExecutable.compareTo].
+  ///
+  /// The contents of the pin directory referenced by
+  /// [executablePinnedInTempDir] will get moved a new location and the
+  /// original pin directory will get deleted.
+  ///
+  /// This method won't try to remove an existing pinned executable pointing
+  /// to the same location on disk, should one exist. The correct way of using
+  /// this method is to call [copyWithPinnedExecutableRemoved] first.
+  Future<PinnedExecutableSetState> copyWithNewPinnedExecutable({
+    required PinnedExecutable executablePinnedInTempDir,
+    bool animatedInsertion = true,
+  }) async {
     final pinNumber = largestPinNumber + 1;
     final pinDirectory = Directory(path.join(pinsDir, pinNumber.toString()));
 
     await pinDirectory.create(recursive: true);
-    final newExecutable = await newPinInTempPinDir.copyToAnotherPinDirectory(
-      pinDirectory.path,
-    );
+    final newExecutable = await executablePinnedInTempDir
+        .copyToAnotherPinDirectory(pinDirectory.path);
 
     await recursiveDeleteAndLogErrors(
-      Directory(newPinInTempPinDir.pinDirectory),
+      Directory(executablePinnedInTempDir.pinDirectory),
     );
 
+    return _copyWithNewPreparedPinnedExecutable(
+      preparedPinnedExecutable: newExecutable,
+      largestPinNumber: pinNumber,
+      animatedInsertion: animatedInsertion,
+    );
+  }
+
+  /// Asynchronously returns a new [PinnedExecutableSetState] with a new
+  /// pinned executable added to the list of pinned executables at the correct
+  /// position, which is determined by the order imposed by
+  /// [PinnedExecutable.compareTo].
+  ///
+  /// It is assumed that the original version of the pinned executable has
+  /// already been removed with [copyWithPinnedExecutableRemoved], with the
+  /// [removePinDirectory] argument set to false. It's also assumed that
+  /// [PinnedExecutable.updateOnDisk] has already been called on
+  /// [updatedPinnedExecutable].
+  Future<PinnedExecutableSetState>
+  copyWithUpdatedPinnedExecutableTreatedAsNewOne({
+    required PinnedExecutable updatedPinnedExecutable,
+    bool animatedInsertion = true,
+  }) {
+    return _copyWithNewPreparedPinnedExecutable(
+      preparedPinnedExecutable: updatedPinnedExecutable,
+      largestPinNumber: largestPinNumber,
+      animatedInsertion: animatedInsertion,
+    );
+  }
+
+  /// Asynchronously returns a new [PinnedExecutableSetState] with a new
+  /// pinned executable added to the list of pinned executables at the correct
+  /// position, which is determined by the order imposed by
+  /// [PinnedExecutable.compareTo].
+  ///
+  /// By "prepared" we mean the pin directory has already been created under
+  /// [pinsDir] and populated properly.
+  Future<PinnedExecutableSetState> _copyWithNewPreparedPinnedExecutable({
+    required PinnedExecutable preparedPinnedExecutable,
+    required int largestPinNumber,
+    required bool animatedInsertion,
+  }) async {
     final newOrderedPinnedExecutables = <PinnedExecutable>[];
     PinnedExecutableListEvent? newPinnedExecutableListEvent;
     bool newExecutableAdded = false;
@@ -180,8 +227,9 @@ class PinnedExecutableSetState extends Equatable {
     void addNewExecutable() {
       newPinnedExecutableListEvent = PinnedExecutableAddedEvent(
         pinnedExecutableIndex: newOrderedPinnedExecutables.length,
+        animatedInsertion: animatedInsertion,
       );
-      newOrderedPinnedExecutables.add(newExecutable);
+      newOrderedPinnedExecutables.add(preparedPinnedExecutable);
       newExecutableAdded = true;
     }
 
@@ -193,7 +241,7 @@ class PinnedExecutableSetState extends Equatable {
       if (newExecutableAdded) {
         addExistingExecutable(existingExecutable);
       } else {
-        if (existingExecutable.compareTo(newExecutable) > 0) {
+        if (existingExecutable.compareTo(preparedPinnedExecutable) > 0) {
           // This existing executable should go after the new one, so
           // given that we haven't added the new executable yet, we
           // add it now, followed by the existing one.
@@ -210,18 +258,27 @@ class PinnedExecutableSetState extends Equatable {
     return copyWith(
       orderedPinnedExecutables: newOrderedPinnedExecutables,
       pinnedExecutableListEventGetter: () => newPinnedExecutableListEvent,
-      largestPinNumber: pinNumber,
+      largestPinNumber: largestPinNumber,
     );
   }
 
   /// Asynchronously returns a new [PinnedExecutableSetState] with a single
   /// pinned executable matching the provided [withdowsPathToExecutable]
-  /// removed. The paths are compared in a case-insensitive manner.
+  /// removed.
+  ///
+  /// The [removePinDirectory] argument specifies whether to delete the
+  /// pin directory. The only scenario where you don't want to do that is
+  /// when [copyWithUpdatedPinnedExecutableTreatedAsNewOne] is going to be
+  /// called next.
+  ///
+  /// The paths are compared in a case-insensitive manner.
   /// If no pinned executable matches the provided path,
   /// [pinnedExecutableListEvent] is going to be null. This method won't try
   /// to match more than one existing pinned executable to the provided path.
   Future<PinnedExecutableSetState> copyWithPinnedExecutableRemoved({
     required String windowsPathToExecutable,
+    bool removePinDirectory = true,
+    bool animatedRemoval = true,
   }) async {
     final executableToRemoveLowerCasePath = windowsPathToExecutable
         .toLowerCase();
@@ -238,10 +295,14 @@ class PinnedExecutableSetState extends Equatable {
         newPinnedExecutableListEvent = PinnedExecutableRemovedEvent(
           pinnedExecutableIndex: newOrderedPinnedExecutables.length,
           removedPinnedExecutable: existingExecutable,
+          animatedRemoval: animatedRemoval,
         );
-        await recursiveDeleteAndLogErrors(
-          Directory(existingExecutable.pinDirectory),
-        );
+
+        if (removePinDirectory) {
+          await recursiveDeleteAndLogErrors(
+            Directory(existingExecutable.pinDirectory),
+          );
+        }
       }
     }
 

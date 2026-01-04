@@ -28,10 +28,15 @@ class PinnedExecutableAddedEvent extends Equatable
   /// The zero-based index of the pinned executable that was just added.
   final int pinnedExecutableIndex;
 
-  const PinnedExecutableAddedEvent({required this.pinnedExecutableIndex});
+  final bool animatedInsertion;
+
+  const PinnedExecutableAddedEvent({
+    required this.pinnedExecutableIndex,
+    required this.animatedInsertion,
+  });
 
   @override
-  List<Object?> get props => [pinnedExecutableIndex];
+  List<Object?> get props => [pinnedExecutableIndex, animatedInsertion];
 }
 
 @immutable
@@ -42,11 +47,18 @@ class PinnedExecutableRemovedEvent extends Equatable
 
   final PinnedExecutable removedPinnedExecutable;
 
+  final bool animatedRemoval;
+
   const PinnedExecutableRemovedEvent({
     required this.pinnedExecutableIndex,
     required this.removedPinnedExecutable,
+    required this.animatedRemoval,
   });
 
   @override
-  List<Object> get props => [pinnedExecutableIndex, removedPinnedExecutable];
+  List<Object> get props => [
+    pinnedExecutableIndex,
+    removedPinnedExecutable,
+    animatedRemoval,
+  ];
 }

@@ -21,6 +21,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:winebar/models/gpu_info.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
@@ -83,6 +84,9 @@ void main() {
       dbusClient: dbusClient,
       runningWineProcessesTracker: runningWineProcessesTracker,
     ),
+  );
+  GetIt.I.registerSingletonAsync<List<GpuInfo>>(
+    GpuInfo.loadListOfAvailableGpus,
   );
 
   runApp(TopLevelWidget());

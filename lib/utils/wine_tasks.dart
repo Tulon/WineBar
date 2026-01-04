@@ -97,9 +97,10 @@ Future<WineProcess> _startWineProcess<SlotType>({
       winePrefix: winePrefix,
       wineArgs: wineArgs,
     ),
-    envVars: wineInstDescriptor.getEnvVarsForWine(
+    envVars: await wineInstDescriptor.getEnvVarsForWine(
       winePrefix: winePrefix,
       processOutputDir: processOutputDir.path,
+      pinnedExecutableSettings: null,
       forWinetricks: false,
       disableLogs: false,
     ),

@@ -88,7 +88,7 @@ class PrefixSettingsDialog extends StatelessWidget {
                                           color: theme.colorScheme.primary,
                                         ),
                                       ),
-                                      TextSpan(text: ' Settings '),
+                                      TextSpan(text: ' Settings'),
                                     ],
                                   ),
                                 ),

@@ -1,0 +1,78 @@
+---
+AlignAfterOpenBracket: AlwaysBreak
+BreakBeforeBraces: Custom
+BraceWrapping:
+  BeforeElse: true
+  AfterFunction: true
+  AfterEnum: true
+  AfterControlStatement: Always
+  AfterClass: true
+  AfterCaseLabel: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeLambdaBody: true
+  BeforeWhile: true
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: true
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+BreakAfterAttributes: Always
+ColumnLimit: 100
+Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+EmptyLineBeforeAccessModifier: Always
+FixNamespaceComments: true
+IncludeBlocks: Preserve
+IndentWidth: 4
+IndentWrappedFunctionNames: false
+InsertBraces: true
+IndentCaseBlocks: false
+IndentAccessModifiers: false
+AccessModifierOffset: -4
+BinPackArguments: true
+BinPackParameters: true
+BreakArrays: false
+BreakBeforeBinaryOperators: None
+BreakBeforeTernaryOperators: true
+BreakStringLiterals: true
+ContinuationIndentWidth: 4
+EmptyLineAfterAccessModifier: Never
+ExperimentalAutoDetectBinPacking: false
+InsertNewlineAtEOF: true
+NamespaceIndentation: None
+PackConstructorInitializers: Never
+PointerAlignment: Left
+QualifierAlignment: Right
+ReferenceAlignment: Left
+RemoveSemicolon: true
+SeparateDefinitionBlocks: Always
+SortIncludes: CaseSensitive
+SpaceBeforeParens: ControlStatementsExceptControlMacros
+Standard: Latest
+AlignOperands: DontAlign
+AllowShortBlocksOnASingleLine : Empty
+AllowShortLambdasOnASingleLine: Inline
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+AlwaysBreakTemplateDeclarations: Yes
+CompactNamespaces: false
+IndentCaseLabels: false
+IndentExternBlock: NoIndent
+IndentGotoLabels: true
+IndentPPDirectives: AfterHash
+IndentRequiresClause: true
+ReflowComments: true
+UseTab: Never
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortIfStatementsOnASingleLine: Never
+AlwaysBreakBeforeMultilineStrings: true
+LineEnding: LF
+PenaltyIndentedWhitespace: 16
+SpaceAfterTemplateKeyword: false

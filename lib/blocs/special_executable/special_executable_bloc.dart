@@ -218,9 +218,10 @@ abstract class RegularSpecialExecutableBloc extends SpecialExecutableBloc {
         winePrefix: winePrefix,
         wineArgs: commandLineToWineArgs(commandLine),
       ),
-      envVars: wineInstDescriptor.getEnvVarsForWine(
+      envVars: await wineInstDescriptor.getEnvVarsForWine(
         winePrefix: winePrefix,
         processOutputDir: processOutputDir.path,
+        pinnedExecutableSettings: null,
         forWinetricks: false,
         disableLogs: false,
       ),
@@ -292,9 +293,10 @@ class PinExecutableBloc extends SpecialExecutableBloc {
             tempPinDir: tempPinDir,
           ),
         ),
-        envVars: wineInstDescriptor.getEnvVarsForWine(
+        envVars: await wineInstDescriptor.getEnvVarsForWine(
           winePrefix: winePrefix,
           processOutputDir: processOutputDir.path,
+          pinnedExecutableSettings: null,
           forWinetricks: false,
           disableLogs: false,
         ),
@@ -396,9 +398,10 @@ class RunInstallerBloc extends SpecialExecutableBloc {
             tempPinsDir: tempPinsDir,
           ),
         ),
-        envVars: wineInstDescriptor.getEnvVarsForWine(
+        envVars: await wineInstDescriptor.getEnvVarsForWine(
           winePrefix: winePrefix,
           processOutputDir: processOutputDir.path,
+          pinnedExecutableSettings: null,
           forWinetricks: false,
           disableLogs: false,
         ),
@@ -502,9 +505,10 @@ class WinetricksExecutableBloc extends SpecialExecutableBloc {
         externalWinetricksScriptPath: externalWinetricksScriptPath,
         winetricksArgs: commandLine,
       ),
-      envVars: wineInstDescriptor.getEnvVarsForWine(
+      envVars: await wineInstDescriptor.getEnvVarsForWine(
         winePrefix: winePrefix,
         processOutputDir: processOutputDir.path,
+        pinnedExecutableSettings: null,
         forWinetricks: true,
         disableLogs: false,
       ),

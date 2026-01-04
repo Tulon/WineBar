@@ -64,6 +64,7 @@ class PinnedExecutableSetBloc extends Cubit<PinnedExecutableSetState> {
               .copyWithPinnedExecutableRemoved(
                 windowsPathToExecutable:
                     executablePinnedInTempDir.windowsPathToExecutable,
+                animatedRemoval: false,
               );
 
           if (isClosed) {
@@ -76,7 +77,9 @@ class PinnedExecutableSetBloc extends Cubit<PinnedExecutableSetState> {
           }
 
           final stateWithNewExecutableAdded = await state
-              .copyWithAdditionalPinnedExecutable(executablePinnedInTempDir);
+              .copyWithNewPinnedExecutable(
+                executablePinnedInTempDir: executablePinnedInTempDir,
+              );
 
           if (isClosed) {
             return;
@@ -121,6 +124,61 @@ class PinnedExecutableSetBloc extends Cubit<PinnedExecutableSetState> {
         .catchError((e, stackTrace) {
           logger.e(
             'Failed to unpin an executable',
+            error: e,
+            stackTrace: stackTrace,
+          );
+        });
+
+    return _lastPinUnpinOperationCompletion;
+  }
+
+  /// Updates an existing pinned executable. The
+  /// [updatedPinnedExecutable.pinDirectory] is assumed to be valid. This method
+  /// will overwrite the pin.json file in that directory.
+  Future<void> updatePinnedExecutable(
+    PinnedExecutable updatedPinnedExecutable,
+  ) {
+    _lastPinUnpinOperationCompletion = _lastPinUnpinOperationCompletion
+        .then((_) async {
+          if (isClosed) {
+            return;
+          }
+
+          // Write a new pin.json file, overwriting the existing one.
+          await updatedPinnedExecutable.updateOnDisk();
+
+          final stateWithExistingExecutableRemoved = await state
+              .copyWithPinnedExecutableRemoved(
+                windowsPathToExecutable:
+                    updatedPinnedExecutable.windowsPathToExecutable,
+                removePinDirectory: false,
+                animatedRemoval: false,
+              );
+
+          if (isClosed) {
+            return;
+          }
+
+          if (stateWithExistingExecutableRemoved.pinnedExecutableListEvent !=
+              null) {
+            emit(stateWithExistingExecutableRemoved);
+          }
+
+          final stateWithPinnedExecutableUpdated = await state
+              .copyWithUpdatedPinnedExecutableTreatedAsNewOne(
+                updatedPinnedExecutable: updatedPinnedExecutable,
+                animatedInsertion: false,
+              );
+
+          if (isClosed) {
+            return;
+          }
+
+          emit(stateWithPinnedExecutableUpdated);
+        })
+        .catchError((e, stackTrace) {
+          logger.e(
+            'Failed to update a pinned executable',
             error: e,
             stackTrace: stackTrace,
           );
