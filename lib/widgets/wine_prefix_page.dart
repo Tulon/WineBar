@@ -488,8 +488,8 @@ class _PinnedAppsGridState extends State<_PinnedExecutablesGridWidget> {
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         mainAxisExtent: PinnedExecutableWidget.maxHeight,
         maxCrossAxisExtent: PinnedExecutableWidget.fixedWidth,
-        mainAxisSpacing: 8.0,
-        crossAxisSpacing: 8.0,
+        mainAxisSpacing: 16.0,
+        crossAxisSpacing: 16.0,
       ),
       initialItemCount: state.orderedPinnedExecutables.length,
       itemBuilder: (context, index, animation) {
