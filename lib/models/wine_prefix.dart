@@ -21,21 +21,21 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 
-import '../utils/prefix_descriptor.dart';
+import 'prefix_descriptor.dart';
 
 typedef WinePrefixCreatedCallback = void Function(WinePrefix prefix);
 
 @immutable
 class WinePrefix extends Equatable implements Comparable<WinePrefix> {
   final WinePrefixDirStructure dirStructure;
-  final PrefixDescriptor descriptor;
+  final WinePrefixDescriptor descriptor;
 
   const WinePrefix({required this.dirStructure, required this.descriptor});
 
   WinePrefix.broken({required String outerDir})
     : this(
         dirStructure: WinePrefixDirStructure.fromOuterDir(outerDir),
-        descriptor: PrefixDescriptor.brokenPrefix(
+        descriptor: WinePrefixDescriptor.brokenPrefix(
           name: '${path.basename(outerDir)} (broken)',
         ),
       );
@@ -45,7 +45,7 @@ class WinePrefix extends Equatable implements Comparable<WinePrefix> {
   @override
   List<Object> get props => [dirStructure, descriptor];
 
-  /// Compares by [PrefixDescriptor.name] and then by [WinePrefixDirStructure.outerDir].
+  /// Compares by [WinePrefixDescriptor.name] and then by [WinePrefixDirStructure.outerDir].
   @override
   int compareTo(WinePrefix other) {
     final nameComp = descriptor.name.compareTo(other.descriptor.name);
@@ -58,7 +58,7 @@ class WinePrefix extends Equatable implements Comparable<WinePrefix> {
 
   WinePrefix copyWith({
     WinePrefixDirStructure? dirStructure,
-    PrefixDescriptor? descriptor,
+    WinePrefixDescriptor? descriptor,
   }) {
     return WinePrefix(
       dirStructure: dirStructure ?? this.dirStructure,

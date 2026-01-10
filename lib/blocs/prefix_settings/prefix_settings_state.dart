@@ -19,6 +19,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:winebar/models/d3d_8_to_11_implementation.dart';
 import 'package:winebar/models/settings_json_file.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/services/app_settings_service.dart';
@@ -27,10 +28,26 @@ import 'package:winebar/utils/startup_data.dart';
 
 enum PrefixUpdateStatus {
   notStarted,
+  starting,
   validationFailed,
-  inProgress,
+  downloadingAndExtractingDxvk,
+  updatingPrefix,
   failed,
-  succeeded,
+  succeeded;
+
+  bool get isInProgress {
+    switch (this) {
+      case notStarted:
+      case validationFailed:
+      case failed:
+      case succeeded:
+        return false;
+      case starting:
+      case downloadingAndExtractingDxvk:
+      case updatingPrefix:
+        return true;
+    }
+  }
 }
 
 @immutable
@@ -56,24 +73,37 @@ class PrefixSettingsState extends Equatable {
   /// this value plays no role.
   final bool wow64ModePreferenceWarningToBeSuppressed;
 
+  final bool useParticularD3d8To11Implementation;
+  final D3d8To11Implementation selectedD3d8To11Implementation;
+
   final PrefixUpdateStatus prefixUpdateStatus;
   final String? prefixUpdateFailureMessage;
   final WineProcessResult? prefixUpdateFailedProcessResult;
+
+  /// Corresponds to a progress (between 0 and 1) in those states
+  /// where [PrefixUpdateStatus.isInProgress] is true. A null value
+  /// is allowed in those states and indicates the exact progress
+  /// is not available.
+  final double? prefixUpdateStepProgress;
 
   const PrefixSettingsState({
     required this.hiDpiScale,
     required this.wow64ModePreferred,
     required this.wow64ModePreferenceWarning,
     required this.wow64ModePreferenceWarningToBeSuppressed,
+    required this.useParticularD3d8To11Implementation,
+    required this.selectedD3d8To11Implementation,
     required this.prefixUpdateStatus,
     required this.prefixUpdateFailureMessage,
     required this.prefixUpdateFailedProcessResult,
+    required this.prefixUpdateStepProgress,
   });
 
   PrefixSettingsState.initialState({
     required StartupData startupData,
     required double? hiDpiScale,
     required bool? wow64ModePreferred,
+    required D3d8To11Implementation? d3d8To11Implementation,
   }) : this(
          hiDpiScale: hiDpiScale,
          wow64ModePreferred: wow64ModePreferred,
@@ -82,9 +112,13 @@ class PrefixSettingsState extends Equatable {
            wow64ModeSelected: wow64ModePreferred,
          ),
          wow64ModePreferenceWarningToBeSuppressed: false,
+         useParticularD3d8To11Implementation: d3d8To11Implementation != null,
+         selectedD3d8To11Implementation:
+             d3d8To11Implementation ?? D3d8To11Implementation.dxvk,
          prefixUpdateStatus: PrefixUpdateStatus.notStarted,
          prefixUpdateFailureMessage: null,
          prefixUpdateFailedProcessResult: null,
+         prefixUpdateStepProgress: null,
        );
 
   @override
@@ -93,9 +127,12 @@ class PrefixSettingsState extends Equatable {
     wow64ModePreferred,
     wow64ModePreferenceWarning,
     wow64ModePreferenceWarningToBeSuppressed,
+    useParticularD3d8To11Implementation,
+    selectedD3d8To11Implementation,
     prefixUpdateStatus,
     prefixUpdateFailureMessage,
     prefixUpdateFailedProcessResult,
+    prefixUpdateStepProgress,
   ];
 
   PrefixSettingsState copyWith({
@@ -103,9 +140,12 @@ class PrefixSettingsState extends Equatable {
     ValueGetter<bool?>? wow64ModePreferredGetter,
     ValueGetter<WineArchWarning?>? wow64ModePreferenceWarningGetter,
     bool? wow64ModePreferenceWarningToBeSuppressed,
+    bool? useParticularD3d8To11Implementation,
+    D3d8To11Implementation? selectedD3d8To11Implementation,
     PrefixUpdateStatus? prefixUpdateStatus,
     ValueGetter<String?>? prefixUpdateFailureMessageGetter,
     ValueGetter<WineProcessResult?>? prefixUpdateFailedProcessResultGetter,
+    ValueGetter<double?>? prefixUpdateStepProgressGetter,
   }) {
     return PrefixSettingsState(
       hiDpiScale: hiDpiScaleGetter != null ? hiDpiScaleGetter() : hiDpiScale,
@@ -118,6 +158,11 @@ class PrefixSettingsState extends Equatable {
       wow64ModePreferenceWarningToBeSuppressed:
           wow64ModePreferenceWarningToBeSuppressed ??
           this.wow64ModePreferenceWarningToBeSuppressed,
+      useParticularD3d8To11Implementation:
+          useParticularD3d8To11Implementation ??
+          this.useParticularD3d8To11Implementation,
+      selectedD3d8To11Implementation:
+          selectedD3d8To11Implementation ?? this.selectedD3d8To11Implementation,
       prefixUpdateStatus: prefixUpdateStatus ?? this.prefixUpdateStatus,
       prefixUpdateFailureMessage: prefixUpdateFailureMessageGetter != null
           ? prefixUpdateFailureMessageGetter()
@@ -126,6 +171,9 @@ class PrefixSettingsState extends Equatable {
           prefixUpdateFailedProcessResultGetter != null
           ? prefixUpdateFailedProcessResultGetter()
           : prefixUpdateFailedProcessResult,
+      prefixUpdateStepProgress: prefixUpdateStepProgressGetter != null
+          ? prefixUpdateStepProgressGetter()
+          : prefixUpdateStepProgress,
     );
   }
 

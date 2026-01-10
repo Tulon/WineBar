@@ -29,6 +29,7 @@ import 'package:winebar/models/process_output.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_build_source.dart';
 import 'package:winebar/utils/startup_data.dart';
+import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 import 'package:winebar/widgets/process_output_widget.dart';
 import 'package:winebar/widgets/warning_widget.dart';
@@ -618,8 +619,12 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
         case PrefixCreationStatus.failed:
         case PrefixCreationStatus.succeeded:
           return 'Create Prefix';
+        case PrefixCreationStatus.starting:
+          return 'Starting ...';
         case PrefixCreationStatus.downloadingAndExtractingWineBuild:
           return 'Downloading and Extracting ...';
+        case PrefixCreationStatus.downloadingAndExtractingDxvk:
+          return 'Downloading and Extracting DXVK ...';
         case PrefixCreationStatus.creatingWinePrefix:
           return 'Creating Wine Prefix ...';
       }
@@ -672,6 +677,15 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
               onWarningToBeSuppressedToggled:
                   bloc.setWow64ModePreferenceWarningToBeSuppressed,
             ),
+          D3d8To11ImplementationSelectionWidget(
+            enabled: !state.prefixCreationStatus.isInProgress,
+            useParticularImplementation:
+                state.useParticularD3d8To11Implementation,
+            onUseParticularImplementationToggled:
+                bloc.setUseParticularD3d8To11Implementation,
+            selectedImplementation: state.selectedD3d8To11Implementation,
+            onImplementationSelected: bloc.setSelectedD3d8To11Implementation,
+          ),
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -700,7 +714,7 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
                         strokeWidth: 3.0,
                         padding: EdgeInsets.all(12.0),
                         value: state.prefixCreationStatus.isInProgress
-                            ? state.prefixCreationOperationProgress
+                            ? state.prefixCreationStepProgress
                             : null,
                       ),
                     )

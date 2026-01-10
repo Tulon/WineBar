@@ -22,23 +22,28 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/generic_exception.dart';
+import 'package:winebar/models/d3d_8_to_11_implementation.dart';
 import 'package:winebar/models/gpu_info.dart';
 import 'package:winebar/models/pinned_executable_settings.dart';
+import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
-import 'package:winebar/utils/prefix_descriptor.dart';
 
 abstract interface class WineInstallationDescriptor {
-  /// Regular Wine (not Proton) creates symlinks for folders liks Desktop and
+  /// Regular Wine (not Proton) creates symlinks for folders like Desktop and
   /// Documents inside a prefix that point to the corresponding folders in your
   /// home directory. We want prefixes to be self contained, so we replace
   /// those symlinks with regular directories on prefix creation. This field
   /// tells us whether we have to do that for a given Wine installation.
   bool get needsHomeIsolation;
 
-  /// Proton builds (not all of them though) have a bundled winetricks script.
+  /// Proton builds (except the Kronek ones) have a bundled winetricks script.
   /// This field is set to true if that's the case.
   bool get hasBundledWinetricks;
+
+  /// Proton builds (except the Kronek ones) have a bundled DXVK installation.
+  /// This field is set to true if that's the case.
+  bool get hasBundledDxvk;
 
   /// Proton creates an extra 'pfx' directory under
   /// [WindPrefixDirStructure.innerDir]. So, in case of a Proton installation,
@@ -188,6 +193,9 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
       (protonfixesWinetricksScript ?? protonfixesBinWinetricksScript) != null;
 
   @override
+  bool get hasBundledDxvk => protonLauncherScript != null;
+
+  @override
   String getInnermostPrefixDir({
     required WinePrefixDirStructure prefixDirStructure,
   }) {
@@ -241,6 +249,7 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
     required WinePrefix winePrefix,
     required String processOutputDir,
     required PinnedExecutableSettings? pinnedExecutableSettings,
+    bool forPrefixInitialization = false,
     required bool forWinetricks,
     required bool disableLogs,
   }) async {
@@ -312,6 +321,11 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
         envVars['PROTON_USE_WOW64'] = '1';
       }
 
+      if (winePrefix.descriptor.d3d8To11Implementation ==
+          D3d8To11Implementation.wineD3D) {
+        envVars['PROTON_USE_WINED3D'] = '1';
+      }
+
       // Not sure if this one does more good or bad.
       //envVars['PROTON_FORCE_LARGE_ADDRESS_AWARE'] = '1';
 
@@ -338,7 +352,7 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
   }
 
   _WineAndWineserverExecutables _findWineAndWineserverExecutables({
-    required PrefixDescriptor prefixDescriptor,
+    required WinePrefixDescriptor prefixDescriptor,
     required bool forWinetricks,
   }) {
     _WineAndWineserverExecutables? maybeTryWow64WineAndWineserver() {

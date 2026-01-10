@@ -7,32 +7,31 @@ import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:path/path.dart' as path;
+import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
+import 'package:winebar/services/dxvk_installation_service.dart';
 import 'package:winebar/services/utility_service.dart';
-import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
-import 'package:winebar/utils/prefix_descriptor.dart';
 import 'package:winebar/utils/startup_data.dart';
-import 'package:winebar/utils/wine_installation_descriptor.dart';
+import 'package:winebar/utils/wine_tasks.dart';
 import 'package:winebar/widgets/prefix_settings_dialog.dart';
 
 @GenerateNiceMocks([
   MockSpec<AppSettingsService>(),
+  MockSpec<DxvkInstallationService>(),
+  MockSpec<DxvkInstallationPlan>(),
   MockSpec<UpdatedPrefixReceiver>(),
   MockSpec<UtilityService>(),
   MockSpec<StartupData>(),
   MockSpec<LocalStoragePaths>(),
   MockSpec<IoOps>(),
   MockSpec<File>(),
-  MockSpec<Directory>(),
   MockSpec<RunningExecutablesRepo>(),
-  MockSpec<WineInstallationDescriptor>(),
-  MockSpec<WineProcessRunnerService>(),
-  MockSpec<WineProcess>(),
+  MockSpec<WineTasks>(),
 ])
 import 'prefix_settings_dialog_test.mocks.dart';
 
@@ -44,56 +43,37 @@ void main() {
     final prefixOuterDir = path.join(toplevelDataDir, 'wine-prefixes/prefix');
     final prefixJsonFilePath = path.join(prefixOuterDir, 'prefix.json');
     final relPathToWineInstall = 'wine-installations/installation';
-    final absPathToWineInstall = path.join(
-      toplevelDataDir,
-      relPathToWineInstall,
-    );
 
     final appSettingsService = MockAppSettingsService();
+    final dxvkInstallationService = MockDxvkInstallationService();
+    final dxvkInstallationPlan = MockDxvkInstallationPlan();
     final updatedPrefixReceiver = MockUpdatedPrefixReceiver();
     final utilityService = MockUtilityService();
     final startupData = MockStartupData();
     final localStoragePaths = MockLocalStoragePaths();
-    final wineInstallationDescriptor = MockWineInstallationDescriptor();
-    final wineProcessRunnerService = MockWineProcessRunnerService();
-    final wineProcess = MockWineProcess();
+    final wineTasks = MockWineTasks();
 
     final runningSpecialExecutablesRepo =
         MockRunningExecutablesRepo<SpecialExecutableSlot>();
 
     final ioOps = MockIoOps();
     final prefixJsonFile = MockFile();
-    final processOutputDir = MockDirectory();
-
-    when(
-      utilityService.wineInstallationDescriptorForWineInstallDir(
-        absPathToWineInstall,
-      ),
-    ).thenAnswer((_) async => wineInstallationDescriptor);
 
     when(startupData.localStoragePaths).thenReturn(localStoragePaths);
 
-    when(
-      startupData.wineProcessRunnerService,
-    ).thenReturn(wineProcessRunnerService);
-
-    when(
-      localStoragePaths.createProcessOutputDir(),
-    ).thenAnswer((_) async => processOutputDir);
-
-    when(
-      wineProcessRunnerService.start(
-        processOutputDir: anyNamed('processOutputDir'),
-        commandLine: anyNamed('commandLine'),
-        envVars: anyNamed('envVars'),
-      ),
-    ).thenAnswer((_) async => wineProcess);
-
-    when(
-      wineProcess.result,
-    ).thenAnswer((_) async => WineProcessResult(exitCode: 0, logs: []));
-
     when(localStoragePaths.toplevelDataDir).thenReturn(toplevelDataDir);
+
+    when(
+      dxvkInstallationService.buildDxvkInstallationPlan(
+        dxvkWanted: anyNamed('dxvkWanted'),
+        localStoragePaths: anyNamed('localStoragePaths'),
+        wineInstDescriptor: anyNamed('wineInstDescriptor'),
+      ),
+    ).thenAnswer((_) async => dxvkInstallationPlan);
+
+    when(dxvkInstallationPlan.needDownloadAndExtract).thenReturn(false);
+    when(dxvkInstallationPlan.needInstall).thenReturn(false);
+    when(dxvkInstallationPlan.needActivate).thenReturn(false);
 
     when(ioOps.createFile(prefixJsonFilePath)).thenReturn(prefixJsonFile);
 
@@ -101,20 +81,23 @@ void main() {
       prefixJsonFile.writeAsString(any),
     ).thenAnswer((_) async => prefixJsonFile);
 
+    WineTasks.registerSingletonInstance(wineTasks);
     GetIt.I.registerSingleton<Logger>(Logger());
     GetIt.I.registerSingleton<AppSettingsService>(appSettingsService);
     GetIt.I.registerSingleton<UtilityService>(utilityService);
+    GetIt.I.registerSingleton<DxvkInstallationService>(dxvkInstallationService);
     GetIt.I.registerSingleton<RunningExecutablesRepo<SpecialExecutableSlot>>(
       runningSpecialExecutablesRepo,
     );
 
     final prefix = WinePrefix(
       dirStructure: WinePrefixDirStructure.fromOuterDir(prefixOuterDir),
-      descriptor: PrefixDescriptor(
+      descriptor: WinePrefixDescriptor(
         name: 'Prefix',
         relPathToWineInstall: relPathToWineInstall,
         hiDpiScale: 1.5, // The value to be picked up.
         wow64ModePreferred: null,
+        d3d8To11Implementation: null,
       ),
     );
 
@@ -138,8 +121,8 @@ void main() {
     expect(scale15Chip.selected, isTrue);
 
     final scale10ChipFinder = find.byWidgetPredicate(
-      (widget) => widget is ChoiceChip && (widget.label as Text).data == "1.0",
-      description: 'ChoiceChip with the text of "1.0"',
+      (widget) => widget is ChoiceChip && (widget.label as Text).data == "2.0",
+      description: 'ChoiceChip with the text of "2.0"',
     );
 
     expect(scale10ChipFinder, findsOneWidget);
@@ -160,14 +143,14 @@ void main() {
       prefixJsonFile.writeAsString(captureAny),
     ).captured.single;
 
-    final updatedPrefix = verify(
-      updatedPrefixReceiver.handleUpdatedPrefix(captureAny),
-    ).captured.single;
+    final updatedPrefix =
+        verify(
+              updatedPrefixReceiver.handleUpdatedPrefix(captureAny),
+            ).captured.single
+            as WinePrefix;
 
-    expect(
-      updatedPrefixJsonString,
-      (updatedPrefix as WinePrefix).descriptor.toJsonString(),
-    );
+    expect(updatedPrefix.descriptor.hiDpiScale, 2.0);
+    expect(updatedPrefixJsonString, updatedPrefix.descriptor.toJsonString());
   });
 }
 

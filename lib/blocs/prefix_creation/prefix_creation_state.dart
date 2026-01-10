@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:winebar/models/d3d_8_to_11_implementation.dart';
 import 'package:winebar/models/settings_json_file.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
@@ -42,7 +43,9 @@ PrefixCreationStep laterPrefixCreatonStepOfTwo(
 
 enum PrefixCreationStatus {
   notStarted,
+  starting,
   downloadingAndExtractingWineBuild,
+  downloadingAndExtractingDxvk,
   creatingWinePrefix,
   failed,
   succeeded;
@@ -53,7 +56,9 @@ enum PrefixCreationStatus {
       case failed:
       case succeeded:
         return false;
+      case starting:
       case downloadingAndExtractingWineBuild:
+      case downloadingAndExtractingDxvk:
       case creatingWinePrefix:
         return true;
     }
@@ -108,15 +113,18 @@ class PrefixCreationState extends Equatable {
   /// this value plays no role.
   final bool wow64ModePreferenceWarningToBeSuppressed;
 
+  final bool useParticularD3d8To11Implementation;
+  final D3d8To11Implementation selectedD3d8To11Implementation;
+
   final PrefixCreationStatus prefixCreationStatus;
   final String? prefixCreationFailureMessage;
   final WineProcessResult? prefixCreationFailedProcessResult;
 
   /// Corresponds to a progress (between 0 and 1) in those states
-  /// where prefixCretionStatus.isInProgress is true. A null value
+  /// where [PrefixCreationStatus.isInProgress] is true. A null value
   /// is allowed in those states and indicates the exact progress
   /// is not available.
-  final double? prefixCreationOperationProgress;
+  final double? prefixCreationStepProgress;
 
   PrefixCreationState({
     required this.currentStep,
@@ -136,10 +144,12 @@ class PrefixCreationState extends Equatable {
     required this.wow64ModePreferred,
     required this.wow64ModePreferenceWarning,
     required this.wow64ModePreferenceWarningToBeSuppressed,
+    required this.useParticularD3d8To11Implementation,
+    required this.selectedD3d8To11Implementation,
     required this.prefixCreationStatus,
     required this.prefixCreationFailureMessage,
     required this.prefixCreationFailedProcessResult,
-    required this.prefixCreationOperationProgress,
+    required this.prefixCreationStepProgress,
   }) {
     assert(currentStep.index <= maxAccessibleStep.index);
   }
@@ -163,10 +173,12 @@ class PrefixCreationState extends Equatable {
         wow64ModePreferred: null,
         wow64ModePreferenceWarning: null,
         wow64ModePreferenceWarningToBeSuppressed: false,
+        useParticularD3d8To11Implementation: false,
+        selectedD3d8To11Implementation: D3d8To11Implementation.dxvk,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessage: null,
         prefixCreationFailedProcessResult: null,
-        prefixCreationOperationProgress: null,
+        prefixCreationStepProgress: null,
       );
 
   @override
@@ -188,10 +200,12 @@ class PrefixCreationState extends Equatable {
     wow64ModePreferred,
     wow64ModePreferenceWarning,
     wow64ModePreferenceWarningToBeSuppressed,
+    useParticularD3d8To11Implementation,
+    selectedD3d8To11Implementation,
     prefixCreationStatus,
     prefixCreationFailureMessage,
     prefixCreationFailedProcessResult,
-    prefixCreationOperationProgress,
+    prefixCreationStepProgress,
   ];
 
   PrefixCreationState copyWith({
@@ -212,10 +226,12 @@ class PrefixCreationState extends Equatable {
     ValueGetter<bool?>? wow64ModePreferredGetter,
     ValueGetter<WineArchWarning?>? wow64ModePreferenceWarningGetter,
     bool? wow64ModePreferenceWarningToBeSuppressed,
+    bool? useParticularD3d8To11Implementation,
+    D3d8To11Implementation? selectedD3d8To11Implementation,
     PrefixCreationStatus? prefixCreationStatus,
     ValueGetter<String?>? prefixCreationFailureMessageGetter,
     ValueGetter<WineProcessResult?>? prefixCreationFailedProcessResultGetter,
-    ValueGetter<double?>? prefixCreationOperationProgressGetter,
+    ValueGetter<double?>? prefixCreationStepProgressGetter,
   }) {
     return PrefixCreationState(
       currentStep: currentStep ?? this.currentStep,
@@ -259,6 +275,11 @@ class PrefixCreationState extends Equatable {
       wow64ModePreferenceWarningToBeSuppressed:
           wow64ModePreferenceWarningToBeSuppressed ??
           this.wow64ModePreferenceWarningToBeSuppressed,
+      useParticularD3d8To11Implementation:
+          useParticularD3d8To11Implementation ??
+          this.useParticularD3d8To11Implementation,
+      selectedD3d8To11Implementation:
+          selectedD3d8To11Implementation ?? this.selectedD3d8To11Implementation,
       prefixCreationStatus: prefixCreationStatus ?? this.prefixCreationStatus,
       prefixCreationFailureMessage: prefixCreationFailureMessageGetter != null
           ? prefixCreationFailureMessageGetter()
@@ -267,10 +288,9 @@ class PrefixCreationState extends Equatable {
           prefixCreationFailedProcessResultGetter != null
           ? prefixCreationFailedProcessResultGetter()
           : prefixCreationFailedProcessResult,
-      prefixCreationOperationProgress:
-          prefixCreationOperationProgressGetter != null
-          ? prefixCreationOperationProgressGetter()
-          : prefixCreationOperationProgress,
+      prefixCreationStepProgress: prefixCreationStepProgressGetter != null
+          ? prefixCreationStepProgressGetter()
+          : prefixCreationStepProgress,
     );
   }
 }

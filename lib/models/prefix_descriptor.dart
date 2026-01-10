@@ -21,16 +21,19 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
+import 'package:winebar/models/d3d_8_to_11_implementation.dart';
+import 'package:winebar/utils/cast_or_null.dart';
 
 /// Represents the contents of the prefix.json file located in the
 /// outer prefix directory. The other prefix directory contains
 /// the 'prefix' subdirectory along with the 'prefix.json' file.
 @immutable
-class PrefixDescriptor extends Equatable {
+class WinePrefixDescriptor extends Equatable {
   static const String _nameKey = 'name';
   static const String _relPathToWineInstallKey = 'relPathToWineInstall';
   static const String _hiDpiScaleKey = 'hiDpiScale';
   static const String _wow64ModePreferredKey = 'wow64ModePreferred';
+  static const String _d3d8To11ImplementationKey = 'd3d8To11Implementation';
 
   final String name;
 
@@ -44,21 +47,25 @@ class PrefixDescriptor extends Equatable {
   /// we are using a build that only supports a single mode.
   final bool? wow64ModePreferred;
 
+  final D3d8To11Implementation? d3d8To11Implementation;
+
   bool get isBroken => relPathToWineInstall == '';
 
-  const PrefixDescriptor({
+  const WinePrefixDescriptor({
     required this.name,
     required this.relPathToWineInstall,
     required this.hiDpiScale,
     required this.wow64ModePreferred,
+    required this.d3d8To11Implementation,
   });
 
-  const PrefixDescriptor.brokenPrefix({required String name})
+  const WinePrefixDescriptor.brokenPrefix({required String name})
     : this(
         name: name,
         relPathToWineInstall: '',
         hiDpiScale: null,
         wow64ModePreferred: null,
+        d3d8To11Implementation: null,
       );
 
   @override
@@ -67,55 +74,70 @@ class PrefixDescriptor extends Equatable {
     relPathToWineInstall,
     hiDpiScale,
     wow64ModePreferred,
+    d3d8To11Implementation,
   ];
 
   String getAbsPathToWineInstall({required String toplevelDataDir}) {
     return path.normalize(path.join(toplevelDataDir, relPathToWineInstall));
   }
 
-  factory PrefixDescriptor.fromJsonString(String jsonString) {
-    return PrefixDescriptor.fromJson(jsonDecode(jsonString));
+  factory WinePrefixDescriptor.fromJsonString(String jsonString) {
+    return WinePrefixDescriptor.fromJson(jsonDecode(jsonString));
   }
 
-  factory PrefixDescriptor.fromJson(Map<String, dynamic> json) {
+  factory WinePrefixDescriptor.fromJson(Map<String, dynamic> json) {
     final name = json[_nameKey] as String;
     final relPathToWineInstall = json[_relPathToWineInstallKey] as String;
-    final hiDpiScale = json[_hiDpiScaleKey] as double?;
-    final wow64ModePreferred = json[_wow64ModePreferredKey] as bool?;
+    final hiDpiScale = castOrNull<double>(json[_hiDpiScaleKey]);
+    final wow64ModePreferred = castOrNull<bool>(json[_wow64ModePreferredKey]);
+    final d3d8to11Implementation = castOrNull<String>(
+      json[_d3d8To11ImplementationKey],
+    );
 
-    return PrefixDescriptor(
+    return WinePrefixDescriptor(
       name: name,
       relPathToWineInstall: relPathToWineInstall,
       hiDpiScale: hiDpiScale,
       wow64ModePreferred: wow64ModePreferred,
+      d3d8To11Implementation: D3d8To11Implementation.fromJsonString(
+        d3d8to11Implementation,
+      ),
     );
   }
 
   String toJsonString() {
+    final d3d8To11Implementation = this.d3d8To11Implementation;
+
     final Map<String, dynamic> json = {
       _nameKey: name,
       _relPathToWineInstallKey: relPathToWineInstall,
       _hiDpiScaleKey: hiDpiScale,
       _wow64ModePreferredKey: wow64ModePreferred,
+      if (d3d8To11Implementation != null)
+        _d3d8To11ImplementationKey: d3d8To11Implementation.jsonString,
     };
 
     final encoder = JsonEncoder.withIndent('  ');
     return encoder.convert(json);
   }
 
-  PrefixDescriptor copyWith({
+  WinePrefixDescriptor copyWith({
     String? name,
     String? relPathToWineInstall,
     ValueGetter<double?>? hiDpiScaleGetter,
     ValueGetter<bool?>? wow64ModePreferredGetter,
+    ValueGetter<D3d8To11Implementation?>? d3d8To11ImplementationGetter,
   }) {
-    return PrefixDescriptor(
+    return WinePrefixDescriptor(
       name: name ?? this.name,
       relPathToWineInstall: relPathToWineInstall ?? this.relPathToWineInstall,
       hiDpiScale: hiDpiScaleGetter != null ? hiDpiScaleGetter() : hiDpiScale,
       wow64ModePreferred: wow64ModePreferredGetter != null
           ? wow64ModePreferredGetter()
           : wow64ModePreferred,
+      d3d8To11Implementation: d3d8To11ImplementationGetter != null
+          ? d3d8To11ImplementationGetter()
+          : d3d8To11Implementation,
     );
   }
 }

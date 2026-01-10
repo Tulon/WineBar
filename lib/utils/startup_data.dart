@@ -21,10 +21,10 @@ import 'dart:io';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
+import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
-import 'package:winebar/utils/prefix_descriptor.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/settings_file_helper.dart';
 
@@ -94,6 +94,7 @@ class StartupData {
 
     await Directory(localStoragePaths.wineInstallsDir).create();
     await Directory(localStoragePaths.winePrefixesDir).create();
+    await Directory(localStoragePaths.dxvkPackagesDir).create();
 
     final winePrefixes = await _loadWinePrefixes(
       localStoragePaths: localStoragePaths,
@@ -243,7 +244,7 @@ class StartupData {
         prefixDirStructure.prefixJsonFilePath,
       ).readAsString();
 
-      final prefixDescriptor = PrefixDescriptor.fromJsonString(
+      final prefixDescriptor = WinePrefixDescriptor.fromJsonString(
         prefixJsonFileContents,
       );
 

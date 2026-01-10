@@ -23,6 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/process_output.dart';
 import 'package:winebar/utils/startup_data.dart';
+import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
 import 'package:winebar/widgets/error_message_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 import 'package:winebar/widgets/process_output_widget.dart';
@@ -46,8 +47,6 @@ class PrefixSettingsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return BlocProvider(
       create: (_) => PrefixSettingsBloc(
         startupData: startupData,
@@ -60,82 +59,95 @@ class PrefixSettingsDialog extends StatelessWidget {
           return current.prefixUpdateStatus == PrefixUpdateStatus.succeeded &&
               previous.prefixUpdateStatus != current.prefixUpdateStatus;
         },
-        child: Dialog(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: BlocBuilder<PrefixSettingsBloc, PrefixSettingsState>(
-                builder: (context, state) {
-                  return SizedBox(
-                    width: 600,
-                    child: Column(
-                      spacing: 16.0,
+        child: _buildDialogWidget(context),
+      ),
+    );
+  }
+
+  Dialog _buildDialogWidget(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Dialog(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: BlocBuilder<PrefixSettingsBloc, PrefixSettingsState>(
+            builder: (context, state) {
+              final bloc = BlocProvider.of<PrefixSettingsBloc>(context);
+
+              return SizedBox(
+                width: 600,
+                child: Column(
+                  spacing: 16.0,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: RichText(
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  text: TextSpan(
-                                    style: theme.textTheme.headlineSmall,
-                                    children: [
-                                      TextSpan(text: 'Wine Prefix '),
-                                      TextSpan(
-                                        text: prefix.descriptor.name,
-                                        style: TextStyle(
-                                          color: theme.colorScheme.primary,
-                                        ),
-                                      ),
-                                      TextSpan(text: ' Settings'),
-                                    ],
+                        Expanded(
+                          child: Center(
+                            child: RichText(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                style: theme.textTheme.headlineSmall,
+                                children: [
+                                  TextSpan(text: 'Wine Prefix '),
+                                  TextSpan(
+                                    text: prefix.descriptor.name,
+                                    style: TextStyle(
+                                      color: theme.colorScheme.primary,
+                                    ),
                                   ),
-                                ),
+                                  TextSpan(text: ' Settings'),
+                                ],
                               ),
                             ),
-                            if (state.prefixUpdateStatus !=
-                                PrefixUpdateStatus.inProgress)
-                              CloseButton(),
-                          ],
-                        ),
-                        HiDpiScaleSelectionWidget(
-                          enabled:
-                              state.prefixUpdateStatus !=
-                              PrefixUpdateStatus.inProgress,
-                          initialScaleFactor: state.hiDpiScale,
-                          onScaleFactorChanged: (hiDpiScale) {
-                            BlocProvider.of<PrefixSettingsBloc>(
-                              context,
-                            ).setHiDpiScale(hiDpiScale);
-                          },
-                          requiredError:
-                              state.prefixUpdateStatus ==
-                                  PrefixUpdateStatus.validationFailed &&
-                              state.hiDpiScale == null,
-                        ),
-                        ?_maybeBuildWow64PreferenceToggle(context, state),
-                        _buildUpdatePrefixButton(context, state),
-                        if (state.prefixUpdateFailureMessage != null)
-                          ErrorMessageWidget(
-                            width: double.infinity,
-                            text: state.prefixUpdateFailureMessage!,
-                            onViewLogsPressed:
-                                state.prefixUpdateFailedProcessResult == null
-                                ? null
-                                : () => _showWineProcessLogs(
-                                    context: context,
-                                    logs: state
-                                        .prefixUpdateFailedProcessResult!
-                                        .logs,
-                                  ),
                           ),
+                        ),
+                        if (!state.prefixUpdateStatus.isInProgress)
+                          CloseButton(),
                       ],
                     ),
-                  );
-                },
-              ),
-            ),
+                    HiDpiScaleSelectionWidget(
+                      enabled: !state.prefixUpdateStatus.isInProgress,
+                      initialScaleFactor: state.hiDpiScale,
+                      onScaleFactorChanged: (hiDpiScale) {
+                        bloc.setHiDpiScale(hiDpiScale);
+                      },
+                      requiredError:
+                          state.prefixUpdateStatus ==
+                              PrefixUpdateStatus.validationFailed &&
+                          state.hiDpiScale == null,
+                    ),
+                    ?_maybeBuildWow64PreferenceToggle(context, state),
+                    D3d8To11ImplementationSelectionWidget(
+                      enabled: !state.prefixUpdateStatus.isInProgress,
+                      useParticularImplementation:
+                          state.useParticularD3d8To11Implementation,
+                      onUseParticularImplementationToggled:
+                          bloc.setUseParticularD3d8To11Implementation,
+                      selectedImplementation:
+                          state.selectedD3d8To11Implementation,
+                      onImplementationSelected:
+                          bloc.setSelectedD3d8To11Implementation,
+                    ),
+                    _buildUpdatePrefixButton(context, state),
+                    if (state.prefixUpdateFailureMessage != null)
+                      ErrorMessageWidget(
+                        width: double.infinity,
+                        text: state.prefixUpdateFailureMessage!,
+                        onViewLogsPressed:
+                            state.prefixUpdateFailedProcessResult == null
+                            ? null
+                            : () => _showWineProcessLogs(
+                                context: context,
+                                logs:
+                                    state.prefixUpdateFailedProcessResult!.logs,
+                              ),
+                      ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -154,7 +166,7 @@ class PrefixSettingsDialog extends StatelessWidget {
     final bloc = BlocProvider.of<PrefixSettingsBloc>(context);
 
     return Wow64PreferenceToggle(
-      enabled: state.prefixUpdateStatus != PrefixUpdateStatus.inProgress,
+      enabled: !state.prefixUpdateStatus.isInProgress,
       wow64ModePreferred: state.wow64ModePreferred!,
       onWow64ModePreferredToggled: bloc.setWow64ModePreferred,
       warningToShow: state.wow64ModePreferenceWarning,
@@ -177,7 +189,11 @@ class PrefixSettingsDialog extends StatelessWidget {
         case PrefixUpdateStatus.failed:
         case PrefixUpdateStatus.succeeded:
           return 'Update Wine Prefix';
-        case PrefixUpdateStatus.inProgress:
+        case PrefixUpdateStatus.starting:
+          return 'Starting ...';
+        case PrefixUpdateStatus.downloadingAndExtractingDxvk:
+          return 'Downloading and Extracting DXVK ...';
+        case PrefixUpdateStatus.updatingPrefix:
           return 'Updating Wine Prefix ...';
       }
     }
@@ -186,22 +202,20 @@ class PrefixSettingsDialog extends StatelessWidget {
       width: double.infinity,
       height: 50,
       child: ElevatedButton.icon(
-        onPressed: state.prefixUpdateStatus == PrefixUpdateStatus.inProgress
+        onPressed: state.prefixUpdateStatus.isInProgress
             ? null
             : BlocProvider.of<PrefixSettingsBloc>(context).startUpdatingPrefix,
         style: ElevatedButton.styleFrom(
           backgroundColor: theme.colorScheme.primary,
           foregroundColor: theme.colorScheme.onPrimary,
-          disabledBackgroundColor:
-              state.prefixUpdateStatus == PrefixUpdateStatus.inProgress
+          disabledBackgroundColor: state.prefixUpdateStatus.isInProgress
               ? theme.colorScheme.primary
               : null,
-          disabledForegroundColor:
-              state.prefixUpdateStatus == PrefixUpdateStatus.inProgress
+          disabledForegroundColor: state.prefixUpdateStatus.isInProgress
               ? theme.colorScheme.onPrimary
               : null,
         ),
-        icon: state.prefixUpdateStatus == PrefixUpdateStatus.inProgress
+        icon: state.prefixUpdateStatus.isInProgress
             ? AspectRatio(
                 aspectRatio: 1.0,
                 child: CircularProgressIndicator(

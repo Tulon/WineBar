@@ -25,11 +25,13 @@ import 'package:winebar/models/gpu_info.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/services/dxvk_installation_service.dart';
 import 'package:winebar/services/running_wine_processes_tracker.dart';
 import 'package:winebar/services/screensaver_inhibition_service.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/services/winetricks_download_service_impl.dart';
+import 'package:winebar/utils/wine_tasks.dart';
 
 import 'repositories/wine_build_source_repo.dart';
 import 'services/download_and_extraction_service.dart';
@@ -70,6 +72,7 @@ void main() {
   GetIt.I.registerSingleton<WinetricksDownloadService>(
     WinetricksDownloadServiceImpl(dio: dio),
   );
+  GetIt.I.registerSingleton<DxvkInstallationService>(DxvkInstallationService());
   GetIt.I.registerSingleton<RunningExecutablesRepo<PinnedExecutable>>(
     runningPinnedExecutablesRepo,
   );
@@ -88,6 +91,7 @@ void main() {
   GetIt.I.registerSingletonAsync<List<GpuInfo>>(
     GpuInfo.loadListOfAvailableGpus,
   );
+  WineTasks.createAndRegisterSingletonInstance();
 
   runApp(TopLevelWidget());
 }

@@ -91,8 +91,9 @@ class WarningWidget extends StatelessWidget {
             ),
             activeColor: enabled ? null : theme.disabledColor,
             value: isWarningToBeSuppressed,
-            onChanged: (checked) =>
-                enabled ? onWarningToBeSuppressedToggled!(checked!) : null,
+            onChanged: !enabled
+                ? null
+                : (checked) => onWarningToBeSuppressedToggled!(checked!),
           ),
         ),
         Text(
