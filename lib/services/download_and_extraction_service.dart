@@ -19,6 +19,9 @@
 import '../models/archive_type.dart';
 
 abstract interface class DownloadAndExtractionService {
+  /// Initiates downloading and extracting an archive.
+  ///
+  /// The [extractionnDir] has to exist already.
   Future<DownloadAndExtractionProcess> startDownloadAndExtractionProcess({
     required Uri archiveUri,
     required ArchiveType archiveType,

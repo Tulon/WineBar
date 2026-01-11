@@ -154,14 +154,12 @@ class PinnedExecutableSettingsDialog extends StatelessWidget {
             ),
             activeColor: maySelectGpu ? null : theme.disabledColor,
             value: maySelectGpu && state.isParticularGpuToBeUsed,
-            onChanged: (checked) {
-              if (maySelectGpu) {
-                bloc.setParticularGpuToBeUsed(checked == true);
-              }
-            },
+            onChanged: !maySelectGpu
+                ? null
+                : (checked) => bloc.setParticularGpuToBeUsed(checked == true),
           ),
         ),
-        const Text('Use a particular GPU'),
+        Expanded(child: const Text('Use a particular GPU')),
       ],
     );
 

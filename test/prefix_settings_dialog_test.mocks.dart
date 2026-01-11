@@ -3,31 +3,35 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i13;
-import 'dart:convert' as _i19;
-import 'dart:io' as _i6;
-import 'dart:typed_data' as _i20;
-import 'dart:ui' as _i22;
+import 'dart:async' as _i11;
+import 'dart:convert' as _i24;
+import 'dart:io' as _i7;
+import 'dart:typed_data' as _i25;
+import 'dart:ui' as _i26;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i15;
-import 'package:winebar/models/pinned_executable_settings.dart' as _i23;
+import 'package:mockito/src/dummies.dart' as _i19;
+import 'package:winebar/models/dxvk_build.dart' as _i23;
 import 'package:winebar/models/settings_json_file.dart' as _i2;
-import 'package:winebar/models/suppressable_warning.dart' as _i9;
-import 'package:winebar/models/wine_build.dart' as _i18;
-import 'package:winebar/models/wine_build_source.dart' as _i16;
-import 'package:winebar/models/wine_prefix.dart' as _i11;
-import 'package:winebar/models/wine_prefix_dir_structure.dart' as _i7;
-import 'package:winebar/models/wine_release.dart' as _i17;
-import 'package:winebar/repositories/running_executables_repo.dart' as _i21;
-import 'package:winebar/services/app_settings_service.dart' as _i8;
-import 'package:winebar/services/utility_service.dart' as _i12;
-import 'package:winebar/services/wine_process_runner_service.dart' as _i5;
-import 'package:winebar/utils/local_storage_paths.dart' as _i4;
-import 'package:winebar/utils/startup_data.dart' as _i14;
-import 'package:winebar/utils/wine_installation_descriptor.dart' as _i3;
+import 'package:winebar/models/special_executable_slot.dart' as _i16;
+import 'package:winebar/models/suppressable_warning.dart' as _i10;
+import 'package:winebar/models/wine_build.dart' as _i22;
+import 'package:winebar/models/wine_build_source.dart' as _i20;
+import 'package:winebar/models/wine_prefix.dart' as _i14;
+import 'package:winebar/models/wine_prefix_dir_structure.dart' as _i8;
+import 'package:winebar/models/wine_release.dart' as _i21;
+import 'package:winebar/repositories/running_executables_repo.dart' as _i15;
+import 'package:winebar/services/app_settings_service.dart' as _i9;
+import 'package:winebar/services/download_and_extraction_service.dart' as _i12;
+import 'package:winebar/services/dxvk_installation_service.dart' as _i3;
+import 'package:winebar/services/utility_service.dart' as _i18;
+import 'package:winebar/services/wine_process_runner_service.dart' as _i6;
+import 'package:winebar/utils/local_storage_paths.dart' as _i5;
+import 'package:winebar/utils/startup_data.dart' as _i13;
+import 'package:winebar/utils/wine_installation_descriptor.dart' as _i4;
+import 'package:winebar/utils/wine_tasks.dart' as _i27;
 
-import 'prefix_settings_dialog_test.dart' as _i10;
+import 'prefix_settings_dialog_test.dart' as _i17;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -50,80 +54,75 @@ class _FakeSettingsJsonFile_0 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeWineInstallationDescriptor_1 extends _i1.SmartFake
-    implements _i3.WineInstallationDescriptor {
-  _FakeWineInstallationDescriptor_1(Object parent, Invocation parentInvocation)
+class _FakeDxvkInstallationPlan_1 extends _i1.SmartFake
+    implements _i3.DxvkInstallationPlan {
+  _FakeDxvkInstallationPlan_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeLocalStoragePaths_2 extends _i1.SmartFake
-    implements _i4.LocalStoragePaths {
-  _FakeLocalStoragePaths_2(Object parent, Invocation parentInvocation)
+class _FakeWineInstallationDescriptor_2 extends _i1.SmartFake
+    implements _i4.WineInstallationDescriptor {
+  _FakeWineInstallationDescriptor_2(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeWineProcessRunnerService_3 extends _i1.SmartFake
-    implements _i5.WineProcessRunnerService {
-  _FakeWineProcessRunnerService_3(Object parent, Invocation parentInvocation)
+class _FakeLocalStoragePaths_3 extends _i1.SmartFake
+    implements _i5.LocalStoragePaths {
+  _FakeLocalStoragePaths_3(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeDirectory_4 extends _i1.SmartFake implements _i6.Directory {
-  _FakeDirectory_4(Object parent, Invocation parentInvocation)
+class _FakeWineProcessRunnerService_4 extends _i1.SmartFake
+    implements _i6.WineProcessRunnerService {
+  _FakeWineProcessRunnerService_4(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeWinePrefixDirStructure_5 extends _i1.SmartFake
-    implements _i7.WinePrefixDirStructure {
-  _FakeWinePrefixDirStructure_5(Object parent, Invocation parentInvocation)
+class _FakeDirectory_5 extends _i1.SmartFake implements _i7.Directory {
+  _FakeDirectory_5(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeFile_6 extends _i1.SmartFake implements _i6.File {
-  _FakeFile_6(Object parent, Invocation parentInvocation)
+class _FakeWinePrefixDirStructure_6 extends _i1.SmartFake
+    implements _i8.WinePrefixDirStructure {
+  _FakeWinePrefixDirStructure_6(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeUri_7 extends _i1.SmartFake implements Uri {
-  _FakeUri_7(Object parent, Invocation parentInvocation)
+class _FakeFile_7 extends _i1.SmartFake implements _i7.File {
+  _FakeFile_7(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeFileSystemEntity_8 extends _i1.SmartFake
-    implements _i6.FileSystemEntity {
-  _FakeFileSystemEntity_8(Object parent, Invocation parentInvocation)
+class _FakeUri_8 extends _i1.SmartFake implements Uri {
+  _FakeUri_8(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeDateTime_9 extends _i1.SmartFake implements DateTime {
-  _FakeDateTime_9(Object parent, Invocation parentInvocation)
+class _FakeFileSystemEntity_9 extends _i1.SmartFake
+    implements _i7.FileSystemEntity {
+  _FakeFileSystemEntity_9(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeRandomAccessFile_10 extends _i1.SmartFake
-    implements _i6.RandomAccessFile {
-  _FakeRandomAccessFile_10(Object parent, Invocation parentInvocation)
+class _FakeDateTime_10 extends _i1.SmartFake implements DateTime {
+  _FakeDateTime_10(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeIOSink_11 extends _i1.SmartFake implements _i6.IOSink {
-  _FakeIOSink_11(Object parent, Invocation parentInvocation)
+class _FakeRandomAccessFile_11 extends _i1.SmartFake
+    implements _i7.RandomAccessFile {
+  _FakeRandomAccessFile_11(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeFileStat_12 extends _i1.SmartFake implements _i6.FileStat {
-  _FakeFileStat_12(Object parent, Invocation parentInvocation)
+class _FakeIOSink_12 extends _i1.SmartFake implements _i7.IOSink {
+  _FakeIOSink_12(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeWineProcess_13 extends _i1.SmartFake implements _i5.WineProcess {
-  _FakeWineProcess_13(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeWineProcessResult_14 extends _i1.SmartFake
-    implements _i5.WineProcessResult {
-  _FakeWineProcessResult_14(Object parent, Invocation parentInvocation)
+class _FakeFileStat_13 extends _i1.SmartFake implements _i7.FileStat {
+  _FakeFileStat_13(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -131,7 +130,7 @@ class _FakeWineProcessResult_14 extends _i1.SmartFake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAppSettingsService extends _i1.Mock
-    implements _i8.AppSettingsService {
+    implements _i9.AppSettingsService {
   @override
   _i2.SettingsJsonFile get settings =>
       (super.noSuchMethod(
@@ -149,7 +148,7 @@ class MockAppSettingsService extends _i1.Mock
 
   @override
   void setWarningSuppressed(
-    _i9.SuppressableWarning? warning, {
+    _i10.SuppressableWarning? warning, {
     required bool? suppressed,
   }) => super.noSuchMethod(
     Invocation.method(
@@ -161,13 +160,145 @@ class MockAppSettingsService extends _i1.Mock
   );
 }
 
+/// A class which mocks [DxvkInstallationService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDxvkInstallationService extends _i1.Mock
+    implements _i3.DxvkInstallationService {
+  @override
+  _i11.Future<_i3.DxvkInstallationPlan> buildDxvkInstallationPlan({
+    required bool? dxvkWanted,
+    required _i5.LocalStoragePaths? localStoragePaths,
+    required _i4.WineInstallationDescriptor? wineInstDescriptor,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#buildDxvkInstallationPlan, [], {
+              #dxvkWanted: dxvkWanted,
+              #localStoragePaths: localStoragePaths,
+              #wineInstDescriptor: wineInstDescriptor,
+            }),
+            returnValue: _i11.Future<_i3.DxvkInstallationPlan>.value(
+              _FakeDxvkInstallationPlan_1(
+                this,
+                Invocation.method(#buildDxvkInstallationPlan, [], {
+                  #dxvkWanted: dxvkWanted,
+                  #localStoragePaths: localStoragePaths,
+                  #wineInstDescriptor: wineInstDescriptor,
+                }),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i11.Future<_i3.DxvkInstallationPlan>.value(
+                  _FakeDxvkInstallationPlan_1(
+                    this,
+                    Invocation.method(#buildDxvkInstallationPlan, [], {
+                      #dxvkWanted: dxvkWanted,
+                      #localStoragePaths: localStoragePaths,
+                      #wineInstDescriptor: wineInstDescriptor,
+                    }),
+                  ),
+                ),
+          )
+          as _i11.Future<_i3.DxvkInstallationPlan>);
+}
+
+/// A class which mocks [DxvkInstallationPlan].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDxvkInstallationPlan extends _i1.Mock
+    implements _i3.DxvkInstallationPlan {
+  @override
+  bool get needDownloadAndExtract =>
+      (super.noSuchMethod(
+            Invocation.getter(#needDownloadAndExtract),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
+  bool get needInstall =>
+      (super.noSuchMethod(
+            Invocation.getter(#needInstall),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
+  bool get needActivate =>
+      (super.noSuchMethod(
+            Invocation.getter(#needActivate),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
+  _i11.Future<_i12.DownloadAndExtractionOutcome> downloadAndExtract({
+    required _i7.Directory? tempExtractionDir,
+    void Function(void Function())? cancelHookReceiver,
+    _i12.DownloadAndExtractionProgressCallback? progressCallback,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#downloadAndExtract, [], {
+              #tempExtractionDir: tempExtractionDir,
+              #cancelHookReceiver: cancelHookReceiver,
+              #progressCallback: progressCallback,
+            }),
+            returnValue: _i11.Future<_i12.DownloadAndExtractionOutcome>.value(
+              _i12.DownloadAndExtractionOutcome.succeeded,
+            ),
+            returnValueForMissingStub:
+                _i11.Future<_i12.DownloadAndExtractionOutcome>.value(
+                  _i12.DownloadAndExtractionOutcome.succeeded,
+                ),
+          )
+          as _i11.Future<_i12.DownloadAndExtractionOutcome>);
+
+  @override
+  _i11.Future<void> install({
+    required _i8.WinePrefixDirStructure? prefixDirStructure,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#install, [], {
+              #prefixDirStructure: prefixDirStructure,
+            }),
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
+          )
+          as _i11.Future<void>);
+
+  @override
+  _i11.Future<void> activate({
+    void Function(void Function())? cancelHookReceiver,
+    required _i13.StartupData? startupData,
+    required _i14.WinePrefix? winePrefix,
+    required _i15.RunningExecutablesRepo<_i16.SpecialExecutableSlot>?
+    runningSpecialExecutablesRepo,
+    required _i16.SpecialExecutableSlot? specialExecutableSlot,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#activate, [], {
+              #cancelHookReceiver: cancelHookReceiver,
+              #startupData: startupData,
+              #winePrefix: winePrefix,
+              #runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+              #specialExecutableSlot: specialExecutableSlot,
+            }),
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
+          )
+          as _i11.Future<void>);
+}
+
 /// A class which mocks [UpdatedPrefixReceiver].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUpdatedPrefixReceiver extends _i1.Mock
-    implements _i10.UpdatedPrefixReceiver {
+    implements _i17.UpdatedPrefixReceiver {
   @override
-  void handleUpdatedPrefix(_i11.WinePrefix? updatedPrefix) =>
+  void handleUpdatedPrefix(_i14.WinePrefix? updatedPrefix) =>
       super.noSuchMethod(
         Invocation.method(#handleUpdatedPrefix, [updatedPrefix]),
         returnValueForMissingStub: null,
@@ -177,16 +308,16 @@ class MockUpdatedPrefixReceiver extends _i1.Mock
 /// A class which mocks [UtilityService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUtilityService extends _i1.Mock implements _i12.UtilityService {
+class MockUtilityService extends _i1.Mock implements _i18.UtilityService {
   @override
-  _i13.Future<_i3.WineInstallationDescriptor>
+  _i11.Future<_i4.WineInstallationDescriptor>
   wineInstallationDescriptorForWineInstallDir(String? wineInstallDir) =>
       (super.noSuchMethod(
             Invocation.method(#wineInstallationDescriptorForWineInstallDir, [
               wineInstallDir,
             ]),
-            returnValue: _i13.Future<_i3.WineInstallationDescriptor>.value(
-              _FakeWineInstallationDescriptor_1(
+            returnValue: _i11.Future<_i4.WineInstallationDescriptor>.value(
+              _FakeWineInstallationDescriptor_2(
                 this,
                 Invocation.method(
                   #wineInstallationDescriptorForWineInstallDir,
@@ -195,8 +326,8 @@ class MockUtilityService extends _i1.Mock implements _i12.UtilityService {
               ),
             ),
             returnValueForMissingStub:
-                _i13.Future<_i3.WineInstallationDescriptor>.value(
-                  _FakeWineInstallationDescriptor_1(
+                _i11.Future<_i4.WineInstallationDescriptor>.value(
+                  _FakeWineInstallationDescriptor_2(
                     this,
                     Invocation.method(
                       #wineInstallationDescriptorForWineInstallDir,
@@ -205,51 +336,51 @@ class MockUtilityService extends _i1.Mock implements _i12.UtilityService {
                   ),
                 ),
           )
-          as _i13.Future<_i3.WineInstallationDescriptor>);
+          as _i11.Future<_i4.WineInstallationDescriptor>);
 }
 
 /// A class which mocks [StartupData].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockStartupData extends _i1.Mock implements _i14.StartupData {
+class MockStartupData extends _i1.Mock implements _i13.StartupData {
   @override
-  _i4.LocalStoragePaths get localStoragePaths =>
+  _i5.LocalStoragePaths get localStoragePaths =>
       (super.noSuchMethod(
             Invocation.getter(#localStoragePaths),
-            returnValue: _FakeLocalStoragePaths_2(
+            returnValue: _FakeLocalStoragePaths_3(
               this,
               Invocation.getter(#localStoragePaths),
             ),
-            returnValueForMissingStub: _FakeLocalStoragePaths_2(
+            returnValueForMissingStub: _FakeLocalStoragePaths_3(
               this,
               Invocation.getter(#localStoragePaths),
             ),
           )
-          as _i4.LocalStoragePaths);
+          as _i5.LocalStoragePaths);
 
   @override
-  List<_i11.WinePrefix> get winePrefixes =>
+  List<_i14.WinePrefix> get winePrefixes =>
       (super.noSuchMethod(
             Invocation.getter(#winePrefixes),
-            returnValue: <_i11.WinePrefix>[],
-            returnValueForMissingStub: <_i11.WinePrefix>[],
+            returnValue: <_i14.WinePrefix>[],
+            returnValueForMissingStub: <_i14.WinePrefix>[],
           )
-          as List<_i11.WinePrefix>);
+          as List<_i14.WinePrefix>);
 
   @override
-  _i5.WineProcessRunnerService get wineProcessRunnerService =>
+  _i6.WineProcessRunnerService get wineProcessRunnerService =>
       (super.noSuchMethod(
             Invocation.getter(#wineProcessRunnerService),
-            returnValue: _FakeWineProcessRunnerService_3(
+            returnValue: _FakeWineProcessRunnerService_4(
               this,
               Invocation.getter(#wineProcessRunnerService),
             ),
-            returnValueForMissingStub: _FakeWineProcessRunnerService_3(
+            returnValueForMissingStub: _FakeWineProcessRunnerService_4(
               this,
               Invocation.getter(#wineProcessRunnerService),
             ),
           )
-          as _i5.WineProcessRunnerService);
+          as _i6.WineProcessRunnerService);
 
   @override
   bool get isIntelHost =>
@@ -273,16 +404,16 @@ class MockStartupData extends _i1.Mock implements _i14.StartupData {
 /// A class which mocks [LocalStoragePaths].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
+class MockLocalStoragePaths extends _i1.Mock implements _i5.LocalStoragePaths {
   @override
   String get homeDir =>
       (super.noSuchMethod(
             Invocation.getter(#homeDir),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.getter(#homeDir),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.getter(#homeDir),
             ),
@@ -293,11 +424,11 @@ class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
   String get toplevelDataDir =>
       (super.noSuchMethod(
             Invocation.getter(#toplevelDataDir),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.getter(#toplevelDataDir),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.getter(#toplevelDataDir),
             ),
@@ -308,11 +439,11 @@ class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
   String get settingsJsonFilePath =>
       (super.noSuchMethod(
             Invocation.getter(#settingsJsonFilePath),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.getter(#settingsJsonFilePath),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.getter(#settingsJsonFilePath),
             ),
@@ -323,11 +454,11 @@ class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
   String get wineInstallsDir =>
       (super.noSuchMethod(
             Invocation.getter(#wineInstallsDir),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.getter(#wineInstallsDir),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.getter(#wineInstallsDir),
             ),
@@ -338,13 +469,28 @@ class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
   String get winePrefixesDir =>
       (super.noSuchMethod(
             Invocation.getter(#winePrefixesDir),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.getter(#winePrefixesDir),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.getter(#winePrefixesDir),
+            ),
+          )
+          as String);
+
+  @override
+  String get dxvkPackagesDir =>
+      (super.noSuchMethod(
+            Invocation.getter(#dxvkPackagesDir),
+            returnValue: _i19.dummyValue<String>(
+              this,
+              Invocation.getter(#dxvkPackagesDir),
+            ),
+            returnValueForMissingStub: _i19.dummyValue<String>(
+              this,
+              Invocation.getter(#dxvkPackagesDir),
             ),
           )
           as String);
@@ -353,11 +499,11 @@ class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
   String get tempDir =>
       (super.noSuchMethod(
             Invocation.getter(#tempDir),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.getter(#tempDir),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.getter(#tempDir),
             ),
@@ -365,29 +511,29 @@ class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
           as String);
 
   @override
-  _i13.Future<_i6.Directory> createProcessOutputDir() =>
+  _i11.Future<_i7.Directory> createProcessOutputDir() =>
       (super.noSuchMethod(
             Invocation.method(#createProcessOutputDir, []),
-            returnValue: _i13.Future<_i6.Directory>.value(
-              _FakeDirectory_4(
+            returnValue: _i11.Future<_i7.Directory>.value(
+              _FakeDirectory_5(
                 this,
                 Invocation.method(#createProcessOutputDir, []),
               ),
             ),
-            returnValueForMissingStub: _i13.Future<_i6.Directory>.value(
-              _FakeDirectory_4(
+            returnValueForMissingStub: _i11.Future<_i7.Directory>.value(
+              _FakeDirectory_5(
                 this,
                 Invocation.method(#createProcessOutputDir, []),
               ),
             ),
           )
-          as _i13.Future<_i6.Directory>);
+          as _i11.Future<_i7.Directory>);
 
   @override
   String getWineInstallDir({
-    required _i16.WineBuildSource? wineBuildSource,
-    required _i17.WineRelease? wineRelease,
-    required _i18.WineBuild? wineBuild,
+    required _i20.WineBuildSource? wineBuildSource,
+    required _i21.WineRelease? wineRelease,
+    required _i22.WineBuild? wineBuild,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#getWineInstallDir, [], {
@@ -395,7 +541,7 @@ class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
               #wineRelease: wineRelease,
               #wineBuild: wineBuild,
             }),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.method(#getWineInstallDir, [], {
                 #wineBuildSource: wineBuildSource,
@@ -403,7 +549,7 @@ class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
                 #wineBuild: wineBuild,
               }),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.method(#getWineInstallDir, [], {
                 #wineBuildSource: wineBuildSource,
@@ -415,74 +561,93 @@ class MockLocalStoragePaths extends _i1.Mock implements _i4.LocalStoragePaths {
           as String);
 
   @override
-  _i7.WinePrefixDirStructure getWinePrefixDirStructure({
+  String getDxvkPackageDir({required _i23.DxvkBuild? dxvkBuild}) =>
+      (super.noSuchMethod(
+            Invocation.method(#getDxvkPackageDir, [], {#dxvkBuild: dxvkBuild}),
+            returnValue: _i19.dummyValue<String>(
+              this,
+              Invocation.method(#getDxvkPackageDir, [], {
+                #dxvkBuild: dxvkBuild,
+              }),
+            ),
+            returnValueForMissingStub: _i19.dummyValue<String>(
+              this,
+              Invocation.method(#getDxvkPackageDir, [], {
+                #dxvkBuild: dxvkBuild,
+              }),
+            ),
+          )
+          as String);
+
+  @override
+  _i8.WinePrefixDirStructure getWinePrefixDirStructure({
     required String? prefixName,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#getWinePrefixDirStructure, [], {
               #prefixName: prefixName,
             }),
-            returnValue: _FakeWinePrefixDirStructure_5(
+            returnValue: _FakeWinePrefixDirStructure_6(
               this,
               Invocation.method(#getWinePrefixDirStructure, [], {
                 #prefixName: prefixName,
               }),
             ),
-            returnValueForMissingStub: _FakeWinePrefixDirStructure_5(
+            returnValueForMissingStub: _FakeWinePrefixDirStructure_6(
               this,
               Invocation.method(#getWinePrefixDirStructure, [], {
                 #prefixName: prefixName,
               }),
             ),
           )
-          as _i7.WinePrefixDirStructure);
+          as _i8.WinePrefixDirStructure);
 }
 
 /// A class which mocks [IoOps].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIoOps extends _i1.Mock implements _i10.IoOps {
+class MockIoOps extends _i1.Mock implements _i17.IoOps {
   @override
-  _i6.File createFile(String? path) =>
+  _i7.File createFile(String? path) =>
       (super.noSuchMethod(
             Invocation.method(#createFile, [path]),
-            returnValue: _FakeFile_6(
+            returnValue: _FakeFile_7(
               this,
               Invocation.method(#createFile, [path]),
             ),
-            returnValueForMissingStub: _FakeFile_6(
+            returnValueForMissingStub: _FakeFile_7(
               this,
               Invocation.method(#createFile, [path]),
             ),
           )
-          as _i6.File);
+          as _i7.File);
 }
 
 /// A class which mocks [File].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFile extends _i1.Mock implements _i6.File {
+class MockFile extends _i1.Mock implements _i7.File {
   @override
-  _i6.File get absolute =>
+  _i7.File get absolute =>
       (super.noSuchMethod(
             Invocation.getter(#absolute),
-            returnValue: _FakeFile_6(this, Invocation.getter(#absolute)),
-            returnValueForMissingStub: _FakeFile_6(
+            returnValue: _FakeFile_7(this, Invocation.getter(#absolute)),
+            returnValueForMissingStub: _FakeFile_7(
               this,
               Invocation.getter(#absolute),
             ),
           )
-          as _i6.File);
+          as _i7.File);
 
   @override
   String get path =>
       (super.noSuchMethod(
             Invocation.getter(#path),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.getter(#path),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.getter(#path),
             ),
@@ -493,8 +658,8 @@ class MockFile extends _i1.Mock implements _i6.File {
   Uri get uri =>
       (super.noSuchMethod(
             Invocation.getter(#uri),
-            returnValue: _FakeUri_7(this, Invocation.getter(#uri)),
-            returnValueForMissingStub: _FakeUri_7(
+            returnValue: _FakeUri_8(this, Invocation.getter(#uri)),
+            returnValueForMissingStub: _FakeUri_8(
               this,
               Invocation.getter(#uri),
             ),
@@ -511,19 +676,19 @@ class MockFile extends _i1.Mock implements _i6.File {
           as bool);
 
   @override
-  _i6.Directory get parent =>
+  _i7.Directory get parent =>
       (super.noSuchMethod(
             Invocation.getter(#parent),
-            returnValue: _FakeDirectory_4(this, Invocation.getter(#parent)),
-            returnValueForMissingStub: _FakeDirectory_4(
+            returnValue: _FakeDirectory_5(this, Invocation.getter(#parent)),
+            returnValueForMissingStub: _FakeDirectory_5(
               this,
               Invocation.getter(#parent),
             ),
           )
-          as _i6.Directory);
+          as _i7.Directory);
 
   @override
-  _i13.Future<_i6.File> create({
+  _i11.Future<_i7.File> create({
     bool? recursive = false,
     bool? exclusive = false,
   }) =>
@@ -532,8 +697,8 @@ class MockFile extends _i1.Mock implements _i6.File {
               #recursive: recursive,
               #exclusive: exclusive,
             }),
-            returnValue: _i13.Future<_i6.File>.value(
-              _FakeFile_6(
+            returnValue: _i11.Future<_i7.File>.value(
+              _FakeFile_7(
                 this,
                 Invocation.method(#create, [], {
                   #recursive: recursive,
@@ -541,8 +706,8 @@ class MockFile extends _i1.Mock implements _i6.File {
                 }),
               ),
             ),
-            returnValueForMissingStub: _i13.Future<_i6.File>.value(
-              _FakeFile_6(
+            returnValueForMissingStub: _i11.Future<_i7.File>.value(
+              _FakeFile_7(
                 this,
                 Invocation.method(#create, [], {
                   #recursive: recursive,
@@ -551,7 +716,7 @@ class MockFile extends _i1.Mock implements _i6.File {
               ),
             ),
           )
-          as _i13.Future<_i6.File>);
+          as _i11.Future<_i7.File>);
 
   @override
   void createSync({bool? recursive = false, bool? exclusive = false}) =>
@@ -564,51 +729,51 @@ class MockFile extends _i1.Mock implements _i6.File {
       );
 
   @override
-  _i13.Future<_i6.File> rename(String? newPath) =>
+  _i11.Future<_i7.File> rename(String? newPath) =>
       (super.noSuchMethod(
             Invocation.method(#rename, [newPath]),
-            returnValue: _i13.Future<_i6.File>.value(
-              _FakeFile_6(this, Invocation.method(#rename, [newPath])),
+            returnValue: _i11.Future<_i7.File>.value(
+              _FakeFile_7(this, Invocation.method(#rename, [newPath])),
             ),
-            returnValueForMissingStub: _i13.Future<_i6.File>.value(
-              _FakeFile_6(this, Invocation.method(#rename, [newPath])),
+            returnValueForMissingStub: _i11.Future<_i7.File>.value(
+              _FakeFile_7(this, Invocation.method(#rename, [newPath])),
             ),
           )
-          as _i13.Future<_i6.File>);
+          as _i11.Future<_i7.File>);
 
   @override
-  _i6.File renameSync(String? newPath) =>
+  _i7.File renameSync(String? newPath) =>
       (super.noSuchMethod(
             Invocation.method(#renameSync, [newPath]),
-            returnValue: _FakeFile_6(
+            returnValue: _FakeFile_7(
               this,
               Invocation.method(#renameSync, [newPath]),
             ),
-            returnValueForMissingStub: _FakeFile_6(
+            returnValueForMissingStub: _FakeFile_7(
               this,
               Invocation.method(#renameSync, [newPath]),
             ),
           )
-          as _i6.File);
+          as _i7.File);
 
   @override
-  _i13.Future<_i6.FileSystemEntity> delete({bool? recursive = false}) =>
+  _i11.Future<_i7.FileSystemEntity> delete({bool? recursive = false}) =>
       (super.noSuchMethod(
             Invocation.method(#delete, [], {#recursive: recursive}),
-            returnValue: _i13.Future<_i6.FileSystemEntity>.value(
-              _FakeFileSystemEntity_8(
+            returnValue: _i11.Future<_i7.FileSystemEntity>.value(
+              _FakeFileSystemEntity_9(
                 this,
                 Invocation.method(#delete, [], {#recursive: recursive}),
               ),
             ),
-            returnValueForMissingStub: _i13.Future<_i6.FileSystemEntity>.value(
-              _FakeFileSystemEntity_8(
+            returnValueForMissingStub: _i11.Future<_i7.FileSystemEntity>.value(
+              _FakeFileSystemEntity_9(
                 this,
                 Invocation.method(#delete, [], {#recursive: recursive}),
               ),
             ),
           )
-          as _i13.Future<_i6.FileSystemEntity>);
+          as _i11.Future<_i7.FileSystemEntity>);
 
   @override
   void deleteSync({bool? recursive = false}) => super.noSuchMethod(
@@ -617,41 +782,41 @@ class MockFile extends _i1.Mock implements _i6.File {
   );
 
   @override
-  _i13.Future<_i6.File> copy(String? newPath) =>
+  _i11.Future<_i7.File> copy(String? newPath) =>
       (super.noSuchMethod(
             Invocation.method(#copy, [newPath]),
-            returnValue: _i13.Future<_i6.File>.value(
-              _FakeFile_6(this, Invocation.method(#copy, [newPath])),
+            returnValue: _i11.Future<_i7.File>.value(
+              _FakeFile_7(this, Invocation.method(#copy, [newPath])),
             ),
-            returnValueForMissingStub: _i13.Future<_i6.File>.value(
-              _FakeFile_6(this, Invocation.method(#copy, [newPath])),
+            returnValueForMissingStub: _i11.Future<_i7.File>.value(
+              _FakeFile_7(this, Invocation.method(#copy, [newPath])),
             ),
           )
-          as _i13.Future<_i6.File>);
+          as _i11.Future<_i7.File>);
 
   @override
-  _i6.File copySync(String? newPath) =>
+  _i7.File copySync(String? newPath) =>
       (super.noSuchMethod(
             Invocation.method(#copySync, [newPath]),
-            returnValue: _FakeFile_6(
+            returnValue: _FakeFile_7(
               this,
               Invocation.method(#copySync, [newPath]),
             ),
-            returnValueForMissingStub: _FakeFile_6(
+            returnValueForMissingStub: _FakeFile_7(
               this,
               Invocation.method(#copySync, [newPath]),
             ),
           )
-          as _i6.File);
+          as _i7.File);
 
   @override
-  _i13.Future<int> length() =>
+  _i11.Future<int> length() =>
       (super.noSuchMethod(
             Invocation.method(#length, []),
-            returnValue: _i13.Future<int>.value(0),
-            returnValueForMissingStub: _i13.Future<int>.value(0),
+            returnValue: _i11.Future<int>.value(0),
+            returnValueForMissingStub: _i11.Future<int>.value(0),
           )
-          as _i13.Future<int>);
+          as _i11.Future<int>);
 
   @override
   int lengthSync() =>
@@ -663,27 +828,27 @@ class MockFile extends _i1.Mock implements _i6.File {
           as int);
 
   @override
-  _i13.Future<DateTime> lastAccessed() =>
+  _i11.Future<DateTime> lastAccessed() =>
       (super.noSuchMethod(
             Invocation.method(#lastAccessed, []),
-            returnValue: _i13.Future<DateTime>.value(
-              _FakeDateTime_9(this, Invocation.method(#lastAccessed, [])),
+            returnValue: _i11.Future<DateTime>.value(
+              _FakeDateTime_10(this, Invocation.method(#lastAccessed, [])),
             ),
-            returnValueForMissingStub: _i13.Future<DateTime>.value(
-              _FakeDateTime_9(this, Invocation.method(#lastAccessed, [])),
+            returnValueForMissingStub: _i11.Future<DateTime>.value(
+              _FakeDateTime_10(this, Invocation.method(#lastAccessed, [])),
             ),
           )
-          as _i13.Future<DateTime>);
+          as _i11.Future<DateTime>);
 
   @override
   DateTime lastAccessedSync() =>
       (super.noSuchMethod(
             Invocation.method(#lastAccessedSync, []),
-            returnValue: _FakeDateTime_9(
+            returnValue: _FakeDateTime_10(
               this,
               Invocation.method(#lastAccessedSync, []),
             ),
-            returnValueForMissingStub: _FakeDateTime_9(
+            returnValueForMissingStub: _FakeDateTime_10(
               this,
               Invocation.method(#lastAccessedSync, []),
             ),
@@ -691,13 +856,13 @@ class MockFile extends _i1.Mock implements _i6.File {
           as DateTime);
 
   @override
-  _i13.Future<dynamic> setLastAccessed(DateTime? time) =>
+  _i11.Future<dynamic> setLastAccessed(DateTime? time) =>
       (super.noSuchMethod(
             Invocation.method(#setLastAccessed, [time]),
-            returnValue: _i13.Future<dynamic>.value(),
-            returnValueForMissingStub: _i13.Future<dynamic>.value(),
+            returnValue: _i11.Future<dynamic>.value(),
+            returnValueForMissingStub: _i11.Future<dynamic>.value(),
           )
-          as _i13.Future<dynamic>);
+          as _i11.Future<dynamic>);
 
   @override
   void setLastAccessedSync(DateTime? time) => super.noSuchMethod(
@@ -706,27 +871,27 @@ class MockFile extends _i1.Mock implements _i6.File {
   );
 
   @override
-  _i13.Future<DateTime> lastModified() =>
+  _i11.Future<DateTime> lastModified() =>
       (super.noSuchMethod(
             Invocation.method(#lastModified, []),
-            returnValue: _i13.Future<DateTime>.value(
-              _FakeDateTime_9(this, Invocation.method(#lastModified, [])),
+            returnValue: _i11.Future<DateTime>.value(
+              _FakeDateTime_10(this, Invocation.method(#lastModified, [])),
             ),
-            returnValueForMissingStub: _i13.Future<DateTime>.value(
-              _FakeDateTime_9(this, Invocation.method(#lastModified, [])),
+            returnValueForMissingStub: _i11.Future<DateTime>.value(
+              _FakeDateTime_10(this, Invocation.method(#lastModified, [])),
             ),
           )
-          as _i13.Future<DateTime>);
+          as _i11.Future<DateTime>);
 
   @override
   DateTime lastModifiedSync() =>
       (super.noSuchMethod(
             Invocation.method(#lastModifiedSync, []),
-            returnValue: _FakeDateTime_9(
+            returnValue: _FakeDateTime_10(
               this,
               Invocation.method(#lastModifiedSync, []),
             ),
-            returnValueForMissingStub: _FakeDateTime_9(
+            returnValueForMissingStub: _FakeDateTime_10(
               this,
               Invocation.method(#lastModifiedSync, []),
             ),
@@ -734,13 +899,13 @@ class MockFile extends _i1.Mock implements _i6.File {
           as DateTime);
 
   @override
-  _i13.Future<dynamic> setLastModified(DateTime? time) =>
+  _i11.Future<dynamic> setLastModified(DateTime? time) =>
       (super.noSuchMethod(
             Invocation.method(#setLastModified, [time]),
-            returnValue: _i13.Future<dynamic>.value(),
-            returnValueForMissingStub: _i13.Future<dynamic>.value(),
+            returnValue: _i11.Future<dynamic>.value(),
+            returnValueForMissingStub: _i11.Future<dynamic>.value(),
           )
-          as _i13.Future<dynamic>);
+          as _i11.Future<dynamic>);
 
   @override
   void setLastModifiedSync(DateTime? time) => super.noSuchMethod(
@@ -749,68 +914,68 @@ class MockFile extends _i1.Mock implements _i6.File {
   );
 
   @override
-  _i13.Future<_i6.RandomAccessFile> open({
-    _i6.FileMode? mode = _i6.FileMode.read,
+  _i11.Future<_i7.RandomAccessFile> open({
+    _i7.FileMode? mode = _i7.FileMode.read,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#open, [], {#mode: mode}),
-            returnValue: _i13.Future<_i6.RandomAccessFile>.value(
-              _FakeRandomAccessFile_10(
+            returnValue: _i11.Future<_i7.RandomAccessFile>.value(
+              _FakeRandomAccessFile_11(
                 this,
                 Invocation.method(#open, [], {#mode: mode}),
               ),
             ),
-            returnValueForMissingStub: _i13.Future<_i6.RandomAccessFile>.value(
-              _FakeRandomAccessFile_10(
+            returnValueForMissingStub: _i11.Future<_i7.RandomAccessFile>.value(
+              _FakeRandomAccessFile_11(
                 this,
                 Invocation.method(#open, [], {#mode: mode}),
               ),
             ),
           )
-          as _i13.Future<_i6.RandomAccessFile>);
+          as _i11.Future<_i7.RandomAccessFile>);
 
   @override
-  _i6.RandomAccessFile openSync({_i6.FileMode? mode = _i6.FileMode.read}) =>
+  _i7.RandomAccessFile openSync({_i7.FileMode? mode = _i7.FileMode.read}) =>
       (super.noSuchMethod(
             Invocation.method(#openSync, [], {#mode: mode}),
-            returnValue: _FakeRandomAccessFile_10(
+            returnValue: _FakeRandomAccessFile_11(
               this,
               Invocation.method(#openSync, [], {#mode: mode}),
             ),
-            returnValueForMissingStub: _FakeRandomAccessFile_10(
+            returnValueForMissingStub: _FakeRandomAccessFile_11(
               this,
               Invocation.method(#openSync, [], {#mode: mode}),
             ),
           )
-          as _i6.RandomAccessFile);
+          as _i7.RandomAccessFile);
 
   @override
-  _i13.Stream<List<int>> openRead([int? start, int? end]) =>
+  _i11.Stream<List<int>> openRead([int? start, int? end]) =>
       (super.noSuchMethod(
             Invocation.method(#openRead, [start, end]),
-            returnValue: _i13.Stream<List<int>>.empty(),
-            returnValueForMissingStub: _i13.Stream<List<int>>.empty(),
+            returnValue: _i11.Stream<List<int>>.empty(),
+            returnValueForMissingStub: _i11.Stream<List<int>>.empty(),
           )
-          as _i13.Stream<List<int>>);
+          as _i11.Stream<List<int>>);
 
   @override
-  _i6.IOSink openWrite({
-    _i6.FileMode? mode = _i6.FileMode.write,
-    _i19.Encoding? encoding = const _i19.Utf8Codec(),
+  _i7.IOSink openWrite({
+    _i7.FileMode? mode = _i7.FileMode.write,
+    _i24.Encoding? encoding = const _i24.Utf8Codec(),
   }) =>
       (super.noSuchMethod(
             Invocation.method(#openWrite, [], {
               #mode: mode,
               #encoding: encoding,
             }),
-            returnValue: _FakeIOSink_11(
+            returnValue: _FakeIOSink_12(
               this,
               Invocation.method(#openWrite, [], {
                 #mode: mode,
                 #encoding: encoding,
               }),
             ),
-            returnValueForMissingStub: _FakeIOSink_11(
+            returnValueForMissingStub: _FakeIOSink_12(
               this,
               Invocation.method(#openWrite, [], {
                 #mode: mode,
@@ -818,58 +983,58 @@ class MockFile extends _i1.Mock implements _i6.File {
               }),
             ),
           )
-          as _i6.IOSink);
+          as _i7.IOSink);
 
   @override
-  _i13.Future<_i20.Uint8List> readAsBytes() =>
+  _i11.Future<_i25.Uint8List> readAsBytes() =>
       (super.noSuchMethod(
             Invocation.method(#readAsBytes, []),
-            returnValue: _i13.Future<_i20.Uint8List>.value(_i20.Uint8List(0)),
-            returnValueForMissingStub: _i13.Future<_i20.Uint8List>.value(
-              _i20.Uint8List(0),
+            returnValue: _i11.Future<_i25.Uint8List>.value(_i25.Uint8List(0)),
+            returnValueForMissingStub: _i11.Future<_i25.Uint8List>.value(
+              _i25.Uint8List(0),
             ),
           )
-          as _i13.Future<_i20.Uint8List>);
+          as _i11.Future<_i25.Uint8List>);
 
   @override
-  _i20.Uint8List readAsBytesSync() =>
+  _i25.Uint8List readAsBytesSync() =>
       (super.noSuchMethod(
             Invocation.method(#readAsBytesSync, []),
-            returnValue: _i20.Uint8List(0),
-            returnValueForMissingStub: _i20.Uint8List(0),
+            returnValue: _i25.Uint8List(0),
+            returnValueForMissingStub: _i25.Uint8List(0),
           )
-          as _i20.Uint8List);
+          as _i25.Uint8List);
 
   @override
-  _i13.Future<String> readAsString({
-    _i19.Encoding? encoding = const _i19.Utf8Codec(),
+  _i11.Future<String> readAsString({
+    _i24.Encoding? encoding = const _i24.Utf8Codec(),
   }) =>
       (super.noSuchMethod(
             Invocation.method(#readAsString, [], {#encoding: encoding}),
-            returnValue: _i13.Future<String>.value(
-              _i15.dummyValue<String>(
+            returnValue: _i11.Future<String>.value(
+              _i19.dummyValue<String>(
                 this,
                 Invocation.method(#readAsString, [], {#encoding: encoding}),
               ),
             ),
-            returnValueForMissingStub: _i13.Future<String>.value(
-              _i15.dummyValue<String>(
+            returnValueForMissingStub: _i11.Future<String>.value(
+              _i19.dummyValue<String>(
                 this,
                 Invocation.method(#readAsString, [], {#encoding: encoding}),
               ),
             ),
           )
-          as _i13.Future<String>);
+          as _i11.Future<String>);
 
   @override
-  String readAsStringSync({_i19.Encoding? encoding = const _i19.Utf8Codec()}) =>
+  String readAsStringSync({_i24.Encoding? encoding = const _i24.Utf8Codec()}) =>
       (super.noSuchMethod(
             Invocation.method(#readAsStringSync, [], {#encoding: encoding}),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.method(#readAsStringSync, [], {#encoding: encoding}),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.method(#readAsStringSync, [], {#encoding: encoding}),
             ),
@@ -877,21 +1042,21 @@ class MockFile extends _i1.Mock implements _i6.File {
           as String);
 
   @override
-  _i13.Future<List<String>> readAsLines({
-    _i19.Encoding? encoding = const _i19.Utf8Codec(),
+  _i11.Future<List<String>> readAsLines({
+    _i24.Encoding? encoding = const _i24.Utf8Codec(),
   }) =>
       (super.noSuchMethod(
             Invocation.method(#readAsLines, [], {#encoding: encoding}),
-            returnValue: _i13.Future<List<String>>.value(<String>[]),
-            returnValueForMissingStub: _i13.Future<List<String>>.value(
+            returnValue: _i11.Future<List<String>>.value(<String>[]),
+            returnValueForMissingStub: _i11.Future<List<String>>.value(
               <String>[],
             ),
           )
-          as _i13.Future<List<String>>);
+          as _i11.Future<List<String>>);
 
   @override
   List<String> readAsLinesSync({
-    _i19.Encoding? encoding = const _i19.Utf8Codec(),
+    _i24.Encoding? encoding = const _i24.Utf8Codec(),
   }) =>
       (super.noSuchMethod(
             Invocation.method(#readAsLinesSync, [], {#encoding: encoding}),
@@ -901,9 +1066,9 @@ class MockFile extends _i1.Mock implements _i6.File {
           as List<String>);
 
   @override
-  _i13.Future<_i6.File> writeAsBytes(
+  _i11.Future<_i7.File> writeAsBytes(
     List<int>? bytes, {
-    _i6.FileMode? mode = _i6.FileMode.write,
+    _i7.FileMode? mode = _i7.FileMode.write,
     bool? flush = false,
   }) =>
       (super.noSuchMethod(
@@ -912,8 +1077,8 @@ class MockFile extends _i1.Mock implements _i6.File {
               [bytes],
               {#mode: mode, #flush: flush},
             ),
-            returnValue: _i13.Future<_i6.File>.value(
-              _FakeFile_6(
+            returnValue: _i11.Future<_i7.File>.value(
+              _FakeFile_7(
                 this,
                 Invocation.method(
                   #writeAsBytes,
@@ -922,8 +1087,8 @@ class MockFile extends _i1.Mock implements _i6.File {
                 ),
               ),
             ),
-            returnValueForMissingStub: _i13.Future<_i6.File>.value(
-              _FakeFile_6(
+            returnValueForMissingStub: _i11.Future<_i7.File>.value(
+              _FakeFile_7(
                 this,
                 Invocation.method(
                   #writeAsBytes,
@@ -933,12 +1098,12 @@ class MockFile extends _i1.Mock implements _i6.File {
               ),
             ),
           )
-          as _i13.Future<_i6.File>);
+          as _i11.Future<_i7.File>);
 
   @override
   void writeAsBytesSync(
     List<int>? bytes, {
-    _i6.FileMode? mode = _i6.FileMode.write,
+    _i7.FileMode? mode = _i7.FileMode.write,
     bool? flush = false,
   }) => super.noSuchMethod(
     Invocation.method(#writeAsBytesSync, [bytes], {#mode: mode, #flush: flush}),
@@ -946,10 +1111,10 @@ class MockFile extends _i1.Mock implements _i6.File {
   );
 
   @override
-  _i13.Future<_i6.File> writeAsString(
+  _i11.Future<_i7.File> writeAsString(
     String? contents, {
-    _i6.FileMode? mode = _i6.FileMode.write,
-    _i19.Encoding? encoding = const _i19.Utf8Codec(),
+    _i7.FileMode? mode = _i7.FileMode.write,
+    _i24.Encoding? encoding = const _i24.Utf8Codec(),
     bool? flush = false,
   }) =>
       (super.noSuchMethod(
@@ -958,8 +1123,8 @@ class MockFile extends _i1.Mock implements _i6.File {
               [contents],
               {#mode: mode, #encoding: encoding, #flush: flush},
             ),
-            returnValue: _i13.Future<_i6.File>.value(
-              _FakeFile_6(
+            returnValue: _i11.Future<_i7.File>.value(
+              _FakeFile_7(
                 this,
                 Invocation.method(
                   #writeAsString,
@@ -968,8 +1133,8 @@ class MockFile extends _i1.Mock implements _i6.File {
                 ),
               ),
             ),
-            returnValueForMissingStub: _i13.Future<_i6.File>.value(
-              _FakeFile_6(
+            returnValueForMissingStub: _i11.Future<_i7.File>.value(
+              _FakeFile_7(
                 this,
                 Invocation.method(
                   #writeAsString,
@@ -979,13 +1144,13 @@ class MockFile extends _i1.Mock implements _i6.File {
               ),
             ),
           )
-          as _i13.Future<_i6.File>);
+          as _i11.Future<_i7.File>);
 
   @override
   void writeAsStringSync(
     String? contents, {
-    _i6.FileMode? mode = _i6.FileMode.write,
-    _i19.Encoding? encoding = const _i19.Utf8Codec(),
+    _i7.FileMode? mode = _i7.FileMode.write,
+    _i24.Encoding? encoding = const _i24.Utf8Codec(),
     bool? flush = false,
   }) => super.noSuchMethod(
     Invocation.method(
@@ -997,13 +1162,13 @@ class MockFile extends _i1.Mock implements _i6.File {
   );
 
   @override
-  _i13.Future<bool> exists() =>
+  _i11.Future<bool> exists() =>
       (super.noSuchMethod(
             Invocation.method(#exists, []),
-            returnValue: _i13.Future<bool>.value(false),
-            returnValueForMissingStub: _i13.Future<bool>.value(false),
+            returnValue: _i11.Future<bool>.value(false),
+            returnValueForMissingStub: _i11.Future<bool>.value(false),
           )
-          as _i13.Future<bool>);
+          as _i11.Future<bool>);
 
   @override
   bool existsSync() =>
@@ -1015,33 +1180,33 @@ class MockFile extends _i1.Mock implements _i6.File {
           as bool);
 
   @override
-  _i13.Future<String> resolveSymbolicLinks() =>
+  _i11.Future<String> resolveSymbolicLinks() =>
       (super.noSuchMethod(
             Invocation.method(#resolveSymbolicLinks, []),
-            returnValue: _i13.Future<String>.value(
-              _i15.dummyValue<String>(
+            returnValue: _i11.Future<String>.value(
+              _i19.dummyValue<String>(
                 this,
                 Invocation.method(#resolveSymbolicLinks, []),
               ),
             ),
-            returnValueForMissingStub: _i13.Future<String>.value(
-              _i15.dummyValue<String>(
+            returnValueForMissingStub: _i11.Future<String>.value(
+              _i19.dummyValue<String>(
                 this,
                 Invocation.method(#resolveSymbolicLinks, []),
               ),
             ),
           )
-          as _i13.Future<String>);
+          as _i11.Future<String>);
 
   @override
   String resolveSymbolicLinksSync() =>
       (super.noSuchMethod(
             Invocation.method(#resolveSymbolicLinksSync, []),
-            returnValue: _i15.dummyValue<String>(
+            returnValue: _i19.dummyValue<String>(
               this,
               Invocation.method(#resolveSymbolicLinksSync, []),
             ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
+            returnValueForMissingStub: _i19.dummyValue<String>(
               this,
               Invocation.method(#resolveSymbolicLinksSync, []),
             ),
@@ -1049,35 +1214,35 @@ class MockFile extends _i1.Mock implements _i6.File {
           as String);
 
   @override
-  _i13.Future<_i6.FileStat> stat() =>
+  _i11.Future<_i7.FileStat> stat() =>
       (super.noSuchMethod(
             Invocation.method(#stat, []),
-            returnValue: _i13.Future<_i6.FileStat>.value(
-              _FakeFileStat_12(this, Invocation.method(#stat, [])),
+            returnValue: _i11.Future<_i7.FileStat>.value(
+              _FakeFileStat_13(this, Invocation.method(#stat, [])),
             ),
-            returnValueForMissingStub: _i13.Future<_i6.FileStat>.value(
-              _FakeFileStat_12(this, Invocation.method(#stat, [])),
+            returnValueForMissingStub: _i11.Future<_i7.FileStat>.value(
+              _FakeFileStat_13(this, Invocation.method(#stat, [])),
             ),
           )
-          as _i13.Future<_i6.FileStat>);
+          as _i11.Future<_i7.FileStat>);
 
   @override
-  _i6.FileStat statSync() =>
+  _i7.FileStat statSync() =>
       (super.noSuchMethod(
             Invocation.method(#statSync, []),
-            returnValue: _FakeFileStat_12(
+            returnValue: _FakeFileStat_13(
               this,
               Invocation.method(#statSync, []),
             ),
-            returnValueForMissingStub: _FakeFileStat_12(
+            returnValueForMissingStub: _FakeFileStat_13(
               this,
               Invocation.method(#statSync, []),
             ),
           )
-          as _i6.FileStat);
+          as _i7.FileStat);
 
   @override
-  _i13.Stream<_i6.FileSystemEvent> watch({
+  _i11.Stream<_i7.FileSystemEvent> watch({
     int? events = 15,
     bool? recursive = false,
   }) =>
@@ -1086,314 +1251,17 @@ class MockFile extends _i1.Mock implements _i6.File {
               #events: events,
               #recursive: recursive,
             }),
-            returnValue: _i13.Stream<_i6.FileSystemEvent>.empty(),
-            returnValueForMissingStub: _i13.Stream<_i6.FileSystemEvent>.empty(),
+            returnValue: _i11.Stream<_i7.FileSystemEvent>.empty(),
+            returnValueForMissingStub: _i11.Stream<_i7.FileSystemEvent>.empty(),
           )
-          as _i13.Stream<_i6.FileSystemEvent>);
-}
-
-/// A class which mocks [Directory].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockDirectory extends _i1.Mock implements _i6.Directory {
-  @override
-  String get path =>
-      (super.noSuchMethod(
-            Invocation.getter(#path),
-            returnValue: _i15.dummyValue<String>(
-              this,
-              Invocation.getter(#path),
-            ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
-              this,
-              Invocation.getter(#path),
-            ),
-          )
-          as String);
-
-  @override
-  Uri get uri =>
-      (super.noSuchMethod(
-            Invocation.getter(#uri),
-            returnValue: _FakeUri_7(this, Invocation.getter(#uri)),
-            returnValueForMissingStub: _FakeUri_7(
-              this,
-              Invocation.getter(#uri),
-            ),
-          )
-          as Uri);
-
-  @override
-  _i6.Directory get absolute =>
-      (super.noSuchMethod(
-            Invocation.getter(#absolute),
-            returnValue: _FakeDirectory_4(this, Invocation.getter(#absolute)),
-            returnValueForMissingStub: _FakeDirectory_4(
-              this,
-              Invocation.getter(#absolute),
-            ),
-          )
-          as _i6.Directory);
-
-  @override
-  bool get isAbsolute =>
-      (super.noSuchMethod(
-            Invocation.getter(#isAbsolute),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  _i6.Directory get parent =>
-      (super.noSuchMethod(
-            Invocation.getter(#parent),
-            returnValue: _FakeDirectory_4(this, Invocation.getter(#parent)),
-            returnValueForMissingStub: _FakeDirectory_4(
-              this,
-              Invocation.getter(#parent),
-            ),
-          )
-          as _i6.Directory);
-
-  @override
-  _i13.Future<_i6.Directory> create({bool? recursive = false}) =>
-      (super.noSuchMethod(
-            Invocation.method(#create, [], {#recursive: recursive}),
-            returnValue: _i13.Future<_i6.Directory>.value(
-              _FakeDirectory_4(
-                this,
-                Invocation.method(#create, [], {#recursive: recursive}),
-              ),
-            ),
-            returnValueForMissingStub: _i13.Future<_i6.Directory>.value(
-              _FakeDirectory_4(
-                this,
-                Invocation.method(#create, [], {#recursive: recursive}),
-              ),
-            ),
-          )
-          as _i13.Future<_i6.Directory>);
-
-  @override
-  void createSync({bool? recursive = false}) => super.noSuchMethod(
-    Invocation.method(#createSync, [], {#recursive: recursive}),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  _i13.Future<_i6.Directory> createTemp([String? prefix]) =>
-      (super.noSuchMethod(
-            Invocation.method(#createTemp, [prefix]),
-            returnValue: _i13.Future<_i6.Directory>.value(
-              _FakeDirectory_4(this, Invocation.method(#createTemp, [prefix])),
-            ),
-            returnValueForMissingStub: _i13.Future<_i6.Directory>.value(
-              _FakeDirectory_4(this, Invocation.method(#createTemp, [prefix])),
-            ),
-          )
-          as _i13.Future<_i6.Directory>);
-
-  @override
-  _i6.Directory createTempSync([String? prefix]) =>
-      (super.noSuchMethod(
-            Invocation.method(#createTempSync, [prefix]),
-            returnValue: _FakeDirectory_4(
-              this,
-              Invocation.method(#createTempSync, [prefix]),
-            ),
-            returnValueForMissingStub: _FakeDirectory_4(
-              this,
-              Invocation.method(#createTempSync, [prefix]),
-            ),
-          )
-          as _i6.Directory);
-
-  @override
-  _i13.Future<String> resolveSymbolicLinks() =>
-      (super.noSuchMethod(
-            Invocation.method(#resolveSymbolicLinks, []),
-            returnValue: _i13.Future<String>.value(
-              _i15.dummyValue<String>(
-                this,
-                Invocation.method(#resolveSymbolicLinks, []),
-              ),
-            ),
-            returnValueForMissingStub: _i13.Future<String>.value(
-              _i15.dummyValue<String>(
-                this,
-                Invocation.method(#resolveSymbolicLinks, []),
-              ),
-            ),
-          )
-          as _i13.Future<String>);
-
-  @override
-  String resolveSymbolicLinksSync() =>
-      (super.noSuchMethod(
-            Invocation.method(#resolveSymbolicLinksSync, []),
-            returnValue: _i15.dummyValue<String>(
-              this,
-              Invocation.method(#resolveSymbolicLinksSync, []),
-            ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
-              this,
-              Invocation.method(#resolveSymbolicLinksSync, []),
-            ),
-          )
-          as String);
-
-  @override
-  _i13.Future<_i6.Directory> rename(String? newPath) =>
-      (super.noSuchMethod(
-            Invocation.method(#rename, [newPath]),
-            returnValue: _i13.Future<_i6.Directory>.value(
-              _FakeDirectory_4(this, Invocation.method(#rename, [newPath])),
-            ),
-            returnValueForMissingStub: _i13.Future<_i6.Directory>.value(
-              _FakeDirectory_4(this, Invocation.method(#rename, [newPath])),
-            ),
-          )
-          as _i13.Future<_i6.Directory>);
-
-  @override
-  _i6.Directory renameSync(String? newPath) =>
-      (super.noSuchMethod(
-            Invocation.method(#renameSync, [newPath]),
-            returnValue: _FakeDirectory_4(
-              this,
-              Invocation.method(#renameSync, [newPath]),
-            ),
-            returnValueForMissingStub: _FakeDirectory_4(
-              this,
-              Invocation.method(#renameSync, [newPath]),
-            ),
-          )
-          as _i6.Directory);
-
-  @override
-  _i13.Future<_i6.FileSystemEntity> delete({bool? recursive = false}) =>
-      (super.noSuchMethod(
-            Invocation.method(#delete, [], {#recursive: recursive}),
-            returnValue: _i13.Future<_i6.FileSystemEntity>.value(
-              _FakeFileSystemEntity_8(
-                this,
-                Invocation.method(#delete, [], {#recursive: recursive}),
-              ),
-            ),
-            returnValueForMissingStub: _i13.Future<_i6.FileSystemEntity>.value(
-              _FakeFileSystemEntity_8(
-                this,
-                Invocation.method(#delete, [], {#recursive: recursive}),
-              ),
-            ),
-          )
-          as _i13.Future<_i6.FileSystemEntity>);
-
-  @override
-  void deleteSync({bool? recursive = false}) => super.noSuchMethod(
-    Invocation.method(#deleteSync, [], {#recursive: recursive}),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  _i13.Stream<_i6.FileSystemEntity> list({
-    bool? recursive = false,
-    bool? followLinks = true,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#list, [], {
-              #recursive: recursive,
-              #followLinks: followLinks,
-            }),
-            returnValue: _i13.Stream<_i6.FileSystemEntity>.empty(),
-            returnValueForMissingStub:
-                _i13.Stream<_i6.FileSystemEntity>.empty(),
-          )
-          as _i13.Stream<_i6.FileSystemEntity>);
-
-  @override
-  List<_i6.FileSystemEntity> listSync({
-    bool? recursive = false,
-    bool? followLinks = true,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#listSync, [], {
-              #recursive: recursive,
-              #followLinks: followLinks,
-            }),
-            returnValue: <_i6.FileSystemEntity>[],
-            returnValueForMissingStub: <_i6.FileSystemEntity>[],
-          )
-          as List<_i6.FileSystemEntity>);
-
-  @override
-  _i13.Future<bool> exists() =>
-      (super.noSuchMethod(
-            Invocation.method(#exists, []),
-            returnValue: _i13.Future<bool>.value(false),
-            returnValueForMissingStub: _i13.Future<bool>.value(false),
-          )
-          as _i13.Future<bool>);
-
-  @override
-  bool existsSync() =>
-      (super.noSuchMethod(
-            Invocation.method(#existsSync, []),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  _i13.Future<_i6.FileStat> stat() =>
-      (super.noSuchMethod(
-            Invocation.method(#stat, []),
-            returnValue: _i13.Future<_i6.FileStat>.value(
-              _FakeFileStat_12(this, Invocation.method(#stat, [])),
-            ),
-            returnValueForMissingStub: _i13.Future<_i6.FileStat>.value(
-              _FakeFileStat_12(this, Invocation.method(#stat, [])),
-            ),
-          )
-          as _i13.Future<_i6.FileStat>);
-
-  @override
-  _i6.FileStat statSync() =>
-      (super.noSuchMethod(
-            Invocation.method(#statSync, []),
-            returnValue: _FakeFileStat_12(
-              this,
-              Invocation.method(#statSync, []),
-            ),
-            returnValueForMissingStub: _FakeFileStat_12(
-              this,
-              Invocation.method(#statSync, []),
-            ),
-          )
-          as _i6.FileStat);
-
-  @override
-  _i13.Stream<_i6.FileSystemEvent> watch({
-    int? events = 15,
-    bool? recursive = false,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#watch, [], {
-              #events: events,
-              #recursive: recursive,
-            }),
-            returnValue: _i13.Stream<_i6.FileSystemEvent>.empty(),
-            returnValueForMissingStub: _i13.Stream<_i6.FileSystemEvent>.empty(),
-          )
-          as _i13.Stream<_i6.FileSystemEvent>);
+          as _i11.Stream<_i7.FileSystemEvent>);
 }
 
 /// A class which mocks [RunningExecutablesRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockRunningExecutablesRepo<SlotType> extends _i1.Mock
-    implements _i21.RunningExecutablesRepo<SlotType> {
+    implements _i15.RunningExecutablesRepo<SlotType> {
   @override
   bool get hasListeners =>
       (super.noSuchMethod(
@@ -1405,9 +1273,9 @@ class MockRunningExecutablesRepo<SlotType> extends _i1.Mock
 
   @override
   void addRunningProcess({
-    required _i11.WinePrefix? prefix,
+    required _i14.WinePrefix? prefix,
     required SlotType? slot,
-    required _i5.WineProcess? wineProcess,
+    required _i6.WineProcess? wineProcess,
   }) => super.noSuchMethod(
     Invocation.method(#addRunningProcess, [], {
       #prefix: prefix,
@@ -1418,8 +1286,8 @@ class MockRunningExecutablesRepo<SlotType> extends _i1.Mock
   );
 
   @override
-  _i5.WineProcess? tryFindRunningProcess({
-    required _i11.WinePrefix? prefix,
+  _i6.WineProcess? tryFindRunningProcess({
+    required _i14.WinePrefix? prefix,
     required SlotType? slot,
   }) =>
       (super.noSuchMethod(
@@ -1429,10 +1297,10 @@ class MockRunningExecutablesRepo<SlotType> extends _i1.Mock
             }),
             returnValueForMissingStub: null,
           )
-          as _i5.WineProcess?);
+          as _i6.WineProcess?);
 
   @override
-  int numProcessesRunningInPrefix(_i11.WinePrefix? prefix) =>
+  int numProcessesRunningInPrefix(_i14.WinePrefix? prefix) =>
       (super.noSuchMethod(
             Invocation.method(#numProcessesRunningInPrefix, [prefix]),
             returnValue: 0,
@@ -1450,13 +1318,13 @@ class MockRunningExecutablesRepo<SlotType> extends _i1.Mock
           as int);
 
   @override
-  void addListener(_i22.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i26.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#addListener, [listener]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void removeListener(_i22.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i26.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#removeListener, [listener]),
     returnValueForMissingStub: null,
   );
@@ -1474,172 +1342,131 @@ class MockRunningExecutablesRepo<SlotType> extends _i1.Mock
   );
 }
 
-/// A class which mocks [WineInstallationDescriptor].
+/// A class which mocks [WineTasks].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWineInstallationDescriptor extends _i1.Mock
-    implements _i3.WineInstallationDescriptor {
+class MockWineTasks extends _i1.Mock implements _i27.WineTasks {
   @override
-  bool get needsHomeIsolation =>
-      (super.noSuchMethod(
-            Invocation.getter(#needsHomeIsolation),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  bool get hasBundledWinetricks =>
-      (super.noSuchMethod(
-            Invocation.getter(#hasBundledWinetricks),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  String getInnermostPrefixDir({
-    required _i7.WinePrefixDirStructure? prefixDirStructure,
+  _i11.Future<void> initializeWinePrefix({
+    void Function(void Function())? cancelHookReceiver,
+    required _i13.StartupData? startupData,
+    required _i14.WinePrefix? winePrefix,
+    required _i4.WineInstallationDescriptor? wineInstDescriptor,
+    required _i15.RunningExecutablesRepo<_i16.SpecialExecutableSlot>?
+    runningSpecialExecutablesRepo,
+    required _i16.SpecialExecutableSlot? specialExecutableSlot,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#getInnermostPrefixDir, [], {
-              #prefixDirStructure: prefixDirStructure,
-            }),
-            returnValue: _i15.dummyValue<String>(
-              this,
-              Invocation.method(#getInnermostPrefixDir, [], {
-                #prefixDirStructure: prefixDirStructure,
-              }),
-            ),
-            returnValueForMissingStub: _i15.dummyValue<String>(
-              this,
-              Invocation.method(#getInnermostPrefixDir, [], {
-                #prefixDirStructure: prefixDirStructure,
-              }),
-            ),
-          )
-          as String);
-
-  @override
-  List<String> buildWineInvocationCommand({
-    required _i11.WinePrefix? winePrefix,
-    required List<String>? wineArgs,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#buildWineInvocationCommand, [], {
+            Invocation.method(#initializeWinePrefix, [], {
+              #cancelHookReceiver: cancelHookReceiver,
+              #startupData: startupData,
               #winePrefix: winePrefix,
-              #wineArgs: wineArgs,
+              #wineInstDescriptor: wineInstDescriptor,
+              #runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+              #specialExecutableSlot: specialExecutableSlot,
             }),
-            returnValue: <String>[],
-            returnValueForMissingStub: <String>[],
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
           )
-          as List<String>);
+          as _i11.Future<void>);
 
   @override
-  List<String> buildWinetricksInvocationCommand({
-    required String? externalWinetricksScriptPath,
-    required List<String>? winetricksArgs,
+  _i11.Future<void> setHiDpiScale({
+    required double? hiDpiScale,
+    void Function(void Function())? cancelHookReceiver,
+    required _i13.StartupData? startupData,
+    required _i14.WinePrefix? winePrefix,
+    required _i4.WineInstallationDescriptor? wineInstDescriptor,
+    required _i15.RunningExecutablesRepo<_i16.SpecialExecutableSlot>?
+    runningSpecialExecutablesRepo,
+    required _i16.SpecialExecutableSlot? specialExecutableSlot,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#buildWinetricksInvocationCommand, [], {
-              #externalWinetricksScriptPath: externalWinetricksScriptPath,
-              #winetricksArgs: winetricksArgs,
-            }),
-            returnValue: <String>[],
-            returnValueForMissingStub: <String>[],
-          )
-          as List<String>);
-
-  @override
-  _i13.Future<Map<String, String>> getEnvVarsForWine({
-    required _i11.WinePrefix? winePrefix,
-    required String? processOutputDir,
-    required _i23.PinnedExecutableSettings? pinnedExecutableSettings,
-    required bool? forWinetricks,
-    required bool? disableLogs,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#getEnvVarsForWine, [], {
+            Invocation.method(#setHiDpiScale, [], {
+              #hiDpiScale: hiDpiScale,
+              #cancelHookReceiver: cancelHookReceiver,
+              #startupData: startupData,
               #winePrefix: winePrefix,
-              #processOutputDir: processOutputDir,
-              #pinnedExecutableSettings: pinnedExecutableSettings,
-              #forWinetricks: forWinetricks,
-              #disableLogs: disableLogs,
+              #wineInstDescriptor: wineInstDescriptor,
+              #runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+              #specialExecutableSlot: specialExecutableSlot,
             }),
-            returnValue: _i13.Future<Map<String, String>>.value(
-              <String, String>{},
-            ),
-            returnValueForMissingStub: _i13.Future<Map<String, String>>.value(
-              <String, String>{},
-            ),
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
           )
-          as _i13.Future<Map<String, String>>);
-}
+          as _i11.Future<void>);
 
-/// A class which mocks [WineProcessRunnerService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockWineProcessRunnerService extends _i1.Mock
-    implements _i5.WineProcessRunnerService {
   @override
-  _i13.Future<_i5.WineProcess> start({
-    required _i6.Directory? processOutputDir,
-    required List<String>? commandLine,
-    required Map<String, String>? envVars,
+  _i11.Future<void> setupDxvkDllOverrides({
+    void Function(void Function())? cancelHookReceiver,
+    required _i13.StartupData? startupData,
+    required _i14.WinePrefix? winePrefix,
+    required _i4.WineInstallationDescriptor? wineInstDescriptor,
+    required _i15.RunningExecutablesRepo<_i16.SpecialExecutableSlot>?
+    runningSpecialExecutablesRepo,
+    required _i16.SpecialExecutableSlot? specialExecutableSlot,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#start, [], {
-              #processOutputDir: processOutputDir,
-              #commandLine: commandLine,
-              #envVars: envVars,
+            Invocation.method(#setupDxvkDllOverrides, [], {
+              #cancelHookReceiver: cancelHookReceiver,
+              #startupData: startupData,
+              #winePrefix: winePrefix,
+              #wineInstDescriptor: wineInstDescriptor,
+              #runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+              #specialExecutableSlot: specialExecutableSlot,
             }),
-            returnValue: _i13.Future<_i5.WineProcess>.value(
-              _FakeWineProcess_13(
-                this,
-                Invocation.method(#start, [], {
-                  #processOutputDir: processOutputDir,
-                  #commandLine: commandLine,
-                  #envVars: envVars,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i13.Future<_i5.WineProcess>.value(
-              _FakeWineProcess_13(
-                this,
-                Invocation.method(#start, [], {
-                  #processOutputDir: processOutputDir,
-                  #commandLine: commandLine,
-                  #envVars: envVars,
-                }),
-              ),
-            ),
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
           )
-          as _i13.Future<_i5.WineProcess>);
-}
-
-/// A class which mocks [WineProcess].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockWineProcess extends _i1.Mock implements _i5.WineProcess {
-  @override
-  _i13.Future<_i5.WineProcessResult> get result =>
-      (super.noSuchMethod(
-            Invocation.getter(#result),
-            returnValue: _i13.Future<_i5.WineProcessResult>.value(
-              _FakeWineProcessResult_14(this, Invocation.getter(#result)),
-            ),
-            returnValueForMissingStub: _i13.Future<_i5.WineProcessResult>.value(
-              _FakeWineProcessResult_14(this, Invocation.getter(#result)),
-            ),
-          )
-          as _i13.Future<_i5.WineProcessResult>);
+          as _i11.Future<void>);
 
   @override
-  bool kill([_i6.ProcessSignal? signal = _i6.ProcessSignal.sigterm]) =>
+  _i11.Future<void> clearDxvkDllOverrides({
+    void Function(void Function())? cancelHookReceiver,
+    required _i13.StartupData? startupData,
+    required _i14.WinePrefix? winePrefix,
+    required _i4.WineInstallationDescriptor? wineInstDescriptor,
+    required _i15.RunningExecutablesRepo<_i16.SpecialExecutableSlot>?
+    runningSpecialExecutablesRepo,
+    required _i16.SpecialExecutableSlot? specialExecutableSlot,
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#kill, [signal]),
-            returnValue: false,
-            returnValueForMissingStub: false,
+            Invocation.method(#clearDxvkDllOverrides, [], {
+              #cancelHookReceiver: cancelHookReceiver,
+              #startupData: startupData,
+              #winePrefix: winePrefix,
+              #wineInstDescriptor: wineInstDescriptor,
+              #runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+              #specialExecutableSlot: specialExecutableSlot,
+            }),
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
           )
-          as bool);
+          as _i11.Future<void>);
+
+  @override
+  _i11.Future<void> updateDllOverrides({
+    required Map<String, String?>? valuesToSetOrRemove,
+    void Function(void Function())? cancelHookReceiver,
+    required _i13.StartupData? startupData,
+    required _i14.WinePrefix? winePrefix,
+    required _i4.WineInstallationDescriptor? wineInstDescriptor,
+    required _i15.RunningExecutablesRepo<_i16.SpecialExecutableSlot>?
+    runningSpecialExecutablesRepo,
+    required _i16.SpecialExecutableSlot? specialExecutableSlot,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateDllOverrides, [], {
+              #valuesToSetOrRemove: valuesToSetOrRemove,
+              #cancelHookReceiver: cancelHookReceiver,
+              #startupData: startupData,
+              #winePrefix: winePrefix,
+              #wineInstDescriptor: wineInstDescriptor,
+              #runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+              #specialExecutableSlot: specialExecutableSlot,
+            }),
+            returnValue: _i11.Future<void>.value(),
+            returnValueForMissingStub: _i11.Future<void>.value(),
+          )
+          as _i11.Future<void>);
 }

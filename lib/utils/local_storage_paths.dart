@@ -19,6 +19,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
+import 'package:winebar/models/dxvk_build.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 
 import '../models/wine_build.dart';
@@ -30,6 +31,7 @@ class LocalStoragePaths {
   static const String _settingsJsonFileName = 'settings.json';
   static const String _wineInstallsDirName = 'wine-installs';
   static const String _winePrefixesDirName = 'wine-prefixes';
+  static const String _dxvkPackagesDirName = 'dxvk-packages';
   static const String _tempDirName = 'temp';
 
   final String homeDir;
@@ -44,6 +46,9 @@ class LocalStoragePaths {
 
   String get winePrefixesDir =>
       path.join(toplevelDataDir, _winePrefixesDirName);
+
+  String get dxvkPackagesDir =>
+      path.join(toplevelDataDir, _dxvkPackagesDirName);
 
   String get tempDir => path.join(toplevelDataDir, _tempDirName);
 
@@ -132,6 +137,12 @@ class LocalStoragePaths {
       wineReleaseDir,
       wineBuildDir,
     );
+  }
+
+  String getDxvkPackageDir({required DxvkBuild dxvkBuild}) {
+    final dxvkReleaseDir = _sanitizeName(dxvkBuild.versionTag);
+
+    return path.join(toplevelDataDir, _dxvkPackagesDirName, dxvkReleaseDir);
   }
 
   WinePrefixDirStructure getWinePrefixDirStructure({

@@ -22,19 +22,32 @@ import 'package:meta/meta.dart';
 import 'archive_type.dart';
 
 @immutable
-class WineBuild extends Equatable {
+class DxvkBuild extends Equatable {
+  final String versionTag;
   final String archiveFileName;
   final ArchiveType archiveType;
   final String downloadUrl;
 
-  const WineBuild({
+  const DxvkBuild({
+    required this.versionTag,
     required this.archiveFileName,
     required this.archiveType,
     required this.downloadUrl,
   });
 
   @override
-  List<Object> get props => [archiveFileName, archiveType, downloadUrl];
+  List<Object> get props => [
+    versionTag,
+    archiveFileName,
+    archiveType,
+    downloadUrl,
+  ];
 
-  bool get hasWow64InName => archiveFileName.toLowerCase().contains('wow64');
+  static DxvkBuild get recommendedBuild => DxvkBuild(
+    versionTag: 'v2.7.1',
+    archiveFileName: 'dxvk-2.7.1.tar.gz',
+    archiveType: ArchiveType.tarGz,
+    downloadUrl:
+        'https://github.com/doitsujin/dxvk/releases/download/v2.7.1/dxvk-2.7.1.tar.gz',
+  );
 }

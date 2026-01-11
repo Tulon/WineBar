@@ -1,18 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
+import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/prefix_list_event.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
-import 'package:winebar/utils/prefix_descriptor.dart';
 
 WinePrefix _makePrefix({required String name, required String outerDir}) {
   return WinePrefix(
     dirStructure: WinePrefixDirStructure.fromOuterDir(outerDir),
-    descriptor: PrefixDescriptor(
+    descriptor: WinePrefixDescriptor(
       name: name,
       relPathToWineInstall: '..',
       hiDpiScale: null,
       wow64ModePreferred: null,
+      d3d8To11Implementation: null,
     ),
   );
 }

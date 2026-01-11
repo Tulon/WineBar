@@ -26,15 +26,17 @@ import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/wine_command_failed_exception.dart';
+import 'package:winebar/models/d3d_8_to_11_implementation.dart';
+import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/suppressable_warning.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
+import 'package:winebar/services/dxvk_installation_service.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/utils/get_single_child_dir.dart';
-import 'package:winebar/utils/prefix_descriptor.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
@@ -49,6 +51,9 @@ import '../../services/download_and_extraction_service.dart';
 import 'prefix_creation_state.dart';
 
 class PrefixCreationBloc extends Cubit<PrefixCreationState> {
+  static const SpecialExecutableSlot _specialExecutableSlot =
+      SpecialExecutableSlot.prefixCreationTask;
+
   final logger = GetIt.I.get<Logger>();
   final StartupData startupData;
   final Set<SuppressableWarning> warningsSuppressedAtBlocCreationTime;
@@ -402,10 +407,31 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     );
   }
 
+  void setUseParticularD3d8To11Implementation(bool use) {
+    if (state.useParticularD3d8To11Implementation != use) {
+      emit(state.copyWith(useParticularD3d8To11Implementation: use));
+    }
+  }
+
+  void setSelectedD3d8To11Implementation(D3d8To11Implementation selectedImpl) {
+    if (state.selectedD3d8To11Implementation != selectedImpl) {
+      emit(state.copyWith(selectedD3d8To11Implementation: selectedImpl));
+    }
+  }
+
   void startCreatingPrefix() {
     assert(!state.prefixCreationStatus.isInProgress);
 
-    emit(state.copyWith(prefixCreationFailureMessageGetter: () => null));
+    emit(
+      state.copyWith(
+        // We have to switch the state early, if only to disable the
+        // 'Create Prefix' button.
+        prefixCreationStatus: PrefixCreationStatus.starting,
+
+        prefixCreationFailureMessageGetter: () => null,
+        prefixCreationFailedProcessResultGetter: () => null,
+      ),
+    );
 
     unawaited(
       _createPrefix().then(
@@ -444,18 +470,50 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         );
       }
 
-      emit(
-        state.copyWith(
-          prefixCreationStatus: PrefixCreationStatus.creatingWinePrefix,
-          prefixCreationOperationProgressGetter: () => null,
-          prefixCreationFailedProcessResultGetter: () => null,
-        ),
-      );
-
       final utilityService = GetIt.I.get<UtilityService>();
 
       final wineInstDescriptor = await utilityService
           .wineInstallationDescriptorForWineInstallDir(wineInstallDir.path);
+
+      final dxvkInstallationService = GetIt.I.get<DxvkInstallationService>();
+
+      final dxvkWanted =
+          state.useParticularD3d8To11Implementation &&
+          state.selectedD3d8To11Implementation == D3d8To11Implementation.dxvk;
+
+      final dxvkInstallationPlan = await dxvkInstallationService
+          .buildDxvkInstallationPlan(
+            dxvkWanted: dxvkWanted,
+            localStoragePaths: startupData.localStoragePaths,
+            wineInstDescriptor: wineInstDescriptor,
+          );
+
+      if (dxvkInstallationPlan.needDownloadAndExtract) {
+        emit(
+          state.copyWith(
+            prefixCreationStatus:
+                PrefixCreationStatus.downloadingAndExtractingDxvk,
+            prefixCreationStepProgressGetter: () => null,
+          ),
+        );
+
+        final dxvkExtractionTempDir = await prefixCreationTempDir.createTemp(
+          'dxvk-extraction-',
+        );
+
+        await dxvkInstallationPlan.downloadAndExtract(
+          tempExtractionDir: dxvkExtractionTempDir,
+          progressCallback: _updateDownloadAndExtractionProgress,
+        );
+      }
+
+      emit(
+        state.copyWith(
+          prefixCreationStatus: PrefixCreationStatus.creatingWinePrefix,
+          prefixCreationStepProgressGetter: () => null,
+          prefixCreationFailedProcessResultGetter: () => null,
+        ),
+      );
 
       await Directory(prefixDirStructure.innerDir).create(recursive: true);
 
@@ -464,11 +522,14 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         from: startupData.localStoragePaths.toplevelDataDir,
       );
 
-      final prefixDescriptor = PrefixDescriptor(
+      final prefixDescriptor = WinePrefixDescriptor(
         name: state.prefixName,
         relPathToWineInstall: relWineInstallPath,
         hiDpiScale: state.hiDpiScale,
         wow64ModePreferred: state.wow64ModePreferred,
+        d3d8To11Implementation: state.useParticularD3d8To11Implementation
+            ? state.selectedD3d8To11Implementation
+            : null,
       );
 
       final winePrefix = WinePrefix(
@@ -491,18 +552,25 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         prefixDirStructure: prefixDirStructure,
       );
 
+      final wineTasks = WineTasks.instance;
+
       // Populate the prefix directory.
-      await _initializeWinePrefix(
+      await wineTasks.initializeWinePrefix(
+        startupData: startupData,
         winePrefix: winePrefix,
         wineInstDescriptor: wineInstDescriptor,
         runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+        specialExecutableSlot: _specialExecutableSlot,
       );
 
       // This time, apply the HiDPI settings the proper way.
-      await _applyHiDpiSettings(
+      await wineTasks.setHiDpiScale(
+        hiDpiScale: state.hiDpiScale,
+        startupData: startupData,
         winePrefix: winePrefix,
         wineInstDescriptor: wineInstDescriptor,
         runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+        specialExecutableSlot: _specialExecutableSlot,
       );
 
       // See the documentation for [WineInstallationDescriptor.needsHomeIsolation]
@@ -511,6 +579,21 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         await _isolateHome(
           wineInstDescriptor: wineInstDescriptor,
           prefixDirStructure: prefixDirStructure,
+        );
+      }
+
+      if (dxvkInstallationPlan.needInstall) {
+        await dxvkInstallationPlan.install(
+          prefixDirStructure: prefixDirStructure,
+        );
+      }
+
+      if (dxvkInstallationPlan.needActivate) {
+        await dxvkInstallationPlan.activate(
+          startupData: startupData,
+          winePrefix: winePrefix,
+          runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
+          specialExecutableSlot: _specialExecutableSlot,
         );
       }
 
@@ -556,7 +639,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
       state.copyWith(
         prefixCreationStatus:
             PrefixCreationStatus.downloadingAndExtractingWineBuild,
-        prefixCreationOperationProgressGetter: () => null,
+        prefixCreationStepProgressGetter: () => null,
         prefixCreationFailedProcessResultGetter: () => null,
       ),
     );
@@ -583,33 +666,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
   void _updateDownloadAndExtractionProgress(int bytesRead, int? bytesTotal) {
     if (bytesTotal != null) {
       final progress = bytesRead / bytesTotal;
-      emit(
-        state.copyWith(prefixCreationOperationProgressGetter: () => progress),
-      );
-    }
-  }
-
-  Future<void> _initializeWinePrefix({
-    required WinePrefix winePrefix,
-    required WineInstallationDescriptor wineInstDescriptor,
-    required RunningExecutablesRepo<SpecialExecutableSlot>
-    runningSpecialExecutablesRepo,
-  }) async {
-    final process = await startTaskOfPrefixInitialization(
-      startupData: startupData,
-      winePrefix: winePrefix,
-      wineInstDescriptor: wineInstDescriptor,
-      runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
-      specialExecutableSlot: SpecialExecutableSlot.prefixCreationTask,
-    );
-
-    final processResult = await process.result;
-
-    if (processResult.exitCode != 0) {
-      throw WineCommandFailedException(
-        'The "wineboot -u" command failed',
-        processResult: processResult,
-      );
+      emit(state.copyWith(prefixCreationStepProgressGetter: () => progress));
     }
   }
 
@@ -649,31 +706,6 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     await File(
       path.join(innermostPrefixDir, 'user.reg'),
     ).writeAsString(initialUserRegContents);
-  }
-
-  Future<void> _applyHiDpiSettings({
-    required WinePrefix winePrefix,
-    required WineInstallationDescriptor wineInstDescriptor,
-    required RunningExecutablesRepo<SpecialExecutableSlot>
-    runningSpecialExecutablesRepo,
-  }) async {
-    final process = await startTaskOfSettingHiDpiScale(
-      hiDpiScale: state.hiDpiScale,
-      startupData: startupData,
-      winePrefix: winePrefix,
-      wineInstDescriptor: wineInstDescriptor,
-      runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
-      specialExecutableSlot: SpecialExecutableSlot.prefixCreationTask,
-    );
-
-    final processResult = await process.result;
-
-    if (processResult.exitCode != 0) {
-      throw WineCommandFailedException(
-        'The "wine reg" command failed',
-        processResult: processResult,
-      );
-    }
   }
 
   Future<void> _isolateHome({
