@@ -18,33 +18,35 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:winebar/models/process_output.dart';
+import 'package:winebar/models/process_log.dart';
 
 @immutable
 class SpecialExecutableState extends Equatable {
   final bool isRunning;
-  final ProcessOutput? processOutput;
+
+  /// This field will be set when the process finishes.
+  final List<ProcessLog>? processLogs;
 
   const SpecialExecutableState({
     required this.isRunning,
-    required this.processOutput,
+    required this.processLogs,
   });
 
   const SpecialExecutableState.defaultState()
-    : this(isRunning: false, processOutput: null);
+    : this(isRunning: false, processLogs: null);
 
   @override
-  List<Object?> get props => [isRunning, processOutput];
+  List<Object?> get props => [isRunning, processLogs];
 
   SpecialExecutableState copyWith({
     bool? isRunning,
-    ValueGetter<ProcessOutput?>? processOutputGetter,
+    ValueGetter<List<ProcessLog>?>? processLogsGetter,
   }) {
     return SpecialExecutableState(
       isRunning: isRunning ?? this.isRunning,
-      processOutput: processOutputGetter != null
-          ? processOutputGetter()
-          : processOutput,
+      processLogs: processLogsGetter != null
+          ? processLogsGetter()
+          : processLogs,
     );
   }
 }

@@ -25,13 +25,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:icon_decoration/icon_decoration.dart';
 import 'package:winebar/models/process_log.dart';
-import 'package:winebar/models/process_output.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_build_source.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
-import 'package:winebar/widgets/process_output_widget.dart';
+import 'package:winebar/widgets/process_logs_view_widget.dart';
 import 'package:winebar/widgets/warning_widget.dart';
 import 'package:winebar/widgets/wow64_preference_toggle.dart';
 
@@ -749,8 +748,7 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) =>
-              ProcessOutputWidget(processOutput: ProcessOutput(logs: logs)),
+          builder: (_) => ProcessLogsViewWidget(processLogs: logs),
         ),
       ),
     );
