@@ -1349,7 +1349,6 @@ class MockWineTasks extends _i1.Mock implements _i27.WineTasks {
   @override
   _i11.Future<void> initializeWinePrefix({
     void Function(void Function())? cancelHookReceiver,
-    required _i13.StartupData? startupData,
     required _i14.WinePrefix? winePrefix,
     required _i4.WineInstallationDescriptor? wineInstDescriptor,
     required _i15.RunningExecutablesRepo<_i16.SpecialExecutableSlot>?
@@ -1359,7 +1358,6 @@ class MockWineTasks extends _i1.Mock implements _i27.WineTasks {
       (super.noSuchMethod(
             Invocation.method(#initializeWinePrefix, [], {
               #cancelHookReceiver: cancelHookReceiver,
-              #startupData: startupData,
               #winePrefix: winePrefix,
               #wineInstDescriptor: wineInstDescriptor,
               #runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
@@ -1374,7 +1372,6 @@ class MockWineTasks extends _i1.Mock implements _i27.WineTasks {
   _i11.Future<void> setHiDpiScale({
     required double? hiDpiScale,
     void Function(void Function())? cancelHookReceiver,
-    required _i13.StartupData? startupData,
     required _i14.WinePrefix? winePrefix,
     required _i4.WineInstallationDescriptor? wineInstDescriptor,
     required _i15.RunningExecutablesRepo<_i16.SpecialExecutableSlot>?
@@ -1385,7 +1382,6 @@ class MockWineTasks extends _i1.Mock implements _i27.WineTasks {
             Invocation.method(#setHiDpiScale, [], {
               #hiDpiScale: hiDpiScale,
               #cancelHookReceiver: cancelHookReceiver,
-              #startupData: startupData,
               #winePrefix: winePrefix,
               #wineInstDescriptor: wineInstDescriptor,
               #runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,

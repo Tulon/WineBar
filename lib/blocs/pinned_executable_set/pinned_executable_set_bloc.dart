@@ -24,23 +24,19 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
-import 'package:winebar/utils/startup_data.dart';
 
 import '../../../models/pinned_executable.dart';
 
 class PinnedExecutableSetBloc extends Cubit<PinnedExecutableSetState> {
   final logger = GetIt.I.get<Logger>();
-  final StartupData startupData;
 
   /// Pinning and unpinning operations are asynchronous but need to be executed
   /// sequentially. This future corresponds to the completion of the last pin
   /// or unpin operation.
   var _lastPinUnpinOperationCompletion = Future<void>.value();
 
-  PinnedExecutableSetBloc({
-    required PinnedExecutableSetState initialState,
-    required this.startupData,
-  }) : super(initialState);
+  PinnedExecutableSetBloc({required PinnedExecutableSetState initialState})
+    : super(initialState);
 
   /// See the docs for [PinnedExecutableSetState.pinnedExecutableListEvent] for why we need
   /// such a method and when to call it.

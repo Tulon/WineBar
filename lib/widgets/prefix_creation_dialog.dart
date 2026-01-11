@@ -27,7 +27,6 @@ import 'package:icon_decoration/icon_decoration.dart';
 import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_build_source.dart';
-import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 import 'package:winebar/widgets/process_logs_view_widget.dart';
@@ -41,31 +40,21 @@ import '../repositories/wine_build_source_repo.dart';
 import 'error_message_widget.dart';
 
 class PrefixCreationDialog extends StatelessWidget {
-  final StartupData startupData;
   final void Function(WinePrefix) onPrefixCreated;
 
-  const PrefixCreationDialog({
-    super.key,
-    required this.startupData,
-    required this.onPrefixCreated,
-  });
+  const PrefixCreationDialog({super.key, required this.onPrefixCreated});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => PrefixCreationBloc(
-        startupData: startupData,
-        onPrefixCreated: onPrefixCreated,
-      ),
-      child: _PrefixCreationStatefulDialog(startupData: startupData),
+      create: (_) => PrefixCreationBloc(onPrefixCreated: onPrefixCreated),
+      child: _PrefixCreationStatefulDialog(),
     );
   }
 }
 
 class _PrefixCreationStatefulDialog extends StatefulWidget {
-  final StartupData startupData;
-
-  const _PrefixCreationStatefulDialog({required this.startupData});
+  const _PrefixCreationStatefulDialog();
 
   @override
   State createState() => _PrefixCreationDialogState();

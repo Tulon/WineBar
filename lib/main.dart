@@ -31,6 +31,7 @@ import 'package:winebar/services/screensaver_inhibition_service.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/services/winetricks_download_service_impl.dart';
+import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_tasks.dart';
 
 import 'repositories/wine_build_source_repo.dart';
@@ -91,7 +92,9 @@ void main() {
   GetIt.I.registerSingletonAsync<List<GpuInfo>>(
     GpuInfo.loadListOfAvailableGpus,
   );
-  WineTasks.createAndRegisterSingletonInstance();
+
+  WineTasks.createAndRegisterInstance();
+  StartupData.asyncCreateAndRegisterInstance();
 
   runApp(TopLevelWidget());
 }

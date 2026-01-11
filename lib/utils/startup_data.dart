@@ -41,7 +41,7 @@ class StartupData {
   final bool isIntelHost;
   final bool wineWillRunUnderMuvm;
 
-  StartupData({
+  StartupData._({
     required this.localStoragePaths,
     required this.winePrefixes,
     required this.wineProcessRunnerService,
@@ -49,7 +49,23 @@ class StartupData {
     required this.wineWillRunUnderMuvm,
   });
 
-  static Future<StartupData> load() async {
+  static void asyncCreateAndRegisterInstance() {
+    GetIt.I.registerSingletonAsync<StartupData>(_load);
+  }
+
+  static void registerMockInstance(StartupData instance) {
+    GetIt.I.registerSingleton<StartupData>(instance);
+  }
+
+  static Future<StartupData> get asyncInstance {
+    return GetIt.I.getAsync<StartupData>();
+  }
+
+  static StartupData get instance {
+    return GetIt.I.get<StartupData>();
+  }
+
+  static Future<StartupData> _load() async {
     final localStoragePaths = await LocalStoragePaths.get();
     final toplevelDataDirectory = Directory(localStoragePaths.toplevelDataDir);
 
@@ -106,7 +122,7 @@ class StartupData {
       runWithMuvm: muvmNeeded,
     );
 
-    return StartupData(
+    return StartupData._(
       localStoragePaths: localStoragePaths,
       winePrefixes: winePrefixes,
       wineProcessRunnerService: wineProcessRunningService,

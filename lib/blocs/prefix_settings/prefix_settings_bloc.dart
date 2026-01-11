@@ -41,22 +41,17 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
       SpecialExecutableSlot.prefixUpdateTask;
 
   final logger = GetIt.I.get<Logger>();
-  final StartupData startupData;
   WinePrefix prefix;
   final void Function(WinePrefix) onPrefixUpdated;
 
-  PrefixSettingsBloc({
-    required this.startupData,
-    required this.prefix,
-    required this.onPrefixUpdated,
-  }) : super(
-         PrefixSettingsState.initialState(
-           startupData: startupData,
-           hiDpiScale: prefix.descriptor.hiDpiScale,
-           wow64ModePreferred: prefix.descriptor.wow64ModePreferred,
-           d3d8To11Implementation: prefix.descriptor.d3d8To11Implementation,
-         ),
-       );
+  PrefixSettingsBloc({required this.prefix, required this.onPrefixUpdated})
+    : super(
+        PrefixSettingsState.initialState(
+          hiDpiScale: prefix.descriptor.hiDpiScale,
+          wow64ModePreferred: prefix.descriptor.wow64ModePreferred,
+          d3d8To11Implementation: prefix.descriptor.d3d8To11Implementation,
+        ),
+      );
 
   void setHiDpiScale(double scaleFactor) {
     emit(state.copyWith(hiDpiScaleGetter: () => scaleFactor));
@@ -70,7 +65,6 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
     }
 
     final wow64ModePreferenceWarning = wineArchWarningToShowForDualModeBuild(
-      startupData: startupData,
       wow64ModeSelected: wow64ModePreferred,
     );
 
@@ -143,6 +137,7 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
   }
 
   Future<void> _updatePrefix() async {
+    final startupData = StartupData.instance;
     final utilityService = GetIt.I.get<UtilityService>();
     final runningSpecialExecutablesRepo = GetIt.I
         .get<RunningExecutablesRepo<SpecialExecutableSlot>>();
@@ -212,7 +207,6 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
 
       await wineTasks.setHiDpiScale(
         hiDpiScale: state.hiDpiScale!,
-        startupData: startupData,
         winePrefix: prefix,
         wineInstDescriptor: wineInstDescriptor,
         runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,

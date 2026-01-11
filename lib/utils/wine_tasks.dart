@@ -37,11 +37,11 @@ class WineTasks {
   /// Prevents instantiating, except from within this library.
   WineTasks._();
 
-  static void createAndRegisterSingletonInstance() {
+  static void createAndRegisterInstance() {
     GetIt.I.registerSingleton<WineTasks>(WineTasks._());
   }
 
-  static void registerSingletonInstance(WineTasks instance) {
+  static void registerMockInstance(WineTasks instance) {
     GetIt.I.registerSingleton<WineTasks>(instance);
   }
 
@@ -61,7 +61,6 @@ class WineTasks {
   /// Future will be completed with [WineCommandFailedException].
   Future<void> initializeWinePrefix({
     void Function(void Function() cancel)? cancelHookReceiver,
-    required StartupData startupData,
     required WinePrefix winePrefix,
     required WineInstallationDescriptor wineInstDescriptor,
     required RunningExecutablesRepo<SpecialExecutableSlot>
@@ -76,7 +75,6 @@ class WineTasks {
         'wineboot.exe',
         '-u',
       ],
-      startupData: startupData,
       winePrefix: winePrefix,
       wineInstDescriptor: wineInstDescriptor,
       runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
@@ -110,7 +108,6 @@ class WineTasks {
   Future<void> setHiDpiScale({
     required double hiDpiScale,
     void Function(void Function() cancel)? cancelHookReceiver,
-    required StartupData startupData,
     required WinePrefix winePrefix,
     required WineInstallationDescriptor wineInstDescriptor,
     required RunningExecutablesRepo<SpecialExecutableSlot>
@@ -133,7 +130,6 @@ class WineTasks {
         (hiDpiScale * 96).round().toString(),
         '/f',
       ],
-      startupData: startupData,
       winePrefix: winePrefix,
       wineInstDescriptor: wineInstDescriptor,
       runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
@@ -323,7 +319,6 @@ class WineTasks {
           'import',
           regFile.path,
         ],
-        startupData: startupData,
         winePrefix: winePrefix,
         wineInstDescriptor: wineInstDescriptor,
         runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
@@ -349,12 +344,13 @@ class WineTasks {
 
   static Future<WineProcess> _startWineProcess<SlotType>({
     required List<String> wineArgs,
-    required StartupData startupData,
     required WinePrefix winePrefix,
     required WineInstallationDescriptor wineInstDescriptor,
     required RunningExecutablesRepo<SlotType> runningSpecialExecutablesRepo,
     required SlotType slot,
   }) async {
+    final startupData = StartupData.instance;
+
     final processOutputDir = await startupData.localStoragePaths
         .createProcessOutputDir();
 

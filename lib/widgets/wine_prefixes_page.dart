@@ -40,14 +40,12 @@ import 'prefix_creation_dialog.dart';
 import 'wine_prefix_page.dart';
 
 class WinePrefixesPage extends StatelessWidget {
-  final StartupData startupData;
-
-  const WinePrefixesPage({super.key, required this.startupData});
+  const WinePrefixesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PrefixListBloc>(
-      create: (context) => PrefixListBloc(startupData.winePrefixes),
+      create: (context) => PrefixListBloc(StartupData.instance.winePrefixes),
       child: Builder(
         builder: (context) {
           return Scaffold(
@@ -58,7 +56,7 @@ class WinePrefixesPage extends StatelessWidget {
               actions: [_buildDonationButton(context)],
               actionsPadding: EdgeInsetsDirectional.only(end: 8.0),
             ),
-            body: _WinePrefixesList(startupData: startupData),
+            body: _WinePrefixesList(),
             floatingActionButton: FloatingActionButton.extended(
               label: const Text('Add Wine Prefix'),
               icon: const Icon(Icons.add),
@@ -196,7 +194,8 @@ class WinePrefixesPage extends StatelessWidget {
   void _maybeShowPrefixCreationDialog(BuildContext context) {
     if (maybeTellUserToFinishRunningApps(
       context: context,
-      appsRunningInAnyPrefixAreAProblem: startupData.wineWillRunUnderMuvm,
+      appsRunningInAnyPrefixAreAProblem:
+          StartupData.instance.wineWillRunUnderMuvm,
     )) {
       return;
     }
@@ -206,7 +205,6 @@ class WinePrefixesPage extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (_) => PrefixCreationDialog(
-          startupData: startupData,
           onPrefixCreated: (prefix) {
             BlocProvider.of<PrefixListBloc>(context).addPrefix(prefix);
           },
@@ -217,10 +215,6 @@ class WinePrefixesPage extends StatelessWidget {
 }
 
 class _WinePrefixesList extends StatefulWidget {
-  final StartupData startupData;
-
-  const _WinePrefixesList({required this.startupData});
-
   @override
   State<_WinePrefixesList> createState() => _WinePrefixesListState();
 }
@@ -324,7 +318,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
                 ? null
                 : _startNavigatingToPrefix(
                     context: context,
-                    startupData: widget.startupData,
                     winePrefix: prefix,
                   ),
           ),
@@ -446,7 +439,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
 
   static void _startNavigatingToPrefix({
     required BuildContext context,
-    required StartupData startupData,
     required WinePrefix winePrefix,
   }) async {
     final bloc = BlocProvider.of<PrefixListBloc>(context);
@@ -460,7 +452,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
           context,
           MaterialPageRoute(
             builder: (_) => WinePrefixPage(
-              startupData: startupData,
               initialPrefix: winePrefix,
               initialPinnedExecutables: pinnedExecutables,
               onPrefixUpdated: (updatedPrefix) {
