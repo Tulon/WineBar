@@ -27,7 +27,6 @@ import 'package:winebar/blocs/pinned_executable/pinned_executable_bloc.dart';
 import 'package:winebar/blocs/pinned_executable/pinned_executable_state.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_bloc.dart';
 import 'package:winebar/models/pinned_executable.dart';
-import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/pinned_executable_settings_dialog.dart';
 
 import '../models/wine_prefix.dart';
@@ -56,7 +55,6 @@ class PinnedExecutableWidget extends StatefulWidget {
   final PinnedExecutable pinnedExecutable;
   final void Function(PinnedExecutable) onPinnedExecutableUpdated;
   final WinePrefix winePrefix;
-  final StartupData startupData;
 
   /// Indicates whether the pinned executable in question has already
   /// been removed. A widget for a removed pinned stays in the tree
@@ -70,7 +68,6 @@ class PinnedExecutableWidget extends StatefulWidget {
     required this.pinnedExecutable,
     required this.onPinnedExecutableUpdated,
     required this.winePrefix,
-    required this.startupData,
     required this.removed,
     required this.animation,
   });
@@ -205,7 +202,6 @@ class _PinnedExecutableWidgetState extends State<PinnedExecutableWidget> {
       key: ValueKey((widget.pinnedExecutable, widget.winePrefix)),
 
       create: (context) => PinnedExecutableBloc(
-        startupData: widget.startupData,
         winePrefix: widget.winePrefix,
         pinnedExecutable: widget.pinnedExecutable,
         isContextMenuOpen: menuController.isOpen,

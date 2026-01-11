@@ -45,7 +45,6 @@ enum WineArchWarning {
 /// If [wow64ModeSelected] is null, that indicates the selected Wine build
 /// is not a dual mode one. In such a case, this function returns null.
 WineArchWarning? wineArchWarningToShowForDualModeBuild({
-  required StartupData startupData,
   required bool? wow64ModeSelected,
 }) {
   WineArchWarning? modeWarning;
@@ -64,7 +63,7 @@ WineArchWarning? wineArchWarningToShowForDualModeBuild({
   }
 
   if (wow64ModeSelected == true) {
-    if (!startupData.isIntelHost) {
+    if (!StartupData.instance.isIntelHost) {
       setWarningUnlessSuppressed(WineArchWarning.wow64ModeUnderEmulation);
     }
   } else if (wow64ModeSelected == false) {

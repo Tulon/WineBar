@@ -85,13 +85,12 @@ void main() {
     when(wineBuild.archiveType).thenReturn(ArchiveType.tarGz);
     when(wineBuild.hasWow64InName).thenReturn(true);
 
+    StartupData.registerMockInstance(startupData);
     GetIt.I.registerSingleton<Logger>(Logger());
     GetIt.I.registerSingleton<AppSettingsService>(appSettingsService);
     GetIt.I.registerSingleton<WineBuildSourceRepo>(wineBuildSourceRepo);
 
-    await tester.pumpWidget(
-      TestWidget(startupData: startupData, onPrefixCreated: (prefix) {}),
-    );
+    await tester.pumpWidget(TestWidget(onPrefixCreated: (prefix) {}));
 
     await tester.tap(find.text(wineBuildSourceLabel));
 
@@ -114,22 +113,14 @@ void main() {
 }
 
 class TestWidget extends StatelessWidget {
-  final StartupData startupData;
   final void Function(WinePrefix) onPrefixCreated;
 
-  const TestWidget({
-    super.key,
-    required this.startupData,
-    required this.onPrefixCreated,
-  });
+  const TestWidget({super.key, required this.onPrefixCreated});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PrefixCreationDialog(
-        startupData: startupData,
-        onPrefixCreated: onPrefixCreated,
-      ),
+      home: PrefixCreationDialog(onPrefixCreated: onPrefixCreated),
     );
   }
 }

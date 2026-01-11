@@ -44,7 +44,8 @@ import '../models/wine_prefix.dart';
 import 'process_logs_view_widget.dart';
 
 class WinePrefixPage extends StatelessWidget {
-  final StartupData startupData;
+  final startupData = StartupData.instance;
+
   final void Function(WinePrefix) onPrefixUpdated;
 
   /// This member is used only to initialize the PrefixDetailsBloc.
@@ -57,9 +58,8 @@ class WinePrefixPage extends StatelessWidget {
   /// won't change.
   final PinnedExecutableSetState initialPinnedExecutables;
 
-  const WinePrefixPage({
+  WinePrefixPage({
     super.key,
-    required this.startupData,
     required this.onPrefixUpdated,
     required this.initialPrefix,
     required this.initialPinnedExecutables,
@@ -75,10 +75,8 @@ class WinePrefixPage extends StatelessWidget {
           create: (context) => PrefixDetailsBloc(prefix: initialPrefix),
         ),
         BlocProvider<PinnedExecutableSetBloc>(
-          create: (context) => PinnedExecutableSetBloc(
-            initialState: initialPinnedExecutables,
-            startupData: startupData,
-          ),
+          create: (context) =>
+              PinnedExecutableSetBloc(initialState: initialPinnedExecutables),
         ),
       ],
       child: BlocBuilder<PrefixDetailsBloc, PrefixDetailsState>(
@@ -90,10 +88,8 @@ class WinePrefixPage extends StatelessWidget {
                 // when the prefix is modified.
                 key: ValueKey(state.prefix),
 
-                create: (context) => CustomExecutableBloc(
-                  startupData: startupData,
-                  winePrefix: state.prefix,
-                ),
+                create: (context) =>
+                    CustomExecutableBloc(winePrefix: state.prefix),
               ),
               BlocProvider<RunInstallerBloc>(
                 // We provide a key in order to force the bloc to be recreated
@@ -101,7 +97,6 @@ class WinePrefixPage extends StatelessWidget {
                 key: ValueKey(state.prefix),
 
                 create: (context) => RunInstallerBloc(
-                  startupData: startupData,
                   winePrefix: state.prefix,
                   processExecutablePinnedInTempDir:
                       (executablePinnedInTempDir) =>
@@ -115,20 +110,16 @@ class WinePrefixPage extends StatelessWidget {
                 // when the prefix is modified.
                 key: ValueKey(state.prefix),
 
-                create: (context) => WinecfgExecutableBloc(
-                  startupData: startupData,
-                  winePrefix: state.prefix,
-                ),
+                create: (context) =>
+                    WinecfgExecutableBloc(winePrefix: state.prefix),
               ),
               BlocProvider<WinetricksExecutableBloc>(
                 // We provide a key in order to force the bloc to be recreated
                 // when the prefix is modified.
                 key: ValueKey(state.prefix),
 
-                create: (context) => WinetricksExecutableBloc(
-                  startupData: startupData,
-                  winePrefix: state.prefix,
-                ),
+                create: (context) =>
+                    WinetricksExecutableBloc(winePrefix: state.prefix),
               ),
             ],
             child: Stack(
@@ -142,10 +133,7 @@ class WinePrefixPage extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  body: _PinnedExecutablesGridWidget(
-                    startupData: startupData,
-                    winePrefix: state.prefix,
-                  ),
+                  body: _PinnedExecutablesGridWidget(winePrefix: state.prefix),
                   bottomNavigationBar: _buildBottomPanel(
                     context: context,
                     state: state,
@@ -245,7 +233,6 @@ class WinePrefixPage extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (context) => PrefixSettingsDialog(
-          startupData: startupData,
           prefix: state.prefix,
           onPrefixUpdated: (prefix) {
             prefixDetailsBloc.updatePrefix(prefix);
@@ -293,7 +280,6 @@ class WinePrefixPage extends StatelessWidget {
       key: ValueKey(prefix),
 
       create: (context) => PinExecutableBloc(
-        startupData: startupData,
         winePrefix: prefix,
         processExecutablePinnedInTempDir: (executablePinnedInTempDir) =>
             BlocProvider.of<PinnedExecutableSetBloc>(
@@ -455,13 +441,9 @@ class WinePrefixPage extends StatelessWidget {
 }
 
 class _PinnedExecutablesGridWidget extends StatefulWidget {
-  final StartupData startupData;
   final WinePrefix winePrefix;
 
-  const _PinnedExecutablesGridWidget({
-    required this.startupData,
-    required this.winePrefix,
-  });
+  const _PinnedExecutablesGridWidget({required this.winePrefix});
 
   @override
   State<_PinnedExecutablesGridWidget> createState() => _PinnedAppsGridState();
@@ -510,7 +492,6 @@ class _PinnedAppsGridState extends State<_PinnedExecutablesGridWidget> {
             }
           },
           winePrefix: widget.winePrefix,
-          startupData: widget.startupData,
           removed: false,
           animation: animation,
         );
@@ -539,7 +520,6 @@ class _PinnedAppsGridState extends State<_PinnedExecutablesGridWidget> {
             pinnedExecutable: evt.removedPinnedExecutable,
             onPinnedExecutableUpdated: (_) {},
             winePrefix: widget.winePrefix,
-            startupData: widget.startupData,
             removed: true,
             animation: animation,
           ),

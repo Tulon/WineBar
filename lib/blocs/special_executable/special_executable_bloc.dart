@@ -41,16 +41,16 @@ import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
 
 abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
+  final startupData = StartupData.instance;
   final logger = GetIt.I.get<Logger>();
   final runningSpecialExecutablesRepo = GetIt.I
       .get<RunningExecutablesRepo<SpecialExecutableSlot>>();
-  final StartupData startupData;
   final WinePrefix winePrefix;
   WineProcess? _runningProcess;
   CancelableOperation<WineProcessResult>? _cancellableProcessResultGetter;
 
   @protected
-  SpecialExecutableBloc({required this.startupData, required this.winePrefix})
+  SpecialExecutableBloc({required this.winePrefix})
     : super(SpecialExecutableState.defaultState()) {
     final runningProcess = runningSpecialExecutablesRepo.tryFindRunningProcess(
       prefix: winePrefix,
@@ -202,10 +202,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
 
 abstract class RegularSpecialExecutableBloc extends SpecialExecutableBloc {
   @protected
-  RegularSpecialExecutableBloc({
-    required super.startupData,
-    required super.winePrefix,
-  });
+  RegularSpecialExecutableBloc({required super.winePrefix});
 
   @override
   Future<WineProcessResult> runProcess({
@@ -238,7 +235,7 @@ abstract class RegularSpecialExecutableBloc extends SpecialExecutableBloc {
 }
 
 class CustomExecutableBloc extends RegularSpecialExecutableBloc {
-  CustomExecutableBloc({required super.startupData, required super.winePrefix});
+  CustomExecutableBloc({required super.winePrefix});
 
   @override
   SpecialExecutableSlot get executableSlot =>
@@ -246,10 +243,7 @@ class CustomExecutableBloc extends RegularSpecialExecutableBloc {
 }
 
 class WinecfgExecutableBloc extends RegularSpecialExecutableBloc {
-  WinecfgExecutableBloc({
-    required super.startupData,
-    required super.winePrefix,
-  });
+  WinecfgExecutableBloc({required super.winePrefix});
 
   @override
   SpecialExecutableSlot get executableSlot =>
@@ -261,7 +255,6 @@ class PinExecutableBloc extends SpecialExecutableBloc {
   processExecutablePinnedInTempDir;
 
   PinExecutableBloc({
-    required super.startupData,
     required super.winePrefix,
     required this.processExecutablePinnedInTempDir,
   });
@@ -368,7 +361,6 @@ class RunInstallerBloc extends SpecialExecutableBloc {
   processExecutablePinnedInTempDir;
 
   RunInstallerBloc({
-    required super.startupData,
     required super.winePrefix,
     required this.processExecutablePinnedInTempDir,
   });
@@ -467,10 +459,7 @@ class RunInstallerBloc extends SpecialExecutableBloc {
 }
 
 class WinetricksExecutableBloc extends SpecialExecutableBloc {
-  WinetricksExecutableBloc({
-    required super.startupData,
-    required super.winePrefix,
-  });
+  WinetricksExecutableBloc({required super.winePrefix});
 
   @override
   SpecialExecutableSlot get executableSlot =>

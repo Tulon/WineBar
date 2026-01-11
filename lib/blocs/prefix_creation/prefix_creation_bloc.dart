@@ -55,7 +55,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
       SpecialExecutableSlot.prefixCreationTask;
 
   final logger = GetIt.I.get<Logger>();
-  final StartupData startupData;
+  final startupData = StartupData.instance;
   final Set<SuppressableWarning> warningsSuppressedAtBlocCreationTime;
 
   @protected
@@ -63,7 +63,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
 
   CancelableOperation<List<WineRelease>>? _ongoingReleaseLoadingOp;
 
-  PrefixCreationBloc({required this.startupData, required this.onPrefixCreated})
+  PrefixCreationBloc({required this.onPrefixCreated})
     : warningsSuppressedAtBlocCreationTime = GetIt.I
           .get<AppSettingsService>()
           .settings
@@ -122,11 +122,10 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     // currently doesn't work under emulation.
     final bool? wow64ModePreferred =
         source != null && source.buildsMaySupportBothWin64AndWow64Modes
-        ? startupData.isIntelHost
+        ? StartupData.instance.isIntelHost
         : null;
 
     final wow64ModePreferenceWarning = wineArchWarningToShowForDualModeBuild(
-      startupData: startupData,
       wow64ModeSelected: wow64ModePreferred,
     );
 
@@ -382,7 +381,6 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     }
 
     final wow64ModePreferenceWarning = wineArchWarningToShowForDualModeBuild(
-      startupData: startupData,
       wow64ModeSelected: wow64ModePreferred,
     );
 
@@ -556,7 +554,6 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
 
       // Populate the prefix directory.
       await wineTasks.initializeWinePrefix(
-        startupData: startupData,
         winePrefix: winePrefix,
         wineInstDescriptor: wineInstDescriptor,
         runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,
@@ -566,7 +563,6 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
       // This time, apply the HiDPI settings the proper way.
       await wineTasks.setHiDpiScale(
         hiDpiScale: state.hiDpiScale,
-        startupData: startupData,
         winePrefix: winePrefix,
         wineInstDescriptor: wineInstDescriptor,
         runningSpecialExecutablesRepo: runningSpecialExecutablesRepo,

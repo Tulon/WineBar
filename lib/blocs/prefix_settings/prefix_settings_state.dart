@@ -100,7 +100,6 @@ class PrefixSettingsState extends Equatable {
   });
 
   PrefixSettingsState.initialState({
-    required StartupData startupData,
     required double? hiDpiScale,
     required bool? wow64ModePreferred,
     required D3d8To11Implementation? d3d8To11Implementation,
@@ -108,7 +107,6 @@ class PrefixSettingsState extends Equatable {
          hiDpiScale: hiDpiScale,
          wow64ModePreferred: wow64ModePreferred,
          wow64ModePreferenceWarning: _determineWineArchWarningForDualModeBuild(
-           startupData: startupData,
            wow64ModeSelected: wow64ModePreferred,
          ),
          wow64ModePreferenceWarningToBeSuppressed: false,
@@ -181,7 +179,6 @@ class PrefixSettingsState extends Equatable {
   /// is not a dual mode win64/wow64 one. In such a case, this function
   /// returns null.
   static WineArchWarning? _determineWineArchWarningForDualModeBuild({
-    required StartupData startupData,
     required bool? wow64ModeSelected,
   }) {
     WineArchWarning? modeWarning;
@@ -200,7 +197,7 @@ class PrefixSettingsState extends Equatable {
     }
 
     if (wow64ModeSelected == true) {
-      if (!startupData.isIntelHost) {
+      if (!StartupData.instance.isIntelHost) {
         setWarningUnlessSuppressed(WineArchWarning.wow64ModeUnderEmulation);
       }
     } else if (wow64ModeSelected == false) {

@@ -99,7 +99,8 @@ void main() {
       prefixJsonFile.writeAsString(any),
     ).thenAnswer((_) async => prefixJsonFile);
 
-    WineTasks.registerSingletonInstance(wineTasks);
+    StartupData.registerMockInstance(startupData);
+    WineTasks.registerMockInstance(wineTasks);
     GetIt.I.registerSingleton<Logger>(Logger());
     GetIt.I.registerSingleton<AppSettingsService>(appSettingsService);
     GetIt.I.registerSingleton<UtilityService>(utilityService);
@@ -121,7 +122,6 @@ void main() {
 
     await tester.pumpWidget(
       TestWidget(
-        startupData: startupData,
         prefix: prefix,
         onPrefixUpdated: updatedPrefixReceiver.handleUpdatedPrefix,
       ),
@@ -181,13 +181,11 @@ abstract interface class IoOps {
 }
 
 class TestWidget extends StatelessWidget {
-  final StartupData startupData;
   final WinePrefix prefix;
   final void Function(WinePrefix) onPrefixUpdated;
 
   const TestWidget({
     super.key,
-    required this.startupData,
     required this.prefix,
     required this.onPrefixUpdated,
   });
@@ -196,7 +194,6 @@ class TestWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: PrefixSettingsDialog(
-        startupData: startupData,
         prefix: prefix,
         onPrefixUpdated: onPrefixUpdated,
       ),

@@ -24,9 +24,7 @@ import 'error_message_widget.dart';
 import 'wine_prefixes_page.dart';
 
 class TopLevelWidget extends StatelessWidget {
-  final _startupDataFuture = StartupData.load();
-
-  TopLevelWidget({super.key});
+  const TopLevelWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +34,7 @@ class TopLevelWidget extends StatelessWidget {
       darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: ThemeMode.system,
       home: FutureBuilder<StartupData>(
-        future: _startupDataFuture,
+        future: StartupData.asyncInstance,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While LocalDataRepo is loading, show the splash screen
@@ -51,7 +49,7 @@ class TopLevelWidget extends StatelessWidget {
           } else {
             // StartupData has finished loading, so we display
             // the home screen.
-            return WinePrefixesPage(startupData: snapshot.data!);
+            return WinePrefixesPage();
           }
         },
       ),

@@ -21,7 +21,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:winebar/models/process_log.dart';
-import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
 import 'package:winebar/widgets/error_message_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
@@ -33,13 +32,11 @@ import '../blocs/prefix_settings/prefix_settings_state.dart';
 import '../models/wine_prefix.dart';
 
 class PrefixSettingsDialog extends StatelessWidget {
-  final StartupData startupData;
   final WinePrefix prefix;
   final void Function(WinePrefix) onPrefixUpdated;
 
   const PrefixSettingsDialog({
     super.key,
-    required this.startupData,
     required this.prefix,
     required this.onPrefixUpdated,
   });
@@ -47,11 +44,8 @@ class PrefixSettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => PrefixSettingsBloc(
-        startupData: startupData,
-        prefix: prefix,
-        onPrefixUpdated: onPrefixUpdated,
-      ),
+      create: (_) =>
+          PrefixSettingsBloc(prefix: prefix, onPrefixUpdated: onPrefixUpdated),
       child: BlocListener<PrefixSettingsBloc, PrefixSettingsState>(
         listener: (context, state) => Navigator.pop(context),
         listenWhen: (previous, current) {

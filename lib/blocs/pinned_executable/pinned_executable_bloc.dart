@@ -36,14 +36,12 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
   final logger = GetIt.I.get<Logger>();
   final runningPinnedExecutablesRepo = GetIt.I
       .get<RunningExecutablesRepo<PinnedExecutable>>();
-  final StartupData startupData;
   final WinePrefix winePrefix;
   final PinnedExecutable pinnedExecutable;
   WineProcess? _runningProcess;
   CancelableOperation<WineProcessResult>? _cancellableProcessResultGetter;
 
   PinnedExecutableBloc({
-    required this.startupData,
     required this.winePrefix,
     required this.pinnedExecutable,
     required bool isContextMenuOpen,
@@ -162,6 +160,7 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
   }
 
   Future<WineProcess> _startProcess() async {
+    final startupData = StartupData.instance;
     final utilityService = GetIt.I.get<UtilityService>();
 
     final wineInstDescriptor = await utilityService
