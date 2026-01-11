@@ -41,7 +41,7 @@ import '../blocs/pinned_executable_set/pinned_executable_set_state.dart';
 import '../blocs/prefix_details/prefix_details_bloc.dart';
 import '../blocs/prefix_details/prefix_details_state.dart';
 import '../models/wine_prefix.dart';
-import '../widgets/process_output_widget.dart';
+import 'process_logs_view_widget.dart';
 
 class WinePrefixPage extends StatelessWidget {
   final StartupData startupData;
@@ -439,14 +439,14 @@ class WinePrefixPage extends StatelessWidget {
     required BuildContext context,
     required SpecialExecutableState specialExecutableState,
   }) {
-    final processOutput = specialExecutableState.processOutput;
+    final processLogs = specialExecutableState.processLogs;
 
-    if (processOutput != null) {
+    if (processLogs != null) {
       unawaited(
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => ProcessOutputWidget(processOutput: processOutput),
+            builder: (_) => ProcessLogsViewWidget(processLogs: processLogs),
           ),
         ),
       );

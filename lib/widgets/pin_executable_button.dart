@@ -69,7 +69,7 @@ class PinExecutableButton extends StatelessWidget {
     int stackIndex = 0;
     if (specialExecutableState.isRunning) {
       stackIndex = 0; // The "Kill process" page.
-    } else if (specialExecutableState.processOutput != null) {
+    } else if (specialExecutableState.processLogs != null) {
       stackIndex = 1; // The "View Logs" page.
     } else {
       return null; // No aux button needed.

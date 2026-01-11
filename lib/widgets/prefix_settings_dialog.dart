@@ -21,12 +21,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:winebar/models/process_log.dart';
-import 'package:winebar/models/process_output.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
 import 'package:winebar/widgets/error_message_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
-import 'package:winebar/widgets/process_output_widget.dart';
+import 'package:winebar/widgets/process_logs_view_widget.dart';
 import 'package:winebar/widgets/wow64_preference_toggle.dart';
 
 import '../blocs/prefix_settings/prefix_settings_bloc.dart';
@@ -242,8 +241,7 @@ class PrefixSettingsDialog extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) =>
-              ProcessOutputWidget(processOutput: ProcessOutput(logs: logs)),
+          builder: (_) => ProcessLogsViewWidget(processLogs: logs),
         ),
       ),
     );

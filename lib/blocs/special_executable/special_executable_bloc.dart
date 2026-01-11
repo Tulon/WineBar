@@ -28,7 +28,6 @@ import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/process_log.dart';
-import 'package:winebar/models/process_output.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
@@ -112,8 +111,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
               emit(
                 state.copyWith(
                   isRunning: false,
-                  processOutputGetter: () =>
-                      ProcessOutput(logs: processResult.logs),
+                  processLogsGetter: () => processResult.logs,
                 ),
               );
             },
@@ -124,9 +122,9 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
               emit(
                 state.copyWith(
                   isRunning: false,
-                  processOutputGetter: () => ProcessOutput(
-                    logs: [ProcessLog(name: 'Error', content: e.toString())],
-                  ),
+                  processLogsGetter: () => [
+                    ProcessLog(name: 'Error', content: e.toString()),
+                  ],
                 ),
               );
             },
@@ -153,7 +151,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
       return;
     }
 
-    emit(state.copyWith(isRunning: true, processOutputGetter: () => null));
+    emit(state.copyWith(isRunning: true, processLogsGetter: () => null));
 
     unawaited(
       _runProcess(

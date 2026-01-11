@@ -17,15 +17,33 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:winebar/models/process_log.dart';
 
 @immutable
-class ProcessOutput extends Equatable {
-  final List<ProcessLog> logs;
+class ProcessLogsViewState extends Equatable {
+  final List<ProcessLog> processLogs;
 
-  const ProcessOutput({required this.logs});
+  /// Indexes into processOutput.logs.
+  final int? selectedLogIndex;
+
+  const ProcessLogsViewState({
+    required this.processLogs,
+    required this.selectedLogIndex,
+  });
 
   @override
-  List<Object> get props => [logs];
+  List<Object?> get props => [processLogs, selectedLogIndex];
+
+  ProcessLogsViewState copyWith({
+    List<ProcessLog>? processLogs,
+    ValueGetter<int?>? selectedLogIndexGetter,
+  }) {
+    return ProcessLogsViewState(
+      processLogs: processLogs ?? this.processLogs,
+      selectedLogIndex: selectedLogIndexGetter != null
+          ? selectedLogIndexGetter()
+          : selectedLogIndex,
+    );
+  }
 }

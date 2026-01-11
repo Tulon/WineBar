@@ -17,16 +17,16 @@
  */
 
 import 'package:bloc/bloc.dart';
+import 'package:winebar/models/process_log.dart';
 
-import '../../models/process_output.dart';
-import 'process_output_view_state.dart';
+import 'process_logs_view_state.dart';
 
-class ProcessOutputViewBloc extends Cubit<ProcessOutputViewState> {
-  ProcessOutputViewBloc({required ProcessOutput processOutput})
+class ProcessLogsViewBloc extends Cubit<ProcessLogsViewState> {
+  ProcessLogsViewBloc({required List<ProcessLog> processLogs})
     : super(
-        ProcessOutputViewState(
-          processOutput: processOutput,
-          selectedLogIndex: processOutput.logs.isEmpty ? null : 0,
+        ProcessLogsViewState(
+          processLogs: processLogs,
+          selectedLogIndex: processLogs.isEmpty ? null : 0,
         ),
       );
 

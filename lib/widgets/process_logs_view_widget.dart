@@ -20,23 +20,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:winebar/models/process_log.dart';
 
-import '../blocs/process_output_view/process_output_view_bloc.dart';
-import '../blocs/process_output_view/process_output_view_state.dart';
-import '../models/process_output.dart';
+import '../blocs/process_logs_view/process_logs_view_bloc.dart';
+import '../blocs/process_logs_view/process_logs_view_state.dart';
 
-class ProcessOutputWidget extends StatelessWidget {
+class ProcessLogsViewWidget extends StatelessWidget {
   @protected
-  final ProcessOutput processOutput;
+  final List<ProcessLog> processLogs;
 
-  const ProcessOutputWidget({super.key, required this.processOutput});
+  const ProcessLogsViewWidget({super.key, required this.processLogs});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return BlocProvider(
-      create: (context) => ProcessOutputViewBloc(processOutput: processOutput),
-      child: BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
+      create: (context) => ProcessLogsViewBloc(processLogs: processLogs),
+      child: BlocBuilder<ProcessLogsViewBloc, ProcessLogsViewState>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -47,7 +46,7 @@ class ProcessOutputWidget extends StatelessWidget {
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
+              child: BlocBuilder<ProcessLogsViewBloc, ProcessLogsViewState>(
                 builder: (context, state) {
                   return Column(
                     children: [
@@ -56,9 +55,9 @@ class ProcessOutputWidget extends StatelessWidget {
                           sizing: StackFit.expand,
                           index:
                               state.selectedLogIndex ??
-                              state.processOutput.logs.length,
+                              state.processLogs.length,
                           children: [
-                            ...state.processOutput.logs.map(
+                            ...state.processLogs.map(
                               (log) => SelectableText(
                                 log.content,
                                 style: TextStyle(fontFamily: 'monospace'),
@@ -86,12 +85,12 @@ class ProcessOutputWidget extends StatelessWidget {
   }
 
   Widget _buildLogSelectionControls(BuildContext context) {
-    return BlocBuilder<ProcessOutputViewBloc, ProcessOutputViewState>(
+    return BlocBuilder<ProcessLogsViewBloc, ProcessLogsViewState>(
       builder: (context, state) {
         return Wrap(
           spacing: 4.0,
           runSpacing: 4.0,
-          children: state.processOutput.logs
+          children: state.processLogs
               .asMap()
               .entries
               .map<Widget>(
@@ -110,7 +109,7 @@ class ProcessOutputWidget extends StatelessWidget {
 
   Widget _buildLogSelectionChip({
     required BuildContext context,
-    required ProcessOutputViewState state,
+    required ProcessLogsViewState state,
     required int index,
     required ProcessLog log,
   }) {
@@ -119,7 +118,7 @@ class ProcessOutputWidget extends StatelessWidget {
       selected: state.selectedLogIndex == index,
       onSelected: (bool selected) {
         if (selected) {
-          BlocProvider.of<ProcessOutputViewBloc>(
+          BlocProvider.of<ProcessLogsViewBloc>(
             context,
           ).setSelectedLogIndex(index);
         }
