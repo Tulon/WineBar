@@ -66,6 +66,11 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
   /// To be implemented in a subclass.
   SpecialExecutableSlot get executableSlot;
 
+  String get executableSlotDebugName {
+    final slot = executableSlot;
+    return '${slot.runtimeType.toString()}.${slot.name}';
+  }
+
   @override
   Future<void> close() async {
     if (_cancellableProcessResultGetter != null) {
@@ -142,8 +147,8 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
   void startProcess(List<String> commandLine) {
     if (state.isRunning || _runningProcess != null) {
       logger.w(
-        "Trying to run a special executable "
-        "\"${executableSlot.name}\" that's already running",
+        '[$executableSlotDebugName] Trying to run an executable in a slot '
+        'where another or the same executable is still running',
       );
       return;
     }
@@ -163,7 +168,8 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
         },
       ).catchError((e, stackTrace) {
         logger.w(
-          'Error running special executable "${executableSlot.name}":\n${e.toString()}',
+          '[$executableSlotDebugName] Error running executable:\n'
+          '${e.toString()}',
           stackTrace: stackTrace,
         );
 
@@ -320,7 +326,9 @@ class PinExecutableBloc extends SpecialExecutableBloc {
     required Directory tempPinDir,
   }) {
     if (commandLine.isEmpty) {
-      throw GenericException("Can't execute an empty command line");
+      throw GenericException(
+        "[$executableSlotDebugName] Can't execute an empty command line",
+      );
     }
 
     final executable = commandLine.first;
