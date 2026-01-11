@@ -1,6 +1,6 @@
 /*
  * Wine Bar - A Wine prefix manager.
- * Copyright (C) 2025 Josif Arcimovic
+ * Copyright (C) 2025-2026 Josif Arcimovic
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
