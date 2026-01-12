@@ -27,6 +27,8 @@ import 'package:logger/logger.dart';
 import 'package:simple_icons/simple_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
+import 'package:winebar/blocs/prefix_list_item/prefix_list_item_bloc.dart';
+import 'package:winebar/blocs/prefix_list_item/prefix_list_item_state.dart';
 import 'package:winebar/models/prefix_list_event.dart';
 import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
@@ -302,24 +304,36 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
         child: Card(
           margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           elevation: 3.0,
-          child: ListTile(
-            title: Text(prefix.descriptor.name),
-            enabled: !prefix.isBroken,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 4.0,
-            ),
-            leading: _buildPrefixMenuButton(
-              context: context,
-              prefix: prefix,
-              removedPrefix: removedPrefix,
-            ),
-            onTap: () => prefix.isBroken || removedPrefix
-                ? null
-                : _startNavigatingToPrefix(
-                    context: context,
-                    winePrefix: prefix,
+          child: BlocProvider(
+            create: (context) => PrefixListItemBloc(),
+            child: BlocBuilder<PrefixListItemBloc, PrefixListItemState>(
+              builder: (context, listItemState) {
+                return ListTile(
+                  title: Text(prefix.descriptor.name),
+                  enabled:
+                      !prefix.isBroken && !listItemState.isPrefixBeingDeleted,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
                   ),
+                  leading: _buildPrefixMenuButton(
+                    context: context,
+                    prefix: prefix,
+                    removedPrefix: removedPrefix,
+                    prefixListItemState: listItemState,
+                  ),
+                  onTap: () =>
+                      prefix.isBroken ||
+                          listItemState.isPrefixBeingDeleted ||
+                          removedPrefix
+                      ? null
+                      : _startNavigatingToPrefix(
+                          context: context,
+                          winePrefix: prefix,
+                        ),
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -329,10 +343,11 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
   Widget _buildPrefixMenuButton({
     required BuildContext context,
     required WinePrefix prefix,
+    required PrefixListItemState prefixListItemState,
     required bool removedPrefix,
   }) {
-    if (removedPrefix) {
-      return IconButton(icon: const Icon(Icons.more_vert), onPressed: null);
+    if (prefixListItemState.isPrefixBeingDeleted || removedPrefix) {
+      return IconButton(icon: const Icon(Icons.delete), onPressed: null);
     }
 
     return MenuAnchor(
@@ -346,6 +361,7 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
           onPressed: () => _maybeShowPrefixDeletionConfirmationDialog(
             context: context,
             prefix: prefix,
+            prefixListItemBloc: BlocProvider.of<PrefixListItemBloc>(context),
           ),
         ),
       ],
@@ -368,6 +384,7 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
   Future<void> _maybeShowPrefixDeletionConfirmationDialog({
     required BuildContext context,
     required WinePrefix prefix,
+    required PrefixListItemBloc prefixListItemBloc,
   }) async {
     if (maybeTellUserToFinishRunningApps(
       context: context,
@@ -377,7 +394,7 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     }
 
     final colorScheme = Theme.of(context).colorScheme;
-    final bloc = BlocProvider.of<PrefixListBloc>(context);
+    final prefixListBloc = BlocProvider.of<PrefixListBloc>(context);
 
     return showDialog<void>(
       context: context,
@@ -406,7 +423,8 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
                 _startDeletingPrefixUnlessAppsAreRunningThere(
                   context: context,
                   prefix: prefix,
-                  bloc: bloc,
+                  prefixListBloc: prefixListBloc,
+                  prefixListItemBloc: prefixListItemBloc,
                 );
               },
             ),
@@ -425,7 +443,8 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
   void _startDeletingPrefixUnlessAppsAreRunningThere({
     required BuildContext context,
     required WinePrefix prefix,
-    required PrefixListBloc bloc,
+    required PrefixListBloc prefixListBloc,
+    required PrefixListItemBloc prefixListItemBloc,
   }) {
     if (maybeTellUserToFinishRunningApps(
       context: context,
@@ -434,7 +453,8 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
       return;
     }
 
-    bloc.startDeletingPrefix(prefix);
+    prefixListItemBloc.setPrefixBeingDeleted(true);
+    prefixListBloc.startDeletingPrefix(prefix);
   }
 
   static void _startNavigatingToPrefix({
