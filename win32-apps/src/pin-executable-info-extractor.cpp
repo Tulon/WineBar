@@ -70,6 +70,11 @@ wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, PWSTR /*pCmdLine*
         logger = std::make_unique<FileLogger>(
             std::format(L"{}\\pin-info-extractor.txt", toWindowsFilePath(unixLogsDir)).c_str());
     }
+    catch (WStringException const& e)
+    {
+        fwprintf(stderr, L"Failed to create a log file: %ls\n", e.what());
+        logger = std::make_unique<NoOpLogger>();
+    }
     catch (std::exception const& e)
     {
         fprintf(stderr, "Failed to create a log file: %s\n", e.what());
