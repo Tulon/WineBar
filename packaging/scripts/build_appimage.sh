@@ -18,8 +18,10 @@ APPIMAGETOOL_URL="https://github.com/AppImage/appimagetool/releases/download/1.9
 
 case "$TARGET_ARCH" in
     x64)
+        TARGET_APPIMAGE_ARCH=x86_64
         ;;
     arm64)
+        TARGET_APPIMAGE_ARCH=aarch64
         ;;
     *)
         echo "Unsupported target architecture \"${TARGET_ARCH}\"."
@@ -70,5 +72,10 @@ cp -rp packaging/resources/common/winebar.desktop "${APP_DIR}/"
 ln -s data/flutter_assets/packaging/resources/common/winebar.png "${APP_DIR}/winebar.png"
 ln -s data/flutter_assets/packaging/resources/common/winebar.png "${APP_DIR}/.DirIcon"
 cp -rp packaging/resources/AppImage/. "${APP_DIR}/"
+
+if [ -n "${VERSION_NAME}" ]; then
+    echo "X-AppImage-Version=${VERSION_NAME}" >> "${APP_DIR}/winebar.desktop"
+fi
+echo "X-AppImage-Arch=${TARGET_APPIMAGE_ARCH}" >> "${APP_DIR}/winebar.desktop"
 
 "build/${APPIMAGETOOL_FILENAME}" "${APP_DIR}" "${APP_IMAGE}"
