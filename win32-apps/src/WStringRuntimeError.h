@@ -33,7 +33,7 @@ public:
 
     virtual ~WStringRuntimeError() = default;
 
-    virtual std::wstring const& what() const noexcept override { return mMessage; }
+    virtual wchar_t const* what() const noexcept override { return mMessage.c_str(); }
 
 private:
     std::wstring mMessage;

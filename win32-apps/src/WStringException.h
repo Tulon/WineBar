@@ -25,5 +25,5 @@ class WStringException
 public:
     virtual ~WStringException() = default;
 
-    virtual std::wstring const& what() const noexcept = 0;
+    virtual wchar_t const* what() const noexcept = 0;
 };
