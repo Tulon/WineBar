@@ -3,6 +3,7 @@ Version=1.0
 Type=Application
 Terminal=false
 SingleMainWindow=true
+StartupNotify=false
 StartupWMClass=io.github.tulon.winebar
 Name=Wine Bar
 Comment=Manage Wine Prefixes
