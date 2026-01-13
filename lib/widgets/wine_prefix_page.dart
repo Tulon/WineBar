@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:path/path.dart' as path;
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
@@ -417,8 +418,87 @@ class WinePrefixPage extends StatelessWidget {
 
     if (filePickerResult != null) {
       String filePath = filePickerResult.files.single.path!;
-      specialExecutableBloc.startProcess([filePath]);
+      if (_isPathAccessibleFromWine(filePath)) {
+        specialExecutableBloc.startProcess([filePath]);
+      } else {
+        if (context.mounted) {
+          _showPathNotAccessibleFromWineDialog(
+            context: context,
+            filePath: filePath,
+          );
+        }
+      }
     }
+  }
+
+  bool _isPathAccessibleFromWine(String filePath) {
+    if (!startupData.wineWillRunUnderMuvm) {
+      return true;
+    }
+
+    // Under muvm, only the home directory is accessible. The root is a
+    // virtual filesystem and removable media is not mounted.
+    return path.isWithin(startupData.localStoragePaths.homeDir, filePath);
+  }
+
+  void _showPathNotAccessibleFromWineDialog({
+    required BuildContext context,
+    required String filePath,
+  }) {
+    final theme = Theme.of(context);
+
+    unawaited(
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const SelectableText('Path inaccessible from Wine'),
+            content: SelectableText.rich(
+              TextSpan(
+                style: theme.textTheme.bodyLarge,
+                children: [
+                  TextSpan(
+                    text: 'The following path is inaccessible from Wine:\n',
+                  ),
+                  TextSpan(
+                    text: filePath,
+                    style: TextStyle(
+                      color: theme.colorScheme.primary,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  TextSpan(
+                    text:
+                        '\n\nThe thing is that on Apple silicon Macs running '
+                        'Linux, Wine runs under a virtual machine, which '
+                        "doesn't have access to removable media and in fact "
+                        'to anything other than your home directory.\n\n',
+                  ),
+                  TextSpan(
+                    text: 'Solution\n',
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  TextSpan(
+                    text:
+                        'Copy the folder in question somewhere under your '
+                        'home directory.',
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Close'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   void _viewProcessLogs({
