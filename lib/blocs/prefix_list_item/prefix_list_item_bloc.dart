@@ -17,14 +17,46 @@
  */
 
 import 'package:bloc/bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:winebar/blocs/prefix_list_item/prefix_list_item_state.dart';
+import 'package:winebar/models/wine_prefix.dart';
+import 'package:winebar/services/running_wine_processes_tracker.dart';
 
 class PrefixListItemBloc extends Cubit<PrefixListItemState> {
-  PrefixListItemBloc() : super(PrefixListItemState.initialState());
+  final _runningProcessesTracker = GetIt.I.get<RunningWineProcessesTracker>();
+  final WinePrefixId _prefixId;
+
+  PrefixListItemBloc({required int prefixId})
+    : _prefixId = prefixId,
+      super(
+        PrefixListItemState.initialState(
+          numAppsRunning: GetIt.I
+              .get<RunningWineProcessesTracker>()
+              .numProcessesRunningInPrefix(prefixId),
+        ),
+      ) {
+    _runningProcessesTracker.addListener(_onProcessStartedOrStopped);
+  }
+
+  @override
+  Future<void> close() {
+    _runningProcessesTracker.removeListener(_onProcessStartedOrStopped);
+    return super.close();
+  }
 
   void setPrefixBeingDeleted(bool prefixBeingDeleted) {
     if (state.isPrefixBeingDeleted != prefixBeingDeleted) {
       emit(state.copyWith(isPrefixBeingDeleted: prefixBeingDeleted));
     }
+  }
+
+  void _onProcessStartedOrStopped() {
+    emit(
+      state.copyWith(
+        numAppsRunning: _runningProcessesTracker.numProcessesRunningInPrefix(
+          _prefixId,
+        ),
+      ),
+    );
   }
 }

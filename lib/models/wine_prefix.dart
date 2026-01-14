@@ -23,14 +23,21 @@ import 'package:winebar/models/wine_prefix_dir_structure.dart';
 
 import 'prefix_descriptor.dart';
 
+typedef WinePrefixId = int;
 typedef WinePrefixCreatedCallback = void Function(WinePrefix prefix);
 
 @immutable
 class WinePrefix extends Equatable implements Comparable<WinePrefix> {
+  static WinePrefixId _lastId = 0;
+
+  /// A numeric Id that's not persisted and that stays the same when
+  /// a prefix is updated.
+  final WinePrefixId id = ++_lastId;
+
   final WinePrefixDirStructure dirStructure;
   final WinePrefixDescriptor descriptor;
 
-  const WinePrefix({required this.dirStructure, required this.descriptor});
+  WinePrefix({required this.dirStructure, required this.descriptor});
 
   WinePrefix.broken({required String outerDir})
     : this(
@@ -43,7 +50,7 @@ class WinePrefix extends Equatable implements Comparable<WinePrefix> {
   bool get isBroken => descriptor.isBroken;
 
   @override
-  List<Object> get props => [dirStructure, descriptor];
+  List<Object> get props => [id, dirStructure, descriptor];
 
   /// Compares by [WinePrefixDescriptor.name] and then by [WinePrefixDirStructure.outerDir].
   @override
@@ -56,6 +63,8 @@ class WinePrefix extends Equatable implements Comparable<WinePrefix> {
     return dirStructure.outerDir.compareTo(other.dirStructure.outerDir);
   }
 
+  /// The [id] field is not included on purpose, as it's not supposed
+  /// to change.
   WinePrefix copyWith({
     WinePrefixDirStructure? dirStructure,
     WinePrefixDescriptor? descriptor,

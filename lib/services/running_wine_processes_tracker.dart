@@ -37,10 +37,10 @@ class RunningWineProcessesTracker with ChangeNotifier {
     }
   }
 
-  int numProcessesRunningInPrefix(WinePrefix prefix) {
+  int numProcessesRunningInPrefix(WinePrefixId prefixId) {
     return typedRepos.fold(
       0,
-      (sum, typedRepo) => sum + typedRepo.numProcessesRunningInPrefix(prefix),
+      (sum, typedRepo) => sum + typedRepo.numProcessesRunningInPrefix(prefixId),
     );
   }
 

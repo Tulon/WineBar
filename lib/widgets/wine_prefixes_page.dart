@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:simple_icons/simple_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
@@ -247,6 +248,7 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
         final state = BlocProvider.of<PrefixListBloc>(context).state;
         final prefix = state.orderedPrefixes[index];
         return _buildPrefixWidget(
+          context: context,
           prefix: prefix,
           animation: animation,
           removedPrefix: false,
@@ -273,6 +275,7 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
         animatedListState.removeItem(
           evt.prefixIndex,
           (context, animation) => _buildPrefixWidget(
+            context: context,
             prefix: evt.removedPrefix,
             animation: animation,
             removedPrefix: true,
@@ -292,10 +295,13 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
   }
 
   Widget _buildPrefixWidget({
+    required BuildContext context,
     required WinePrefix prefix,
     required Animation<double> animation,
     required bool removedPrefix,
   }) {
+    final theme = Theme.of(context);
+
     return FadeTransition(
       opacity: animation,
       child: SizeTransition(
@@ -305,11 +311,14 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
           margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           elevation: 3.0,
           child: BlocProvider(
-            create: (context) => PrefixListItemBloc(),
+            create: (context) => PrefixListItemBloc(prefixId: prefix.id),
             child: BlocBuilder<PrefixListItemBloc, PrefixListItemState>(
               builder: (context, listItemState) {
                 return ListTile(
-                  title: Text(prefix.descriptor.name),
+                  title: Text(
+                    prefix.descriptor.name,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   enabled:
                       !prefix.isBroken && !listItemState.isPrefixBeingDeleted,
                   contentPadding: EdgeInsets.symmetric(
@@ -322,6 +331,18 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
                     removedPrefix: removedPrefix,
                     prefixListItemState: listItemState,
                   ),
+                  trailing: listItemState.numAppsRunning == 0
+                      ? null
+                      : Tooltip(
+                          // We could have displayed the number of apps
+                          // running, but that number happens to be unreliable
+                          // for reasons described in README.md.
+                          message: 'Apps are running in this prefix',
+                          child: Icon(
+                            MdiIcons.hexagonMultiple,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
                   onTap: () =>
                       prefix.isBroken ||
                           listItemState.isPrefixBeingDeleted ||
