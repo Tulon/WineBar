@@ -21,17 +21,26 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class PrefixListItemState extends Equatable {
+  final int numAppsRunning;
   final bool isPrefixBeingDeleted;
 
-  const PrefixListItemState({required this.isPrefixBeingDeleted});
+  const PrefixListItemState({
+    required this.numAppsRunning,
+    required this.isPrefixBeingDeleted,
+  });
 
-  const PrefixListItemState.initialState() : this(isPrefixBeingDeleted: false);
+  const PrefixListItemState.initialState({required int numAppsRunning})
+    : this(numAppsRunning: numAppsRunning, isPrefixBeingDeleted: false);
 
   @override
-  List<Object?> get props => [isPrefixBeingDeleted];
+  List<Object?> get props => [numAppsRunning, isPrefixBeingDeleted];
 
-  PrefixListItemState copyWith({bool? isPrefixBeingDeleted}) {
+  PrefixListItemState copyWith({
+    int? numAppsRunning,
+    bool? isPrefixBeingDeleted,
+  }) {
     return PrefixListItemState(
+      numAppsRunning: numAppsRunning ?? this.numAppsRunning,
       isPrefixBeingDeleted: isPrefixBeingDeleted ?? this.isPrefixBeingDeleted,
     );
   }

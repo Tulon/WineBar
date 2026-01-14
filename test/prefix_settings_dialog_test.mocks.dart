@@ -1273,12 +1273,12 @@ class MockRunningExecutablesRepo<SlotType> extends _i1.Mock
 
   @override
   void addRunningProcess({
-    required _i14.WinePrefix? prefix,
+    required int? prefixId,
     required SlotType? slot,
     required _i6.WineProcess? wineProcess,
   }) => super.noSuchMethod(
     Invocation.method(#addRunningProcess, [], {
-      #prefix: prefix,
+      #prefixId: prefixId,
       #slot: slot,
       #wineProcess: wineProcess,
     }),
@@ -1287,12 +1287,12 @@ class MockRunningExecutablesRepo<SlotType> extends _i1.Mock
 
   @override
   _i6.WineProcess? tryFindRunningProcess({
-    required _i14.WinePrefix? prefix,
+    required int? prefixId,
     required SlotType? slot,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#tryFindRunningProcess, [], {
-              #prefix: prefix,
+              #prefixId: prefixId,
               #slot: slot,
             }),
             returnValueForMissingStub: null,
@@ -1300,9 +1300,9 @@ class MockRunningExecutablesRepo<SlotType> extends _i1.Mock
           as _i6.WineProcess?);
 
   @override
-  int numProcessesRunningInPrefix(_i14.WinePrefix? prefix) =>
+  int numProcessesRunningInPrefix(int? prefixId) =>
       (super.noSuchMethod(
-            Invocation.method(#numProcessesRunningInPrefix, [prefix]),
+            Invocation.method(#numProcessesRunningInPrefix, [prefixId]),
             returnValue: 0,
             returnValueForMissingStub: 0,
           )

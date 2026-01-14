@@ -370,7 +370,7 @@ class WineTasks {
     );
 
     runningSpecialExecutablesRepo.addRunningProcess(
-      prefix: winePrefix,
+      prefixId: winePrefix.id,
       slot: slot,
       wineProcess: wineProcess,
     );

@@ -34,17 +34,17 @@ abstract interface class RunningExecutablesRepo<SlotType> with ChangeNotifier {
   }
 
   void addRunningProcess({
-    required WinePrefix prefix,
+    required WinePrefixId prefixId,
     required SlotType slot,
     required WineProcess wineProcess,
   });
 
   WineProcess? tryFindRunningProcess({
-    required WinePrefix prefix,
+    required WinePrefixId prefixId,
     required SlotType slot,
   });
 
-  int numProcessesRunningInPrefix(WinePrefix prefix);
+  int numProcessesRunningInPrefix(WinePrefixId prefixId);
 
   int totalRunningProcesses();
 }
@@ -54,19 +54,19 @@ typedef _RunningExecutablesInPrefix<SlotType> = Map<SlotType, WineProcess>;
 class _RunningExecutablesRepo<SlotType>
     with ChangeNotifier
     implements RunningExecutablesRepo<SlotType> {
-  final runningExecutablesByPrefix =
-      <WinePrefix, _RunningExecutablesInPrefix<SlotType>>{};
+  final runningExecutablesByPrefixId =
+      <WinePrefixId, _RunningExecutablesInPrefix<SlotType>>{};
 
   @override
   void addRunningProcess({
-    required WinePrefix prefix,
+    required WinePrefixId prefixId,
     required SlotType slot,
     required WineProcess wineProcess,
   }) {
-    var runningExecutablesInPrefix = runningExecutablesByPrefix[prefix];
+    var runningExecutablesInPrefix = runningExecutablesByPrefixId[prefixId];
     if (runningExecutablesInPrefix == null) {
       runningExecutablesInPrefix = _RunningExecutablesInPrefix();
-      runningExecutablesByPrefix[prefix] = runningExecutablesInPrefix;
+      runningExecutablesByPrefixId[prefixId] = runningExecutablesInPrefix;
     }
 
     runningExecutablesInPrefix[slot] = wineProcess;
@@ -76,7 +76,7 @@ class _RunningExecutablesRepo<SlotType>
       wineProcess.result.whenComplete(() {
         runningExecutablesInPrefix!.remove(slot);
         if (runningExecutablesInPrefix.isEmpty) {
-          runningExecutablesByPrefix.remove(prefix);
+          runningExecutablesByPrefixId.remove(prefixId);
         }
         notifyListeners();
       }),
@@ -87,20 +87,20 @@ class _RunningExecutablesRepo<SlotType>
 
   @override
   WineProcess? tryFindRunningProcess({
-    required WinePrefix prefix,
+    required WinePrefixId prefixId,
     required SlotType slot,
   }) {
-    return runningExecutablesByPrefix[prefix]?[slot];
+    return runningExecutablesByPrefixId[prefixId]?[slot];
   }
 
   @override
-  int numProcessesRunningInPrefix(WinePrefix prefix) {
-    return runningExecutablesByPrefix[prefix]?.length ?? 0;
+  int numProcessesRunningInPrefix(WinePrefixId prefixId) {
+    return runningExecutablesByPrefixId[prefixId]?.length ?? 0;
   }
 
   @override
   int totalRunningProcesses() {
-    return runningExecutablesByPrefix.entries.fold(
+    return runningExecutablesByPrefixId.entries.fold(
       0,
       (sum, entry) => sum + entry.value.length,
     );
