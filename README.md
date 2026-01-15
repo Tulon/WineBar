@@ -56,7 +56,14 @@ While AppImages can be run just by making them executable and double clicking th
 3. Click `Move to the app menu`.
 4. Click `Launch`.
 
-An `.AppImage` file started that way can be pinned to a taskbar just fine (on KDE at least). As a bonus, `Gear Level` can automatically update your AppImages. These URLs always point to the latest release of Wine Bar ([WineBar-x64.AppImage](https://github.com/Tulon/WineBar/releases/latest/download/WineBar-x64.AppImage), [WineBar-arm64.AppImage](https://github.com/Tulon/WineBar/releases/latest/download/WineBar-arm64.AppImage)) and may be used as update URLs in `Gear Level`.
+An `.AppImage` file started that way can be pinned to a taskbar just fine. As a bonus, `Gear Level` can automatically update your AppImages. Use the following update settings:
+
+| Parameter          | Value                                                                          |
+| ------------------ | ------------------------------------------------------------------------------ |
+| Source             | Github                                                                         |
+| Repo URL           | https://github.com/Tulon/WineBar                                               |
+| Release file name  | `WineBar*-x64.AppImage` (or `WineBar*-arm64.AppImage` for Apple silicon Macs)  |
+| Allow pre-releases | off                                                                            |
 
 Another option is the [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) app, which works similarly to `Gear Level`.
 
