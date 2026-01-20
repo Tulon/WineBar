@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:winebar/models/process_log.dart';
+import 'package:winebar/utils/tappable_link.dart';
 import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
 import 'package:winebar/widgets/error_message_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
@@ -128,13 +129,17 @@ class PrefixSettingsDialog extends StatelessWidget {
                       ErrorMessageWidget(
                         width: double.infinity,
                         text: state.prefixUpdateFailureMessage!,
-                        onViewLogsPressed:
+                        trailingLink:
                             state.prefixUpdateFailedProcessResult == null
                             ? null
-                            : () => _showWineProcessLogs(
-                                context: context,
-                                logs:
-                                    state.prefixUpdateFailedProcessResult!.logs,
+                            : TappableLink(
+                                linkText: 'View Logs.',
+                                onTapped: () => _showWineProcessLogs(
+                                  context: context,
+                                  logs: state
+                                      .prefixUpdateFailedProcessResult!
+                                      .logs,
+                                ),
                               ),
                       ),
                   ],

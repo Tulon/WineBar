@@ -10,15 +10,15 @@ on:
 jobs:
   build-x64:
     name: Build x64 AppImage
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build-appimage.yml
     with:
       version: 0.0.0
       arch: x64
       runs-on: ubuntu-24.04
-  
+
   build-arm64:
     name: Build arm64 AppImage
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build-appimage.yml
     with:
       version: 0.0.0
       arch: arm64

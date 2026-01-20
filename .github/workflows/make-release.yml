@@ -16,19 +16,37 @@ jobs:
         shell: bash
         run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
 
-  build-x64:
+  build-appimage-x64:
     name: Build x64 AppImage
     needs: prepare
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build-appimage.yml
     with:
       version: ${{needs.prepare.outputs.version}}
       arch: x64
       runs-on: ubuntu-24.04
 
-  build-arm64:
+  build-appimage-arm64:
     name: Build arm64 AppImage
     needs: prepare
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build-appimage.yml
+    with:
+      version: ${{needs.prepare.outputs.version}}
+      arch: arm64
+      runs-on: ubuntu-24.04-arm
+
+  build-snap-x64:
+    name: Build x64 Snap
+    needs: prepare
+    uses: ./.github/workflows/build-snap.yml
+    with:
+      version: ${{needs.prepare.outputs.version}}
+      arch: x64
+      runs-on: ubuntu-24.04
+
+  build-snap-arm64:
+    name: Build arm64 AppImage
+    needs: prepare
+    uses: ./.github/workflows/build-snap.yml
     with:
       version: ${{needs.prepare.outputs.version}}
       arch: arm64
@@ -39,8 +57,10 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - prepare
-      - build-x64
-      - build-arm64
+      - build-appimage-x64
+      - build-appimage-arm64
+      - build-snap-x64
+      - build-snap-arm64
 
     permissions:
       contents: write
@@ -52,7 +72,22 @@ jobs:
       #- name: List files
       #  run: find . -type f -print
 
-      - name: Make a Release
+      - name: Install snapcraft
+        run: |
+          sudo snap install snapcraft --classic
+
+      - name: Login to Snap Store
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+        run: |
+          snapcraft login
+
+      - name: Publish snaps
+        run: |
+          snapcraft upload --release=stable WineBar-${{needs.prepare.outputs.version}}-x64.snap/WineBar-${{needs.prepare.outputs.version}}-x64.snap
+          snapcraft upload --release=stable WineBar-${{needs.prepare.outputs.version}}-arm64.snap/WineBar-${{needs.prepare.outputs.version}}-arm64.snap
+
+      - name: Make a Release on Github
         uses: softprops/action-gh-release@v2
         with:
           name: "Wine Bar v${{needs.prepare.outputs.version}}"

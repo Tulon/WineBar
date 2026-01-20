@@ -1,0 +1,115 @@
+From 05906314e5e855a435e4145f94aea4ec1b7945e6 Mon Sep 17 00:00:00 2001
+From: Joseph Artsimovich <joseph.artsimovich@gmx.com>
+Date: Fri, 6 Mar 2026 19:09:59 +0200
+Subject: [PATCH] Use the PULSE_SERVER env var to locate the pulseaudio socket
+
+If it's missing, fall back to appending "pulse/native" to
+XDG_RUNTIME_DIR.
+
+The thing is, when running in a Snap confined environment,
+XDG_RUNTIME_DIR will be something like this:
+
+    /run/user/<UID>/snap.<SNAP_NAME>
+
+while PULSE_SERVER will be:
+
+    unix:/run/user/<UID>/snap.<SNAP_NAME>/../pulse/native
+
+Because apps expect XDG_RUNTIME_DIR to be writable and the
+Snap runtime doesn't want Snaps polluting the system
+XDG_RUNTIME_DIR, it mounts `/run/user/<UID>` as read-only
+but then mounts a read-write `snap.<SNAP_NAME>` subdirectory
+under it, setting XDG_RUNTIME_DIR to that writable subdirectory.
+---
+ crates/muvm/src/bin/muvm.rs | 73 +++++++++++++++++++++++++++++--------
+ 1 file changed, 58 insertions(+), 15 deletions(-)
+
+diff --git a/crates/muvm/src/bin/muvm.rs b/crates/muvm/src/bin/muvm.rs
+index 0827e8d..5aaaea8 100644
+--- a/crates/muvm/src/bin/muvm.rs
++++ b/crates/muvm/src/bin/muvm.rs
+@@ -291,23 +291,66 @@ fn main() -> Result<ExitCode> {
+         }
+     }
+ 
+-    if let Ok(run_path) = env::var("XDG_RUNTIME_DIR") {
+-        let pulse_path = Path::new(&run_path).join("pulse/native");
+-        if pulse_path.exists() {
+-            let pulse_path = CString::new(
+-                pulse_path
+-                    .to_str()
+-                    .expect("pulse_path should not contain invalid UTF-8"),
+-            )
+-            .context("Failed to process `pulse/native` path as it contains NUL character")?;
+-            // SAFETY: `pulse_path` is a pointer to a `CString` with long enough lifetime.
+-            let err = unsafe { krun_add_vsock_port(ctx_id, PULSE_SOCKET, pulse_path.as_ptr()) };
+-            if err < 0 {
+-                let err = Errno::from_raw_os_error(-err);
+-                return Err(err).context("Failed to configure vsock for pulse socket");
+-            }
++    fn pulse_path_from_xdg_runtime_dir(xdg_runtime_dir: &Option<String>) -> Option<CString> {
++        match xdg_runtime_dir {
++            None => None,
++            Some(run_path) => {
++                let pulse_path = Path::new(&run_path).join("pulse/native");
++                if pulse_path.exists() {
++                    CString::new(
++                        pulse_path
++                            .to_str()
++                            .expect("XDR_RUNTIME_DIR should not contain invalid UTF-8"),
++                    )
++                    .context("XDR_RUNTIME_DIR should not contain null characters")
++                    .ok()
++                } else {
++                    eprintln!(
++                        "$XDR_RUNTIME_DIR/pulse/native (aka {}) doesn't exit",
++                        pulse_path.to_string_lossy()
++                    );
++                    None
++                }
++            },
++        }
++    }
++
++    fn pulse_path_from_pulse_server() -> Option<CString> {
++        match env::var("PULSE_SERVER") {
++            Err(_) => None,
++            Ok(socket_uri) => match socket_uri.strip_prefix("unix:") {
++                None => {
++                    eprintln!("Only the \"unix:\" scheme is supported in PULSE_SERVER");
++                    None
++                },
++                Some(socket_path) => {
++                    if Path::new(&socket_path).exists() {
++                        CString::new(socket_path)
++                            .context("PULSE_SERVER should not contain null characters")
++                            .ok()
++                    } else {
++                        eprintln!("The socket in PULSE_SERVER ({}) doesn't exit", socket_uri);
++                        None
++                    }
++                },
++            },
+         }
++    }
++
++    let xdg_runtime_dir = env::var("XDG_RUNTIME_DIR").ok();
++    let pulse_path = pulse_path_from_pulse_server()
++        .or_else(|| pulse_path_from_xdg_runtime_dir(&xdg_runtime_dir));
++
++    if let Some(pulse_path) = pulse_path {
++        // SAFETY: `pulse_path` is a pointer to a `CString` with long enough lifetime.
++        let err = unsafe { krun_add_vsock_port(ctx_id, PULSE_SOCKET, pulse_path.as_ptr()) };
++        if err < 0 {
++            let err = Errno::from_raw_os_error(-err);
++            return Err(err).context("Failed to configure vsock for pulse socket");
++        }
++    }
+ 
++    if let Some(run_path) = xdg_runtime_dir {
+         let hidpipe_path = Path::new(&run_path).join("hidpipe");
+         spawn_hidpipe_server(hidpipe_path.clone()).context("Failed to spawn hidpipe thread")?;
+         let hidpipe_path = CString::new(
+-- 
+2.53.0
+

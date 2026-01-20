@@ -1,0 +1,37 @@
+From a9c277eac40ab8323a07a02e630484f765751d48 Mon Sep 17 00:00:00 2001
+From: Joseph Artsimovich <joseph.artsimovich@gmx.com>
+Date: Sun, 15 Mar 2026 11:38:32 +0200
+Subject: [PATCH] Handle MFD_* constants being defined despite <sys/memfd.h>
+ not being present
+
+---
+ src/xshmfence_alloc.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/src/xshmfence_alloc.c b/src/xshmfence_alloc.c
+index 77f968c..68195db 100644
+--- a/src/xshmfence_alloc.c
++++ b/src/xshmfence_alloc.c
+@@ -50,12 +50,19 @@ static int memfd_create(const char *name,
+ #include <sys/memfd.h>
+ #else
+ /* flags for memfd_create(2) (unsigned int) */
++
++#if !defined(MFD_CLOEXEC)
+ #define MFD_CLOEXEC		0x0001U
++#endif
++
++#if !defined(MFD_ALLOW_SEALING)
+ #define MFD_ALLOW_SEALING	0x0002U
+ #endif
+ 
+ #endif
+ 
++#endif
++
+ /**
+  * xshmfence_alloc_shm:
+  *
+-- 
+2.53.0
+

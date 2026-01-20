@@ -27,6 +27,7 @@ import 'package:icon_decoration/icon_decoration.dart';
 import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_build_source.dart';
+import 'package:winebar/utils/tappable_link.dart';
 import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 import 'package:winebar/widgets/process_logs_view_widget.dart';
@@ -730,11 +731,14 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
             ErrorMessageWidget(
               width: double.infinity,
               text: state.prefixCreationFailureMessage!,
-              onViewLogsPressed: state.prefixCreationFailedProcessResult == null
+              trailingLink: state.prefixCreationFailedProcessResult == null
                   ? null
-                  : () => _showWineProcessLogs(
-                      context: context,
-                      logs: state.prefixCreationFailedProcessResult!.logs,
+                  : TappableLink(
+                      linkText: 'View Logs.',
+                      onTapped: () => _showWineProcessLogs(
+                        context: context,
+                        logs: state.prefixCreationFailedProcessResult!.logs,
+                      ),
                     ),
             ),
         ],
