@@ -1,4 +1,13 @@
 #!/bin/sh
 
+# Clear the variables set by AppImage runtime.
+# APPDIR in particular is problematic. For some reason, its presense
+# causes the Wine applications launched by WineBar to be given WineBar's
+# icon on the taskbar, intsead of the app-provided one.
+unset APPIMAGE
+unset APPDIR
+unset OWD
+unset ARGV0
+
 cd "$(dirname "$0")"
 exec ./winebar

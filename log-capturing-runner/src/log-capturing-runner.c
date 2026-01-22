@@ -102,15 +102,6 @@ main(int argc, char* argv[])
         return exitCode;
     }
 
-    // Clear the variables set by AppImage runtime.
-    // "APPDIR" in particular is problematic. For some reason, its presense
-    // causes the Wine application launched by us to be given WineBar's
-    // icon on the taskbar, intsead of the app-provided icon.
-    unsetenv("APPIMAGE");
-    unsetenv("APPDIR");
-    unsetenv("OWD");
-    unsetenv("ARGV0");
-
     char** mainChildCommandLine = argv + 2;
 
     // Parse command-line options past <outdir>, which is at argv[1].
