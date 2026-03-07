@@ -19,7 +19,7 @@
 import 'dart:async';
 
 import 'package:boxy/padding.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
@@ -389,7 +389,7 @@ class WinePrefixPage extends StatelessWidget {
     final prefixDetailsBloc = BlocProvider.of<PrefixDetailsBloc>(context);
     prefixDetailsBloc.setFileSelectionInProgress(true);
 
-    FilePickerResult? filePickerResult;
+    XFile? selectedFile;
 
     try {
       final WinePrefix prefix = prefixDetailsBloc.state.prefix;
@@ -401,23 +401,23 @@ class WinePrefixPage extends StatelessWidget {
             ),
           );
 
-      filePickerResult = await FilePicker.platform.pickFiles(
+      const XTypeGroup executablesGroup = XTypeGroup(
+        label: 'Windows executables',
+        extensions: <String>['exe', 'msi', 'lnk'],
+        uniformTypeIdentifiers: <String>['public.jpeg', 'public.png'],
+      );
+      selectedFile = await openFile(
+        acceptedTypeGroups: <XTypeGroup>[executablesGroup],
         initialDirectory: wineInstDesc.getInnermostPrefixDir(
           prefixDirStructure: prefix.dirStructure,
         ),
-        type: FileType.custom,
-        allowedExtensions: ['exe', 'msi', 'lnk'],
-
-        // This doesn't work in Linux unfortunately, so we use a ModalBarrier
-        // widget to block interactions while the file selection in in progress.
-        lockParentWindow: true,
       );
     } finally {
       prefixDetailsBloc.setFileSelectionInProgress(false);
     }
 
-    if (filePickerResult != null) {
-      String filePath = filePickerResult.files.single.path!;
+    if (selectedFile != null) {
+      String filePath = selectedFile.path;
       if (_isPathAccessibleFromWine(filePath)) {
         specialExecutableBloc.startProcess([filePath]);
       } else {

@@ -9,5 +9,9 @@ unset APPDIR
 unset OWD
 unset ARGV0
 
+# Since we've switched from the file_picker to the file_selector plugin,
+# this environment variable is required to get a native file picker on KDE.
+export GTK_USE_PORTAL=1
+
 cd "$(dirname "$0")"
 exec ./winebar
