@@ -311,6 +311,9 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
           margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           elevation: 3.0,
           child: BlocProvider(
+            // Force PrefixListItemBloc to be re-created if prefix.id changes.
+            key: ValueKey(prefix.id),
+
             create: (context) => PrefixListItemBloc(prefixId: prefix.id),
             child: BlocBuilder<PrefixListItemBloc, PrefixListItemState>(
               builder: (context, listItemState) {
