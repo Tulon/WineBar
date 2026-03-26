@@ -130,15 +130,7 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
         '${[executable, ...args].join(' ')}',
       );
 
-      final process = await Process.start(
-        executable,
-        args,
-
-        // Muvm doesn't pass its environment to the child, so in this case,
-        // we pass the environment through the command-line arguments
-        // (see _buildExecutableAndArgs()).
-        environment: runWithMuvm ? null : envVars,
-      );
+      final process = await Process.start(executable, args);
 
       return _WineProcessWithLogCapturingRunner(
         process: process,
