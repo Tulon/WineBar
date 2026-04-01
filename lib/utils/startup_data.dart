@@ -66,7 +66,7 @@ class StartupData {
   }
 
   static Future<StartupData> _load() async {
-    final localStoragePaths = await LocalStoragePaths.get();
+    final localStoragePaths = LocalStoragePaths.get();
     final toplevelDataDirectory = Directory(localStoragePaths.toplevelDataDir);
 
     final pageSize = await _getPageSize();

@@ -94,7 +94,7 @@ class LocalStoragePaths {
     );
   }
 
-  static Future<LocalStoragePaths> get() async {
+  static LocalStoragePaths get() {
     final homeDir = Platform.environment['HOME'];
     if (homeDir == null) {
       throw Exception("Couldn't read the HOME environment variable");
