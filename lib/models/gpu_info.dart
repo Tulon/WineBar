@@ -77,6 +77,8 @@ class GpuInfo extends Equatable {
           'gpu-enumerator failed with status ${result.exitCode}',
           error: result.stderr,
         );
+
+        return [];
       }
 
       final json = jsonDecode(result.stdout);
