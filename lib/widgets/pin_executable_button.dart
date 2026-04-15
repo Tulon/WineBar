@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/widgets/bouncing_widget.dart';
 
