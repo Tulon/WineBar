@@ -250,7 +250,7 @@ abstract class _PrefixCreationStep {
             Row(
               spacing: 8.0,
               children: [
-                ?_maybeCreateBackButton(bloc: bloc),
+                ?_maybeCreateBackButton(bloc: bloc, state: state),
                 Expanded(child: Text(title, style: textTheme.titleLarge)),
                 ...buildPageTitleTrailingWidgets(
                   context: context,
@@ -273,7 +273,10 @@ abstract class _PrefixCreationStep {
     );
   }
 
-  Widget? _maybeCreateBackButton({required PrefixCreationBloc bloc}) {
+  Widget? _maybeCreateBackButton({
+    required PrefixCreationBloc bloc,
+    required PrefixCreationState state,
+  }) {
     final prevStep = this.prevStep;
 
     if (prevStep == null) {
@@ -292,7 +295,17 @@ abstract class _PrefixCreationStep {
         top: -8.0,
         bottom: -8.0,
       ),
-      child: BackButton(onPressed: () => bloc.navigateToStep(prevStep)),
+
+      // Note that we can't use a BackButton widget, as you can't disable
+      // it by providing a null onPressed callback. Rather than disabling
+      // the BackButton, a null onPressed callback causes the default action
+      // of Navigator.pop() to be invoked.
+      child: IconButton(
+        icon: BackButtonIcon(),
+        onPressed: state.prefixCreationStatus.isInProgress
+            ? null
+            : () => bloc.navigateToStep(prevStep),
+      ),
     );
   }
 }
