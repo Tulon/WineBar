@@ -95,7 +95,8 @@ class LocalStoragePaths {
   }
 
   static LocalStoragePaths get() {
-    final homeDir = Platform.environment['HOME'];
+    final homeDir =
+        Platform.environment['SNAP_REAL_HOME'] ?? Platform.environment['HOME'];
     if (homeDir == null) {
       throw Exception("Couldn't read the HOME environment variable");
     }

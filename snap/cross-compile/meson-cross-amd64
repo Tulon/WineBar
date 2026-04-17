@@ -1,0 +1,22 @@
+[binaries]
+c = 'x86_64-linux-gnu-gcc'
+cpp = 'x86_64-linux-gnu-g++'
+ar = 'x86_64-linux-gnu-gcc-ar'
+strip = 'x86_64-linux-gnu-strip'
+pkg-config = 'x86_64-linux-gnu-pkg-config'
+cmake = 'cmake'
+rust = ['rustc', '--target', 'x86_64-unknown-linux-gnu']
+rust_ld = 'x86_64-linux-gnu-gcc'
+
+[cmake]
+CMAKE_C_COMPILER    = 'x86_64-linux-gnu-gcc'
+CMAKE_CXX_COMPILER  = 'x86_64-linux-gnu-g++'
+
+[paths]
+libdir = 'lib/x86_64-linux-gnu'
+
+[host_machine]
+system = 'linux'
+cpu_family = 'x86_64'
+cpu = 'x86_64'
+endian = 'little'

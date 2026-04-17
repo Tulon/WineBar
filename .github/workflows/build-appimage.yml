@@ -1,4 +1,4 @@
-name: Build
+name: Build AppImage
 
 on:
   workflow_call:
@@ -10,7 +10,7 @@ on:
       arch:
         required: true
         type: string
-        description: Architecture (x64|arm)
+        description: Architecture (x64|arm64)
       runs-on:
         required: true
         type: string
@@ -26,7 +26,7 @@ on:
         required: true
         type: choice
         description: Architecture
-        options: 
+        options:
           - x64
           - arm64
       runs-on:
@@ -48,7 +48,7 @@ jobs:
         run: |
           sudo snap install snapcraft --classic
           sudo snap set snapcraft provider=lxd
-      
+
       - name: Install and configure LXD
         run: |
           sudo snap install lxd
@@ -65,7 +65,7 @@ jobs:
         with:
           repository: Tulon/winebar-flutter-snap
           ref: winebar
-      
+
       - name: Build the winebar-flutter snap
         run: |
           sudo usermod -a -G lxd $USER
@@ -75,7 +75,7 @@ jobs:
 
       # This one is usefull for debugging
       #- name: Upload the built winebar-flutter snap
-      #  uses: actions/upload-artifact@v4
+      #  uses: actions/upload-artifact@v6
       #  with:
       #    name: "winebar-flutter-${{ inputs.arch }}.snap"
       #    path: "winebar-flutter.snap"
@@ -124,7 +124,7 @@ jobs:
         run: |
           ./packaging/scripts/build_appimage.sh ${{ inputs.arch }} ${{ inputs.version }}
 
-      - name: Run ninja manually on a failed build to get better diagnostics 
+      - name: Run ninja manually on a failed build to get better diagnostics
         if: failure() && steps.build-appimage.outcome == 'failure'
         working-directory: ./build/linux/${{ inputs.arch }}/release
         run: ninja
@@ -133,14 +133,14 @@ jobs:
         env:
           CTEST_OUTPUT_ON_FAILURE: 1
         working-directory: ./build/linux/${{ inputs.arch }}/release
-        run: | 
+        run: |
           cmake --build . --target run_tests
 
       - name: Run Flutter Tests
         run: flutter test
 
       - name: Upload build artefacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: "WineBar-${{ inputs.version }}-${{ inputs.arch }}.AppImage"
           path: "build/linux/${{ inputs.arch }}/release/WineBar-${{ inputs.version }}-${{ inputs.arch }}.AppImage"

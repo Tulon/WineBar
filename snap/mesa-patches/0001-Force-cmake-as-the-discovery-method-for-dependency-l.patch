@@ -1,0 +1,55 @@
+From e76860c68078dba75d33df0ad2f37a5c46577c91 Mon Sep 17 00:00:00 2001
+From: Joseph Artsimovich <joseph.artsimovich@gmx.com>
+Date: Tue, 17 Mar 2026 18:24:20 +0200
+Subject: [PATCH] Force 'cmake' as the discovery method for dependency 'llvm'
+
+On Ubuntu and Debian, different architecture versions of LLVM can't coexist.
+When cross-compiling, we need the build-machine version to be able to run
+the `mesa_clc` tool (we assume a two-stage build is used) but at the same
+time we need the target-machine version to build the mesa libs. One way to
+work around that is to manually extract the target-machine .deb files to a
+different prefix. The problem is there is no way to tell mesa where to find
+that target-machine llvm installation, given that it forces the discovery
+method to 'config-tool'.
+
+This patch sets 'cmake' as the discovery method for dependency 'llvm',
+in order to work around the issue described above. In order for specify the
+prefix of the target-machine llvm installation, pass the following to
+"meson setup":
+
+    --cmake-prefix-path=<PREFIX>/usr/lib/llvm-20/lib/cmake
+
+where <PREFIX> is the directory where the target-machine .deb packages were
+extracted to.
+
+Q: Why not just skip the build-machine version of LLVM altogether, only
+   installing the target-machine version and using qemu-user-static to
+   run the target-machine version of the `llvm-config` tool and the
+   `mesa_clc` tool built as part of mesa?
+A: You see, I want to be able to cross-compile mesa to amd64 and i386
+   on my arm64-based Macbook Air M2 running Linux. Because of page size
+   differences (4K on amd64 and i386, 16K on Apple-hardware arm64), the
+   x86_64 / i386 versions of `mesa_clc` running under qemu-user-static
+   end up crashing. Native arm64 versions don't crash, as according to [1],
+   all major arm64 Linux distros support 4K, 16K and 64K page sizes.
+   [1]: https://github.com/k3s-io/k3s/issues/7335#issuecomment-1518600436
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 933710ecdf1..eb97a4bd1d7 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1771,7 +1771,7 @@ _shared_llvm = get_option('shared-llvm') \
+ 
+ dep_llvm = dependency(
+   'llvm',
+-  method : host_machine.system() == 'windows' ? 'auto' : 'config-tool',
++  method : 'cmake',
+   version : _llvm_version,
+   modules : llvm_modules,
+   optional_modules : llvm_optional_modules,
+-- 
+2.53.0
+

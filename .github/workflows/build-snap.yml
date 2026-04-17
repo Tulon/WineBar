@@ -1,0 +1,113 @@
+name: Build Snap
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: Version name (x.y.z)
+      arch:
+        required: true
+        type: string
+        description: Architecture (x64|arm64)
+      runs-on:
+        required: true
+        type: string
+        description: Github runner name
+
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: Version name (x.y.z)
+      arch:
+        required: true
+        type: choice
+        description: Architecture
+        options:
+          - x64
+          - arm64
+      runs-on:
+        required: true
+        type: choice
+        description: Github runner name
+        options:
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
+
+jobs:
+  build-x64:
+    name: Build
+    runs-on: ${{ inputs.runs-on }}
+    timeout-minutes: 120 # The normal run time is about 70 minutes.
+
+    steps:
+      - name: Install and configure snapcraft
+        run: |
+          sudo snap install snapcraft --classic
+          sudo snap set snapcraft provider=lxd
+
+      - name: Install and configure LXD
+        run: |
+          # On the default channel, the "5.21.4 LTS" version of LXD is
+          # installed. That version works perfectly on my local machine,
+          # but on Github hosted runners, binfmt_misc handlers can't be
+          # installed during the build. Switching to the "6/stable"
+          # channel fixes that.
+          sudo snap install lxd --channel=6/stable
+
+          sudo lxd init --auto
+
+          # From here: https://documentation.ubuntu.com/lxd/latest/howto/network_bridge_firewalld/#prevent-connectivity-issues-with-lxd-and-docker
+          sudo iptables -I DOCKER-USER -i lxdbr0 -j ACCEPT
+          sudo ip6tables -I DOCKER-USER -i lxdbr0 -j ACCEPT
+          sudo iptables  -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+          sudo ip6tables -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+      - name: Setup gah
+        uses: get-gah/setup-gah@v1
+        with:
+          version: v1.13.0
+
+      - name: Install yq
+        run: |
+          gah install yq --tag=v4.52.5
+
+      - name: Clone repository
+        uses: actions/checkout@v5
+
+      - name: Add snapcraft.base.yaml to the merge list
+        run: |
+          echo "SNAPCRAFT_YAML_MERGE_LIST=snap/snapcraft.base.yaml" >> $GITHUB_ENV
+
+      - name: Add snapcraft.arm64.yaml to the merge list
+        if: inputs.arch == 'arm64'
+        run: |
+          echo "SNAPCRAFT_YAML_MERGE_LIST=$SNAPCRAFT_YAML_MERGE_LIST snap/snapcraft.arm64.yaml" >> $GITHUB_ENV
+
+      # This step uses the yq tool we've installed above.
+      - name: Merge snapcraft.*.yaml files
+        run: |
+          snap/scripts/merge-snapcraft-yaml-files.sh $SNAPCRAFT_YAML_MERGE_LIST > snap/snapcraft.yaml
+
+      - name: Replace the version field in merged snapcraft.yaml
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          yq eval --inplace '.version = strenv(VERSION)' snap/snapcraft.yaml
+
+      - name: Build WineBar snap
+        run: |
+          sudo usermod -a -G lxd $USER
+
+          # newgrp doesn't work in Github Actions, though sg does.
+          sg lxd -c "snapcraft pack -o 'WineBar-${{ inputs.version }}-${{ inputs.arch }}.snap'"
+
+      - name: Upload build artefacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: "WineBar-${{ inputs.version }}-${{ inputs.arch }}.snap"
+          path: "WineBar-${{ inputs.version }}-${{ inputs.arch }}.snap"
+          if-no-files-found: error

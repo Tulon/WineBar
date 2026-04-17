@@ -1,0 +1,221 @@
+# This file is to be merged with arch-specific files using the
+# snap/scripts/merge-snapcraft-yaml-files.sh script.
+
+name: winebar
+title: Wine Bar
+summary: Install and run Windows apps
+description: |
+  Wine Bar helps you install various Wine and Proton builds,
+  create Wine prefixes, install Windows software into them and
+  run that software.
+
+  Think of a Wine prefix as of a separate Windows installation,
+  powered by Wine, which is an opensource Windows compatibility
+  layer.
+website:
+  - https://github.com/Tulon/WineBar
+issues:
+  - https://github.com/Tulon/WineBar/issues
+donation:
+  - https://ko-fi.com/tulon
+
+base: core24
+confinement: strict
+grade: stable
+license: GPL-3.0-or-later
+compression: lzo
+version: 0.0.0 # Overridden using the `yq` tool in CI builds.
+platforms:
+  amd64:
+  arm64:
+assumes:
+  - snapd2.62
+
+lint:
+  ignore:
+    - metadata:
+        - contact
+        - source-code
+
+    # Because it's a list of maps rather than a simple map, it won't be merged
+    # correctly with entries from arch-specific snapcraft.yaml files. So, we
+    # put everything here, even the stuff that's arch-specific.
+    - library:
+        - usr/lib/**/libicuio.so.*
+        - usr/lib/**/libicutest.so.*
+        - usr/lib/**/libicutu.so.*
+        - usr/lib/**/libicui18n.so.*
+
+        - usr/share/fex-emu/GuestThunks/*
+        - usr/share/fex-emu/GuestThunks_32/*
+        - usr/lib/**/libFEXCore.so
+        - lib/**/libulockmgr.so*
+
+        # Unfortunately, there doesn't seem to be a way to disable the
+        # "unused library" warning without disabling the "missing dependency"
+        # one. Such an option would come useful here.
+        - gpu-2404-override/usr/lib/**/*
+
+plugs:
+  # Allows accessing the real home directory (available in snap as $SNAP_REAL_HOME).
+  home:
+    interface: home
+
+  # Creates a read-write directory under /dev/shm and mounts it as /dev/shm
+  # within the confined environment. Muvm makes use of /dev/shm for host to guest
+  # communication.
+  shmem:
+    interface: shared-memory
+    private: true
+
+slots:
+  # This one is necessary to prevent multiple instances of the app from running.
+  dbus-daemon:
+    interface: dbus
+    bus: session
+    name: io.github.tulon.winebar
+
+environment:
+  # It's the default, but it's good to be explicit, as this option
+  # is required to get a native file picker on KDE.
+  GTK_USE_PORTAL: "1"
+
+apps:
+  winebar:
+    command: winebar
+    command-chain:
+      - snap/command-chain/winebar-launcher
+    desktop: usr/share/applications/winebar.desktop
+    extensions:
+      # In theory, we don't need the full gnome platform, just the gtk+-3 library.
+      # In practice, this extension is absolutely necessary, as it does lots of
+      # internal plumbing, like symlinking the wayland socket from XDG_RUNTIME_DIR.
+      - gnome
+    slots:
+      - dbus-daemon
+    plugs:
+      # This list was more or less copied from the Steam snap.
+      - shmem
+      - desktop
+      - desktop-legacy
+      - wayland
+      - home
+      - x11
+      - gsettings
+      - hardware-observe
+      - mount-observe
+      - system-observe
+      - network-observe
+      - joystick
+      - network
+      - network-bind
+      - opengl
+      - audio-playback
+      - audio-record
+      - screen-inhibit-control
+      - process-control
+      - bluez
+      - network-control
+      - fuse-support
+      - removable-media
+      - upower-observe
+      - uinput
+
+parts:
+  winebar:
+    source: .
+    plugin: flutter
+    override-build: |
+      # Note that we don't do "craftctl default" here, as that doesn't allow
+      # us to pass the --build-name argument to "flutter build". Still, we
+      # use the "flutter" plugin as it brings in the extra dependencies that
+      # flutter needs.
+
+      export PATH="$PWD/flutter-checkout/bin:$PATH"
+
+      # Install latest flutter unless already installed.
+      if [[ ! -e flutter-checkout ]]; then
+        git clone --depth 1 -b stable https://github.com/flutter/flutter.git flutter-checkout
+        flutter precache --linux
+      fi
+
+      # Prevents build failures on subsequent rebuilds.
+      rm -rf .flutter-plugins-dependencies
+
+      # Get project dependencies.
+      flutter pub get
+
+      # Build the project.
+      flutter build linux --release --verbose --build-name "$(craftctl get version)" \
+        --build-number 1
+        
+      cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/
+
+      # Install the app icon.
+      install -D packaging/resources/common/winebar.png \
+        $CRAFT_PART_INSTALL/usr/share/icons/winebar.png
+
+      # Copy the .desktop file.
+      install -D packaging/resources/common/winebar.desktop \
+        $CRAFT_PART_INSTALL/usr/share/applications/winebar.desktop
+
+      # Fix up the .desktop file.
+      sed -i -e 's|^Icon=.*$|Icon=/usr/share/icons/winebar.png|g' \
+        $CRAFT_PART_INSTALL/usr/share/applications/winebar.desktop
+
+      # Install the launcher script.
+      install -D -m 0755 -t $CRAFT_PART_INSTALL/snap/command-chain/ \
+        $SNAPCRAFT_PART_SRC/snap/command-chain/winebar-launcher
+    build-packages:
+      - mingw-w64-i686-dev
+      - g++-mingw-w64-i686
+      - binutils-mingw-w64-i686
+      - libgtk-3-dev
+      - libvulkan-dev
+    stage-packages:
+      - jq # Used by the winebar-launcher script
+      - xz-utils
+      - zstd
+    prime:
+      - -usr/share/doc
+      - -usr/share/man
+
+  # graphics-debugging-tools:
+  #   plugin: nil
+  #   stage-packages:
+  #     - mesa-utils
+  #     - vulkan-tools
+  #   stage:
+  #     - usr/bin
+
+  #     # The other libraries are mesa-related, and we don't want to duplicate them.
+  #     - usr/lib/**/libdecor-*
+
+  # strace:
+  #   plugin: nil
+  #   stage-snaps:
+  #     - strace-static
+
+  # Zenity is used by winetricks.
+  zenity:
+    plugin: nil
+    stage-packages:
+      - zenity
+
+    stage:
+      # zenity depends on gtk, which is provided by gnome-platform.
+      # so, we only stage its binary, not the dependencies.
+      - usr/bin/zenity
+      - usr/share/icons
+      - usr/share/locale/*/LC_MESSAGES/zenity.mo
+
+  # Zenity is one dependency of winetricks, these are the others.
+  other-winetricks-deps:
+    plugin: nil
+    stage-packages:
+      - 7zip
+      - aria2
+      - cabextract
+      #- fuseiso
+      - unzip
+      - xz-utils

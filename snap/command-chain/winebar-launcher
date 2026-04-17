@@ -1,0 +1,62 @@
+#!/bin/bash
+
+if [ "$SNAP_ARCH" = "arm64" ]; then
+    # On all platforms, we use the `gnome` extension. That extension imposes
+    # on us the `gpu-2404` interface. That interfaces carries various GPU
+    # drivers and configuration files. The thing is, on arm64, those drivers
+    # are not good for us, as they miss the Asahi driver and ship a version
+    # of libxshmfence that's too old (it's missing an essential patch to make
+    # it work under muvm).
+    # Our approach is to ship something that's very similar to the `gpu-2404`
+    # interface. We place it at $SNAP/gpu-2404-override. We are still subject
+    # to the launcher script that comes from `gpu-2404` and that script sets
+    # environment variables that point to `$SNAP/gpu-2404`. Below we rewrite
+    # them to point to `$SNAP/gpu-2404-override` instead.
+
+    env_vars_to_patch=(
+        __EGL_EXTERNAL_PLATFORM_CONFIG_DIRS
+        __EGL_VENDOR_LIBRARY_DIRS
+        VK_LAYER_PATH
+        DRIRC_CONFIGDIR
+        XLOCALEDIR
+        LIBGL_DRIVERS_PATH
+        LD_LIBRARY_PATH
+        LIBVA_DRIVERS_PATH
+        GBM_BACKENDS_PATH
+        XDG_DATA_DIRS
+    )
+
+    for var in "${env_vars_to_patch[@]}"; do
+        val=$(echo ${!var} | sed -e 's|/gpu-2404/|/gpu-2404-override/|g')
+        export "$var=$val"
+    done
+fi
+
+# The thing is, on my Fedora 43, the library paths in Vulkan ICD files
+# located in /var/lib/snapd/lib/vulkan/icd.d/ are absolute. Those absolute
+# paths don't exist inside the Snap sandbox, so we have to work around that,
+# which is what we do below. Failing to fix them leads to Vulkan not working
+# with Nvidia proprietary drivers.
+system_vulkan_icd_dir="/var/lib/snapd/lib/vulkan/icd.d"
+user_vulkan_icd_dir="$HOME/.local/share/vulkan/icd.d"
+mkdir -p "$user_vulkan_icd_dir"
+if [ -d "$system_vulkan_icd_dir" ]; then
+    find "$system_vulkan_icd" -type f -name "*.json" | while IFS= read -r file; do
+        lib_path="$(jq -r .ICD.library_path "$icd_file")"
+        lib_name="$(basename "$lib_path")"
+        if [ "$lib_path" != "$lib_name" ]; then 
+            echo "Fixing the absolute library path in $icd_file"
+
+            new_icd_file_name="$(basename "$icd_file" .json)_fixed.json"
+            
+            jq --arg lib_name "$lib_name" '.ICD.library_path = $lib_name' \
+                "$icd_file" > "$user_vulkan_icd_dir/$new_icd_file_name"
+
+            # Disable loading of the original ICD file.
+            icd_file_name="$(basename "$icd_file")"
+            export VK_LOADER_DRIVERS_DISABLE="${VK_LOADER_DRIVERS_DISABLE:+$VK_LOADER_DRIVERS_DISABLE:}$icd_file_name"
+        fi
+    done
+fi
+
+exec "$@"

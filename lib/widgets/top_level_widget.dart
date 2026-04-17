@@ -17,7 +17,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:winebar/exceptions/error_with_more_details_url.dart';
 import 'package:winebar/utils/app_info.dart';
+import 'package:winebar/utils/cast_or_null.dart';
+import 'package:winebar/utils/tappable_link.dart';
 
 import '../utils/startup_data.dart';
 import 'error_message_widget.dart';
@@ -43,8 +47,11 @@ class TopLevelWidget extends StatelessWidget {
             // Handle the error case. It's a critical error and the only
             // thing the user can do at this point is to close the app.
             return _buildCriticalErrorWidget(
-              context,
-              snapshot.error?.toString() ?? 'Unknown error',
+              context: context,
+              errorMessage: snapshot.error?.toString() ?? 'Unknown error',
+              moreDetailsUrl: castOrNull<ErrorWithMoreDetailsUrl>(
+                snapshot.error,
+              )?.moreDetailsUrl,
             );
           } else {
             // StartupData has finished loading, so we display
@@ -68,7 +75,11 @@ class TopLevelWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildCriticalErrorWidget(BuildContext context, String errorMessage) {
+  Widget _buildCriticalErrorWidget({
+    required BuildContext context,
+    required String errorMessage,
+    String? moreDetailsUrl,
+  }) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -103,7 +114,15 @@ class TopLevelWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                ErrorMessageWidget(text: errorMessage),
+                ErrorMessageWidget(
+                  text: errorMessage,
+                  trailingLink: moreDetailsUrl == null
+                      ? null
+                      : TappableLink(
+                          linkText: 'More details.',
+                          onTapped: () => launchUrlString(moreDetailsUrl),
+                        ),
+                ),
               ],
             ),
           ),

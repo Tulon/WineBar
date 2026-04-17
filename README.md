@@ -80,7 +80,7 @@ In general, using the Flutter from Snap to build Flutter software on Linux is a 
 1. They need a newer version of CMake than the one provided (and imposed on you) by the Flutter Snap.
 2. One of the helper tools uses the Vulkan API and so needs the `libvulkan-dev` package to be included as part of the Flutter Snap.
 
-Therefore, for development, I suggest simply installing the upstream version of Flutter, as mentioned above. For distribution though, we do want compatibility with older distros, as provided by the Flutter from Snap. The solution adopted by Wine Bar is to fork the [Flutter Snap](https://github.com/canonical/flutter-snap) and build and install it as part of the Wine Bar CI build process. See [here](.github/workflows/build.yml) for more details.
+Therefore, for development, I suggest simply installing the upstream version of Flutter, as mentioned above. For distribution though, we do want compatibility with older distros, as provided by the Flutter from Snap. The solution adopted by Wine Bar is to fork the [Flutter Snap](https://github.com/canonical/flutter-snap) and build and install it as part of the Wine Bar CI build process. See [here](.github/workflows/build-appimage.yml) for more details.
 
 Another option would be doing a Docker build on an older distro or a regular build on an older Github Actions runner. Unfortunately, that option is also problematic, as our cross-compiled Win32 helper tools happen to use C++23, which is simply not available on older distros.
 

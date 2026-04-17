@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:winebar/exceptions/error_with_more_details_url.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
@@ -70,19 +71,41 @@ class StartupData {
     final toplevelDataDirectory = Directory(localStoragePaths.toplevelDataDir);
 
     final pageSize = await _getPageSize();
-    final muvmNeeded = pageSize != 4096;
-
     final archName = await _getArchNameFromUname();
 
-    // See the list of possible string returned from "uname -a":
+    // See the list of possible strings returned from "uname -a":
     // https://stackoverflow.com/a/78630608
     final isIntelHost = archName.contains('86');
 
+    final isNon4kPageSize = pageSize != 4096;
+
+    final isSnapVersion = Platform.environment.containsKey('SNAP');
+
+    // Q: Why are we forcing muvm to be used in a Snap environment on ARM64
+    //    even on non-Apple hardware?
+    // A: FEX-EMU (not to be confused with FEX-enabled builds of Wine) can't
+    //    work in a Snap confined environment without an additional emulation
+    //    layer. The Generic-ARM64-support.md document at the root of this
+    //    repo explains why. Muvm provides that additional emulation layer,
+    //    so such a setup may work in theory.
+    final muvmNeeded =
+        archName == 'aarch64' && (isNon4kPageSize || isSnapVersion);
+
     if (muvmNeeded) {
+      if (!await File('/dev/kvm').exists()) {
+        throw ErrorWithMoreDetailsUrl(
+          'This system lacks the hardware virtualization capabilities '
+          '(/dev/kvm is missing) that are required to run WineBar.',
+          moreDetailsUrl:
+              'https://github.com/Tulon/WineBar/blob/main/Generic-ARM64-support.md',
+        );
+      }
+
       if (!await _isMuvmAvailable()) {
         throw GenericException(
           'This system needs muvm / FEX to be able to run Windows apps. '
-          'Please install it using "sudo dnf install muvm fex-emu" or similar',
+          'The Snap version of WineBar has muvm built-in. Otherwise, '
+          'please install it using "sudo dnf install muvm fex-emu" or similar',
         );
       }
     }
