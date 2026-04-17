@@ -21,6 +21,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:winebar/models/gpu_info.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/special_executable_slot.dart';
@@ -39,8 +41,47 @@ import 'services/download_and_extraction_service.dart';
 import 'services/download_and_extraction_service_impl.dart';
 import 'widgets/top_level_widget.dart';
 
-void main() {
-  final logger = Logger();
+void main() async {
+  bool productionMode = true;
+  assert(() {
+    // Asserts are disabled in production mode, so this code will never run.
+    productionMode = false;
+    return true;
+  }());
+
+  final logOutputs = <LogOutput>[];
+
+  if (productionMode) {
+    // In production mode, we log to files. This kind of logging doesn't block
+    // the UI thread.
+    final appCacheDir = await getApplicationCacheDirectory();
+    final logDir = path.join(appCacheDir.path, 'logs');
+
+    logOutputs.add(
+      AdvancedFileOutput(
+        path: logDir,
+        overrideExisting: true,
+        writeImmediately: [Level.fatal],
+      ),
+    );
+  } else {
+    // In development mode, we log to console.
+    logOutputs.add(ConsoleOutput());
+  }
+
+  final logger = Logger(
+    // ProductionFilter outputs logs in both production and debug modes,
+    // while DevelopmentFilter only outputs them in debug mode.
+    filter: ProductionFilter(),
+
+    printer: PrettyPrinter(
+      lineLength: productionMode ? 80 : 120,
+      colors: !productionMode,
+      noBoxingByDefault: productionMode,
+    ),
+
+    output: MultiOutput(logOutputs),
+  );
 
   // It would be tempting to pass httpClientAdapter = Http2Adapter(...)
   // here. Unfortunately, it turns out to be quite buggy. Getting the list
