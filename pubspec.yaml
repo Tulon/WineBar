@@ -44,7 +44,6 @@ dependencies:
   logger: ^2.6.1
   boxy: ^2.2.1
   dio: ^5.9.0
-  file_picker: ^6.2.1
   flutter_material_design_icons: ^3.0.0+7447
   io: ^1.0.5
   crypto: ^3.0.6
@@ -53,6 +52,7 @@ dependencies:
   dbus: ^0.7.11
   icon_decoration: ^2.1.0
   simple_icons: ^14.6.1
+  file_selector: ^1.1.0
 
 dev_dependencies:
   flutter_test:
