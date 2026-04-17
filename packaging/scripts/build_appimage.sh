@@ -75,6 +75,7 @@ ln -s data/flutter_assets/packaging/resources/common/winebar.png "${APP_DIR}/win
 ln -s data/flutter_assets/packaging/resources/common/winebar.png "${APP_DIR}/.DirIcon"
 cp -rp packaging/resources/AppImage/. "${APP_DIR}/"
 
+echo "X-AppImage-Name=Wine Bar" >> "${APP_DIR}/winebar.desktop"
 if [ -n "${VERSION_NAME}" ]; then
     echo "X-AppImage-Version=${VERSION_NAME}" >> "${APP_DIR}/winebar.desktop"
 fi

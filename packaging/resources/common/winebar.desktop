@@ -10,4 +10,3 @@ Comment=Manage Wine Prefixes
 Exec=winebar
 Icon=winebar
 Categories=System;Emulator
-X-AppImage-Name=Wine Bar
