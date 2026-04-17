@@ -2,7 +2,7 @@ name: winebar
 description: "Manages Wine Prefixes"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -45,14 +45,14 @@ dependencies:
   boxy: ^2.2.1
   dio: ^5.9.0
   file_picker: ^6.2.1
-  material_design_icons_flutter: ^7.0.7296
+  flutter_material_design_icons: ^3.0.0+7447
   io: ^1.0.5
   crypto: ^3.0.6
   convert: ^3.1.2
   posix: ^6.0.3
   dbus: ^0.7.11
   icon_decoration: ^2.1.0
-  simple_icons: ^10.1.3
+  simple_icons: ^14.6.1
 
 dev_dependencies:
   flutter_test:
