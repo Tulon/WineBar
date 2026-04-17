@@ -22,6 +22,18 @@ static void first_frame_cb(MyApplication *self, FlView *view) {
 
 // Implements GApplication::activate.
 static void my_application_activate(GApplication *application) {
+
+  // BEGIN: WineBar-specific code
+
+  GList* existing_windows = gtk_application_get_windows(GTK_APPLICATION(application));
+  GtkWindow* existing_window = existing_windows ? GTK_WINDOW(existing_windows->data) : NULL;
+  if (existing_window) {
+    gtk_window_present(existing_window);
+    return;
+  }
+
+  // END: WineBar-specific code
+
   MyApplication *self = MY_APPLICATION(application);
   GtkWindow *window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
