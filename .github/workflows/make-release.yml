@@ -44,7 +44,7 @@ jobs:
       runs-on: ubuntu-24.04
 
   build-snap-arm64:
-    name: Build arm64 AppImage
+    name: Build arm64 Snap
     needs: prepare
     uses: ./.github/workflows/build-snap.yml
     with:
