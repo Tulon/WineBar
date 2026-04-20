@@ -5,10 +5,10 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [ opened, synchronize, reopened ]
 
 jobs:
-  build-x64:
+  build-appimage-x64:
     name: Build x64 AppImage
     uses: ./.github/workflows/build-appimage.yml
     with:
@@ -16,9 +16,25 @@ jobs:
       arch: x64
       runs-on: ubuntu-24.04
 
-  build-arm64:
+  build-appimage-arm64:
     name: Build arm64 AppImage
     uses: ./.github/workflows/build-appimage.yml
+    with:
+      version: 0.0.0
+      arch: arm64
+      runs-on: ubuntu-24.04-arm
+
+  build-snap-x64:
+    name: Build x64 Snap
+    uses: ./.github/workflows/build-snap.yml
+    with:
+      version: 0.0.0
+      arch: x64
+      runs-on: ubuntu-24.04
+
+  build-snap-arm64:
+    name: Build arm64 Snap
+    uses: ./.github/workflows/build-snap.yml
     with:
       version: 0.0.0
       arch: arm64
