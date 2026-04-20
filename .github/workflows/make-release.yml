@@ -76,13 +76,15 @@ jobs:
         run: |
           sudo snap install snapcraft --classic
 
-      - name: Login to Snap Store
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
-        run: |
-          snapcraft login
+      # - name: Check snapcraft login status
+      #   env:
+      #     SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+      #   run: |
+      #     snapcraft whoami
 
       - name: Publish snaps
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         run: |
           snapcraft upload --release=stable WineBar-${{needs.prepare.outputs.version}}-x64.snap/WineBar-${{needs.prepare.outputs.version}}-x64.snap
           snapcraft upload --release=stable WineBar-${{needs.prepare.outputs.version}}-arm64.snap/WineBar-${{needs.prepare.outputs.version}}-arm64.snap
