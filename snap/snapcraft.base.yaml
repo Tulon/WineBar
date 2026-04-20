@@ -119,7 +119,10 @@ apps:
       - fuse-support
       - removable-media
       - upower-observe
-      - uinput
+      # This one is a super-privileged interface that requires a valid use
+      # case to be granted. So far I am not sure how Steam makes use of it,
+      # so I am commenting it out.
+      #- uinput
 
 parts:
   winebar:
