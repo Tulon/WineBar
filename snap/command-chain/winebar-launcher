@@ -1,6 +1,11 @@
 #!/bin/bash
 
 if [ "$SNAP_ARCH" = "arm64" ]; then
+    # On arm64, we need the "kvm" slot connected.
+    if snapctl is-connected kvm; then
+        export SNAP_KVM_CONNECTED=1
+    fi
+
     # On all platforms, we use the `gnome` extension. That extension imposes
     # on us the `gpu-2404` interface. That interfaces carries various GPU
     # drivers and configuration files. The thing is, on arm64, those drivers
