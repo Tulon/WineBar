@@ -9,7 +9,6 @@ layout:
     bind: $SNAP/gpu-2404-override/libdrm
   /usr/share/X11/XErrorDB:
     symlink: $SNAP/gpu-2404-override/X11/XErrorDB
-
   # The entries below we would set if we weren't mimicking what the `gpu-2404`
   # interface does. The reason we are mimicking it is that it's imposed on
   # us by the `gnome` extension. That interface exposes the folders listed
@@ -28,6 +27,12 @@ layout:
   #   symlink: $SNAP/gpu-2404-override/usr/share/vulkan
   # /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gbm:
   #   symlink: $SNAP/gpu-2404-override/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gbm
+
+apps:
+  winebar:
+    plugs:
+      # muvm needs read-write access to /dev/kvm.
+      - kvm
 
 parts:
   # The only reason we build libxshmfence from source is that the version of
@@ -60,7 +65,7 @@ parts:
   # This part builds libxshmfence and mesa from source.
   # Both native and cross-builds (for fex-rootfs) are done.
   libxshmfence-plus-mesa:
-    after: [mesa-source, libxshmfence-source]
+    after: [ mesa-source, libxshmfence-source ]
     plugin: nil
     override-build: |
       source $CRAFT_PROJECT_DIR/snap/scripts/buildah-helpers.sh
@@ -358,7 +363,7 @@ parts:
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
 
   libkrun:
-    after: [libkrunfw, virglrenderer]
+    after: [ libkrunfw, virglrenderer ]
     source: https://github.com/containers/libkrun.git
     source-type: git
     source-tag: v1.17.2
@@ -421,7 +426,7 @@ parts:
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
 
   muvm:
-    after: [libkrun]
+    after: [ libkrun ]
     source: https://github.com/AsahiLinux/muvm.git
     source-type: git
     source-tag: muvm-0.5.0
@@ -543,7 +548,7 @@ parts:
       - -qemu-user-static
 
   fex-rootfs:
-    after: [qemu-user-static, libxshmfence-plus-mesa]
+    after: [ qemu-user-static, libxshmfence-plus-mesa ]
     plugin: nil
     stage-packages:
       # To be able to unpack the default.erofs file on systems where we don't

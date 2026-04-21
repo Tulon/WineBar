@@ -101,6 +101,16 @@ class StartupData {
         );
       }
 
+      if (isSnapVersion && Platform.environment['SNAP_KVM_CONNECTED'] != '1') {
+        throw GenericException(
+          'WineBar on ARM64 needs read-write access to /dev/kvm. Ordinary '
+          'apps normally have such access, but not Snaps. To grant such '
+          'access, run the following command from the command line:\n\n'
+          'sudo snap connect winebar:kvm :kvm\n\n'
+          'Then, restart WineBar.',
+        );
+      }
+
       if (!await _isMuvmAvailable()) {
         throw GenericException(
           'This system needs muvm / FEX to be able to run Windows apps. '
