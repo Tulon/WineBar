@@ -354,6 +354,8 @@ class WineTasks {
     final processOutputDir = await startupData.localStoragePaths
         .createProcessOutputDir();
 
+    final disableLogs = false;
+
     final wineProcess = await startupData.wineProcessRunnerService.start(
       processOutputDir: processOutputDir,
       commandLine: wineInstDescriptor.buildWineInvocationCommand(
@@ -365,8 +367,9 @@ class WineTasks {
         processOutputDir: processOutputDir.path,
         pinnedExecutableSettings: null,
         forWinetricks: false,
-        disableLogs: false,
+        disableLogs: disableLogs,
       ),
+      disableLogs: disableLogs,
     );
 
     runningSpecialExecutablesRepo.addRunningProcess(
