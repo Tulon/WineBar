@@ -17,31 +17,23 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/process_log.dart';
+import 'package:winebar/utils/file_log_accessor.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
+import 'package:winebar/utils/log_accessor.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
+import 'package:winebar/utils/size_limited_in_memory_log.dart';
 
 void _validateCommandLine(List<String> commandLine) {
   if (commandLine.isEmpty) {
     throw GenericException("Command line can't be empty");
   }
-}
-
-ProcessLog? _maybeBuildLog(String name, Uint8List content) {
-  return content.isEmpty
-      ? null
-      : ProcessLog(
-          name: name,
-          content: utf8.decode(content, allowMalformed: true),
-        );
 }
 
 /// Runs a wine process (or a process that may invoke wine) either directly
@@ -75,6 +67,7 @@ abstract interface class WineProcessRunnerService {
     required Directory processOutputDir,
     required List<String> commandLine,
     required Map<String, String> envVars,
+    required bool disableLogs,
   });
 }
 
@@ -115,6 +108,7 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
     required Directory processOutputDir,
     required List<String> commandLine,
     required Map<String, String> envVars,
+    required bool disableLogs,
   }) async {
     _validateCommandLine(commandLine);
 
@@ -132,9 +126,51 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
 
       final process = await Process.start(executable, args);
 
+      var logAccessors = <ProcessLogAccessor>[];
+
+      if (!disableLogs) {
+        logAccessors = <ProcessLogAccessor>[
+          // For file-based logs, size-limiting is done by log-capturing-runner.
+          FileLogAccessor(
+            logName: 'STDOUT',
+            filePath: path.join(processOutputDir.path, 'stdout.txt'),
+          ),
+
+          FileLogAccessor(
+            logName: 'STDERR',
+            filePath: path.join(processOutputDir.path, 'stderr.txt'),
+          ),
+
+          if (runWithMuvm)
+            SizeLimitedInMemoryLog(logName: 'muvm', byteStream: process.stderr),
+
+          FileLogAccessor(
+            logName: 'log-capturing-runner',
+            filePath: path.join(
+              processOutputDir.path,
+              'log-capturing-runner.txt',
+            ),
+          ),
+
+          FileLogAccessor(
+            logName: 'installer-runner',
+            filePath: path.join(processOutputDir.path, 'installer-runner.txt'),
+          ),
+
+          FileLogAccessor(
+            logName: 'pin-info-extractor',
+            filePath: path.join(
+              processOutputDir.path,
+              'pin-info-extractor.txt',
+            ),
+          ),
+        ];
+      }
+
       return _WineProcessWithLogCapturingRunner(
         process: process,
         processOutputDir: processOutputDir,
+        logAccessors: logAccessors,
       );
     } catch (e) {
       await recursiveDeleteAndLogErrors(processOutputDir);
@@ -202,11 +238,13 @@ class _WineProcessRunnerService implements WineProcessRunnerService {
 class _WineProcessWithLogCapturingRunner implements WineProcess {
   final Process process;
   final Directory processOutputDir;
+  final List<ProcessLogAccessor> logAccessors;
   final _completer = Completer<WineProcessResult>();
 
   _WineProcessWithLogCapturingRunner({
     required this.process,
     required this.processOutputDir,
+    required this.logAccessors,
   }) {
     unawaited(
       process.exitCode
@@ -227,40 +265,18 @@ class _WineProcessWithLogCapturingRunner implements WineProcess {
 
     final exitCode = int.tryParse(statusString.trim());
 
-    // The log files are size-limted, so it's totally fine
-    // to read them into memory.
-    final stdout = await File(
-      path.join(processOutputDir.path, 'stdout.txt'),
-    ).readAsBytes().catchError((e) => Uint8List(0));
+    final logs = await Future.wait(
+      logAccessors.map((accessor) => accessor.tryRetrieveLog()),
+    );
 
-    final stderr = await File(
-      path.join(processOutputDir.path, 'stderr.txt'),
-    ).readAsBytes().catchError((e) => Uint8List(0));
-
-    final logCapturingRunnerLog = await File(
-      path.join(processOutputDir.path, 'log-capturing-runner.txt'),
-    ).readAsBytes().catchError((e) => Uint8List(0));
-
-    final installerRunnerLog = await File(
-      path.join(processOutputDir.path, 'installer-runner.txt'),
-    ).readAsBytes().catchError((e) => Uint8List(0));
-
-    final pinInfoExtractorLog = await File(
-      path.join(processOutputDir.path, 'pin-info-extractor.txt'),
-    ).readAsBytes().catchError((e) => Uint8List(0));
-
+    // This has to go after retrieving logs, as the log files are in
+    // this directory.
     await recursiveDeleteAndLogErrors(processOutputDir);
 
     _completer.complete(
       WineProcessResult(
         exitCode: exitCode,
-        logs: [
-          ?_maybeBuildLog('STDOUT', stdout),
-          ?_maybeBuildLog('STDERR', stderr),
-          ?_maybeBuildLog('log-capturing-runner', logCapturingRunnerLog),
-          ?_maybeBuildLog('installer-runner', installerRunnerLog),
-          ?_maybeBuildLog('pin-info-extractor', pinInfoExtractorLog),
-        ],
+        logs: logs.where((log) => log != null).cast<ProcessLog>().toList(),
       ),
     );
   }

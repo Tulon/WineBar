@@ -177,6 +177,10 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
     final processOutputDir = await startupData.localStoragePaths
         .createProcessOutputDir();
 
+    // For maximum performance, we disable capturing logs from pinned
+    // executables.
+    final bool disableLogs = true;
+
     final wineProcess = await startupData.wineProcessRunnerService.start(
       processOutputDir: processOutputDir,
       commandLine: wineInstDescriptor.buildWineInvocationCommand(
@@ -190,11 +194,9 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
         processOutputDir: processOutputDir.path,
         pinnedExecutableSettings: pinnedExecutable.settings,
         forWinetricks: false,
-
-        // For maximum performance, we disable capturing logs from pinned
-        // executables.
-        disableLogs: true,
+        disableLogs: disableLogs,
       ),
+      disableLogs: disableLogs,
     );
 
     return wineProcess;

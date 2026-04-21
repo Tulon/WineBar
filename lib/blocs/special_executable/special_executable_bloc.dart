@@ -213,6 +213,8 @@ abstract class RegularSpecialExecutableBloc extends SpecialExecutableBloc {
     final processOutputDir = await startupData.localStoragePaths
         .createProcessOutputDir();
 
+    final disableLogs = false;
+
     final wineProcess = await startupData.wineProcessRunnerService.start(
       processOutputDir: processOutputDir,
       commandLine: wineInstDescriptor.buildWineInvocationCommand(
@@ -224,8 +226,9 @@ abstract class RegularSpecialExecutableBloc extends SpecialExecutableBloc {
         processOutputDir: processOutputDir.path,
         pinnedExecutableSettings: null,
         forWinetricks: false,
-        disableLogs: false,
+        disableLogs: disableLogs,
       ),
+      disableLogs: disableLogs,
     );
 
     onProcessStarted(wineProcess);
@@ -280,6 +283,8 @@ class PinExecutableBloc extends SpecialExecutableBloc {
       final processOutputDir = await startupData.localStoragePaths
           .createProcessOutputDir();
 
+      final disableLogs = false;
+
       final wineProcess = await startupData.wineProcessRunnerService.start(
         processOutputDir: processOutputDir,
         commandLine: wineInstDescriptor.buildWineInvocationCommand(
@@ -295,8 +300,9 @@ class PinExecutableBloc extends SpecialExecutableBloc {
           processOutputDir: processOutputDir.path,
           pinnedExecutableSettings: null,
           forWinetricks: false,
-          disableLogs: false,
+          disableLogs: disableLogs,
         ),
+        disableLogs: disableLogs,
       );
 
       onProcessStarted(wineProcess);
@@ -386,6 +392,8 @@ class RunInstallerBloc extends SpecialExecutableBloc {
       final processOutputDir = await startupData.localStoragePaths
           .createProcessOutputDir();
 
+      final disableLogs = false;
+
       final wineProcess = await startupData.wineProcessRunnerService.start(
         processOutputDir: processOutputDir,
         commandLine: wineInstDescriptor.buildWineInvocationCommand(
@@ -401,8 +409,9 @@ class RunInstallerBloc extends SpecialExecutableBloc {
           processOutputDir: processOutputDir.path,
           pinnedExecutableSettings: null,
           forWinetricks: false,
-          disableLogs: false,
+          disableLogs: disableLogs,
         ),
+        disableLogs: disableLogs,
       );
 
       onProcessStarted(wineProcess);
@@ -494,6 +503,8 @@ class WinetricksExecutableBloc extends SpecialExecutableBloc {
     final processOutputDir = await startupData.localStoragePaths
         .createProcessOutputDir();
 
+    final disableLogs = false;
+
     final wineProcess = await startupData.wineProcessRunnerService.start(
       processOutputDir: processOutputDir,
       commandLine: wineInstDescriptor.buildWinetricksInvocationCommand(
@@ -505,8 +516,9 @@ class WinetricksExecutableBloc extends SpecialExecutableBloc {
         processOutputDir: processOutputDir.path,
         pinnedExecutableSettings: null,
         forWinetricks: true,
-        disableLogs: false,
+        disableLogs: disableLogs,
       ),
+      disableLogs: disableLogs,
     );
 
     onProcessStarted(wineProcess);
