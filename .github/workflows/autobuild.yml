@@ -8,6 +8,19 @@ on:
     types: [ opened, synchronize, reopened ]
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      snap: ${{ steps.filter.outputs.snap }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            snap:
+              - 'snap/**'
+
   build-appimage-x64:
     name: Build x64 AppImage
     uses: ./.github/workflows/build-appimage.yml
@@ -31,13 +44,17 @@ jobs:
       version: 0.0.0
       arch: x64
       runs-on: ubuntu-24.04
-  # This one takes a very long time, so it's commented out.
-  # TODO: make it execute only on PRs and only when the PR
-  # modifies anything under snap/
-  # build-snap-arm64:
-  #   name: Build arm64 Snap
-  #   uses: ./.github/workflows/build-snap.yml
-  #   with:
-  #     version: 0.0.0
-  #     arch: arm64
-  #     runs-on: ubuntu-24.04-arm
+
+  # This one takes a very long time, so we only run it
+  # when some files get changed under /snap. It's tempting
+  # to check just for /snap/snapcraft.arm64.yaml, but there
+  # are also scripts that only run on ARM64.
+  build-snap-arm64:
+    name: Build arm64 Snap
+    needs: check-changes
+    if: needs.check-changes.outputs.snap == 'true'
+    uses: ./.github/workflows/build-snap.yml
+    with:
+      version: 0.0.0
+      arch: arm64
+      runs-on: ubuntu-24.04-arm
