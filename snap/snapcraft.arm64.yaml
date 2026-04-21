@@ -429,7 +429,7 @@ parts:
     after: [ libkrun ]
     source: https://github.com/AsahiLinux/muvm.git
     source-type: git
-    source-tag: muvm-0.5.0
+    source-tag: muvm-0.5.1
     plugin: rust
     rust-channel: 1.91.0
     organize:
