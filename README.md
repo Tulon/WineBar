@@ -2,7 +2,7 @@
 
 A Wine prefix manager for Linux with explicit support for Apple silicon Macs (think Asahi Linux).
 
-It works on regular x86_64 Linux systems as well, though this configuration receives less testing. Support for generic non-Apple arm64 systems is currently missing, though it shouldn't be hard to add - PRs are welcome!
+It works on regular x86_64 Linux systems as well, though this configuration receives less testing. As for supporting non-Apple ARM64 hardware - well, it's [complicated](Generic-ARM64-support.md). 
 
 This project is mainly written in Dart / Flutter, with some C and C++ code for auxilliary tools.
 
@@ -23,16 +23,24 @@ https://github.com/user-attachments/assets/08b0a19b-c84c-4866-a8b9-622f12874666
 
 The only serious limitation of Wine Bar is how it handles running multiple apps simultaneously in the same Wine prefix. Perhaps I shouldn't have allowed that in the first place, but for those rare cases where you really need that, I made that possible. When you launch more than one executable in the same prefix, you'll notice some or all of the following symptoms:
 
-1. Wine Bar will think your executable is still running when it has actually exited.
+1. Wine Bar thinks your executable is still running when it has actually exited.
 2. Force-stopping a running executable may do nothing or it may terminate all executables running in a prefix, not just the one you want to stop.
 
 On Apple silicon Macs, these symptoms appear even when running executables in different Wine prefixes simultaneously.
 
 The complexity here comes from the fact that the `wine` process starts the windows executable it was asked to run and then exits immediately without waiting for that windows executable to finish. That's not terribly hard to workaround with a single windows executable running, but very hard for more than one executable. Currently, I don't have plans to tackle this limitation.
 
+## Installing
+
+The easiest way is to install WineBar from the Snap Store.
+
+[![Get it from the Snap Store](https://snapcraft.io/en/light/install.svg)](https://snapcraft.io/winebar)
+
+If something doesn't work in the Snap version, or if you want a slim installation, try one of the AppImages from the [Releases](https://github.com/Tulon/WineBar/releases) page.
+
 ## Running
 
-On regular x86_64 Linux systems, you are good to go!
+On regular x86_64 Linux systems, you should be good to go!
 
 On Apple silicon Macs, you need to install a few dependencies first:
 
@@ -69,18 +77,18 @@ Another option is the [AppImageLauncher](https://github.com/TheAssassin/AppImage
 
 ## Building
 
-First, install Flutter (which also installs Dart) by following the [official instructions](https://docs.flutter.dev/install). In addition to the prerequisite packages listed in the installation instructions, I also had to install the following ones: `cmake`, `ninja` (`ninja-build` on Ubuntu), `clang++`, `gtk3-devel` (`libgtk-3-dev` on Ubuntu).
+First, install Flutter (which also installs Dart) by following the [official instructions](https://docs.flutter.dev/install). In addition to the prerequisite packages listed in the installation instructions, I also had to install the following ones: `cmake`, `ninja` (`ninja-build` on Ubuntu), `clang++`, `llvm`, `lld`, `gtk3-devel` (`libgtk-3-dev` on Ubuntu).
 
-Don't install Flutter from Snap, see below why.
+Don't install Flutter from the Snap Store, see below why.
 
-### The Flutter from Snap
+### The Flutter from Snap Store
 
-In general, using the Flutter from Snap to build Flutter software on Linux is a good idea, as that makes your app compatible with older distros. In practice though, the Flutter from Snap can't be used to build Wine Bar, as Wine Bar also builds some C and C++ helper tools (some of them cross-compiled to Win32) that have some special needs:
+In general, using the Snap version of Flutter to build Flutter software on Linux is a good idea, as that makes your app compatible with older distros. In practice though, that version of Flutter can't be used to build Wine Bar, as Wine Bar also builds some C and C++ helper tools (some of them cross-compiled to Win32) that have some special needs:
 
 1. They need a newer version of CMake than the one provided (and imposed on you) by the Flutter Snap.
 2. One of the helper tools uses the Vulkan API and so needs the `libvulkan-dev` package to be included as part of the Flutter Snap.
 
-Therefore, for development, I suggest simply installing the upstream version of Flutter, as mentioned above. For distribution though, we do want compatibility with older distros, as provided by the Flutter from Snap. The solution adopted by Wine Bar is to fork the [Flutter Snap](https://github.com/canonical/flutter-snap) and build and install it as part of the Wine Bar CI build process. See [here](.github/workflows/build-appimage.yml) for more details.
+Therefore, for development, I suggest simply installing the upstream version of Flutter, as mentioned above. For distribution though, we do want compatibility with older distros, as provided by the Flutter Snap. The solution adopted by Wine Bar is to fork the [Flutter Snap](https://github.com/canonical/flutter-snap) and build and install it as part of the Wine Bar CI build process. See [here](.github/workflows/build-appimage.yml) for more details.
 
 Another option would be doing a Docker build on an older distro or a regular build on an older Github Actions runner. Unfortunately, that option is also problematic, as our cross-compiled Win32 helper tools happen to use C++23, which is simply not available on older distros.
 
