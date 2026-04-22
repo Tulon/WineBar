@@ -19,6 +19,8 @@ issues:
 donation:
   - https://ko-fi.com/tulon
 
+icon: packaging/resources/common/winebar.png
+
 base: core24
 confinement: strict
 grade: stable
