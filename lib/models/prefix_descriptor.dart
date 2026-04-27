@@ -16,6 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/// @docImport 'package:winebar/models/wine_locale.dart';
+library;
+
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
@@ -34,6 +37,7 @@ class WinePrefixDescriptor extends Equatable {
   static const String _hiDpiScaleKey = 'hiDpiScale';
   static const String _wow64ModePreferredKey = 'wow64ModePreferred';
   static const String _d3d8To11ImplementationKey = 'd3d8To11Implementation';
+  static const String _explicitLocalePosixNameKey = 'explicitLocale';
 
   final String name;
 
@@ -49,6 +53,9 @@ class WinePrefixDescriptor extends Equatable {
 
   final D3d8To11Implementation? d3d8To11Implementation;
 
+  /// If a locale was selected explicitly, this member will hold [WineLocale.posixName].
+  final String? explicitLocalePosixName;
+
   bool get isBroken => relPathToWineInstall == '';
 
   const WinePrefixDescriptor({
@@ -57,6 +64,7 @@ class WinePrefixDescriptor extends Equatable {
     required this.hiDpiScale,
     required this.wow64ModePreferred,
     required this.d3d8To11Implementation,
+    required this.explicitLocalePosixName,
   });
 
   const WinePrefixDescriptor.brokenPrefix({required String name})
@@ -66,6 +74,7 @@ class WinePrefixDescriptor extends Equatable {
         hiDpiScale: null,
         wow64ModePreferred: null,
         d3d8To11Implementation: null,
+        explicitLocalePosixName: null,
       );
 
   @override
@@ -75,6 +84,7 @@ class WinePrefixDescriptor extends Equatable {
     hiDpiScale,
     wow64ModePreferred,
     d3d8To11Implementation,
+    explicitLocalePosixName,
   ];
 
   String getAbsPathToWineInstall({required String toplevelDataDir}) {
@@ -93,6 +103,9 @@ class WinePrefixDescriptor extends Equatable {
     final d3d8to11Implementation = castOrNull<String>(
       json[_d3d8To11ImplementationKey],
     );
+    final explicitLocalePosixName = castOrNull<String>(
+      json[_explicitLocalePosixNameKey],
+    );
 
     return WinePrefixDescriptor(
       name: name,
@@ -102,6 +115,7 @@ class WinePrefixDescriptor extends Equatable {
       d3d8To11Implementation: D3d8To11Implementation.fromJsonString(
         d3d8to11Implementation,
       ),
+      explicitLocalePosixName: explicitLocalePosixName,
     );
   }
 
@@ -115,6 +129,8 @@ class WinePrefixDescriptor extends Equatable {
       _wow64ModePreferredKey: wow64ModePreferred,
       if (d3d8To11Implementation != null)
         _d3d8To11ImplementationKey: d3d8To11Implementation.jsonString,
+      if (explicitLocalePosixName != null)
+        _explicitLocalePosixNameKey: explicitLocalePosixName,
     };
 
     final encoder = JsonEncoder.withIndent('  ');
@@ -127,6 +143,7 @@ class WinePrefixDescriptor extends Equatable {
     ValueGetter<double?>? hiDpiScaleGetter,
     ValueGetter<bool?>? wow64ModePreferredGetter,
     ValueGetter<D3d8To11Implementation?>? d3d8To11ImplementationGetter,
+    ValueGetter<String?>? explicitLocalePosixNameGetter,
   }) {
     return WinePrefixDescriptor(
       name: name ?? this.name,
@@ -138,6 +155,9 @@ class WinePrefixDescriptor extends Equatable {
       d3d8To11Implementation: d3d8To11ImplementationGetter != null
           ? d3d8To11ImplementationGetter()
           : d3d8To11Implementation,
+      explicitLocalePosixName: explicitLocalePosixNameGetter != null
+          ? explicitLocalePosixNameGetter()
+          : explicitLocalePosixName,
     );
   }
 }

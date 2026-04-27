@@ -20,8 +20,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
+import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/settings_json_file.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
+import 'package:winebar/models/wine_locale.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/startup_data.dart';
@@ -76,6 +78,8 @@ class PrefixSettingsState extends Equatable {
   final bool useParticularD3d8To11Implementation;
   final D3d8To11Implementation selectedD3d8To11Implementation;
 
+  final ExplicitLocaleState explicitLocaleState;
+
   final PrefixUpdateStatus prefixUpdateStatus;
   final String? prefixUpdateFailureMessage;
   final WineProcessResult? prefixUpdateFailedProcessResult;
@@ -93,6 +97,7 @@ class PrefixSettingsState extends Equatable {
     required this.wow64ModePreferenceWarningToBeSuppressed,
     required this.useParticularD3d8To11Implementation,
     required this.selectedD3d8To11Implementation,
+    required this.explicitLocaleState,
     required this.prefixUpdateStatus,
     required this.prefixUpdateFailureMessage,
     required this.prefixUpdateFailedProcessResult,
@@ -103,6 +108,7 @@ class PrefixSettingsState extends Equatable {
     required double? hiDpiScale,
     required bool? wow64ModePreferred,
     required D3d8To11Implementation? d3d8To11Implementation,
+    required WineLocale? explicitLocale,
   }) : this(
          hiDpiScale: hiDpiScale,
          wow64ModePreferred: wow64ModePreferred,
@@ -113,6 +119,9 @@ class PrefixSettingsState extends Equatable {
          useParticularD3d8To11Implementation: d3d8To11Implementation != null,
          selectedD3d8To11Implementation:
              d3d8To11Implementation ?? D3d8To11Implementation.dxvk,
+         explicitLocaleState: ExplicitLocaleState.initialState(
+           explicitLocale: explicitLocale,
+         ),
          prefixUpdateStatus: PrefixUpdateStatus.notStarted,
          prefixUpdateFailureMessage: null,
          prefixUpdateFailedProcessResult: null,
@@ -127,6 +136,7 @@ class PrefixSettingsState extends Equatable {
     wow64ModePreferenceWarningToBeSuppressed,
     useParticularD3d8To11Implementation,
     selectedD3d8To11Implementation,
+    explicitLocaleState,
     prefixUpdateStatus,
     prefixUpdateFailureMessage,
     prefixUpdateFailedProcessResult,
@@ -140,6 +150,7 @@ class PrefixSettingsState extends Equatable {
     bool? wow64ModePreferenceWarningToBeSuppressed,
     bool? useParticularD3d8To11Implementation,
     D3d8To11Implementation? selectedD3d8To11Implementation,
+    ExplicitLocaleState? explicitLocaleState,
     PrefixUpdateStatus? prefixUpdateStatus,
     ValueGetter<String?>? prefixUpdateFailureMessageGetter,
     ValueGetter<WineProcessResult?>? prefixUpdateFailedProcessResultGetter,
@@ -161,6 +172,7 @@ class PrefixSettingsState extends Equatable {
           this.useParticularD3d8To11Implementation,
       selectedD3d8To11Implementation:
           selectedD3d8To11Implementation ?? this.selectedD3d8To11Implementation,
+      explicitLocaleState: explicitLocaleState ?? this.explicitLocaleState,
       prefixUpdateStatus: prefixUpdateStatus ?? this.prefixUpdateStatus,
       prefixUpdateFailureMessage: prefixUpdateFailureMessageGetter != null
           ? prefixUpdateFailureMessageGetter()

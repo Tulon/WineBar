@@ -24,6 +24,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
+import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
@@ -50,6 +51,9 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
           hiDpiScale: prefix.descriptor.hiDpiScale,
           wow64ModePreferred: prefix.descriptor.wow64ModePreferred,
           d3d8To11Implementation: prefix.descriptor.d3d8To11Implementation,
+          explicitLocale: GetIt.I.get<StartupData>().wineLocaleRepo.tryFind(
+            posixName: prefix.descriptor.explicitLocalePosixName,
+          ),
         ),
       );
 
@@ -98,6 +102,12 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
   void setSelectedD3d8To11Implementation(D3d8To11Implementation selectedImpl) {
     if (state.selectedD3d8To11Implementation != selectedImpl) {
       emit(state.copyWith(selectedD3d8To11Implementation: selectedImpl));
+    }
+  }
+
+  void setExplicitLocaleState(ExplicitLocaleState explicitLocaleState) {
+    if (state.explicitLocaleState != explicitLocaleState) {
+      emit(state.copyWith(explicitLocaleState: explicitLocaleState));
     }
   }
 
@@ -193,6 +203,8 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
               state.useParticularD3d8To11Implementation
               ? state.selectedD3d8To11Implementation
               : null,
+          explicitLocalePosixNameGetter: () =>
+              state.explicitLocaleState.explicitLocalePosixName,
         ),
       );
 

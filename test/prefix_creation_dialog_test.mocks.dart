@@ -3,22 +3,23 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i12;
+import 'dart:async' as _i13;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i11;
-import 'package:winebar/models/archive_type.dart' as _i15;
+import 'package:mockito/src/dummies.dart' as _i12;
+import 'package:winebar/models/archive_type.dart' as _i16;
 import 'package:winebar/models/settings_json_file.dart' as _i2;
-import 'package:winebar/models/suppressable_warning.dart' as _i6;
-import 'package:winebar/models/wine_build.dart' as _i14;
-import 'package:winebar/models/wine_build_source.dart' as _i10;
-import 'package:winebar/models/wine_prefix.dart' as _i8;
-import 'package:winebar/models/wine_release.dart' as _i13;
-import 'package:winebar/repositories/wine_build_source_repo.dart' as _i9;
-import 'package:winebar/services/app_settings_service.dart' as _i5;
-import 'package:winebar/services/wine_process_runner_service.dart' as _i4;
+import 'package:winebar/models/suppressable_warning.dart' as _i7;
+import 'package:winebar/models/wine_build.dart' as _i15;
+import 'package:winebar/models/wine_build_source.dart' as _i11;
+import 'package:winebar/models/wine_prefix.dart' as _i9;
+import 'package:winebar/models/wine_release.dart' as _i14;
+import 'package:winebar/repositories/wine_build_source_repo.dart' as _i10;
+import 'package:winebar/repositories/wine_locale_repo.dart' as _i4;
+import 'package:winebar/services/app_settings_service.dart' as _i6;
+import 'package:winebar/services/wine_process_runner_service.dart' as _i5;
 import 'package:winebar/utils/local_storage_paths.dart' as _i3;
-import 'package:winebar/utils/startup_data.dart' as _i7;
+import 'package:winebar/utils/startup_data.dart' as _i8;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -47,9 +48,15 @@ class _FakeLocalStoragePaths_1 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeWineProcessRunnerService_2 extends _i1.SmartFake
-    implements _i4.WineProcessRunnerService {
-  _FakeWineProcessRunnerService_2(Object parent, Invocation parentInvocation)
+class _FakeWineLocaleRepo_2 extends _i1.SmartFake
+    implements _i4.WineLocaleRepo {
+  _FakeWineLocaleRepo_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeWineProcessRunnerService_3 extends _i1.SmartFake
+    implements _i5.WineProcessRunnerService {
+  _FakeWineProcessRunnerService_3(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -57,7 +64,7 @@ class _FakeWineProcessRunnerService_2 extends _i1.SmartFake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAppSettingsService extends _i1.Mock
-    implements _i5.AppSettingsService {
+    implements _i6.AppSettingsService {
   @override
   _i2.SettingsJsonFile get settings =>
       (super.noSuchMethod(
@@ -75,7 +82,7 @@ class MockAppSettingsService extends _i1.Mock
 
   @override
   void setWarningSuppressed(
-    _i6.SuppressableWarning? warning, {
+    _i7.SuppressableWarning? warning, {
     required bool? suppressed,
   }) => super.noSuchMethod(
     Invocation.method(
@@ -90,7 +97,7 @@ class MockAppSettingsService extends _i1.Mock
 /// A class which mocks [StartupData].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockStartupData extends _i1.Mock implements _i7.StartupData {
+class MockStartupData extends _i1.Mock implements _i8.StartupData {
   @override
   _i3.LocalStoragePaths get localStoragePaths =>
       (super.noSuchMethod(
@@ -107,28 +114,43 @@ class MockStartupData extends _i1.Mock implements _i7.StartupData {
           as _i3.LocalStoragePaths);
 
   @override
-  List<_i8.WinePrefix> get winePrefixes =>
+  List<_i9.WinePrefix> get winePrefixes =>
       (super.noSuchMethod(
             Invocation.getter(#winePrefixes),
-            returnValue: <_i8.WinePrefix>[],
-            returnValueForMissingStub: <_i8.WinePrefix>[],
+            returnValue: <_i9.WinePrefix>[],
+            returnValueForMissingStub: <_i9.WinePrefix>[],
           )
-          as List<_i8.WinePrefix>);
+          as List<_i9.WinePrefix>);
 
   @override
-  _i4.WineProcessRunnerService get wineProcessRunnerService =>
+  _i4.WineLocaleRepo get wineLocaleRepo =>
+      (super.noSuchMethod(
+            Invocation.getter(#wineLocaleRepo),
+            returnValue: _FakeWineLocaleRepo_2(
+              this,
+              Invocation.getter(#wineLocaleRepo),
+            ),
+            returnValueForMissingStub: _FakeWineLocaleRepo_2(
+              this,
+              Invocation.getter(#wineLocaleRepo),
+            ),
+          )
+          as _i4.WineLocaleRepo);
+
+  @override
+  _i5.WineProcessRunnerService get wineProcessRunnerService =>
       (super.noSuchMethod(
             Invocation.getter(#wineProcessRunnerService),
-            returnValue: _FakeWineProcessRunnerService_2(
+            returnValue: _FakeWineProcessRunnerService_3(
               this,
               Invocation.getter(#wineProcessRunnerService),
             ),
-            returnValueForMissingStub: _FakeWineProcessRunnerService_2(
+            returnValueForMissingStub: _FakeWineProcessRunnerService_3(
               this,
               Invocation.getter(#wineProcessRunnerService),
             ),
           )
-          as _i4.WineProcessRunnerService);
+          as _i5.WineProcessRunnerService);
 
   @override
   bool get isIntelHost =>
@@ -153,30 +175,30 @@ class MockStartupData extends _i1.Mock implements _i7.StartupData {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockWineBuildSourceRepo extends _i1.Mock
-    implements _i9.WineBuildSourceRepo {
+    implements _i10.WineBuildSourceRepo {
   @override
-  List<_i10.WineBuildSource> get sources =>
+  List<_i11.WineBuildSource> get sources =>
       (super.noSuchMethod(
             Invocation.getter(#sources),
-            returnValue: <_i10.WineBuildSource>[],
-            returnValueForMissingStub: <_i10.WineBuildSource>[],
+            returnValue: <_i11.WineBuildSource>[],
+            returnValueForMissingStub: <_i11.WineBuildSource>[],
           )
-          as List<_i10.WineBuildSource>);
+          as List<_i11.WineBuildSource>);
 }
 
 /// A class which mocks [WineBuildSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWineBuildSource extends _i1.Mock implements _i10.WineBuildSource {
+class MockWineBuildSource extends _i1.Mock implements _i11.WineBuildSource {
   @override
   String get label =>
       (super.noSuchMethod(
             Invocation.getter(#label),
-            returnValue: _i11.dummyValue<String>(
+            returnValue: _i12.dummyValue<String>(
               this,
               Invocation.getter(#label),
             ),
-            returnValueForMissingStub: _i11.dummyValue<String>(
+            returnValueForMissingStub: _i12.dummyValue<String>(
               this,
               Invocation.getter(#label),
             ),
@@ -196,11 +218,11 @@ class MockWineBuildSource extends _i1.Mock implements _i10.WineBuildSource {
   String get directoryName =>
       (super.noSuchMethod(
             Invocation.getter(#directoryName),
-            returnValue: _i11.dummyValue<String>(
+            returnValue: _i12.dummyValue<String>(
               this,
               Invocation.getter(#directoryName),
             ),
-            returnValueForMissingStub: _i11.dummyValue<String>(
+            returnValueForMissingStub: _i12.dummyValue<String>(
               this,
               Invocation.getter(#directoryName),
             ),
@@ -211,11 +233,11 @@ class MockWineBuildSource extends _i1.Mock implements _i10.WineBuildSource {
   String get circleAvatarText =>
       (super.noSuchMethod(
             Invocation.getter(#circleAvatarText),
-            returnValue: _i11.dummyValue<String>(
+            returnValue: _i12.dummyValue<String>(
               this,
               Invocation.getter(#circleAvatarText),
             ),
-            returnValueForMissingStub: _i11.dummyValue<String>(
+            returnValueForMissingStub: _i12.dummyValue<String>(
               this,
               Invocation.getter(#circleAvatarText),
             ),
@@ -232,34 +254,34 @@ class MockWineBuildSource extends _i1.Mock implements _i10.WineBuildSource {
           as bool);
 
   @override
-  _i12.Future<List<_i13.WineRelease>> getAvailableReleases({
+  _i13.Future<List<_i14.WineRelease>> getAvailableReleases({
     bool? refresh = false,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#getAvailableReleases, [], {#refresh: refresh}),
-            returnValue: _i12.Future<List<_i13.WineRelease>>.value(
-              <_i13.WineRelease>[],
+            returnValue: _i13.Future<List<_i14.WineRelease>>.value(
+              <_i14.WineRelease>[],
             ),
             returnValueForMissingStub:
-                _i12.Future<List<_i13.WineRelease>>.value(<_i13.WineRelease>[]),
+                _i13.Future<List<_i14.WineRelease>>.value(<_i14.WineRelease>[]),
           )
-          as _i12.Future<List<_i13.WineRelease>>);
+          as _i13.Future<List<_i14.WineRelease>>);
 }
 
 /// A class which mocks [WineRelease].
 ///
 /// See the documentation for Mockito's code generation for more information.
 // ignore: must_be_immutable
-class MockWineRelease extends _i1.Mock implements _i13.WineRelease {
+class MockWineRelease extends _i1.Mock implements _i14.WineRelease {
   @override
   String get releaseName =>
       (super.noSuchMethod(
             Invocation.getter(#releaseName),
-            returnValue: _i11.dummyValue<String>(
+            returnValue: _i12.dummyValue<String>(
               this,
               Invocation.getter(#releaseName),
             ),
-            returnValueForMissingStub: _i11.dummyValue<String>(
+            returnValueForMissingStub: _i12.dummyValue<String>(
               this,
               Invocation.getter(#releaseName),
             ),
@@ -267,13 +289,13 @@ class MockWineRelease extends _i1.Mock implements _i13.WineRelease {
           as String);
 
   @override
-  List<_i14.WineBuild> get builds =>
+  List<_i15.WineBuild> get builds =>
       (super.noSuchMethod(
             Invocation.getter(#builds),
-            returnValue: <_i14.WineBuild>[],
-            returnValueForMissingStub: <_i14.WineBuild>[],
+            returnValue: <_i15.WineBuild>[],
+            returnValueForMissingStub: <_i15.WineBuild>[],
           )
-          as List<_i14.WineBuild>);
+          as List<_i15.WineBuild>);
 
   @override
   List<Object> get props =>
@@ -289,16 +311,16 @@ class MockWineRelease extends _i1.Mock implements _i13.WineRelease {
 ///
 /// See the documentation for Mockito's code generation for more information.
 // ignore: must_be_immutable
-class MockWineBuild extends _i1.Mock implements _i14.WineBuild {
+class MockWineBuild extends _i1.Mock implements _i15.WineBuild {
   @override
   String get archiveFileName =>
       (super.noSuchMethod(
             Invocation.getter(#archiveFileName),
-            returnValue: _i11.dummyValue<String>(
+            returnValue: _i12.dummyValue<String>(
               this,
               Invocation.getter(#archiveFileName),
             ),
-            returnValueForMissingStub: _i11.dummyValue<String>(
+            returnValueForMissingStub: _i12.dummyValue<String>(
               this,
               Invocation.getter(#archiveFileName),
             ),
@@ -306,23 +328,23 @@ class MockWineBuild extends _i1.Mock implements _i14.WineBuild {
           as String);
 
   @override
-  _i15.ArchiveType get archiveType =>
+  _i16.ArchiveType get archiveType =>
       (super.noSuchMethod(
             Invocation.getter(#archiveType),
-            returnValue: _i15.ArchiveType.tarGz,
-            returnValueForMissingStub: _i15.ArchiveType.tarGz,
+            returnValue: _i16.ArchiveType.tarGz,
+            returnValueForMissingStub: _i16.ArchiveType.tarGz,
           )
-          as _i15.ArchiveType);
+          as _i16.ArchiveType);
 
   @override
   String get downloadUrl =>
       (super.noSuchMethod(
             Invocation.getter(#downloadUrl),
-            returnValue: _i11.dummyValue<String>(
+            returnValue: _i12.dummyValue<String>(
               this,
               Invocation.getter(#downloadUrl),
             ),
-            returnValueForMissingStub: _i11.dummyValue<String>(
+            returnValueForMissingStub: _i12.dummyValue<String>(
               this,
               Invocation.getter(#downloadUrl),
             ),

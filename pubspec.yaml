@@ -53,6 +53,7 @@ dependencies:
   icon_decoration: ^2.1.0
   simple_icons: ^14.6.1
   file_selector: ^1.1.0
+  dropdown_search: ^7.0.0
 
 dev_dependencies:
   flutter_test:
@@ -80,7 +81,7 @@ flutter:
 
   assets:
     - packaging/resources/common/winebar.png
-
+    - data/locales.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

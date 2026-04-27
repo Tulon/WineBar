@@ -30,6 +30,7 @@ import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
+import 'package:winebar/repositories/wine_locale_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/dxvk_installation_service.dart';
 import 'package:winebar/services/utility_service.dart';
@@ -46,6 +47,7 @@ import 'package:winebar/widgets/prefix_settings_dialog.dart';
   MockSpec<UtilityService>(),
   MockSpec<StartupData>(),
   MockSpec<LocalStoragePaths>(),
+  MockSpec<WineLocaleRepo>(),
   MockSpec<IoOps>(),
   MockSpec<File>(),
   MockSpec<RunningExecutablesRepo>(),
@@ -69,6 +71,7 @@ void main() {
     final utilityService = MockUtilityService();
     final startupData = MockStartupData();
     final localStoragePaths = MockLocalStoragePaths();
+    final wineLocaleRepo = MockWineLocaleRepo();
     final wineTasks = MockWineTasks();
 
     final runningSpecialExecutablesRepo =
@@ -78,6 +81,7 @@ void main() {
     final prefixJsonFile = MockFile();
 
     when(startupData.localStoragePaths).thenReturn(localStoragePaths);
+    when(startupData.wineLocaleRepo).thenReturn(wineLocaleRepo);
 
     when(localStoragePaths.toplevelDataDir).thenReturn(toplevelDataDir);
 
@@ -117,6 +121,7 @@ void main() {
         hiDpiScale: 1.5, // The value to be picked up.
         wow64ModePreferred: null,
         d3d8To11Implementation: null,
+        explicitLocalePosixName: null,
       ),
     );
 

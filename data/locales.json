@@ -1,0 +1,3847 @@
+[
+  [
+    "aa_DJ",
+    "Qafar (Yabuuti)",
+    "Afar (Djibouti)"
+  ],
+  [
+    "aa_ER",
+    "Qafar (Eretria)",
+    "Afar (Eritrea)"
+  ],
+  [
+    "aa_ET",
+    "Qafar (Otobbia)",
+    "Afar (Ethiopia)"
+  ],
+  [
+    "ab_GE",
+    "Аԥсшәа (Қырҭтәыла)",
+    "Abkhazian (Georgia)"
+  ],
+  [
+    "af_NA",
+    "Afrikaans (Namibië)",
+    "Afrikaans (Namibia)"
+  ],
+  [
+    "af_ZA",
+    "Afrikaans (Suid-Afrika)",
+    "Afrikaans (South Africa)"
+  ],
+  [
+    "agq_CM",
+    "Aghem (Kàmàlûŋ)",
+    "Aghem (Cameroon)"
+  ],
+  [
+    "ak_GH",
+    "Akan (Gaana)",
+    "Akan (Ghana)"
+  ],
+  [
+    "am_ET",
+    "አማርኛ (ኢትዮጵያ)",
+    "Amharic (Ethiopia)"
+  ],
+  [
+    "an_ES",
+    "aragonés (Espanya)",
+    "Aragonese (Spain)"
+  ],
+  [
+    "ann_NG",
+    "Obolo",
+    "Obolo (Nigeria)"
+  ],
+  [
+    "apc_SY",
+    "العامية",
+    null
+  ],
+  [
+    "ar_001",
+    "العربية (العالم)",
+    "Arabic (world)"
+  ],
+  [
+    "ar_AE",
+    "العربية (الإمارات العربية المتحدة)",
+    "Arabic (United Arab Emirates)"
+  ],
+  [
+    "ar_BH",
+    "العربية (البحرين)",
+    "Arabic (Bahrain)"
+  ],
+  [
+    "ar_DJ",
+    "العربية (جيبوتي)",
+    "Arabic (Djibouti)"
+  ],
+  [
+    "ar_DZ",
+    "العربية (الجزائر)",
+    "Arabic (Algeria)"
+  ],
+  [
+    "ar_EG",
+    "العربية (مصر)",
+    "Arabic (Egypt)"
+  ],
+  [
+    "ar_EH",
+    "العربية (الصحراء الغربية)",
+    "Arabic (Western Sahara)"
+  ],
+  [
+    "ar_ER",
+    "العربية (إريتريا)",
+    "Arabic (Eritrea)"
+  ],
+  [
+    "ar_IL",
+    "العربية (إسرائيل)",
+    "Arabic (Israel)"
+  ],
+  [
+    "ar_IQ",
+    "العربية (العراق)",
+    "Arabic (Iraq)"
+  ],
+  [
+    "ar_JO",
+    "العربية (الأردن)",
+    "Arabic (Jordan)"
+  ],
+  [
+    "ar_KM",
+    "العربية (جزر القمر)",
+    "Arabic (Comoros)"
+  ],
+  [
+    "ar_KW",
+    "العربية (الكويت)",
+    "Arabic (Kuwait)"
+  ],
+  [
+    "ar_LB",
+    "العربية (لبنان)",
+    "Arabic (Lebanon)"
+  ],
+  [
+    "ar_LY",
+    "العربية (ليبيا)",
+    "Arabic (Libya)"
+  ],
+  [
+    "ar_MA",
+    "العربية (المغرب)",
+    "Arabic (Morocco)"
+  ],
+  [
+    "ar_MR",
+    "العربية (موريتانيا)",
+    "Arabic (Mauritania)"
+  ],
+  [
+    "ar_OM",
+    "العربية (عُمان)",
+    "Arabic (Oman)"
+  ],
+  [
+    "ar_PS",
+    "العربية (الأراضي الفلسطينية)",
+    "Arabic (Palestinian Territories)"
+  ],
+  [
+    "ar_QA",
+    "العربية (قطر)",
+    "Arabic (Qatar)"
+  ],
+  [
+    "ar_SA",
+    "العربية (المملكة العربية السعودية)",
+    "Arabic (Saudi Arabia)"
+  ],
+  [
+    "ar_SD",
+    "العربية (السودان)",
+    "Arabic (Sudan)"
+  ],
+  [
+    "ar_SO",
+    "العربية (الصومال)",
+    "Arabic (Somalia)"
+  ],
+  [
+    "ar_SS",
+    "العربية (جنوب السودان)",
+    "Arabic (South Sudan)"
+  ],
+  [
+    "ar_SY",
+    "العربية (سوريا)",
+    "Arabic (Syria)"
+  ],
+  [
+    "ar_TD",
+    "العربية (تشاد)",
+    "Arabic (Chad)"
+  ],
+  [
+    "ar_TN",
+    "العربية (تونس)",
+    "Arabic (Tunisia)"
+  ],
+  [
+    "ar_YE",
+    "العربية (اليمن)",
+    "Arabic (Yemen)"
+  ],
+  [
+    "arn_CL",
+    "Mapudungun",
+    "Mapuche (Chile)"
+  ],
+  [
+    "as_IN",
+    "অসমীয়া (ভাৰত)",
+    "Assamese (India)"
+  ],
+  [
+    "asa_TZ",
+    "Kipare (Tadhania)",
+    "Asu (Tanzania)"
+  ],
+  [
+    "ast_ES",
+    "asturianu (España)",
+    "Asturian (Spain)"
+  ],
+  [
+    "az_Arab",
+    "آذربایجان تۆرکجه‌سی (عربجه)",
+    "Azerbaijani (Arabic)"
+  ],
+  [
+    "az_Arab_IQ",
+    "آذربایجان تۆرکجه‌سی (عربجه)",
+    "Azerbaijani (Arabic, Iraq)"
+  ],
+  [
+    "az_Arab_IR",
+    "آذربایجان تۆرکجه‌سی (عربجه)",
+    "Azerbaijani (Arabic, Iran)"
+  ],
+  [
+    "az_Arab_TR",
+    "آذربایجان تۆرکجه‌سی (عربجه)",
+    "Azerbaijani (Arabic, Türkiye)"
+  ],
+  [
+    "az_Cyrl",
+    "азәрбајҹан (Кирил)",
+    "Azerbaijani (Cyrillic)"
+  ],
+  [
+    "az_Cyrl_AZ",
+    "азәрбајҹан (Кирил, Азәрбајҹан)",
+    "Azerbaijani (Cyrillic, Azerbaijan)"
+  ],
+  [
+    "az_Latn",
+    "azərbaycan (latın)",
+    "Azerbaijani (Latin)"
+  ],
+  [
+    "az_Latn_AZ",
+    "azərbaycan (latın, Azərbaycan)",
+    "Azerbaijani (Latin, Azerbaijan)"
+  ],
+  [
+    "ba_RU",
+    "башҡорт теле",
+    "Bashkir (Russia)"
+  ],
+  [
+    "bal_Arab",
+    "بلۆچی (اربی)",
+    "Baluchi (Arabic)"
+  ],
+  [
+    "bal_Arab_PK",
+    "بلۆچی (اربی, پاکستان)",
+    "Baluchi (Arabic, Pakistan)"
+  ],
+  [
+    "bal_Latn",
+    "Balóchi (Látin Engrézi (Látin) Engrézi (Látin, Amrikáay Tepákén Están) syáhag: Látini)",
+    "Baluchi (Latin)"
+  ],
+  [
+    "bal_Latn_PK",
+    "Balóchi (Látin Engrézi (Látin) Engrézi (Látin, Amrikáay Tepákén Están) syáhag: Látini, Pákestán)",
+    "Baluchi (Latin, Pakistan)"
+  ],
+  [
+    "bas_CM",
+    "Ɓàsàa (Kàmɛ̀rûn)",
+    "Basaa (Cameroon)"
+  ],
+  [
+    "be_BY",
+    "беларуская (Беларусь)",
+    "Belarusian (Belarus)"
+  ],
+  [
+    "be_TARASK",
+    "беларуская",
+    "Belarusian (Taraskievica orthography)"
+  ],
+  [
+    "bem_ZM",
+    "Ichibemba (Zambia)",
+    "Bemba (Zambia)"
+  ],
+  [
+    "bew_ID",
+    "Betawi (Indonésia)",
+    "Betawi (Indonesia)"
+  ],
+  [
+    "bez_TZ",
+    "Hibena (Hutanzania)",
+    "Bena (Tanzania)"
+  ],
+  [
+    "bg_BG",
+    "български (България)",
+    "Bulgarian (Bulgaria)"
+  ],
+  [
+    "bgc_IN",
+    "हरियाणवी (भारत)",
+    "Haryanvi (India)"
+  ],
+  [
+    "bgn_AE",
+    "بلوچی (رخشانی) (متحدین عربین امارات)",
+    "Western Balochi (United Arab Emirates)"
+  ],
+  [
+    "bgn_AF",
+    "بلوچی (رخشانی)",
+    "Western Balochi (Afghanistan)"
+  ],
+  [
+    "bgn_IR",
+    "بلوچی (رخشانی)",
+    "Western Balochi (Iran)"
+  ],
+  [
+    "bgn_OM",
+    "بلوچی (رخشانی) (ئومان)",
+    "Western Balochi (Oman)"
+  ],
+  [
+    "bgn_PK",
+    "بلوچی (رخشانی)",
+    "Western Balochi (Pakistan)"
+  ],
+  [
+    "bho_IN",
+    "भोजपुरी (भारत)",
+    "Bhojpuri (India)"
+  ],
+  [
+    "blo_BJ",
+    "anii kagɩja (Benɛɛ)",
+    "Anii (Benin)"
+  ],
+  [
+    "blt_VN",
+    "ꪼꪕꪒꪾ",
+    "Tai Dam (Vietnam)"
+  ],
+  [
+    "bm_ML",
+    "bamanakan (Mali)",
+    "Bambara (Mali)"
+  ],
+  [
+    "bm_Nkoo",
+    null,
+    "Bambara (N’Ko)"
+  ],
+  [
+    "bm_Nkoo_ML",
+    null,
+    "Bambara (N’Ko, Mali)"
+  ],
+  [
+    "bn_BD",
+    "বাংলা (বাংলাদেশ)",
+    "Bangla (Bangladesh)"
+  ],
+  [
+    "bn_IN",
+    "বাংলা (ভারত)",
+    "Bangla (India)"
+  ],
+  [
+    "bo_CN",
+    "བོད་སྐད་ (རྒྱ་ནག)",
+    "Tibetan (China)"
+  ],
+  [
+    "bo_IN",
+    "བོད་སྐད་ (རྒྱ་གར་)",
+    "Tibetan (India)"
+  ],
+  [
+    "br_FR",
+    "brezhoneg (Frañs)",
+    "Breton (France)"
+  ],
+  [
+    "brx_IN",
+    "बर’ (भारत)",
+    "Bodo (India)"
+  ],
+  [
+    "bs_Cyrl",
+    "босански (ћирилица)",
+    "Bosnian (Cyrillic)"
+  ],
+  [
+    "bs_Cyrl_BA",
+    "босански (ћирилица, Босна и Херцеговина)",
+    "Bosnian (Cyrillic, Bosnia & Herzegovina)"
+  ],
+  [
+    "bs_Latn",
+    "bosanski (latinica)",
+    "Bosnian (Latin)"
+  ],
+  [
+    "bs_Latn_BA",
+    "bosanski (latinica, Bosna i Hercegovina)",
+    "Bosnian (Latin, Bosnia & Herzegovina)"
+  ],
+  [
+    "bss_CM",
+    "Akoose (Kamerûn)",
+    "Akoose (Cameroon)"
+  ],
+  [
+    "byn_ER",
+    "ብሊን (ኤርትራ)",
+    "Blin (Eritrea)"
+  ],
+  [
+    "ca_AD",
+    "català (Andorra)",
+    "Catalan (Andorra)"
+  ],
+  [
+    "ca_ES",
+    "català (Espanya)",
+    "Catalan (Spain)"
+  ],
+  [
+    "ca_ES_VALENCIA",
+    "català (Espanya, valencià)",
+    "Catalan (Spain, Valencian)"
+  ],
+  [
+    "ca_FR",
+    "català (França)",
+    "Catalan (France)"
+  ],
+  [
+    "ca_IT",
+    "català (Itàlia)",
+    "Catalan (Italy)"
+  ],
+  [
+    "cad_US",
+    "Caddo (United States)",
+    "Caddo (United States)"
+  ],
+  [
+    "cch_NG",
+    "Atsam",
+    "Atsam (Nigeria)"
+  ],
+  [
+    "ccp_BD",
+    "𑄌𑄋𑄴𑄟𑄳𑄦 (𑄝𑄁𑄣𑄘𑄬𑄌𑄴)",
+    "Chakma (Bangladesh)"
+  ],
+  [
+    "ccp_IN",
+    "𑄌𑄋𑄴𑄟𑄳𑄦 (𑄞𑄢𑄧𑄖𑄴)",
+    "Chakma (India)"
+  ],
+  [
+    "ce_RU",
+    "нохчийн (Росси)",
+    "Chechen (Russia)"
+  ],
+  [
+    "ceb_PH",
+    "Cebuano (Pilipinas)",
+    "Cebuano (Philippines)"
+  ],
+  [
+    "cgg_UG",
+    "Rukiga (Uganda)",
+    "Chiga (Uganda)"
+  ],
+  [
+    "cho_US",
+    "Chahta (United States)",
+    "Choctaw (United States)"
+  ],
+  [
+    "chr_US",
+    "ᏣᎳᎩ (ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ)",
+    "Cherokee (United States)"
+  ],
+  [
+    "cic_US",
+    "Chikashshanompaʼ (United States)",
+    "Chickasaw (United States)"
+  ],
+  [
+    "ckb_IQ",
+    "کوردیی ناوەندی (عێراق)",
+    "Central Kurdish (Iraq)"
+  ],
+  [
+    "ckb_IR",
+    "کوردیی ناوەندی (ئێران)",
+    "Central Kurdish (Iran)"
+  ],
+  [
+    "co_FR",
+    "corsu (Francia)",
+    "Corsican (France)"
+  ],
+  [
+    "cop_EG",
+    null,
+    "Coptic (Egypt)"
+  ],
+  [
+    "cs_CZ",
+    "čeština (Česko)",
+    "Czech (Czechia)"
+  ],
+  [
+    "csw_CA",
+    "ᓀᐦᐃᓇᐍᐏᐣ (ᑳᓇᑕ)",
+    "Swampy Cree (Canada)"
+  ],
+  [
+    "cu_RU",
+    "церковнослове́нскїй (рѡссі́а)",
+    "Church Slavic (Russia)"
+  ],
+  [
+    "cv_RU",
+    "чӑваш (Раҫҫей)",
+    "Chuvash (Russia)"
+  ],
+  [
+    "cy_GB",
+    "Cymraeg (Y Deyrnas Unedig)",
+    "Welsh (United Kingdom)"
+  ],
+  [
+    "da_DK",
+    "dansk (Danmark)",
+    "Danish (Denmark)"
+  ],
+  [
+    "da_GL",
+    "dansk (Grønland)",
+    "Danish (Greenland)"
+  ],
+  [
+    "dav_KE",
+    "Kitaita (Kenya)",
+    "Taita (Kenya)"
+  ],
+  [
+    "de_AT",
+    "Deutsch (Österreich)",
+    "German (Austria)"
+  ],
+  [
+    "de_BE",
+    "Deutsch (Belgien)",
+    "German (Belgium)"
+  ],
+  [
+    "de_CH",
+    "Deutsch (Schweiz)",
+    "German (Switzerland)"
+  ],
+  [
+    "de_DE",
+    "Deutsch (Deutschland)",
+    "German (Germany)"
+  ],
+  [
+    "de_IT",
+    "Deutsch (Italien)",
+    "German (Italy)"
+  ],
+  [
+    "de_LI",
+    "Deutsch (Liechtenstein)",
+    "German (Liechtenstein)"
+  ],
+  [
+    "de_LU",
+    "Deutsch (Luxemburg)",
+    "German (Luxembourg)"
+  ],
+  [
+    "dje_NE",
+    "Zarmaciine (Nižer)",
+    "Zarma (Niger)"
+  ],
+  [
+    "doi_IN",
+    "डोगरी (भारत)",
+    "Dogri (India)"
+  ],
+  [
+    "dsb_DE",
+    "dolnoserbšćina (Nimska)",
+    "Lower Sorbian (Germany)"
+  ],
+  [
+    "dua_CM",
+    "duálá (Cameroun)",
+    "Duala (Cameroon)"
+  ],
+  [
+    "dv_MV",
+    "ދިވެހިބަސް (ދިވެހި ރާއްޖެ)",
+    "Divehi (Maldives)"
+  ],
+  [
+    "dyo_SN",
+    "joola (Senegal)",
+    "Jola-Fonyi (Senegal)"
+  ],
+  [
+    "dz_BT",
+    "རྫོང་ཁ (འབྲུག)",
+    "Dzongkha (Bhutan)"
+  ],
+  [
+    "ebu_KE",
+    "Kĩembu (Kenya)",
+    "Embu (Kenya)"
+  ],
+  [
+    "ee_GH",
+    "eʋegbe (Ghana nutome)",
+    "Ewe (Ghana)"
+  ],
+  [
+    "ee_TG",
+    "eʋegbe (Togo nutome)",
+    "Ewe (Togo)"
+  ],
+  [
+    "el_CY",
+    "Ελληνικά (Κύπρος)",
+    "Greek (Cyprus)"
+  ],
+  [
+    "el_GR",
+    "Ελληνικά (Ελλάδα)",
+    "Greek (Greece)"
+  ],
+  [
+    "el_POLYTON",
+    "Ἑλληνικά (Πολυτονικό)",
+    "Greek (Polytonic)"
+  ],
+  [
+    "en_001",
+    "English (world)",
+    "English (world)"
+  ],
+  [
+    "en_150",
+    "English (Europe)",
+    "English (Europe)"
+  ],
+  [
+    "en_AE",
+    "English (United Arab Emirates)",
+    "English (United Arab Emirates)"
+  ],
+  [
+    "en_AG",
+    "English (Antigua & Barbuda)",
+    "English (Antigua & Barbuda)"
+  ],
+  [
+    "en_AI",
+    "English (Anguilla)",
+    "English (Anguilla)"
+  ],
+  [
+    "en_AS",
+    "English (American Samoa)",
+    "English (American Samoa)"
+  ],
+  [
+    "en_AT",
+    "English (Austria)",
+    "English (Austria)"
+  ],
+  [
+    "en_AU",
+    "English (Australia)",
+    "English (Australia)"
+  ],
+  [
+    "en_BB",
+    "English (Barbados)",
+    "English (Barbados)"
+  ],
+  [
+    "en_BE",
+    "English (Belgium)",
+    "English (Belgium)"
+  ],
+  [
+    "en_BI",
+    "English (Burundi)",
+    "English (Burundi)"
+  ],
+  [
+    "en_BM",
+    "English (Bermuda)",
+    "English (Bermuda)"
+  ],
+  [
+    "en_BS",
+    "English (Bahamas)",
+    "English (Bahamas)"
+  ],
+  [
+    "en_BW",
+    "English (Botswana)",
+    "English (Botswana)"
+  ],
+  [
+    "en_BZ",
+    "English (Belize)",
+    "English (Belize)"
+  ],
+  [
+    "en_CA",
+    "English (Canada)",
+    "English (Canada)"
+  ],
+  [
+    "en_CC",
+    "English (Cocos (Keeling) Islands)",
+    "English (Cocos (Keeling) Islands)"
+  ],
+  [
+    "en_CH",
+    "English (Switzerland)",
+    "English (Switzerland)"
+  ],
+  [
+    "en_CK",
+    "English (Cook Islands)",
+    "English (Cook Islands)"
+  ],
+  [
+    "en_CM",
+    "English (Cameroon)",
+    "English (Cameroon)"
+  ],
+  [
+    "en_CX",
+    "English (Christmas Island)",
+    "English (Christmas Island)"
+  ],
+  [
+    "en_CY",
+    "English (Cyprus)",
+    "English (Cyprus)"
+  ],
+  [
+    "en_CZ",
+    "English (Czechia)",
+    "English (Czechia)"
+  ],
+  [
+    "en_DE",
+    "English (Germany)",
+    "English (Germany)"
+  ],
+  [
+    "en_DG",
+    "English (Diego Garcia)",
+    "English (Diego Garcia)"
+  ],
+  [
+    "en_DK",
+    "English (Denmark)",
+    "English (Denmark)"
+  ],
+  [
+    "en_DM",
+    "English (Dominica)",
+    "English (Dominica)"
+  ],
+  [
+    "en_Dsrt",
+    "𐐀𐑍𐑊𐐮𐑇 (𐐔𐐯𐑆𐐲𐑉𐐯𐐻)",
+    "English (Deseret)"
+  ],
+  [
+    "en_Dsrt_US",
+    "𐐀𐑍𐑊𐐮𐑇 (𐐔𐐯𐑆𐐲𐑉𐐯𐐻, 𐐏𐐭𐑌𐐴𐐻𐐲𐐼 𐐝𐐻𐐩𐐻𐑅)",
+    "English (Deseret, United States)"
+  ],
+  [
+    "en_ER",
+    "English (Eritrea)",
+    "English (Eritrea)"
+  ],
+  [
+    "en_ES",
+    "English (Spain)",
+    "English (Spain)"
+  ],
+  [
+    "en_FI",
+    "English (Finland)",
+    "English (Finland)"
+  ],
+  [
+    "en_FJ",
+    "English (Fiji)",
+    "English (Fiji)"
+  ],
+  [
+    "en_FK",
+    "English (Falkland Islands)",
+    "English (Falkland Islands)"
+  ],
+  [
+    "en_FM",
+    "English (Micronesia)",
+    "English (Micronesia)"
+  ],
+  [
+    "en_FR",
+    "English (France)",
+    "English (France)"
+  ],
+  [
+    "en_GB",
+    "English (United Kingdom)",
+    "English (United Kingdom)"
+  ],
+  [
+    "en_GD",
+    "English (Grenada)",
+    "English (Grenada)"
+  ],
+  [
+    "en_GG",
+    "English (Guernsey)",
+    "English (Guernsey)"
+  ],
+  [
+    "en_GH",
+    "English (Ghana)",
+    "English (Ghana)"
+  ],
+  [
+    "en_GI",
+    "English (Gibraltar)",
+    "English (Gibraltar)"
+  ],
+  [
+    "en_GM",
+    "English (Gambia)",
+    "English (Gambia)"
+  ],
+  [
+    "en_GS",
+    "English (South Georgia & South Sandwich Islands)",
+    "English (South Georgia & South Sandwich Islands)"
+  ],
+  [
+    "en_GU",
+    "English (Guam)",
+    "English (Guam)"
+  ],
+  [
+    "en_GY",
+    "English (Guyana)",
+    "English (Guyana)"
+  ],
+  [
+    "en_HK",
+    "English (Hong Kong SAR China)",
+    "English (Hong Kong SAR China)"
+  ],
+  [
+    "en_HU",
+    "English (Hungary)",
+    "English (Hungary)"
+  ],
+  [
+    "en_ID",
+    "English (Indonesia)",
+    "English (Indonesia)"
+  ],
+  [
+    "en_IE",
+    "English (Ireland)",
+    "English (Ireland)"
+  ],
+  [
+    "en_IL",
+    "English (Israel)",
+    "English (Israel)"
+  ],
+  [
+    "en_IM",
+    "English (Isle of Man)",
+    "English (Isle of Man)"
+  ],
+  [
+    "en_IN",
+    "English (India)",
+    "English (India)"
+  ],
+  [
+    "en_IO",
+    "English (British Indian Ocean Territory)",
+    "English (British Indian Ocean Territory)"
+  ],
+  [
+    "en_IT",
+    "English (Italy)",
+    "English (Italy)"
+  ],
+  [
+    "en_JE",
+    "English (Jersey)",
+    "English (Jersey)"
+  ],
+  [
+    "en_JM",
+    "English (Jamaica)",
+    "English (Jamaica)"
+  ],
+  [
+    "en_KE",
+    "English (Kenya)",
+    "English (Kenya)"
+  ],
+  [
+    "en_KI",
+    "English (Kiribati)",
+    "English (Kiribati)"
+  ],
+  [
+    "en_KN",
+    "English (St Kitts & Nevis)",
+    "English (St. Kitts & Nevis)"
+  ],
+  [
+    "en_KY",
+    "English (Cayman Islands)",
+    "English (Cayman Islands)"
+  ],
+  [
+    "en_LC",
+    "English (St Lucia)",
+    "English (St. Lucia)"
+  ],
+  [
+    "en_LR",
+    "English (Liberia)",
+    "English (Liberia)"
+  ],
+  [
+    "en_LS",
+    "English (Lesotho)",
+    "English (Lesotho)"
+  ],
+  [
+    "en_MG",
+    "English (Madagascar)",
+    "English (Madagascar)"
+  ],
+  [
+    "en_MH",
+    "English (Marshall Islands)",
+    "English (Marshall Islands)"
+  ],
+  [
+    "en_MO",
+    "English (Macao SAR China)",
+    "English (Macao SAR China)"
+  ],
+  [
+    "en_MP",
+    "English (Northern Mariana Islands)",
+    "English (Northern Mariana Islands)"
+  ],
+  [
+    "en_MS",
+    "English (Montserrat)",
+    "English (Montserrat)"
+  ],
+  [
+    "en_MT",
+    "English (Malta)",
+    "English (Malta)"
+  ],
+  [
+    "en_MU",
+    "English (Mauritius)",
+    "English (Mauritius)"
+  ],
+  [
+    "en_MV",
+    "English (Maldives)",
+    "English (Maldives)"
+  ],
+  [
+    "en_MW",
+    "English (Malawi)",
+    "English (Malawi)"
+  ],
+  [
+    "en_MY",
+    "English (Malaysia)",
+    "English (Malaysia)"
+  ],
+  [
+    "en_NA",
+    "English (Namibia)",
+    "English (Namibia)"
+  ],
+  [
+    "en_NF",
+    "English (Norfolk Island)",
+    "English (Norfolk Island)"
+  ],
+  [
+    "en_NG",
+    "English (Nigeria)",
+    "English (Nigeria)"
+  ],
+  [
+    "en_NL",
+    "English (Netherlands)",
+    "English (Netherlands)"
+  ],
+  [
+    "en_NO",
+    "English (Norway)",
+    "English (Norway)"
+  ],
+  [
+    "en_NR",
+    "English (Nauru)",
+    "English (Nauru)"
+  ],
+  [
+    "en_NU",
+    "English (Niue)",
+    "English (Niue)"
+  ],
+  [
+    "en_NZ",
+    "English (New Zealand)",
+    "English (New Zealand)"
+  ],
+  [
+    "en_PG",
+    "English (Papua New Guinea)",
+    "English (Papua New Guinea)"
+  ],
+  [
+    "en_PH",
+    "English (Philippines)",
+    "English (Philippines)"
+  ],
+  [
+    "en_PK",
+    "English (Pakistan)",
+    "English (Pakistan)"
+  ],
+  [
+    "en_PL",
+    "English (Poland)",
+    "English (Poland)"
+  ],
+  [
+    "en_PN",
+    "English (Pitcairn Islands)",
+    "English (Pitcairn Islands)"
+  ],
+  [
+    "en_PR",
+    "English (Puerto Rico)",
+    "English (Puerto Rico)"
+  ],
+  [
+    "en_PT",
+    "English (Portugal)",
+    "English (Portugal)"
+  ],
+  [
+    "en_PW",
+    "English (Palau)",
+    "English (Palau)"
+  ],
+  [
+    "en_RO",
+    "English (Romania)",
+    "English (Romania)"
+  ],
+  [
+    "en_RW",
+    "English (Rwanda)",
+    "English (Rwanda)"
+  ],
+  [
+    "en_SB",
+    "English (Solomon Islands)",
+    "English (Solomon Islands)"
+  ],
+  [
+    "en_SC",
+    "English (Seychelles)",
+    "English (Seychelles)"
+  ],
+  [
+    "en_SD",
+    "English (Sudan)",
+    "English (Sudan)"
+  ],
+  [
+    "en_SE",
+    "English (Sweden)",
+    "English (Sweden)"
+  ],
+  [
+    "en_SG",
+    "English (Singapore)",
+    "English (Singapore)"
+  ],
+  [
+    "en_SH",
+    "English (St Helena)",
+    "English (St. Helena)"
+  ],
+  [
+    "en_SI",
+    "English (Slovenia)",
+    "English (Slovenia)"
+  ],
+  [
+    "en_SK",
+    "English (Slovakia)",
+    "English (Slovakia)"
+  ],
+  [
+    "en_SL",
+    "English (Sierra Leone)",
+    "English (Sierra Leone)"
+  ],
+  [
+    "en_SS",
+    "English (South Sudan)",
+    "English (South Sudan)"
+  ],
+  [
+    "en_SX",
+    "English (Sint Maarten)",
+    "English (Sint Maarten)"
+  ],
+  [
+    "en_SZ",
+    "English (Eswatini)",
+    "English (Eswatini)"
+  ],
+  [
+    "en_Shaw",
+    null,
+    "English (Shavian)"
+  ],
+  [
+    "en_Shaw_GB",
+    null,
+    "English (Shavian, United Kingdom)"
+  ],
+  [
+    "en_TC",
+    "English (Turks & Caicos Islands)",
+    "English (Turks & Caicos Islands)"
+  ],
+  [
+    "en_TK",
+    "English (Tokelau)",
+    "English (Tokelau)"
+  ],
+  [
+    "en_TO",
+    "English (Tonga)",
+    "English (Tonga)"
+  ],
+  [
+    "en_TT",
+    "English (Trinidad & Tobago)",
+    "English (Trinidad & Tobago)"
+  ],
+  [
+    "en_TV",
+    "English (Tuvalu)",
+    "English (Tuvalu)"
+  ],
+  [
+    "en_TZ",
+    "English (Tanzania)",
+    "English (Tanzania)"
+  ],
+  [
+    "en_UG",
+    "English (Uganda)",
+    "English (Uganda)"
+  ],
+  [
+    "en_UM",
+    "English (U.S. Outlying Islands)",
+    "English (U.S. Outlying Islands)"
+  ],
+  [
+    "en_US",
+    "English (United States)",
+    "English (United States)"
+  ],
+  [
+    "en_US_POSIX",
+    "English (United States, Computer)",
+    "English (United States, Computer)"
+  ],
+  [
+    "en_VC",
+    "English (St Vincent & the Grenadines)",
+    "English (St. Vincent & Grenadines)"
+  ],
+  [
+    "en_VG",
+    "English (British Virgin Islands)",
+    "English (British Virgin Islands)"
+  ],
+  [
+    "en_VI",
+    "English (U.S. Virgin Islands)",
+    "English (U.S. Virgin Islands)"
+  ],
+  [
+    "en_VU",
+    "English (Vanuatu)",
+    "English (Vanuatu)"
+  ],
+  [
+    "en_WS",
+    "English (Samoa)",
+    "English (Samoa)"
+  ],
+  [
+    "en_ZA",
+    "English (South Africa)",
+    "English (South Africa)"
+  ],
+  [
+    "en_ZM",
+    "English (Zambia)",
+    "English (Zambia)"
+  ],
+  [
+    "en_ZW",
+    "English (Zimbabwe)",
+    "English (Zimbabwe)"
+  ],
+  [
+    "eo_001",
+    "Esperanto (mondo)",
+    "Esperanto (world)"
+  ],
+  [
+    "es_419",
+    "español (Latinoamérica)",
+    "Spanish (Latin America)"
+  ],
+  [
+    "es_AR",
+    "español (Argentina)",
+    "Spanish (Argentina)"
+  ],
+  [
+    "es_BO",
+    "español (Bolivia)",
+    "Spanish (Bolivia)"
+  ],
+  [
+    "es_BR",
+    "español (Brasil)",
+    "Spanish (Brazil)"
+  ],
+  [
+    "es_BZ",
+    "español (Belice)",
+    "Spanish (Belize)"
+  ],
+  [
+    "es_CL",
+    "español (Chile)",
+    "Spanish (Chile)"
+  ],
+  [
+    "es_CO",
+    "español (Colombia)",
+    "Spanish (Colombia)"
+  ],
+  [
+    "es_CR",
+    "español (Costa Rica)",
+    "Spanish (Costa Rica)"
+  ],
+  [
+    "es_CU",
+    "español (Cuba)",
+    "Spanish (Cuba)"
+  ],
+  [
+    "es_DO",
+    "español (República Dominicana)",
+    "Spanish (Dominican Republic)"
+  ],
+  [
+    "es_EA",
+    "español (Ceuta y Melilla)",
+    "Spanish (Ceuta & Melilla)"
+  ],
+  [
+    "es_EC",
+    "español (Ecuador)",
+    "Spanish (Ecuador)"
+  ],
+  [
+    "es_ES",
+    "español (España)",
+    "Spanish (Spain)"
+  ],
+  [
+    "es_GQ",
+    "español (Guinea Ecuatorial)",
+    "Spanish (Equatorial Guinea)"
+  ],
+  [
+    "es_GT",
+    "español (Guatemala)",
+    "Spanish (Guatemala)"
+  ],
+  [
+    "es_HN",
+    "español (Honduras)",
+    "Spanish (Honduras)"
+  ],
+  [
+    "es_IC",
+    "español (Canarias)",
+    "Spanish (Canary Islands)"
+  ],
+  [
+    "es_MX",
+    "español (México)",
+    "Spanish (Mexico)"
+  ],
+  [
+    "es_NI",
+    "español (Nicaragua)",
+    "Spanish (Nicaragua)"
+  ],
+  [
+    "es_PA",
+    "español (Panamá)",
+    "Spanish (Panama)"
+  ],
+  [
+    "es_PE",
+    "español (Perú)",
+    "Spanish (Peru)"
+  ],
+  [
+    "es_PH",
+    "español (Filipinas)",
+    "Spanish (Philippines)"
+  ],
+  [
+    "es_PR",
+    "español (Puerto Rico)",
+    "Spanish (Puerto Rico)"
+  ],
+  [
+    "es_PY",
+    "español (Paraguay)",
+    "Spanish (Paraguay)"
+  ],
+  [
+    "es_SV",
+    "español (El Salvador)",
+    "Spanish (El Salvador)"
+  ],
+  [
+    "es_US",
+    "español (Estados Unidos)",
+    "Spanish (United States)"
+  ],
+  [
+    "es_UY",
+    "español (Uruguay)",
+    "Spanish (Uruguay)"
+  ],
+  [
+    "es_VE",
+    "español (Venezuela)",
+    "Spanish (Venezuela)"
+  ],
+  [
+    "et_EE",
+    "eesti (Eesti)",
+    "Estonian (Estonia)"
+  ],
+  [
+    "eu_ES",
+    "euskara (Espainia)",
+    "Basque (Spain)"
+  ],
+  [
+    "ewo_CM",
+    "ewondo (Kamərún)",
+    "Ewondo (Cameroon)"
+  ],
+  [
+    "fa_AF",
+    "فارسی (افغانستان)",
+    "Persian (Afghanistan)"
+  ],
+  [
+    "fa_IR",
+    "فارسی (ایران)",
+    "Persian (Iran)"
+  ],
+  [
+    "ff_Adlm",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃)",
+    "Fula (Adlam)"
+  ],
+  [
+    "ff_Adlm_BF",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤄𞤵𞤪𞤳𞤭𞤲𞤢 𞤊𞤢𞤧𞤮𞥅)",
+    "Fula (Adlam, Burkina Faso)"
+  ],
+  [
+    "ff_Adlm_CM",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤑𞤢𞤥𞤢𞤪𞤵𞥅𞤲)",
+    "Fula (Adlam, Cameroon)"
+  ],
+  [
+    "ff_Adlm_GH",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤘𞤢𞤲𞤢)",
+    "Fula (Adlam, Ghana)"
+  ],
+  [
+    "ff_Adlm_GM",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤘𞤢𞤥𞤦𞤭𞤴𞤢)",
+    "Fula (Adlam, Gambia)"
+  ],
+  [
+    "ff_Adlm_GN",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤘𞤭𞤲𞤫)",
+    "Fula (Adlam, Guinea)"
+  ],
+  [
+    "ff_Adlm_GW",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤘𞤭𞤲𞤫-𞤄𞤭𞤧𞤢𞤱𞤮𞥅)",
+    "Fula (Adlam, Guinea-Bissau)"
+  ],
+  [
+    "ff_Adlm_LR",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤂𞤢𞤦𞤭𞤪𞤭𞤴𞤢𞥄)",
+    "Fula (Adlam, Liberia)"
+  ],
+  [
+    "ff_Adlm_MR",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤃𞤮𞤪𞤼𞤢𞤲𞤭𞥅)",
+    "Fula (Adlam, Mauritania)"
+  ],
+  [
+    "ff_Adlm_NE",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤐𞤭𞥅𞤶𞤫𞤪)",
+    "Fula (Adlam, Niger)"
+  ],
+  [
+    "ff_Adlm_NG",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤐𞤢𞤶𞤫𞤪𞤭𞤴𞤢𞥄)",
+    "Fula (Adlam, Nigeria)"
+  ],
+  [
+    "ff_Adlm_SL",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤅𞤢𞤪𞤢𞤤𞤮𞤲)",
+    "Fula (Adlam, Sierra Leone)"
+  ],
+  [
+    "ff_Adlm_SN",
+    "𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃, 𞤅𞤫𞤲𞤫𞤺𞤢𞥄𞤤)",
+    "Fula (Adlam, Senegal)"
+  ],
+  [
+    "ff_Latn",
+    "Pulaar",
+    "Fula (Latin)"
+  ],
+  [
+    "ff_Latn_BF",
+    "Pulaar (Burkibaa Faaso)",
+    "Fula (Latin, Burkina Faso)"
+  ],
+  [
+    "ff_Latn_CM",
+    "Pulaar (Kameruun)",
+    "Fula (Latin, Cameroon)"
+  ],
+  [
+    "ff_Latn_GH",
+    "Pulaar (Ganaa)",
+    "Fula (Latin, Ghana)"
+  ],
+  [
+    "ff_Latn_GM",
+    "Pulaar (Gammbi)",
+    "Fula (Latin, Gambia)"
+  ],
+  [
+    "ff_Latn_GN",
+    "Pulaar (Gine)",
+    "Fula (Latin, Guinea)"
+  ],
+  [
+    "ff_Latn_GW",
+    "Pulaar (Gine-Bisaawo)",
+    "Fula (Latin, Guinea-Bissau)"
+  ],
+  [
+    "ff_Latn_LR",
+    "Pulaar (Liberiyaa)",
+    "Fula (Latin, Liberia)"
+  ],
+  [
+    "ff_Latn_MR",
+    "Pulaar (Muritani)",
+    "Fula (Latin, Mauritania)"
+  ],
+  [
+    "ff_Latn_NE",
+    "Pulaar (Nijeer)",
+    "Fula (Latin, Niger)"
+  ],
+  [
+    "ff_Latn_NG",
+    "Pulaar (Nijeriyaa)",
+    "Fula (Latin, Nigeria)"
+  ],
+  [
+    "ff_Latn_SL",
+    "Pulaar (Seraa liyon)",
+    "Fula (Latin, Sierra Leone)"
+  ],
+  [
+    "ff_Latn_SN",
+    "Pulaar (Senegaal)",
+    "Fula (Latin, Senegal)"
+  ],
+  [
+    "fi_FI",
+    "suomi (Suomi)",
+    "Finnish (Finland)"
+  ],
+  [
+    "fil_PH",
+    "Filipino (Pilipinas)",
+    "Filipino (Philippines)"
+  ],
+  [
+    "fo_DK",
+    "føroyskt (Danmark)",
+    "Faroese (Denmark)"
+  ],
+  [
+    "fo_FO",
+    "føroyskt (Føroyar)",
+    "Faroese (Faroe Islands)"
+  ],
+  [
+    "fr_BE",
+    "français (Belgique)",
+    "French (Belgium)"
+  ],
+  [
+    "fr_BF",
+    "français (Burkina Faso)",
+    "French (Burkina Faso)"
+  ],
+  [
+    "fr_BI",
+    "français (Burundi)",
+    "French (Burundi)"
+  ],
+  [
+    "fr_BJ",
+    "français (Bénin)",
+    "French (Benin)"
+  ],
+  [
+    "fr_BL",
+    "français (Saint-Barthélemy)",
+    "French (St. Barthélemy)"
+  ],
+  [
+    "fr_CA",
+    "français (Canada)",
+    "French (Canada)"
+  ],
+  [
+    "fr_CD",
+    "français (Congo-Kinshasa)",
+    "French (Congo - Kinshasa)"
+  ],
+  [
+    "fr_CF",
+    "français (République centrafricaine)",
+    "French (Central African Republic)"
+  ],
+  [
+    "fr_CG",
+    "français (Congo-Brazzaville)",
+    "French (Congo - Brazzaville)"
+  ],
+  [
+    "fr_CH",
+    "français (Suisse)",
+    "French (Switzerland)"
+  ],
+  [
+    "fr_CI",
+    "français (Côte d’Ivoire)",
+    "French (Côte d’Ivoire)"
+  ],
+  [
+    "fr_CM",
+    "français (Cameroun)",
+    "French (Cameroon)"
+  ],
+  [
+    "fr_DJ",
+    "français (Djibouti)",
+    "French (Djibouti)"
+  ],
+  [
+    "fr_DZ",
+    "français (Algérie)",
+    "French (Algeria)"
+  ],
+  [
+    "fr_FR",
+    "français (France)",
+    "French (France)"
+  ],
+  [
+    "fr_GA",
+    "français (Gabon)",
+    "French (Gabon)"
+  ],
+  [
+    "fr_GF",
+    "français (Guyane française)",
+    "French (French Guiana)"
+  ],
+  [
+    "fr_GN",
+    "français (Guinée)",
+    "French (Guinea)"
+  ],
+  [
+    "fr_GP",
+    "français (Guadeloupe)",
+    "French (Guadeloupe)"
+  ],
+  [
+    "fr_GQ",
+    "français (Guinée équatoriale)",
+    "French (Equatorial Guinea)"
+  ],
+  [
+    "fr_HT",
+    "français (Haïti)",
+    "French (Haiti)"
+  ],
+  [
+    "fr_KM",
+    "français (Comores)",
+    "French (Comoros)"
+  ],
+  [
+    "fr_LU",
+    "français (Luxembourg)",
+    "French (Luxembourg)"
+  ],
+  [
+    "fr_MA",
+    "français (Maroc)",
+    "French (Morocco)"
+  ],
+  [
+    "fr_MC",
+    "français (Monaco)",
+    "French (Monaco)"
+  ],
+  [
+    "fr_MF",
+    "français (Saint-Martin)",
+    "French (St. Martin)"
+  ],
+  [
+    "fr_MG",
+    "français (Madagascar)",
+    "French (Madagascar)"
+  ],
+  [
+    "fr_ML",
+    "français (Mali)",
+    "French (Mali)"
+  ],
+  [
+    "fr_MQ",
+    "français (Martinique)",
+    "French (Martinique)"
+  ],
+  [
+    "fr_MR",
+    "français (Mauritanie)",
+    "French (Mauritania)"
+  ],
+  [
+    "fr_MU",
+    "français (Maurice)",
+    "French (Mauritius)"
+  ],
+  [
+    "fr_NC",
+    "français (Nouvelle-Calédonie)",
+    "French (New Caledonia)"
+  ],
+  [
+    "fr_NE",
+    "français (Niger)",
+    "French (Niger)"
+  ],
+  [
+    "fr_PF",
+    "français (Polynésie française)",
+    "French (French Polynesia)"
+  ],
+  [
+    "fr_PM",
+    "français (Saint-Pierre-et-Miquelon)",
+    "French (St. Pierre & Miquelon)"
+  ],
+  [
+    "fr_RE",
+    "français (La Réunion)",
+    "French (Réunion)"
+  ],
+  [
+    "fr_RW",
+    "français (Rwanda)",
+    "French (Rwanda)"
+  ],
+  [
+    "fr_SC",
+    "français (Seychelles)",
+    "French (Seychelles)"
+  ],
+  [
+    "fr_SN",
+    "français (Sénégal)",
+    "French (Senegal)"
+  ],
+  [
+    "fr_SY",
+    "français (Syrie)",
+    "French (Syria)"
+  ],
+  [
+    "fr_TD",
+    "français (Tchad)",
+    "French (Chad)"
+  ],
+  [
+    "fr_TG",
+    "français (Togo)",
+    "French (Togo)"
+  ],
+  [
+    "fr_TN",
+    "français (Tunisie)",
+    "French (Tunisia)"
+  ],
+  [
+    "fr_VU",
+    "français (Vanuatu)",
+    "French (Vanuatu)"
+  ],
+  [
+    "fr_WF",
+    "français (Wallis-et-Futuna)",
+    "French (Wallis & Futuna)"
+  ],
+  [
+    "fr_YT",
+    "français (Mayotte)",
+    "French (Mayotte)"
+  ],
+  [
+    "frr_DE",
+    "Nordfriisk (Tjiisklun)",
+    "Northern Frisian (Germany)"
+  ],
+  [
+    "fur_IT",
+    "furlan (Italie)",
+    "Friulian (Italy)"
+  ],
+  [
+    "fy_NL",
+    "Frysk (Nederlân)",
+    "Western Frisian (Netherlands)"
+  ],
+  [
+    "ga_GB",
+    "Gaeilge (an Ríocht Aontaithe)",
+    "Irish (United Kingdom)"
+  ],
+  [
+    "ga_IE",
+    "Gaeilge (Éire)",
+    "Irish (Ireland)"
+  ],
+  [
+    "gaa_GH",
+    "Gã (Ghana)",
+    "Ga (Ghana)"
+  ],
+  [
+    "gd_GB",
+    "Gàidhlig (An Rìoghachd Aonaichte)",
+    "Scottish Gaelic (United Kingdom)"
+  ],
+  [
+    "gez_ER",
+    "ግዕዝኛ (ኤርትራ)",
+    "Geez (Eritrea)"
+  ],
+  [
+    "gez_ET",
+    "ግዕዝኛ (ኢትዮጵያ)",
+    "Geez (Ethiopia)"
+  ],
+  [
+    "gl_ES",
+    "galego (España)",
+    "Galician (Spain)"
+  ],
+  [
+    "gn_PY",
+    "avañe’ẽ (Paraguai)",
+    "Guarani (Paraguay)"
+  ],
+  [
+    "gsw_CH",
+    "Schwiizertüütsch (Schwiiz)",
+    "Swiss German (Switzerland)"
+  ],
+  [
+    "gsw_FR",
+    "Schwiizertüütsch (Frankriich)",
+    "Swiss German (France)"
+  ],
+  [
+    "gsw_LI",
+    "Schwiizertüütsch (Liächteschtäi)",
+    "Swiss German (Liechtenstein)"
+  ],
+  [
+    "gu_IN",
+    "ગુજરાતી (ભારત)",
+    "Gujarati (India)"
+  ],
+  [
+    "guz_KE",
+    "Ekegusii (Kenya)",
+    "Gusii (Kenya)"
+  ],
+  [
+    "gv_IM",
+    "Gaelg (Ellan Vannin)",
+    "Manx (Isle of Man)"
+  ],
+  [
+    "ha_Arab",
+    null,
+    "Hausa (Arabic)"
+  ],
+  [
+    "ha_Arab_NG",
+    null,
+    "Hausa (Arabic, Nigeria)"
+  ],
+  [
+    "ha_Arab_SD",
+    null,
+    "Hausa (Arabic, Sudan)"
+  ],
+  [
+    "ha_GH",
+    "Hausa (Gana)",
+    "Hausa (Ghana)"
+  ],
+  [
+    "ha_NE",
+    "Hausa (Nijar)",
+    "Hausa (Niger)"
+  ],
+  [
+    "ha_NG",
+    "Hausa (Nijeriya)",
+    "Hausa (Nigeria)"
+  ],
+  [
+    "haw_US",
+    "ʻŌlelo Hawaiʻi (ʻAmelika Hui Pū ʻIa)",
+    "Hawaiian (United States)"
+  ],
+  [
+    "he_IL",
+    "עברית (ישראל)",
+    "Hebrew (Israel)"
+  ],
+  [
+    "hi_IN",
+    "हिन्दी (भारत)",
+    "Hindi (India)"
+  ],
+  [
+    "hi_Latn",
+    "Hindi (Latin)",
+    "Hindi (Latin)"
+  ],
+  [
+    "hi_Latn_IN",
+    "Hindi (Latin, Bharat)",
+    "Hindi (Latin, India)"
+  ],
+  [
+    "hnj_Hmnp",
+    "𞄀𞄄𞄰𞄩𞄍𞄜𞄰 (𞄐𞄦𞄲𞄤𞄎𞄫𞄰 𞄚𞄜𞄲𞄔𞄬𞄱 𞄀𞄄𞄰𞄩)",
+    "Hmong Njua (Nyiakeng Puachue Hmong)"
+  ],
+  [
+    "hnj_Hmnp_US",
+    "𞄀𞄄𞄰𞄩𞄍𞄜𞄰 (𞄐𞄦𞄲𞄤𞄎𞄫𞄰 𞄚𞄜𞄲𞄔𞄬𞄱 𞄀𞄄𞄰𞄩, 𞄒𞄫𞄱𞄔𞄩𞄴)",
+    "Hmong Njua (Nyiakeng Puachue Hmong, United States)"
+  ],
+  [
+    "hr_BA",
+    "hrvatski (Bosna i Hercegovina)",
+    "Croatian (Bosnia & Herzegovina)"
+  ],
+  [
+    "hr_HR",
+    "hrvatski (Hrvatska)",
+    "Croatian (Croatia)"
+  ],
+  [
+    "hsb_DE",
+    "hornjoserbšćina (Němska)",
+    "Upper Sorbian (Germany)"
+  ],
+  [
+    "ht_HT",
+    "Kreyòl Ayisyen (Haïti)",
+    "Haitian Creole (Haiti)"
+  ],
+  [
+    "hu_HU",
+    "magyar (Magyarország)",
+    "Hungarian (Hungary)"
+  ],
+  [
+    "hy_AM",
+    "հայերեն (Հայաստան)",
+    "Armenian (Armenia)"
+  ],
+  [
+    "ia_001",
+    "interlingua (mundo)",
+    "Interlingua (world)"
+  ],
+  [
+    "id_ID",
+    "Indonesia (Indonesia)",
+    "Indonesian (Indonesia)"
+  ],
+  [
+    "ie_EE",
+    "Interlingue (Estonia)",
+    "Interlingue (Estonia)"
+  ],
+  [
+    "ig_NG",
+    "Igbo (Naịjịrịa)",
+    "Igbo (Nigeria)"
+  ],
+  [
+    "ii_CN",
+    "ꆈꌠꉙ (ꍏꇩ)",
+    "Sichuan Yi (China)"
+  ],
+  [
+    "io_001",
+    "Ido",
+    "Ido (world)"
+  ],
+  [
+    "is_IS",
+    "íslenska (Ísland)",
+    "Icelandic (Iceland)"
+  ],
+  [
+    "it_CH",
+    "italiano (Svizzera)",
+    "Italian (Switzerland)"
+  ],
+  [
+    "it_IT",
+    "italiano (Italia)",
+    "Italian (Italy)"
+  ],
+  [
+    "it_SM",
+    "italiano (San Marino)",
+    "Italian (San Marino)"
+  ],
+  [
+    "it_VA",
+    "italiano (Città del Vaticano)",
+    "Italian (Vatican City)"
+  ],
+  [
+    "iu_CA",
+    "ᐃᓄᒃᑎᑐᑦ (ᑲᓇᑕᒥ)",
+    "Inuktitut (Canada)"
+  ],
+  [
+    "iu_Latn",
+    null,
+    "Inuktitut (Latin)"
+  ],
+  [
+    "iu_Latn_CA",
+    null,
+    "Inuktitut (Latin, Canada)"
+  ],
+  [
+    "ja_JP",
+    "日本語 (日本)",
+    "Japanese (Japan)"
+  ],
+  [
+    "jbo_001",
+    "la .lojban.",
+    "Lojban (world)"
+  ],
+  [
+    "jgo_CM",
+    "Ndaꞌa (Kamɛlûn)",
+    "Ngomba (Cameroon)"
+  ],
+  [
+    "jmc_TZ",
+    "Kimachame (Tanzania)",
+    "Machame (Tanzania)"
+  ],
+  [
+    "jv_ID",
+    "Jawa (Indonésia)",
+    "Javanese (Indonesia)"
+  ],
+  [
+    "ka_GE",
+    "ქართული (საქართველო)",
+    "Georgian (Georgia)"
+  ],
+  [
+    "kaa_Cyrl",
+    "қарақалпақша (кирилл жазыўы)",
+    "Kara-Kalpak (Cyrillic)"
+  ],
+  [
+    "kaa_Cyrl_UZ",
+    "қарақалпақша (кирилл жазыўы, Өзбекстан)",
+    "Kara-Kalpak (Cyrillic, Uzbekistan)"
+  ],
+  [
+    "kaa_Latn",
+    null,
+    "Kara-Kalpak (Latin)"
+  ],
+  [
+    "kaa_Latn_UZ",
+    null,
+    "Kara-Kalpak (Latin, Uzbekistan)"
+  ],
+  [
+    "kab_DZ",
+    "Taqbaylit (Lezzayer)",
+    "Kabyle (Algeria)"
+  ],
+  [
+    "kaj_NG",
+    "Kaje",
+    "Jju (Nigeria)"
+  ],
+  [
+    "kam_KE",
+    "Kikamba (Kenya)",
+    "Kamba (Kenya)"
+  ],
+  [
+    "kcg_NG",
+    "Katab",
+    "Tyap (Nigeria)"
+  ],
+  [
+    "kde_TZ",
+    "Chimakonde (Tanzania)",
+    "Makonde (Tanzania)"
+  ],
+  [
+    "kea_CV",
+    "kabuverdianu (Kabu Verdi)",
+    "Kabuverdianu (Cape Verde)"
+  ],
+  [
+    "ken_CM",
+    "Kɛnyaŋ",
+    "Kenyang (Cameroon)"
+  ],
+  [
+    "kgp_BR",
+    "kanhgág (Mrasir)",
+    "Kaingang (Brazil)"
+  ],
+  [
+    "khq_ML",
+    "Koyra ciini (Maali)",
+    "Koyra Chiini (Mali)"
+  ],
+  [
+    "ki_KE",
+    "Gikuyu (Kenya)",
+    "Kikuyu (Kenya)"
+  ],
+  [
+    "kk_Arab",
+    "قازاق ءتىلى (اراب جازۋى)",
+    "Kazakh (Arabic)"
+  ],
+  [
+    "kk_Arab_CN",
+    "قازاق ءتىلى (اراب جازۋى, قىتاي)",
+    "Kazakh (Arabic, China)"
+  ],
+  [
+    "kk_Cyrl",
+    "қазақ тілі (кирилл жазуы)",
+    "Kazakh (Cyrillic)"
+  ],
+  [
+    "kk_Cyrl_KZ",
+    "қазақ тілі (кирилл жазуы, Қазақстан)",
+    "Kazakh (Cyrillic, Kazakhstan)"
+  ],
+  [
+    "kk_KZ",
+    "қазақ тілі (Қазақстан)",
+    "Kazakh (Kazakhstan)"
+  ],
+  [
+    "kkj_CM",
+    "kakɔ (Kamɛrun)",
+    "Kako (Cameroon)"
+  ],
+  [
+    "kl_GL",
+    "kalaallisut (Kalaallit Nunaat)",
+    "Kalaallisut (Greenland)"
+  ],
+  [
+    "kln_KE",
+    "Kalenjin (Emetab Kenya)",
+    "Kalenjin (Kenya)"
+  ],
+  [
+    "km_KH",
+    "ខ្មែរ (កម្ពុជា)",
+    "Khmer (Cambodia)"
+  ],
+  [
+    "kn_IN",
+    "ಕನ್ನಡ (ಭಾರತ)",
+    "Kannada (India)"
+  ],
+  [
+    "ko_CN",
+    "한국어 (중국)",
+    "Korean (China)"
+  ],
+  [
+    "ko_KP",
+    "한국어 (조선민주주의인민공화국)",
+    "Korean (North Korea)"
+  ],
+  [
+    "ko_KR",
+    "한국어 (대한민국)",
+    "Korean (South Korea)"
+  ],
+  [
+    "kok_Deva",
+    "कोंकणी (देवनागरी)",
+    "Konkani (Devanagari)"
+  ],
+  [
+    "kok_Deva_IN",
+    "कोंकणी (देवनागरी, भारत)",
+    "Konkani (Devanagari, India)"
+  ],
+  [
+    "kok_Latn",
+    "Konknni (Romi)",
+    "Konkani (Latin)"
+  ],
+  [
+    "kok_Latn_IN",
+    "Konknni (Romi, Bharot)",
+    "Konkani (Latin, India)"
+  ],
+  [
+    "kpe_GN",
+    "Kpɛlɛɛ",
+    "Kpelle (Guinea)"
+  ],
+  [
+    "kpe_LR",
+    "Kpɛlɛɛ",
+    "Kpelle (Liberia)"
+  ],
+  [
+    "ks_Arab",
+    "کٲشُر (عربی)",
+    "Kashmiri (Arabic)"
+  ],
+  [
+    "ks_Arab_IN",
+    "کٲشُر (عربی, ہِندوستان)",
+    "Kashmiri (Arabic, India)"
+  ],
+  [
+    "ks_Deva",
+    "कॉशुर (देवनागरी)",
+    "Kashmiri (Devanagari)"
+  ],
+  [
+    "ks_Deva_IN",
+    "कॉशुर (देवनागरी, हिंदोस्तान)",
+    "Kashmiri (Devanagari, India)"
+  ],
+  [
+    "ksb_TZ",
+    "Kishambaa (Tanzania)",
+    "Shambala (Tanzania)"
+  ],
+  [
+    "ksf_CM",
+    "rikpa (kamɛrún)",
+    "Bafia (Cameroon)"
+  ],
+  [
+    "ksh_DE",
+    "Kölsch (Doütschland)",
+    "Colognian (Germany)"
+  ],
+  [
+    "ku_TR",
+    "kurdî (kurmancî) (Tirkîye)",
+    "Kurdish (Türkiye)"
+  ],
+  [
+    "kw_GB",
+    "kernewek (Rywvaneth Unys)",
+    "Cornish (United Kingdom)"
+  ],
+  [
+    "kxv_Deva",
+    "कुवि (देवनागरी)",
+    "Kuvi (Devanagari)"
+  ],
+  [
+    "kxv_Deva_IN",
+    "कुवि (देवनागरी, बारत)",
+    "Kuvi (Devanagari, India)"
+  ],
+  [
+    "kxv_Latn",
+    "kuvi (laṭin)",
+    "Kuvi (Latin)"
+  ],
+  [
+    "kxv_Latn_IN",
+    "kuvi (laṭin, inḍiā)",
+    "Kuvi (Latin, India)"
+  ],
+  [
+    "kxv_Orya",
+    "କୁୱି (ଅଡ଼ିଆ)",
+    "Kuvi (Odia)"
+  ],
+  [
+    "kxv_Orya_IN",
+    "କୁୱି (ଅଡ଼ିଆ, ବାରତ)",
+    "Kuvi (Odia, India)"
+  ],
+  [
+    "kxv_Telu",
+    "కువి (తెలుగు)",
+    "Kuvi (Telugu)"
+  ],
+  [
+    "kxv_Telu_IN",
+    "కువి (తెలుగు, బారతదెసాం)",
+    "Kuvi (Telugu, India)"
+  ],
+  [
+    "ky_KG",
+    "кыргызча (Кыргызстан)",
+    "Kyrgyz (Kyrgyzstan)"
+  ],
+  [
+    "la_VA",
+    "Latina (Civitas Vaticana)",
+    "Latin (Vatican City)"
+  ],
+  [
+    "lag_TZ",
+    "Kɨlaangi (Taansanía)",
+    "Langi (Tanzania)"
+  ],
+  [
+    "lb_LU",
+    "Lëtzebuergesch (Lëtzebuerg)",
+    "Luxembourgish (Luxembourg)"
+  ],
+  [
+    "lg_UG",
+    "Luganda (Yuganda)",
+    "Ganda (Uganda)"
+  ],
+  [
+    "lij_IT",
+    "ligure (Italia)",
+    "Ligurian (Italy)"
+  ],
+  [
+    "lkt_US",
+    "Lakȟólʼiyapi (Mílahaŋska Tȟamákȟočhe)",
+    "Lakota (United States)"
+  ],
+  [
+    "lld_IT",
+    "ladin (Talia)",
+    null
+  ],
+  [
+    "lmo_IT",
+    "Lombard (Italia)",
+    "Lombard (Italy)"
+  ],
+  [
+    "ln_AO",
+    "lingála (Angóla)",
+    "Lingala (Angola)"
+  ],
+  [
+    "ln_CD",
+    "lingála (Republíki ya Kongó Demokratíki)",
+    "Lingala (Congo - Kinshasa)"
+  ],
+  [
+    "ln_CF",
+    "lingála (Repibiki ya Afríka ya Káti)",
+    "Lingala (Central African Republic)"
+  ],
+  [
+    "ln_CG",
+    "lingála (Kongo)",
+    "Lingala (Congo - Brazzaville)"
+  ],
+  [
+    "lo_LA",
+    "ລາວ (ລາວ)",
+    "Lao (Laos)"
+  ],
+  [
+    "lrc_IQ",
+    "لۊری شومالی",
+    "Northern Luri (Iraq)"
+  ],
+  [
+    "lrc_IR",
+    "لۊری شومالی",
+    "Northern Luri (Iran)"
+  ],
+  [
+    "lt_LT",
+    "lietuvių (Lietuva)",
+    "Lithuanian (Lithuania)"
+  ],
+  [
+    "ltg_LV",
+    "latgalīšu (Latveja)",
+    "Latgalian (Latvia)"
+  ],
+  [
+    "lu_CD",
+    "Tshiluba (Ditunga wa Kongu)",
+    "Luba-Katanga (Congo - Kinshasa)"
+  ],
+  [
+    "luo_KE",
+    "Dholuo (Kenya)",
+    "Luo (Kenya)"
+  ],
+  [
+    "luy_KE",
+    "Luluhia (Kenya)",
+    "Luyia (Kenya)"
+  ],
+  [
+    "lv_LV",
+    "latviešu (Latvija)",
+    "Latvian (Latvia)"
+  ],
+  [
+    "mai_IN",
+    "मैथिली (भारत)",
+    "Maithili (India)"
+  ],
+  [
+    "mas_KE",
+    "Maa (Kenya)",
+    "Masai (Kenya)"
+  ],
+  [
+    "mas_TZ",
+    "Maa (Tansania)",
+    "Masai (Tanzania)"
+  ],
+  [
+    "mdf_RU",
+    "мокшень кяль",
+    "Moksha (Russia)"
+  ],
+  [
+    "mer_KE",
+    "Kĩmĩrũ (Kenya)",
+    "Meru (Kenya)"
+  ],
+  [
+    "mfe_MU",
+    "kreol morisien (Moris)",
+    "Morisyen (Mauritius)"
+  ],
+  [
+    "mg_MG",
+    "Malagasy (Madagasikara)",
+    "Malagasy (Madagascar)"
+  ],
+  [
+    "mgh_MZ",
+    "Makua (Umozambiki)",
+    "Makhuwa-Meetto (Mozambique)"
+  ],
+  [
+    "mgo_CM",
+    "metaʼ (Kamalun)",
+    "Metaʼ (Cameroon)"
+  ],
+  [
+    "mi_NZ",
+    "Māori (Aotearoa)",
+    "Māori (New Zealand)"
+  ],
+  [
+    "mic_CA",
+    "Lʼnuiʼsuti",
+    "Mi'kmaw (Canada)"
+  ],
+  [
+    "mk_MK",
+    "македонски (Северна Македонија)",
+    "Macedonian (North Macedonia)"
+  ],
+  [
+    "ml_IN",
+    "മലയാളം (ഇന്ത്യ)",
+    "Malayalam (India)"
+  ],
+  [
+    "mn_MN",
+    "монгол (Монгол)",
+    "Mongolian (Mongolia)"
+  ],
+  [
+    "mn_Mong",
+    null,
+    "Mongolian (Mongolian)"
+  ],
+  [
+    "mn_Mong_CN",
+    null,
+    "Mongolian (Mongolian, China)"
+  ],
+  [
+    "mn_Mong_MN",
+    "ᠮᠣᠩᠭᠣᠯ (ᠮᠣᠩᠭᠣᠯ ᠪᠢᠴᠢᠭ᠌, ᠮᠣᠩᠭᠣᠯ)",
+    "Mongolian (Mongolian, Mongolia)"
+  ],
+  [
+    "mni_Beng",
+    "মৈতৈলোন্ (বাংলা)",
+    "Manipuri (Bangla)"
+  ],
+  [
+    "mni_Beng_IN",
+    "মৈতৈলোন্ (বাংলা, ইন্দিয়া)",
+    "Manipuri (Bangla, India)"
+  ],
+  [
+    "mni_Mtei",
+    "ꯃꯤꯇꯩꯂꯣꯟ (ꯃꯤꯇꯩ ꯃꯌꯦꯛ)",
+    "Manipuri (Meitei Mayek)"
+  ],
+  [
+    "mni_Mtei_IN",
+    "ꯃꯤꯇꯩꯂꯣꯟ (ꯃꯤꯇꯩ ꯃꯌꯦꯛ)",
+    "Manipuri (Meitei Mayek, India)"
+  ],
+  [
+    "moh_CA",
+    "Kanienʼkéha",
+    "Mohawk (Canada)"
+  ],
+  [
+    "mr_IN",
+    "मराठी (भारत)",
+    "Marathi (India)"
+  ],
+  [
+    "ms_Arab",
+    "بهاس ملايو (عرب)",
+    "Malay (Arabic)"
+  ],
+  [
+    "ms_Arab_BN",
+    "بهاس ملايو (عرب, بروني)",
+    "Malay (Arabic, Brunei)"
+  ],
+  [
+    "ms_Arab_MY",
+    "بهاس ملايو (عرب, مليسيا)",
+    "Malay (Arabic, Malaysia)"
+  ],
+  [
+    "ms_BN",
+    "Melayu (Brunei)",
+    "Malay (Brunei)"
+  ],
+  [
+    "ms_ID",
+    "Melayu (Indonesia)",
+    "Malay (Indonesia)"
+  ],
+  [
+    "ms_MY",
+    "Melayu (Malaysia)",
+    "Malay (Malaysia)"
+  ],
+  [
+    "ms_SG",
+    "Melayu (Singapura)",
+    "Malay (Singapore)"
+  ],
+  [
+    "mt_MT",
+    "Malti (Malta)",
+    "Maltese (Malta)"
+  ],
+  [
+    "mua_CM",
+    "MUNDAŊ (kameruŋ)",
+    "Mundang (Cameroon)"
+  ],
+  [
+    "mus_US",
+    "Mvskoke (United States)",
+    "Muscogee (United States)"
+  ],
+  [
+    "my_MM",
+    "မြန်မာ (မြန်မာ)",
+    "Burmese (Myanmar (Burma))"
+  ],
+  [
+    "myv_RU",
+    "эрзянь кель (Рузонь мастор)",
+    "Erzya (Russia)"
+  ],
+  [
+    "mzn_IR",
+    "مازرونی (ایران)",
+    "Mazanderani (Iran)"
+  ],
+  [
+    "naq_NA",
+    "Khoekhoegowab (Namibiab)",
+    "Nama (Namibia)"
+  ],
+  [
+    "nb_NO",
+    "norsk bokmål (Norge)",
+    "Norwegian Bokmål (Norway)"
+  ],
+  [
+    "nb_SJ",
+    "norsk bokmål (Svalbard og Jan Mayen)",
+    "Norwegian Bokmål (Svalbard & Jan Mayen)"
+  ],
+  [
+    "nd_ZW",
+    "isiNdebele (Zimbabwe)",
+    "North Ndebele (Zimbabwe)"
+  ],
+  [
+    "nds_DE",
+    "Neddersass’sch (Düütschland)",
+    "Low German (Germany)"
+  ],
+  [
+    "nds_NL",
+    "Neddersass’sch (Nedderlannen)",
+    "Low German (Netherlands)"
+  ],
+  [
+    "ne_IN",
+    "नेपाली (भारत)",
+    "Nepali (India)"
+  ],
+  [
+    "ne_NP",
+    "नेपाली (नेपाल)",
+    "Nepali (Nepal)"
+  ],
+  [
+    "nl_AW",
+    "Nederlands (Aruba)",
+    "Dutch (Aruba)"
+  ],
+  [
+    "nl_BE",
+    "Nederlands (België)",
+    "Dutch (Belgium)"
+  ],
+  [
+    "nl_BQ",
+    "Nederlands (Caribisch Nederland)",
+    "Dutch (Caribbean Netherlands)"
+  ],
+  [
+    "nl_CW",
+    "Nederlands (Curaçao)",
+    "Dutch (Curaçao)"
+  ],
+  [
+    "nl_NL",
+    "Nederlands (Nederland)",
+    "Dutch (Netherlands)"
+  ],
+  [
+    "nl_SR",
+    "Nederlands (Suriname)",
+    "Dutch (Suriname)"
+  ],
+  [
+    "nl_SX",
+    "Nederlands (Sint-Maarten)",
+    "Dutch (Sint Maarten)"
+  ],
+  [
+    "nmg_CM",
+    "Kwasio (Kamerun)",
+    "Kwasio (Cameroon)"
+  ],
+  [
+    "nn_NO",
+    "norsk nynorsk (Noreg)",
+    "Norwegian Nynorsk (Norway)"
+  ],
+  [
+    "nnh_CM",
+    "Shwóŋò ngiembɔɔn (Kàmalûm)",
+    "Ngiemboon (Cameroon)"
+  ],
+  [
+    "nqo_GN",
+    "ߒߞߏ (ߖߌ߬ߣߍ߫)",
+    "N’Ko (Guinea)"
+  ],
+  [
+    "nr_ZA",
+    "isiNdebele",
+    "South Ndebele (South Africa)"
+  ],
+  [
+    "nso_ZA",
+    "Sesotho sa Leboa (Afrika Borwa)",
+    "Northern Sotho (South Africa)"
+  ],
+  [
+    "nus_SS",
+    "Thok Nath",
+    "Nuer (South Sudan)"
+  ],
+  [
+    "nv_US",
+    "Diné Bizaad",
+    "Navajo (United States)"
+  ],
+  [
+    "ny_MW",
+    "Nyanja",
+    "Nyanja (Malawi)"
+  ],
+  [
+    "nyn_UG",
+    "Runyankore (Uganda)",
+    "Nyankole (Uganda)"
+  ],
+  [
+    "oc_ES",
+    "occitan (Espanha)",
+    "Occitan (Spain)"
+  ],
+  [
+    "oc_FR",
+    "occitan (França)",
+    "Occitan (France)"
+  ],
+  [
+    "om_ET",
+    "Oromoo (Itoophiyaa)",
+    "Oromo (Ethiopia)"
+  ],
+  [
+    "om_KE",
+    "Oromoo (Keeniyaa)",
+    "Oromo (Kenya)"
+  ],
+  [
+    "or_IN",
+    "ଓଡ଼ିଆ (ଭାରତ)",
+    "Odia (India)"
+  ],
+  [
+    "os_GE",
+    "ирон (Гуырдзыстон)",
+    "Ossetic (Georgia)"
+  ],
+  [
+    "os_RU",
+    "ирон (Уӕрӕсе)",
+    "Ossetic (Russia)"
+  ],
+  [
+    "osa_US",
+    "𐓏𐓘𐓻𐓘𐓻𐓟 (United States)",
+    "Osage (United States)"
+  ],
+  [
+    "pa_Arab",
+    "پنجابی (عربی)",
+    "Punjabi (Arabic)"
+  ],
+  [
+    "pa_Arab_PK",
+    "پنجابی (عربی, پاکستان)",
+    "Punjabi (Arabic, Pakistan)"
+  ],
+  [
+    "pa_Guru",
+    "ਪੰਜਾਬੀ (ਗੁਰਮੁਖੀ)",
+    "Punjabi (Gurmukhi)"
+  ],
+  [
+    "pa_Guru_IN",
+    "ਪੰਜਾਬੀ (ਗੁਰਮੁਖੀ, ਭਾਰਤ)",
+    "Punjabi (Gurmukhi, India)"
+  ],
+  [
+    "pap_AW",
+    "Papiamentu (Aruba)",
+    "Papiamento (Aruba)"
+  ],
+  [
+    "pap_CW",
+    "Papiamentu (Kòrsou)",
+    "Papiamento (Curaçao)"
+  ],
+  [
+    "pcm_NG",
+    "Naijíriá Píjin (Naijíria)",
+    "Nigerian Pidgin (Nigeria)"
+  ],
+  [
+    "pis_SB",
+    "Pijin (Solomon Aelan)",
+    "Pijin (Solomon Islands)"
+  ],
+  [
+    "pl_PL",
+    "polski (Polska)",
+    "Polish (Poland)"
+  ],
+  [
+    "prg_PL",
+    "prūsiskan (Pōli)",
+    "Prussian (Poland)"
+  ],
+  [
+    "ps_AF",
+    "پښتو (افغانستان)",
+    "Pashto (Afghanistan)"
+  ],
+  [
+    "ps_PK",
+    "پښتو (پاکستان)",
+    "Pashto (Pakistan)"
+  ],
+  [
+    "pt_AO",
+    "português (Angola)",
+    "Portuguese (Angola)"
+  ],
+  [
+    "pt_BR",
+    "português (Brasil)",
+    "Portuguese (Brazil)"
+  ],
+  [
+    "pt_CH",
+    "português (Suíça)",
+    "Portuguese (Switzerland)"
+  ],
+  [
+    "pt_CV",
+    "português (Cabo Verde)",
+    "Portuguese (Cape Verde)"
+  ],
+  [
+    "pt_GQ",
+    "português (Guiné Equatorial)",
+    "Portuguese (Equatorial Guinea)"
+  ],
+  [
+    "pt_GW",
+    "português (Guiné-Bissau)",
+    "Portuguese (Guinea-Bissau)"
+  ],
+  [
+    "pt_LU",
+    "português (Luxemburgo)",
+    "Portuguese (Luxembourg)"
+  ],
+  [
+    "pt_MO",
+    "português (Macau, RAE da China)",
+    "Portuguese (Macao SAR China)"
+  ],
+  [
+    "pt_MZ",
+    "português (Moçambique)",
+    "Portuguese (Mozambique)"
+  ],
+  [
+    "pt_PT",
+    "português (Portugal)",
+    "Portuguese (Portugal)"
+  ],
+  [
+    "pt_ST",
+    "português (São Tomé e Príncipe)",
+    "Portuguese (São Tomé & Príncipe)"
+  ],
+  [
+    "pt_TL",
+    "português (Timor-Leste)",
+    "Portuguese (Timor-Leste)"
+  ],
+  [
+    "qu_BO",
+    "Runasimi (Bolivia)",
+    "Quechua (Bolivia)"
+  ],
+  [
+    "qu_EC",
+    "Runasimi (Ecuador)",
+    "Quechua (Ecuador)"
+  ],
+  [
+    "qu_PE",
+    "Runasimi (Perú)",
+    "Quechua (Peru)"
+  ],
+  [
+    "quc_GT",
+    "Kʼicheʼ",
+    "Kʼicheʼ (Guatemala)"
+  ],
+  [
+    "raj_IN",
+    "राजस्थानी (भारत)",
+    "Rajasthani (India)"
+  ],
+  [
+    "rhg_Rohg",
+    "𐴌𐴗𐴥𐴝𐴙𐴚𐴒𐴙𐴝",
+    "Rohingya (Hanifi)"
+  ],
+  [
+    "rhg_Rohg_BD",
+    "𐴌𐴗𐴥𐴝𐴙𐴚𐴒𐴙𐴝",
+    "Rohingya (Hanifi, Bangladesh)"
+  ],
+  [
+    "rhg_Rohg_MM",
+    "𐴌𐴗𐴥𐴝𐴙𐴚𐴒𐴙𐴝",
+    "Rohingya (Hanifi, Myanmar (Burma))"
+  ],
+  [
+    "rif_MA",
+    "Tarifit (Lmuɣrib)",
+    "Riffian (Morocco)"
+  ],
+  [
+    "rm_CH",
+    "rumantsch (Svizra)",
+    "Romansh (Switzerland)"
+  ],
+  [
+    "rn_BI",
+    "Ikirundi (Uburundi)",
+    "Rundi (Burundi)"
+  ],
+  [
+    "ro_MD",
+    "română (Republica Moldova)",
+    "Romanian (Moldova)"
+  ],
+  [
+    "ro_RO",
+    "română (România)",
+    "Romanian (Romania)"
+  ],
+  [
+    "rof_TZ",
+    "Kihorombo (Tanzania)",
+    "Rombo (Tanzania)"
+  ],
+  [
+    "ru_BY",
+    "русский (Беларусь)",
+    "Russian (Belarus)"
+  ],
+  [
+    "ru_KG",
+    "русский (Киргизия)",
+    "Russian (Kyrgyzstan)"
+  ],
+  [
+    "ru_KZ",
+    "русский (Казахстан)",
+    "Russian (Kazakhstan)"
+  ],
+  [
+    "ru_MD",
+    "русский (Молдова)",
+    "Russian (Moldova)"
+  ],
+  [
+    "ru_RU",
+    "русский (Россия)",
+    "Russian (Russia)"
+  ],
+  [
+    "ru_UA",
+    "русский (Украина)",
+    "Russian (Ukraine)"
+  ],
+  [
+    "rw_RW",
+    "Ikinyarwanda (U Rwanda)",
+    "Kinyarwanda (Rwanda)"
+  ],
+  [
+    "rwk_TZ",
+    "Kiruwa (Tanzania)",
+    "Rwa (Tanzania)"
+  ],
+  [
+    "sa_IN",
+    "संस्कृत भाषा (भारतः)",
+    "Sanskrit (India)"
+  ],
+  [
+    "sah_RU",
+    "саха тыла (Арассыыйа)",
+    "Yakut (Russia)"
+  ],
+  [
+    "saq_KE",
+    "Kisampur (Kenya)",
+    "Samburu (Kenya)"
+  ],
+  [
+    "sat_Deva",
+    "सानताड़ी (देवानागारी)",
+    "Santali (Devanagari)"
+  ],
+  [
+    "sat_Deva_IN",
+    "सानताड़ी (देवानागारी)",
+    "Santali (Devanagari, India)"
+  ],
+  [
+    "sat_Olck",
+    "ᱥᱟᱱᱛᱟᱲᱤ (ᱚᱞ ᱪᱤᱠᱤ)",
+    "Santali (Ol Chiki)"
+  ],
+  [
+    "sat_Olck_IN",
+    "ᱥᱟᱱᱛᱟᱲᱤ (ᱚᱞ ᱪᱤᱠᱤ, ᱤᱱᱰᱤᱭᱟ)",
+    "Santali (Ol Chiki, India)"
+  ],
+  [
+    "sbp_TZ",
+    "Ishisangu (Tansaniya)",
+    "Sangu (Tanzania)"
+  ],
+  [
+    "sc_IT",
+    "sardu (Itàlia)",
+    "Sardinian (Italy)"
+  ],
+  [
+    "scn_IT",
+    "sicilianu (Italia)",
+    "Sicilian (Italy)"
+  ],
+  [
+    "sd_Arab",
+    "سنڌي (عربي)",
+    "Sindhi (Arabic)"
+  ],
+  [
+    "sd_Arab_PK",
+    "سنڌي (عربي, پاڪستان)",
+    "Sindhi (Arabic, Pakistan)"
+  ],
+  [
+    "sd_Deva",
+    "सिन्धी (देवनागिरी)",
+    "Sindhi (Devanagari)"
+  ],
+  [
+    "sd_Deva_IN",
+    "सिन्धी (देवनागिरी, भारत)",
+    "Sindhi (Devanagari, India)"
+  ],
+  [
+    "sdh_IQ",
+    "کوردی خوارگ",
+    "Southern Kurdish (Iraq)"
+  ],
+  [
+    "sdh_IR",
+    "کوردی خوارگ",
+    "Southern Kurdish (Iran)"
+  ],
+  [
+    "se_FI",
+    "davvisámegiella (Suopma)",
+    "Northern Sami (Finland)"
+  ],
+  [
+    "se_NO",
+    "davvisámegiella (Norga)",
+    "Northern Sami (Norway)"
+  ],
+  [
+    "se_SE",
+    "davvisámegiella (Ruoŧŧa)",
+    "Northern Sami (Sweden)"
+  ],
+  [
+    "seh_MZ",
+    "sena (Moçambique)",
+    "Sena (Mozambique)"
+  ],
+  [
+    "ses_ML",
+    "Koyraboro senni (Maali)",
+    "Koyraboro Senni (Mali)"
+  ],
+  [
+    "sg_CF",
+    "Sängö (Ködörösêse tî Bêafrîka)",
+    "Sango (Central African Republic)"
+  ],
+  [
+    "shi_Latn",
+    "Tashelḥiyt",
+    "Tachelhit (Latin)"
+  ],
+  [
+    "shi_Latn_MA",
+    "Tashelḥiyt (lmɣrib)",
+    "Tachelhit (Latin, Morocco)"
+  ],
+  [
+    "shi_Tfng",
+    "ⵜⴰⵛⵍⵃⵉⵜ",
+    "Tachelhit (Tifinagh)"
+  ],
+  [
+    "shi_Tfng_MA",
+    "ⵜⴰⵛⵍⵃⵉⵜ (ⵍⵎⵖⵔⵉⴱ)",
+    "Tachelhit (Tifinagh, Morocco)"
+  ],
+  [
+    "shn_MM",
+    "တႆး (မျၢၼ်ႇမႃႇ (မိူင်းမၢၼ်ႈ))",
+    "Shan (Myanmar (Burma))"
+  ],
+  [
+    "shn_TH",
+    "တႆး (မိူင်းထႆး)",
+    "Shan (Thailand)"
+  ],
+  [
+    "si_LK",
+    "සිංහල (ශ්‍රී ලංකාව)",
+    "Sinhala (Sri Lanka)"
+  ],
+  [
+    "sid_ET",
+    "Sidaamu Afo (Itiyoophiya)",
+    "Sidamo (Ethiopia)"
+  ],
+  [
+    "sk_SK",
+    "slovenčina (Slovensko)",
+    "Slovak (Slovakia)"
+  ],
+  [
+    "skr_PK",
+    "سرائیکی (پاکستان)",
+    null
+  ],
+  [
+    "sl_SI",
+    "slovenščina (Slovenija)",
+    "Slovenian (Slovenia)"
+  ],
+  [
+    "sma_NO",
+    "Åarjelsaemien gïele",
+    "Southern Sami (Norway)"
+  ],
+  [
+    "sma_SE",
+    "Åarjelsaemien gïele",
+    "Southern Sami (Sweden)"
+  ],
+  [
+    "smj_NO",
+    "julevsámegiella",
+    "Lule Sami (Norway)"
+  ],
+  [
+    "smj_SE",
+    "julevsámegiella",
+    "Lule Sami (Sweden)"
+  ],
+  [
+    "smn_FI",
+    "anarâškielâ (Suomâ)",
+    "Inari Sami (Finland)"
+  ],
+  [
+    "sms_FI",
+    "sääʹmǩiõll (Lääʹddjânnam)",
+    "Skolt Sami (Finland)"
+  ],
+  [
+    "sn_ZW",
+    "chiShona (Zimbabwe)",
+    "Shona (Zimbabwe)"
+  ],
+  [
+    "so_DJ",
+    "Soomaali (Jabuuti)",
+    "Somali (Djibouti)"
+  ],
+  [
+    "so_ET",
+    "Soomaali (Itoobiya)",
+    "Somali (Ethiopia)"
+  ],
+  [
+    "so_KE",
+    "Soomaali (Kenya)",
+    "Somali (Kenya)"
+  ],
+  [
+    "so_SO",
+    "Soomaali (Soomaaliya)",
+    "Somali (Somalia)"
+  ],
+  [
+    "sq_AL",
+    "shqip (Shqipëri)",
+    "Albanian (Albania)"
+  ],
+  [
+    "sq_MK",
+    "shqip (Maqedonia e Veriut)",
+    "Albanian (North Macedonia)"
+  ],
+  [
+    "sq_XK",
+    "shqip (Kosovë)",
+    "Albanian (Kosovo)"
+  ],
+  [
+    "sr_Cyrl",
+    "српски (ћирилица)",
+    "Serbian (Cyrillic)"
+  ],
+  [
+    "sr_Cyrl_BA",
+    "српски (ћирилица, Босна и Херцеговина)",
+    "Serbian (Cyrillic, Bosnia & Herzegovina)"
+  ],
+  [
+    "sr_Cyrl_ME",
+    "српски (ћирилица, Црна Гора)",
+    "Serbian (Cyrillic, Montenegro)"
+  ],
+  [
+    "sr_Cyrl_RS",
+    "српски (ћирилица, Србија)",
+    "Serbian (Cyrillic, Serbia)"
+  ],
+  [
+    "sr_Cyrl_XK",
+    "српски (ћирилица, Косово)",
+    "Serbian (Cyrillic, Kosovo)"
+  ],
+  [
+    "sr_Latn",
+    "srpski (latinica)",
+    "Serbian (Latin)"
+  ],
+  [
+    "sr_Latn_BA",
+    "srpski (latinica, Bosna i Hercegovina)",
+    "Serbian (Latin, Bosnia & Herzegovina)"
+  ],
+  [
+    "sr_Latn_ME",
+    "srpski (latinica, Crna Gora)",
+    "Serbian (Latin, Montenegro)"
+  ],
+  [
+    "sr_Latn_RS",
+    "srpski (latinica, Srbija)",
+    "Serbian (Latin, Serbia)"
+  ],
+  [
+    "sr_Latn_XK",
+    "srpski (latinica, Kosovo)",
+    "Serbian (Latin, Kosovo)"
+  ],
+  [
+    "ss_SZ",
+    "siSwati (eSwatini)",
+    "Swati (Eswatini)"
+  ],
+  [
+    "ss_ZA",
+    "siSwati",
+    "Swati (South Africa)"
+  ],
+  [
+    "ssy_ER",
+    "Saho (Eretria)",
+    "Saho (Eritrea)"
+  ],
+  [
+    "st_LS",
+    "Sesotho (Lesotho)",
+    "Southern Sotho (Lesotho)"
+  ],
+  [
+    "st_ZA",
+    "Sesotho (Afrika Borwa)",
+    "Southern Sotho (South Africa)"
+  ],
+  [
+    "su_Latn",
+    "Basa Sunda (Latin)",
+    "Sundanese (Latin)"
+  ],
+  [
+    "su_Latn_ID",
+    "Basa Sunda (Latin, Indonesia)",
+    "Sundanese (Latin, Indonesia)"
+  ],
+  [
+    "sv_AX",
+    "svenska (Åland)",
+    "Swedish (Åland Islands)"
+  ],
+  [
+    "sv_FI",
+    "svenska (Finland)",
+    "Swedish (Finland)"
+  ],
+  [
+    "sv_SE",
+    "svenska (Sverige)",
+    "Swedish (Sweden)"
+  ],
+  [
+    "sw_CD",
+    "Kiswahili (Jamhuri ya Kidemokrasia ya Kongo)",
+    "Swahili (Congo - Kinshasa)"
+  ],
+  [
+    "sw_KE",
+    "Kiswahili (Kenya)",
+    "Swahili (Kenya)"
+  ],
+  [
+    "sw_TZ",
+    "Kiswahili (Tanzania)",
+    "Swahili (Tanzania)"
+  ],
+  [
+    "sw_UG",
+    "Kiswahili (Uganda)",
+    "Swahili (Uganda)"
+  ],
+  [
+    "syr_IQ",
+    "ܣܘܪܝܝܐ (ܥܝܪܩ)",
+    "Syriac (Iraq)"
+  ],
+  [
+    "syr_SY",
+    "ܣܘܪܝܝܐ (ܣܘܪܝܐ)",
+    "Syriac (Syria)"
+  ],
+  [
+    "szl_PL",
+    "ślōnski (Polska)",
+    "Silesian (Poland)"
+  ],
+  [
+    "ta_IN",
+    "தமிழ் (இந்தியா)",
+    "Tamil (India)"
+  ],
+  [
+    "ta_LK",
+    "தமிழ் (இலங்கை)",
+    "Tamil (Sri Lanka)"
+  ],
+  [
+    "ta_MY",
+    "தமிழ் (மலேசியா)",
+    "Tamil (Malaysia)"
+  ],
+  [
+    "ta_SG",
+    "தமிழ் (சிங்கப்பூர்)",
+    "Tamil (Singapore)"
+  ],
+  [
+    "te_IN",
+    "తెలుగు (భారతదేశం)",
+    "Telugu (India)"
+  ],
+  [
+    "teo_KE",
+    "Kiteso (Kenia)",
+    "Teso (Kenya)"
+  ],
+  [
+    "teo_UG",
+    "Kiteso (Uganda)",
+    "Teso (Uganda)"
+  ],
+  [
+    "tg_TJ",
+    "тоҷикӣ (Тоҷикистон)",
+    "Tajik (Tajikistan)"
+  ],
+  [
+    "th_TH",
+    "ไทย (ไทย)",
+    "Thai (Thailand)"
+  ],
+  [
+    "ti_ER",
+    "ትግርኛ (ኤርትራ)",
+    "Tigrinya (Eritrea)"
+  ],
+  [
+    "ti_ET",
+    "ትግርኛ (ኢትዮጵያ)",
+    "Tigrinya (Ethiopia)"
+  ],
+  [
+    "tig_ER",
+    "ትግረ (ኤርትራ)",
+    "Tigre (Eritrea)"
+  ],
+  [
+    "tk_TM",
+    "türkmen dili (Türkmenistan)",
+    "Turkmen (Turkmenistan)"
+  ],
+  [
+    "tn_BW",
+    "Setswana (Botswana)",
+    "Tswana (Botswana)"
+  ],
+  [
+    "tn_ZA",
+    "Setswana (Aforika Borwa)",
+    "Tswana (South Africa)"
+  ],
+  [
+    "to_TO",
+    "lea fakatonga (Tonga)",
+    "Tongan (Tonga)"
+  ],
+  [
+    "tok_001",
+    "toki pona (ma ale)",
+    "Toki Pona (world)"
+  ],
+  [
+    "tpi_PG",
+    "Tok Pisin (Papua Niugini)",
+    "Tok Pisin (Papua New Guinea)"
+  ],
+  [
+    "tr_CY",
+    "Türkçe (Kıbrıs)",
+    "Turkish (Cyprus)"
+  ],
+  [
+    "tr_TR",
+    "Türkçe (Türkiye)",
+    "Turkish (Türkiye)"
+  ],
+  [
+    "trv_TW",
+    "patas Taroko",
+    "Taroko (Taiwan)"
+  ],
+  [
+    "trw_PK",
+    "توروالی (پاکستان)",
+    "Torwali (Pakistan)"
+  ],
+  [
+    "ts_ZA",
+    "Xitsonga",
+    "Tsonga (South Africa)"
+  ],
+  [
+    "tt_RU",
+    "татар (Россия)",
+    "Tatar (Russia)"
+  ],
+  [
+    "twq_NE",
+    "Tasawaq senni (Nižer)",
+    "Tasawaq (Niger)"
+  ],
+  [
+    "tyv_RU",
+    null,
+    "Tuvinian (Russia)"
+  ],
+  [
+    "tzm_MA",
+    "Tamaziɣt n laṭlaṣ (Meṛṛuk)",
+    "Central Atlas Tamazight (Morocco)"
+  ],
+  [
+    "ug_CN",
+    "ئۇيغۇرچە (جۇڭگو)",
+    "Uyghur (China)"
+  ],
+  [
+    "uk_UA",
+    "українська (Україна)",
+    "Ukrainian (Ukraine)"
+  ],
+  [
+    "ur_IN",
+    "اردو (بھارت)",
+    "Urdu (India)"
+  ],
+  [
+    "ur_PK",
+    "اردو (پاکستان)",
+    "Urdu (Pakistan)"
+  ],
+  [
+    "uz_Arab",
+    "اوزبیک (عربی)",
+    "Uzbek (Arabic)"
+  ],
+  [
+    "uz_Arab_AF",
+    "اوزبیک (عربی, افغانستان)",
+    "Uzbek (Arabic, Afghanistan)"
+  ],
+  [
+    "uz_Cyrl",
+    "ўзбекча (Кирил)",
+    "Uzbek (Cyrillic)"
+  ],
+  [
+    "uz_Cyrl_UZ",
+    "ўзбекча (Кирил, Ўзбекистон)",
+    "Uzbek (Cyrillic, Uzbekistan)"
+  ],
+  [
+    "uz_Latn",
+    "o‘zbek (lotin)",
+    "Uzbek (Latin)"
+  ],
+  [
+    "uz_Latn_UZ",
+    "o‘zbek (lotin, Oʻzbekiston)",
+    "Uzbek (Latin, Uzbekistan)"
+  ],
+  [
+    "vai_Latn",
+    "Vai",
+    "Vai (Latin)"
+  ],
+  [
+    "vai_Latn_LR",
+    "Vai (Laibhiya)",
+    "Vai (Latin, Liberia)"
+  ],
+  [
+    "vai_Vaii",
+    "ꕙꔤ",
+    "Vai (Vai)"
+  ],
+  [
+    "vai_Vaii_LR",
+    "ꕙꔤ (ꕞꔤꔫꕩ)",
+    "Vai (Vai, Liberia)"
+  ],
+  [
+    "ve_ZA",
+    "Tshivenḓa",
+    "Venda (South Africa)"
+  ],
+  [
+    "vec_IT",
+    "veneto (Italia)",
+    "Venetian (Italy)"
+  ],
+  [
+    "vi_VN",
+    "Tiếng Việt (Việt Nam)",
+    "Vietnamese (Vietnam)"
+  ],
+  [
+    "vmw_MZ",
+    "emakhuwa (oMosambikhi)",
+    "Makhuwa (Mozambique)"
+  ],
+  [
+    "vo_001",
+    "Volapük",
+    "Volapük (world)"
+  ],
+  [
+    "vun_TZ",
+    "Kyivunjo (Tanzania)",
+    "Vunjo (Tanzania)"
+  ],
+  [
+    "wa_BE",
+    "walon",
+    "Walloon (Belgium)"
+  ],
+  [
+    "wae_CH",
+    "Walser (Schwiz)",
+    "Walser (Switzerland)"
+  ],
+  [
+    "wal_ET",
+    "ወላይታቱ (ኢትዮጵያ)",
+    "Wolaytta (Ethiopia)"
+  ],
+  [
+    "wbp_AU",
+    "Warlpiri",
+    "Warlpiri (Australia)"
+  ],
+  [
+    "wo_SN",
+    "Wolof (Senegaal)",
+    "Wolof (Senegal)"
+  ],
+  [
+    "xh_ZA",
+    "IsiXhosa (EMzantsi Afrika)",
+    "Xhosa (South Africa)"
+  ],
+  [
+    "xnr_IN",
+    "कांगड़ी (भारत)",
+    "Kangri (India)"
+  ],
+  [
+    "xog_UG",
+    "Olusoga (Yuganda)",
+    "Soga (Uganda)"
+  ],
+  [
+    "yav_CM",
+    "nuasue (Kemelún)",
+    "Yangben (Cameroon)"
+  ],
+  [
+    "yi_UA",
+    "ייִדיש (אוקראַינע)",
+    "Yiddish (Ukraine)"
+  ],
+  [
+    "yo_BJ",
+    "Èdè Yorùbá (Bɛ̀nɛ̀)",
+    "Yoruba (Benin)"
+  ],
+  [
+    "yo_NG",
+    "Èdè Yorùbá (Nàìjíríà)",
+    "Yoruba (Nigeria)"
+  ],
+  [
+    "yrl_BR",
+    "nheẽgatu (Brasiu)",
+    "Nheengatu (Brazil)"
+  ],
+  [
+    "yrl_CO",
+    "ñengatú (Kurũbiya)",
+    "Nheengatu (Colombia)"
+  ],
+  [
+    "yrl_VE",
+    "ñengatú (Wenesuera)",
+    "Nheengatu (Venezuela)"
+  ],
+  [
+    "yue_Hans",
+    "粤语 (简体)",
+    "Cantonese (Simplified)"
+  ],
+  [
+    "yue_Hans_CN",
+    "粤语 (简体, 中华人民共和国)",
+    "Cantonese (Simplified, China)"
+  ],
+  [
+    "yue_Hant",
+    "粵語 (繁體)",
+    "Cantonese (Traditional)"
+  ],
+  [
+    "yue_Hant_CN",
+    "粵語 (繁體, 中國)",
+    "Cantonese (Traditional, China)"
+  ],
+  [
+    "yue_Hant_HK",
+    "粵語 (繁體, 中國香港特別行政區)",
+    "Cantonese (Traditional, Hong Kong SAR China)"
+  ],
+  [
+    "yue_Hant_MO",
+    "粵語 (繁體, 中國澳門特別行政區)",
+    "Cantonese (Traditional, Macao SAR China)"
+  ],
+  [
+    "za_CN",
+    "Vahcuengh (Cunghgoz)",
+    "Zhuang (China)"
+  ],
+  [
+    "zgh_MA",
+    "ⵜⴰⵎⴰⵣⵉⵖⵜ (ⵍⵎⵖⵔⵉⴱ)",
+    "Standard Moroccan Tamazight (Morocco)"
+  ],
+  [
+    "zh_Hans",
+    "中文 (简体)",
+    "Chinese (Simplified)"
+  ],
+  [
+    "zh_Hans_CN",
+    "中文 (简体, 中国)",
+    "Chinese (Simplified, China)"
+  ],
+  [
+    "zh_Hans_HK",
+    "中文 (简体, 中国香港特别行政区)",
+    "Chinese (Simplified, Hong Kong SAR China)"
+  ],
+  [
+    "zh_Hans_MO",
+    "中文 (简体, 中国澳门特别行政区)",
+    "Chinese (Simplified, Macao SAR China)"
+  ],
+  [
+    "zh_Hans_MY",
+    "中文 (简体, 马来西亚)",
+    "Chinese (Simplified, Malaysia)"
+  ],
+  [
+    "zh_Hans_SG",
+    "中文 (简体, 新加坡)",
+    "Chinese (Simplified, Singapore)"
+  ],
+  [
+    "zh_Hant",
+    "中文 (繁體)",
+    "Chinese (Traditional)"
+  ],
+  [
+    "zh_Hant_HK",
+    "中文 (繁體字, 中國香港特別行政區)",
+    "Chinese (Traditional, Hong Kong SAR China)"
+  ],
+  [
+    "zh_Hant_MO",
+    "中文 (繁體字, 中國澳門特別行政區)",
+    "Chinese (Traditional, Macao SAR China)"
+  ],
+  [
+    "zh_Hant_MY",
+    "中文 (繁體, 馬來西亞)",
+    "Chinese (Traditional, Malaysia)"
+  ],
+  [
+    "zh_Hant_TW",
+    "中文 (繁體, 台灣)",
+    "Chinese (Traditional, Taiwan)"
+  ],
+  [
+    "zh_Latn",
+    null,
+    "Chinese (Latin)"
+  ],
+  [
+    "zh_Latn_CN",
+    null,
+    "Chinese (Latin, China)"
+  ],
+  [
+    "zu_ZA",
+    "isiZulu (iNingizimu Afrika)",
+    "Zulu (South Africa)"
+  ]
+]
