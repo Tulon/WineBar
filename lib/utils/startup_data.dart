@@ -18,12 +18,14 @@
 
 import 'dart:io';
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/error_with_more_details_url.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
+import 'package:winebar/repositories/wine_locale_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
@@ -38,6 +40,7 @@ import 'local_storage_paths.dart';
 class StartupData {
   final LocalStoragePaths localStoragePaths;
   final List<WinePrefix> winePrefixes;
+  final WineLocaleRepo wineLocaleRepo;
   final WineProcessRunnerService wineProcessRunnerService;
   final bool isIntelHost;
   final bool wineWillRunUnderMuvm;
@@ -45,6 +48,7 @@ class StartupData {
   StartupData._({
     required this.localStoragePaths,
     required this.winePrefixes,
+    required this.wineLocaleRepo,
     required this.wineProcessRunnerService,
     required this.isIntelHost,
     required this.wineWillRunUnderMuvm,
@@ -149,6 +153,8 @@ class StartupData {
       localStoragePaths: localStoragePaths,
     );
 
+    final wineLocaleRepo = await WineLocaleRepo.loadFromBundle(rootBundle);
+
     final wineProcessRunningService = WineProcessRunnerService(
       toplevelTempDir: localStoragePaths.tempDir,
       logCapturingRunnerPath: LocalStoragePaths.logCapturingRunnerPath,
@@ -158,6 +164,7 @@ class StartupData {
     return StartupData._(
       localStoragePaths: localStoragePaths,
       winePrefixes: winePrefixes,
+      wineLocaleRepo: wineLocaleRepo,
       wineProcessRunnerService: wineProcessRunningService,
       isIntelHost: isIntelHost,
       wineWillRunUnderMuvm: muvmNeeded,

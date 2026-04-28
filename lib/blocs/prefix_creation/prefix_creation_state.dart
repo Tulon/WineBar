@@ -19,6 +19,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
+import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/settings_json_file.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
@@ -116,6 +117,8 @@ class PrefixCreationState extends Equatable {
   final bool useParticularD3d8To11Implementation;
   final D3d8To11Implementation selectedD3d8To11Implementation;
 
+  final ExplicitLocaleState explicitLocaleState;
+
   final PrefixCreationStatus prefixCreationStatus;
   final String? prefixCreationFailureMessage;
   final WineProcessResult? prefixCreationFailedProcessResult;
@@ -146,6 +149,7 @@ class PrefixCreationState extends Equatable {
     required this.wow64ModePreferenceWarningToBeSuppressed,
     required this.useParticularD3d8To11Implementation,
     required this.selectedD3d8To11Implementation,
+    required this.explicitLocaleState,
     required this.prefixCreationStatus,
     required this.prefixCreationFailureMessage,
     required this.prefixCreationFailedProcessResult,
@@ -175,6 +179,9 @@ class PrefixCreationState extends Equatable {
         wow64ModePreferenceWarningToBeSuppressed: false,
         useParticularD3d8To11Implementation: false,
         selectedD3d8To11Implementation: D3d8To11Implementation.dxvk,
+        explicitLocaleState: ExplicitLocaleState.initialState(
+          explicitLocale: null,
+        ),
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessage: null,
         prefixCreationFailedProcessResult: null,
@@ -202,6 +209,7 @@ class PrefixCreationState extends Equatable {
     wow64ModePreferenceWarningToBeSuppressed,
     useParticularD3d8To11Implementation,
     selectedD3d8To11Implementation,
+    explicitLocaleState,
     prefixCreationStatus,
     prefixCreationFailureMessage,
     prefixCreationFailedProcessResult,
@@ -229,6 +237,7 @@ class PrefixCreationState extends Equatable {
     bool? useParticularD3d8To11Implementation,
     D3d8To11Implementation? selectedD3d8To11Implementation,
     PrefixCreationStatus? prefixCreationStatus,
+    ExplicitLocaleState? explicitLocaleState,
     ValueGetter<String?>? prefixCreationFailureMessageGetter,
     ValueGetter<WineProcessResult?>? prefixCreationFailedProcessResultGetter,
     ValueGetter<double?>? prefixCreationStepProgressGetter,
@@ -280,6 +289,7 @@ class PrefixCreationState extends Equatable {
           this.useParticularD3d8To11Implementation,
       selectedD3d8To11Implementation:
           selectedD3d8To11Implementation ?? this.selectedD3d8To11Implementation,
+      explicitLocaleState: explicitLocaleState ?? this.explicitLocaleState,
       prefixCreationStatus: prefixCreationStatus ?? this.prefixCreationStatus,
       prefixCreationFailureMessage: prefixCreationFailureMessageGetter != null
           ? prefixCreationFailureMessageGetter()

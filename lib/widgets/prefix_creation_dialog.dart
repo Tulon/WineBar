@@ -29,8 +29,10 @@ import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_build_source.dart';
 import 'package:winebar/utils/tappable_link.dart';
 import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
+import 'package:winebar/widgets/explicit_locale_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 import 'package:winebar/widgets/process_logs_view_widget.dart';
+import 'package:winebar/widgets/scroll_top_bottom_button.dart';
 import 'package:winebar/widgets/warning_widget.dart';
 import 'package:winebar/widgets/wow64_preference_toggle.dart';
 
@@ -67,6 +69,7 @@ class _PrefixCreationStatefulDialog extends StatefulWidget {
 class _PrefixCreationDialogState extends State<_PrefixCreationStatefulDialog> {
   final pageController = PageController();
   final prefixNameController = TextEditingController();
+  final optionsPageScrollController = ScrollController();
   late final List<_PrefixCreationStep> _steps;
 
   _PrefixCreationDialogState() {
@@ -93,6 +96,7 @@ class _PrefixCreationDialogState extends State<_PrefixCreationStatefulDialog> {
   void dispose() {
     pageController.dispose();
     prefixNameController.dispose();
+    optionsPageScrollController.dispose();
     super.dispose();
   }
 
@@ -638,6 +642,7 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
         !state.prefixCreationStatus.isInProgress;
 
     return SingleChildScrollView(
+      controller: widgetState.optionsPageScrollController,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         spacing: 16.0,
@@ -688,6 +693,25 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
             selectedImplementation: state.selectedD3d8To11Implementation,
             onImplementationSelected: bloc.setSelectedD3d8To11Implementation,
           ),
+          ExplicitLocaleWidget(
+            enabled: !state.prefixCreationStatus.isInProgress,
+            state: state.explicitLocaleState,
+            onStateChanged: (newState) => bloc.setExplicitLocaleState(newState),
+          ),
+          if (state.prefixCreationFailureMessage != null)
+            ErrorMessageWidget(
+              width: double.infinity,
+              text: state.prefixCreationFailureMessage!,
+              trailingLink: state.prefixCreationFailedProcessResult == null
+                  ? null
+                  : TappableLink(
+                      linkText: 'View Logs.',
+                      onTapped: () => _showWineProcessLogs(
+                        context: context,
+                        logs: state.prefixCreationFailedProcessResult!.logs,
+                      ),
+                    ),
+            ),
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -727,23 +751,43 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
               ),
             ),
           ),
-          if (state.prefixCreationFailureMessage != null)
-            ErrorMessageWidget(
-              width: double.infinity,
-              text: state.prefixCreationFailureMessage!,
-              trailingLink: state.prefixCreationFailedProcessResult == null
-                  ? null
-                  : TappableLink(
-                      linkText: 'View Logs.',
-                      onTapped: () => _showWineProcessLogs(
-                        context: context,
-                        logs: state.prefixCreationFailedProcessResult!.logs,
-                      ),
-                    ),
-            ),
         ],
       ),
     );
+  }
+
+  @override
+  List<Widget> buildPageTitleTrailingWidgets({
+    required BuildContext context,
+    required PrefixCreationBloc bloc,
+    required PrefixCreationState state,
+  }) {
+    return [
+      ScrollTopBottomButton(
+        scrollController: widgetState.optionsPageScrollController,
+        childBuilder:
+            ({required bool scrollToBottom, required VoidCallback onPressed}) {
+              return OverflowPadding(
+                // We apply a negative padding in order to keep
+                // the step title height the same for all steps.
+                // Without that, the IconButton would force a
+                // taller page title for this particular step.
+                padding: EdgeInsets.all(-8.0),
+                child: IconButton.outlined(
+                  icon: Icon(
+                    scrollToBottom
+                        ? Icons.keyboard_double_arrow_down
+                        : Icons.keyboard_double_arrow_up,
+                  ),
+                  tooltip: scrollToBottom
+                      ? 'Scroll to bottom'
+                      : 'Scroll to top',
+                  onPressed: onPressed,
+                ),
+              );
+            },
+      ),
+    ];
   }
 
   void _showWineProcessLogs({

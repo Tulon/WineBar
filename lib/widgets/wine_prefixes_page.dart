@@ -203,13 +203,15 @@ class WinePrefixesPage extends StatelessWidget {
       return;
     }
 
+    final prefixListBloc = BlocProvider.of<PrefixListBloc>(context);
+
     unawaited(
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) => PrefixCreationDialog(
           onPrefixCreated: (prefix) {
-            BlocProvider.of<PrefixListBloc>(context).addPrefix(prefix);
+            prefixListBloc.addPrefix(prefix);
           },
         ),
       ),

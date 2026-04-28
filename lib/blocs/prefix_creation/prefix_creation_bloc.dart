@@ -27,6 +27,7 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
+import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/suppressable_warning.dart';
@@ -417,6 +418,12 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     }
   }
 
+  void setExplicitLocaleState(ExplicitLocaleState explicitLocaleState) {
+    if (state.explicitLocaleState != explicitLocaleState) {
+      emit(state.copyWith(explicitLocaleState: explicitLocaleState));
+    }
+  }
+
   void startCreatingPrefix() {
     assert(!state.prefixCreationStatus.isInProgress);
 
@@ -528,6 +535,8 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         d3d8To11Implementation: state.useParticularD3d8To11Implementation
             ? state.selectedD3d8To11Implementation
             : null,
+        explicitLocalePosixName:
+            state.explicitLocaleState.explicitLocalePosixName,
       );
 
       final winePrefix = WinePrefix(

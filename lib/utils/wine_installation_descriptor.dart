@@ -260,6 +260,8 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
 
     final envVars = <String, String>{};
 
+    _populateLocaleEnvVars(envVars, winePrefix);
+
     if (forWinetricks) {
       envVars['WINE'] = wineAndWineserverExecutables.wineExecutable;
 
@@ -430,6 +432,26 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
       throw Exception(errMsgIfNull);
     } else {
       return value;
+    }
+  }
+
+  void _populateLocaleEnvVars(
+    Map<String, String> envVars,
+    WinePrefix winePrefix,
+  ) {
+    final systemLocaleVars = Platform.environment.entries.where(
+      (entry) => entry.key == 'LANG' || entry.key.startsWith('LC_'),
+    );
+
+    final localeName = winePrefix.descriptor.explicitLocalePosixName;
+
+    for (final entry in systemLocaleVars) {
+      envVars[entry.key] = localeName ?? entry.value;
+    }
+
+    if (envVars['LANG'] == null && localeName != null) {
+      // A fallback if no language-related envrionment variables were set.
+      envVars['LANG'] = localeName;
     }
   }
 

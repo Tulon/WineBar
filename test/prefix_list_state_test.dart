@@ -32,6 +32,7 @@ WinePrefix _makePrefix({required String name, required String outerDir}) {
       hiDpiScale: null,
       wow64ModePreferred: null,
       d3d8To11Implementation: null,
+      explicitLocalePosixName: null,
     ),
   );
 }
