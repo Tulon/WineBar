@@ -28,7 +28,7 @@ import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_build_source.dart';
 import 'package:winebar/utils/tappable_link.dart';
-import 'package:winebar/widgets/d3d_8_to_11_implementation_selection_widget.dart';
+import 'package:winebar/widgets/explicit_d3d_8_to_11_implementation_widget.dart';
 import 'package:winebar/widgets/explicit_locale_widget.dart';
 import 'package:winebar/widgets/hi_dpi_scale_selection_widget.dart';
 import 'package:winebar/widgets/process_logs_view_widget.dart';
@@ -684,19 +684,15 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
               onWarningToBeSuppressedToggled:
                   bloc.setWow64ModePreferenceWarningToBeSuppressed,
             ),
-          D3d8To11ImplementationSelectionWidget(
+          ExplicitD3d8To11ImplementationWidget(
             enabled: !state.prefixCreationStatus.isInProgress,
-            useParticularImplementation:
-                state.useParticularD3d8To11Implementation,
-            onUseParticularImplementationToggled:
-                bloc.setUseParticularD3d8To11Implementation,
-            selectedImplementation: state.selectedD3d8To11Implementation,
-            onImplementationSelected: bloc.setSelectedD3d8To11Implementation,
+            state: state.explicitD3d8To11ImplementationState,
+            onStateChanged: bloc.setExplicitD3d8To11ImplementationState,
           ),
           ExplicitLocaleWidget(
             enabled: !state.prefixCreationStatus.isInProgress,
             state: state.explicitLocaleState,
-            onStateChanged: (newState) => bloc.setExplicitLocaleState(newState),
+            onStateChanged: bloc.setExplicitLocaleState,
           ),
           if (state.prefixCreationFailureMessage != null)
             ErrorMessageWidget(

@@ -19,21 +19,19 @@
 import 'package:boxy/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
+import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
 
-class D3d8To11ImplementationSelectionWidget extends StatelessWidget {
+class ExplicitD3d8To11ImplementationWidget extends StatelessWidget {
   final bool enabled;
-  final bool useParticularImplementation;
-  final void Function(bool) onUseParticularImplementationToggled;
-  final D3d8To11Implementation selectedImplementation;
-  final void Function(D3d8To11Implementation) onImplementationSelected;
+  final ExplicitD3d8To11ImplementationState state;
+  final void Function(ExplicitD3d8To11ImplementationState newState)
+  onStateChanged;
 
-  const D3d8To11ImplementationSelectionWidget({
+  const ExplicitD3d8To11ImplementationWidget({
     super.key,
     required this.enabled,
-    required this.useParticularImplementation,
-    required this.onUseParticularImplementationToggled,
-    required this.selectedImplementation,
-    required this.onImplementationSelected,
+    required this.state,
+    required this.onStateChanged,
   });
 
   @override
@@ -64,11 +62,13 @@ class D3d8To11ImplementationSelectionWidget extends StatelessWidget {
                     width: 2.0,
                   ),
                   activeColor: enabled ? null : theme.disabledColor,
-                  value: useParticularImplementation,
+                  value: state.useParticularD3d8To11Implementation,
                   onChanged: !enabled
                       ? null
-                      : (checked) => onUseParticularImplementationToggled(
-                          checked == true,
+                      : (checked) => onStateChanged(
+                          state.copyWith(
+                            useParticularD3d8To11Implementation: checked,
+                          ),
                         ),
                 ),
               ),
@@ -81,16 +81,18 @@ class D3d8To11ImplementationSelectionWidget extends StatelessWidget {
             ],
           ),
           DropdownMenu<D3d8To11Implementation>(
-            enabled: enabled && useParticularImplementation,
+            enabled: enabled && state.useParticularD3d8To11Implementation,
             expandedInsets: EdgeInsets.zero,
-            initialSelection: selectedImplementation,
+            initialSelection: state.selectedD3d8To11Implementation,
 
             // We don't want searching by text.
             requestFocusOnTap: false,
 
             onSelected: (impl) {
               if (impl != null) {
-                onImplementationSelected(impl);
+                onStateChanged(
+                  state.copyWith(selectedD3d8To11Implementation: impl),
+                );
               }
             },
             dropdownMenuEntries: D3d8To11Implementation.values
@@ -103,8 +105,8 @@ class D3d8To11ImplementationSelectionWidget extends StatelessWidget {
                 .toList(),
           ),
           SelectableText(
-            useParticularImplementation
-                ? selectedImplementation.explanationText
+            state.useParticularD3d8To11Implementation
+                ? state.selectedD3d8To11Implementation.explanationText
                 : 'A default implementation for this particular Wine build will be used',
             style: enabled ? null : TextStyle(color: theme.disabledColor),
           ),
