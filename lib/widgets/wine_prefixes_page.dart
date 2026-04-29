@@ -34,6 +34,7 @@ import 'package:winebar/models/prefix_list_event.dart';
 import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
+import 'package:winebar/utils/open_url.dart';
 import 'package:winebar/widgets/gesture_recognizer_holder.dart';
 
 import '../blocs/prefix_list/prefix_list_bloc.dart';
@@ -100,25 +101,43 @@ class WinePrefixesPage extends StatelessWidget {
   }
 
   Widget _buildDonationButton(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () {
-        unawaited(
-          launchUrlString('https://ko-fi.com/tulon')
-              .then<void>((_) {})
-              .catchError(
-                (e) => GetIt.I.get<Logger>().w(
-                  'Failed opening the donation URL',
-                  error: e,
-                ),
+    return MenuAnchor(
+      menuChildren: <Widget>[
+        MenuItemButton(
+          // See here: https://stackoverflow.com/a/78692532
+          requestFocusOnHover: false,
+
+          leadingIcon: const Icon(SimpleIcons.kofi),
+          child: const Text('Ko-fi'),
+          onPressed: () => openUrlAndLogErrors('https://ko-fi.com/tulon'),
+        ),
+        MenuItemButton(
+          // See here: https://stackoverflow.com/a/78692532
+          requestFocusOnHover: false,
+
+          leadingIcon: const Icon(SimpleIcons.liberapay),
+          child: const Text('Liberapay'),
+          onPressed: () =>
+              openUrlAndLogErrors('https://liberapay.com/Tulon/donate'),
+        ),
+      ],
+      builder:
+          (BuildContext context, MenuController controller, Widget? child) {
+            return ElevatedButton.icon(
+              onPressed: () {
+                if (controller.isOpen) {
+                  controller.close();
+                } else {
+                  controller.open();
+                }
+              },
+              label: const Text('Donate'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.deepPurpleAccent,
               ),
-        );
-      },
-      icon: const Icon(SimpleIcons.kofi),
-      label: const Text('Support me on Ko-fi'),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.deepPurpleAccent,
-      ),
+            );
+          },
     );
   }
 
@@ -134,22 +153,12 @@ class WinePrefixesPage extends StatelessWidget {
     }
 
     final licenseTapRecognizer = TapGestureRecognizer()
-      ..onTap = () {
-        unawaited(
-          launchUrlString(
-            'https://www.gnu.org/licenses/gpl-3.0-standalone.html',
-          ).then<void>((_) {}).catchError((_) {}),
-        );
-      };
+      ..onTap = () => openUrlAndLogErrors(
+        'https://www.gnu.org/licenses/gpl-3.0-standalone.html',
+      );
 
     final authorNameTapRecognizer = TapGestureRecognizer()
-      ..onTap = () {
-        unawaited(
-          launchUrlString(
-            'https://tulon.github.io/about/',
-          ).then<void>((_) {}).catchError((_) {}),
-        );
-      };
+      ..onTap = () => openUrlAndLogErrors('https://tulon.github.io/about/');
 
     const linkStyle = TextStyle(
       decoration: TextDecoration.underline,
