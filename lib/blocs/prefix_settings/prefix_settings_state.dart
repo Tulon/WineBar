@@ -20,6 +20,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
+import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
 import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/settings_json_file.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
@@ -75,8 +76,7 @@ class PrefixSettingsState extends Equatable {
   /// this value plays no role.
   final bool wow64ModePreferenceWarningToBeSuppressed;
 
-  final bool useParticularD3d8To11Implementation;
-  final D3d8To11Implementation selectedD3d8To11Implementation;
+  final ExplicitD3d8To11ImplementationState explicitD3d8To11ImplementationState;
 
   final ExplicitLocaleState explicitLocaleState;
 
@@ -95,8 +95,7 @@ class PrefixSettingsState extends Equatable {
     required this.wow64ModePreferred,
     required this.wow64ModePreferenceWarning,
     required this.wow64ModePreferenceWarningToBeSuppressed,
-    required this.useParticularD3d8To11Implementation,
-    required this.selectedD3d8To11Implementation,
+    required this.explicitD3d8To11ImplementationState,
     required this.explicitLocaleState,
     required this.prefixUpdateStatus,
     required this.prefixUpdateFailureMessage,
@@ -116,9 +115,13 @@ class PrefixSettingsState extends Equatable {
            wow64ModeSelected: wow64ModePreferred,
          ),
          wow64ModePreferenceWarningToBeSuppressed: false,
-         useParticularD3d8To11Implementation: d3d8To11Implementation != null,
-         selectedD3d8To11Implementation:
-             d3d8To11Implementation ?? D3d8To11Implementation.dxvk,
+         explicitD3d8To11ImplementationState:
+             ExplicitD3d8To11ImplementationState(
+               useParticularD3d8To11Implementation:
+                   d3d8To11Implementation != null,
+               selectedD3d8To11Implementation:
+                   d3d8To11Implementation ?? D3d8To11Implementation.dxvk,
+             ),
          explicitLocaleState: ExplicitLocaleState.initialState(
            explicitLocale: explicitLocale,
          ),
@@ -134,8 +137,7 @@ class PrefixSettingsState extends Equatable {
     wow64ModePreferred,
     wow64ModePreferenceWarning,
     wow64ModePreferenceWarningToBeSuppressed,
-    useParticularD3d8To11Implementation,
-    selectedD3d8To11Implementation,
+    explicitD3d8To11ImplementationState,
     explicitLocaleState,
     prefixUpdateStatus,
     prefixUpdateFailureMessage,
@@ -148,8 +150,7 @@ class PrefixSettingsState extends Equatable {
     ValueGetter<bool?>? wow64ModePreferredGetter,
     ValueGetter<WineArchWarning?>? wow64ModePreferenceWarningGetter,
     bool? wow64ModePreferenceWarningToBeSuppressed,
-    bool? useParticularD3d8To11Implementation,
-    D3d8To11Implementation? selectedD3d8To11Implementation,
+    ExplicitD3d8To11ImplementationState? explicitD3d8To11ImplementationState,
     ExplicitLocaleState? explicitLocaleState,
     PrefixUpdateStatus? prefixUpdateStatus,
     ValueGetter<String?>? prefixUpdateFailureMessageGetter,
@@ -167,11 +168,9 @@ class PrefixSettingsState extends Equatable {
       wow64ModePreferenceWarningToBeSuppressed:
           wow64ModePreferenceWarningToBeSuppressed ??
           this.wow64ModePreferenceWarningToBeSuppressed,
-      useParticularD3d8To11Implementation:
-          useParticularD3d8To11Implementation ??
-          this.useParticularD3d8To11Implementation,
-      selectedD3d8To11Implementation:
-          selectedD3d8To11Implementation ?? this.selectedD3d8To11Implementation,
+      explicitD3d8To11ImplementationState:
+          explicitD3d8To11ImplementationState ??
+          this.explicitD3d8To11ImplementationState,
       explicitLocaleState: explicitLocaleState ?? this.explicitLocaleState,
       prefixUpdateStatus: prefixUpdateStatus ?? this.prefixUpdateStatus,
       prefixUpdateFailureMessage: prefixUpdateFailureMessageGetter != null

@@ -24,6 +24,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
+import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
 import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
@@ -93,15 +94,11 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
     );
   }
 
-  void setUseParticularD3d8To11Implementation(bool use) {
-    if (state.useParticularD3d8To11Implementation != use) {
-      emit(state.copyWith(useParticularD3d8To11Implementation: use));
-    }
-  }
-
-  void setSelectedD3d8To11Implementation(D3d8To11Implementation selectedImpl) {
-    if (state.selectedD3d8To11Implementation != selectedImpl) {
-      emit(state.copyWith(selectedD3d8To11Implementation: selectedImpl));
+  void setExplicitD3d8To11ImplementationState(
+    ExplicitD3d8To11ImplementationState d3dImplState,
+  ) {
+    if (state.explicitD3d8To11ImplementationState != d3dImplState) {
+      emit(state.copyWith(explicitD3d8To11ImplementationState: d3dImplState));
     }
   }
 
@@ -162,8 +159,10 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
           .wineInstallationDescriptorForWineInstallDir(wineInstallDir);
 
       final dxvkWanted =
-          state.useParticularD3d8To11Implementation &&
-          state.selectedD3d8To11Implementation == D3d8To11Implementation.dxvk;
+          state
+              .explicitD3d8To11ImplementationState
+              .explicitlySelectedD3d8To11Implementation ==
+          D3d8To11Implementation.dxvk;
 
       final dxvkInstallationPlan = await dxvkInstallationService
           .buildDxvkInstallationPlan(
@@ -199,10 +198,9 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
         descriptor: prefix.descriptor.copyWith(
           hiDpiScaleGetter: () => state.hiDpiScale,
           wow64ModePreferredGetter: () => state.wow64ModePreferred,
-          d3d8To11ImplementationGetter: () =>
-              state.useParticularD3d8To11Implementation
-              ? state.selectedD3d8To11Implementation
-              : null,
+          d3d8To11ImplementationGetter: () => state
+              .explicitD3d8To11ImplementationState
+              .explicitlySelectedD3d8To11Implementation,
           explicitLocalePosixNameGetter: () =>
               state.explicitLocaleState.explicitLocalePosixName,
         ),
