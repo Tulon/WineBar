@@ -21,6 +21,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:winebar/exceptions/error_with_more_details_url.dart';
 import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/cast_or_null.dart';
+import 'package:winebar/utils/open_url.dart';
 import 'package:winebar/utils/tappable_link.dart';
 
 import '../utils/startup_data.dart';
@@ -120,7 +121,7 @@ class TopLevelWidget extends StatelessWidget {
                       ? null
                       : TappableLink(
                           linkText: 'More details.',
-                          onTapped: () => launchUrlString(moreDetailsUrl),
+                          onTapped: () => openUrlAndLogErrors(moreDetailsUrl),
                         ),
                 ),
               ],
