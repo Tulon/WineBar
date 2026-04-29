@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:winebar/exceptions/error_with_more_details_url.dart';
 import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/cast_or_null.dart';

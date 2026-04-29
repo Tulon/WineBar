@@ -18,7 +18,6 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:winebar/models/d3d_8_to_11_implementation.dart';
 import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
 import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/settings_json_file.dart';
