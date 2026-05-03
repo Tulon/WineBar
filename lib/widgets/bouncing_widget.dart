@@ -44,8 +44,8 @@ class BouncingWidget extends StatefulWidget {
 
 class _BouncingWidgetState extends State<BouncingWidget>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
 
   @override
   void initState() {

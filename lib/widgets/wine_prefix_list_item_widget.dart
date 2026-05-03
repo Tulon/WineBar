@@ -19,9 +19,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
+import 'package:winebar/blocs/prefix_cloning/prefix_cloning_bloc.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
+import 'package:winebar/widgets/prefix_cloning_dialog.dart';
 
 import '../models/wine_prefix.dart';
 import 'wine_prefix_page.dart';
@@ -41,7 +44,7 @@ class WinePrefixListItemWidget extends StatefulWidget {
 }
 
 class _WinePrefixListItemState extends State<WinePrefixListItemWidget> {
-  late String prefixName;
+  late final String prefixName;
 
   @override
   void initState() {
@@ -55,36 +58,32 @@ class _WinePrefixListItemState extends State<WinePrefixListItemWidget> {
     final prefix = widget.prefix;
     final theme = Theme.of(context);
 
-    final canEnter = switch (prefix.status) {
-      WinePrefixStatus.operational => true,
-      WinePrefixStatus.broken => false,
-      WinePrefixStatus.beingConstructed => false,
-      WinePrefixStatus.beingDeleted => false,
-    };
-
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       elevation: 3.0,
-      child: ListTile(
-        title: Text(prefix.descriptor.name, overflow: TextOverflow.ellipsis),
-        enabled: canEnter,
-        contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        leading: _buildPrefixMenuButton(context: context, prefix: prefix),
-        trailing: prefix.hasRunningProcesses
-            ? Tooltip(
-                // We could have displayed the number of apps
-                // running, but that number happens to be unreliable
-                // for reasons described in README.md.
-                message: 'Apps are running in this prefix',
-                child: Icon(
-                  MdiIcons.hexagonMultiple,
-                  color: theme.colorScheme.primary,
-                ),
-              )
-            : null,
-        onTap: () => canEnter
-            ? _startNavigatingToPrefix(context: context, winePrefix: prefix)
-            : null,
+      child: ListenableBuilder(
+        listenable: prefix,
+        builder: (context, _) => ListTile(
+          title: Text(prefix.descriptor.name, overflow: TextOverflow.ellipsis),
+          enabled: prefix.status.mayEnter,
+          contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          leading: _buildPrefixMenuButton(context: context, prefix: prefix),
+          trailing: prefix.hasRunningProcesses
+              ? Tooltip(
+                  // We could have displayed the number of apps
+                  // running, but that number happens to be unreliable
+                  // for reasons described in README.md.
+                  message: 'Apps are running in this prefix',
+                  child: Icon(
+                    MdiIcons.hexagonMultiple,
+                    color: theme.colorScheme.primary,
+                  ),
+                )
+              : null,
+          onTap: () => prefix.status.mayEnter
+              ? _startNavigatingToPrefix(context: context, winePrefix: prefix)
+              : null,
+        ),
       ),
     );
   }
@@ -93,41 +92,83 @@ class _WinePrefixListItemState extends State<WinePrefixListItemWidget> {
     required BuildContext context,
     required WinePrefix prefix,
   }) {
-    switch (prefix.status) {
-      case WinePrefixStatus.beingDeleted:
-        return IconButton(icon: const Icon(Icons.delete), onPressed: null);
-      case WinePrefixStatus.broken:
-      case WinePrefixStatus.beingConstructed:
-      case WinePrefixStatus.operational:
-        return MenuAnchor(
-          menuChildren: <Widget>[
-            MenuItemButton(
-              // See here: https://stackoverflow.com/a/78692532
-              requestFocusOnHover: false,
+    final menuItems = <Widget>[];
 
-              leadingIcon: const Icon(Icons.delete_outlined),
-              child: const Text('Delete'),
-              onPressed: () => _maybeShowPrefixDeletionConfirmationDialog(
-                context: context,
-                prefix: prefix,
-              ),
-            ),
-          ],
-          builder:
-              (BuildContext context, MenuController controller, Widget? child) {
-                return IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {
-                    if (controller.isOpen) {
-                      controller.close();
-                    } else {
-                      controller.open();
-                    }
-                  },
-                );
-              },
-        );
+    if (prefix.status.mayClone) {
+      menuItems.add(
+        MenuItemButton(
+          // See here: https://stackoverflow.com/a/78692532
+          requestFocusOnHover: false,
+
+          leadingIcon: const Icon(Icons.copy),
+          child: const Text('Clone'),
+          onPressed: () => _maybeShowPrefixCloningConfirmationDialog(
+            context: context,
+            prefix: prefix,
+          ),
+        ),
+      );
     }
+
+    if (prefix.status.mayDelete) {
+      menuItems.add(
+        MenuItemButton(
+          // See here: https://stackoverflow.com/a/78692532
+          requestFocusOnHover: false,
+
+          leadingIcon: const Icon(Icons.delete_outlined),
+          child: const Text('Delete'),
+          onPressed: () => _maybeShowPrefixDeletionConfirmationDialog(
+            context: context,
+            prefix: prefix,
+          ),
+        ),
+      );
+    }
+
+    if (menuItems.isEmpty) {
+      return IconButton(icon: Icon(prefix.status.menuIcon), onPressed: null);
+    } else {
+      return MenuAnchor(
+        menuChildren: menuItems,
+        builder:
+            (BuildContext context, MenuController controller, Widget? child) {
+              return IconButton(
+                icon: Icon(prefix.status.menuIcon),
+                onPressed: () {
+                  if (controller.isOpen) {
+                    controller.close();
+                  } else {
+                    controller.open();
+                  }
+                },
+              );
+            },
+      );
+    }
+  }
+
+  Future<void> _maybeShowPrefixCloningConfirmationDialog({
+    required BuildContext context,
+    required WinePrefix prefix,
+  }) async {
+    if (maybeTellUserToFinishRunningApps(
+      context: context,
+      appsRunningInThisPrefixAreAProblem: prefix,
+    )) {
+      return;
+    }
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return BlocProvider(
+          create: (context) => PrefixCloningBloc(onPrefixCloned: (_) {}),
+          child: PrefixCloningDialog(prefixToClone: prefix),
+        );
+      },
+    );
   }
 
   Future<void> _maybeShowPrefixDeletionConfirmationDialog({

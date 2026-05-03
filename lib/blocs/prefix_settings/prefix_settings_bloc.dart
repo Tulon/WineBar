@@ -26,6 +26,7 @@ import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
 import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
 import 'package:winebar/models/explicit_locale_state.dart';
+import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
@@ -120,7 +121,7 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
         prefixUpdateStatus: PrefixUpdateStatus.starting,
 
         prefixUpdateFailureMessageGetter: () => null,
-        prefixUpdateFailedProcessResultGetter: () => null,
+        prefixUpdateFailedProcessLogs: const [],
       ),
     );
 
@@ -297,7 +298,7 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
       state.copyWith(
         prefixUpdateStatus: PrefixUpdateStatus.succeeded,
         prefixUpdateFailureMessageGetter: () => null,
-        prefixUpdateFailedProcessResultGetter: () => null,
+        prefixUpdateFailedProcessLogs: const [],
       ),
     );
 
@@ -305,15 +306,15 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
   }
 
   void _processPrefixUpdateFailure(Object error) {
-    final processResult = error is WineCommandFailedException
-        ? error.processResult
-        : null;
+    final processLogs = error is ProcessFailedException
+        ? error.processLogs
+        : const <ProcessLog>[];
 
     emit(
       state.copyWith(
         prefixUpdateStatus: PrefixUpdateStatus.failed,
         prefixUpdateFailureMessageGetter: () => error.toString(),
-        prefixUpdateFailedProcessResultGetter: () => processResult,
+        prefixUpdateFailedProcessLogs: processLogs,
       ),
     );
   }

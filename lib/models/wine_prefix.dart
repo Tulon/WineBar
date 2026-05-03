@@ -19,7 +19,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/generic_exception.dart';
@@ -31,15 +31,49 @@ import 'package:winebar/utils/startup_data.dart';
 import 'prefix_descriptor.dart';
 
 enum WinePrefixStatus {
-  operational,
+  operational(
+    mayEnter: true,
+    mayClone: true,
+    mayDelete: true,
+    menuIcon: Icons.more_vert,
+  ),
 
   /// Indicates the prefix's directory exists on the file system but
   /// something is missing or broken in it, making the prefix unusable.
   /// The only thing a user can do with such a prefix is to delete it.
-  broken,
+  broken(
+    mayEnter: false,
+    mayClone: false,
+    mayDelete: true,
+    menuIcon: Icons.more_vert,
+  ),
 
-  beingConstructed,
-  beingDeleted,
+  beingDeleted(
+    mayEnter: false,
+    mayClone: false,
+    mayDelete: false,
+    menuIcon: Icons.delete,
+  );
+
+  /// Whether the user can enter this prefix in order to install / run apps
+  /// in it.
+  final bool mayEnter;
+
+  /// Whether this prefix may be cloned into a new one.
+  final bool mayClone;
+
+  /// Whether this prefix may be deleted.
+  final bool mayDelete;
+
+  /// The icon to use for the context menu button in the list of prefixes.
+  final IconData menuIcon;
+
+  const WinePrefixStatus({
+    required this.mayEnter,
+    required this.mayClone,
+    required this.mayDelete,
+    required this.menuIcon,
+  });
 }
 
 typedef WinePrefixCreatedCallback = void Function(WinePrefix prefix);
@@ -80,6 +114,8 @@ abstract interface class WinePrefix
   }
 
   WinePrefixStatus get status;
+
+  void updateStatus(WinePrefixStatus status);
 
   WinePrefixDirStructure get dirStructure;
 
@@ -126,6 +162,14 @@ class _WinePrefix with ChangeNotifier implements WinePrefix {
   }
 
   @override
+  void updateStatus(WinePrefixStatus status) {
+    if (this.status != status) {
+      this.status = status;
+      notifyListeners();
+    }
+  }
+
+  @override
   void updateDescriptor(WinePrefixDescriptor newDescriptor) {
     descriptor = newDescriptor;
     notifyListeners();
@@ -146,16 +190,10 @@ class _WinePrefix with ChangeNotifier implements WinePrefix {
 
   @override
   void startDeleting() {
-    switch (status) {
-      case WinePrefixStatus.operational:
-      case WinePrefixStatus.broken:
-        break;
-      case WinePrefixStatus.beingDeleted:
-        return;
-      case WinePrefixStatus.beingConstructed:
-        throw GenericException(
-          "Trying to delete a prefix that's still being constructed",
-        );
+    if (!status.mayDelete) {
+      throw GenericException(
+        "This prefix is in a state were it can't be deleted",
+      );
     }
 
     status = WinePrefixStatus.beingDeleted;

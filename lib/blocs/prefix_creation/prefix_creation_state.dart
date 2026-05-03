@@ -20,9 +20,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
 import 'package:winebar/models/explicit_locale_state.dart';
+import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/settings_json_file.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
-import 'package:winebar/services/wine_process_runner_service.dart';
 
 import '../../models/wine_build.dart';
 import '../../models/wine_build_source.dart';
@@ -120,7 +120,7 @@ class PrefixCreationState extends Equatable {
 
   final PrefixCreationStatus prefixCreationStatus;
   final String? prefixCreationFailureMessage;
-  final WineProcessResult? prefixCreationFailedProcessResult;
+  final List<ProcessLog> prefixCreationFailedProcessLogs;
 
   /// Corresponds to a progress (between 0 and 1) in those states
   /// where [PrefixCreationStatus.isInProgress] is true. A null value
@@ -150,7 +150,7 @@ class PrefixCreationState extends Equatable {
     required this.explicitLocaleState,
     required this.prefixCreationStatus,
     required this.prefixCreationFailureMessage,
-    required this.prefixCreationFailedProcessResult,
+    required this.prefixCreationFailedProcessLogs,
     required this.prefixCreationStepProgress,
   }) {
     assert(currentStep.index <= maxAccessibleStep.index);
@@ -182,7 +182,7 @@ class PrefixCreationState extends Equatable {
         ),
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessage: null,
-        prefixCreationFailedProcessResult: null,
+        prefixCreationFailedProcessLogs: const [],
         prefixCreationStepProgress: null,
       );
 
@@ -209,7 +209,7 @@ class PrefixCreationState extends Equatable {
     explicitLocaleState,
     prefixCreationStatus,
     prefixCreationFailureMessage,
-    prefixCreationFailedProcessResult,
+    prefixCreationFailedProcessLogs,
     prefixCreationStepProgress,
   ];
 
@@ -235,7 +235,7 @@ class PrefixCreationState extends Equatable {
     PrefixCreationStatus? prefixCreationStatus,
     ExplicitLocaleState? explicitLocaleState,
     ValueGetter<String?>? prefixCreationFailureMessageGetter,
-    ValueGetter<WineProcessResult?>? prefixCreationFailedProcessResultGetter,
+    List<ProcessLog>? prefixCreationFailedProcessLogs,
     ValueGetter<double?>? prefixCreationStepProgressGetter,
   }) {
     return PrefixCreationState(
@@ -288,10 +288,9 @@ class PrefixCreationState extends Equatable {
       prefixCreationFailureMessage: prefixCreationFailureMessageGetter != null
           ? prefixCreationFailureMessageGetter()
           : prefixCreationFailureMessage,
-      prefixCreationFailedProcessResult:
-          prefixCreationFailedProcessResultGetter != null
-          ? prefixCreationFailedProcessResultGetter()
-          : prefixCreationFailedProcessResult,
+      prefixCreationFailedProcessLogs:
+          prefixCreationFailedProcessLogs ??
+          this.prefixCreationFailedProcessLogs,
       prefixCreationStepProgress: prefixCreationStepProgressGetter != null
           ? prefixCreationStepProgressGetter()
           : prefixCreationStepProgress,

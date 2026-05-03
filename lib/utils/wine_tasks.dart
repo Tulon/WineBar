@@ -58,7 +58,7 @@ class WineTasks {
   /// this function to be completed with an error.
   ///
   /// If the Wine process exists with a non-zero status, the returned
-  /// Future will be completed with [WineCommandFailedException].
+  /// Future will be completed with [ProcessFailedException].
   Future<void> initializeWinePrefix({
     void Function(void Function() cancel)? cancelHookReceiver,
     required WinePrefix winePrefix,
@@ -88,9 +88,9 @@ class WineTasks {
     final processResult = await wineProcess.result;
 
     if (processResult.exitCode != 0) {
-      throw WineCommandFailedException(
+      throw ProcessFailedException(
         'The "wineboot -u" command failed',
-        processResult: processResult,
+        processLogs: processResult.logs,
       );
     }
   }
@@ -104,7 +104,7 @@ class WineTasks {
   /// this function to be completed with an error.
   ///
   /// If the Wine process exists with a non-zero status, the returned
-  /// Future will be completed with [WineCommandFailedException].
+  /// Future will be completed with [ProcessFailedException].
   Future<void> setHiDpiScale({
     required double hiDpiScale,
     void Function(void Function() cancel)? cancelHookReceiver,
@@ -143,9 +143,9 @@ class WineTasks {
     final processResult = await wineProcess.result;
 
     if (processResult.exitCode != 0) {
-      throw WineCommandFailedException(
+      throw ProcessFailedException(
         'The "wine reg" command failed',
-        processResult: processResult,
+        processLogs: processResult.logs,
       );
     }
   }
@@ -169,7 +169,7 @@ class WineTasks {
   /// this function to be completed with an error.
   ///
   /// If the Wine process exists with a non-zero status, the returned
-  /// Future will be completed with [WineCommandFailedException].
+  /// Future will be completed with [ProcessFailedException].
   Future<void> setupDxvkDllOverrides({
     void Function(void Function() cancel)? cancelHookReceiver,
     required StartupData startupData,
@@ -223,7 +223,7 @@ class WineTasks {
   /// this function to be completed with an error.
   ///
   /// If the Wine process exists with a non-zero status, the returned
-  /// Future will be completed with [WineCommandFailedException].
+  /// Future will be completed with [ProcessFailedException].
   Future<void> clearDxvkDllOverrides({
     void Function(void Function() cancel)? cancelHookReceiver,
     required StartupData startupData,
@@ -269,7 +269,7 @@ class WineTasks {
   /// this function to be completed with an error.
   ///
   /// If the Wine process exists with a non-zero status, the returned
-  /// Future will be completed with [WineCommandFailedException].
+  /// Future will be completed with [ProcessFailedException].
   ///
   /// [1]: https://gitlab.winehq.org/dmjc/wine/-/blob/aa25b6203b613ad9f8ece388fa2a210e52fde2b6/documentation/dll-overrides
   Future<void> updateDllOverrides({
@@ -332,9 +332,9 @@ class WineTasks {
       final processResult = await wineProcess.result;
 
       if (processResult.exitCode != 0) {
-        throw WineCommandFailedException(
+        throw ProcessFailedException(
           'The "wine reg import" command failed',
-          processResult: processResult,
+          processLogs: processResult.logs,
         );
       }
     } finally {

@@ -27,4 +27,6 @@ class AppInfo {
   // Just the "winetricks" script itself, not the whole github release.
   static final String winetricksSha256 =
       '53194dead910f8a5eb1deacaa4773d4e48f5873633d18ab1ecd6fdb0cb92243b';
+
+  static final int maxCharsInPrefixName = 100;
 }
