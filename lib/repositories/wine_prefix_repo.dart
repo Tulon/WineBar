@@ -28,14 +28,6 @@ import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 
-typedef WinePrefixAddedCallback =
-    void Function({required WinePrefix newPrefix});
-
-/// Note that by the time this callback is fired, the prefix directory has
-/// already been removed from disk.
-typedef WinePrefixRemovedCallback =
-    void Function({required WinePrefix removedPrefix});
-
 abstract interface class WinePrefixRepo {
   /// To be used in tests. In other cases, use WinePrefixRepo.loadFromDisk().
   factory WinePrefixRepo.empty() {
@@ -70,15 +62,6 @@ abstract interface class WinePrefixRepo {
   /// This method is to be called when the prefix has already been removed
   /// from disk.
   void removePrefix(WinePrefix prefixToRemove);
-
-  /// Replaces one prefix with another.
-  ///
-  /// By the time this method gets called, all changes to the filesystem
-  /// need to have finished.
-  void updatePrefix({
-    required WinePrefix oldPrefix,
-    required WinePrefix updatedPrefix,
-  });
 
   /// Loads the wine prefixes from a directory.
   ///
@@ -128,6 +111,7 @@ abstract interface class WinePrefixRepo {
       );
 
       final prefix = WinePrefix(
+        status: WinePrefixStatus.operational,
         dirStructure: prefixDirStructure,
         descriptor: prefixDescriptor,
       );
@@ -204,7 +188,7 @@ class _WinePrefixRepo implements WinePrefixRepo {
     for (final entry in orderedPrefixes.asMap().entries) {
       final existingPrefixIndex = entry.key;
       final existingPrefix = entry.value;
-      if (existingPrefix.id == prefixToRemove.id) {
+      if (existingPrefix == prefixToRemove) {
         orderedPrefixes.removeAt(existingPrefixIndex);
         _streamController.add(
           WinePrefixRemovedEvent(
@@ -219,45 +203,6 @@ class _WinePrefixRepo implements WinePrefixRepo {
 
     GetIt.I.get<Logger>().e(
       'Tried to remove prefix "${prefixToRemove.descriptor.name}" '
-      "but it wasn't there",
-    );
-  }
-
-  @override
-  void updatePrefix({
-    required WinePrefix oldPrefix,
-    required WinePrefix updatedPrefix,
-  }) {
-    for (final entry in orderedPrefixes.asMap().entries) {
-      final existingPrefixIndex = entry.key;
-      final existingPrefix = entry.value;
-      if (existingPrefix.id == oldPrefix.id) {
-        orderedPrefixes.removeAt(existingPrefixIndex);
-
-        _streamController.add(
-          WinePrefixRemovedEvent(
-            removedPrefix: oldPrefix,
-            removedPrefixIndex: existingPrefixIndex,
-            animatedRemoval: false,
-          ),
-        );
-
-        orderedPrefixes.insert(existingPrefixIndex, updatedPrefix);
-
-        _streamController.add(
-          WinePrefixAddedEvent(
-            newPrefix: updatedPrefix,
-            newPrefixIndex: existingPrefixIndex,
-            animatedInsertion: true,
-          ),
-        );
-
-        return;
-      }
-    }
-
-    GetIt.I.get<Logger>().e(
-      'Tried to update prefix "${oldPrefix.descriptor.name}" '
       "but it wasn't there",
     );
   }

@@ -26,6 +26,7 @@ import 'package:winebar/repositories/wine_prefix_repo.dart';
 
 WinePrefix _makePrefix({required String name, required String outerDir}) {
   return WinePrefix(
+    status: WinePrefixStatus.operational,
     dirStructure: WinePrefixDirStructure.fromOuterDir(outerDir),
     descriptor: WinePrefixDescriptor(
       name: name,
@@ -164,98 +165,6 @@ void main() {
     expect(repo.orderedPrefixes.length, 2);
     expect(repo.orderedPrefixes[0], oldPrefix1);
     expect(repo.orderedPrefixes[1], oldPrefix2);
-
-    await eventMatchingCompletion;
-  });
-
-  test('Updating a prefix in the middle', () async {
-    final repo = WinePrefixRepo.empty();
-
-    final prefixNotToBeUpdated1 = _makePrefix(
-      name: 'Prefix 1',
-      outerDir: '/prefix1',
-    );
-    final prefixToBeUpdated = _makePrefix(
-      name: 'Prefix 2',
-      outerDir: '/prefix2',
-    );
-    final prefixNotToBeUpdated2 = _makePrefix(
-      name: 'Prefix 3',
-      outerDir: '/prefix3',
-    );
-    final prefixToUpateWith = _makePrefix(
-      name: 'Prefix 2 (updated)',
-      outerDir: '/prefix2 (updated)',
-    );
-
-    final eventMatchingCompletion = expectLater(
-      repo.eventStream,
-      emitsInOrder([
-        predicate<WinePrefixAddedEvent>(
-          (e) => e.newPrefix == prefixNotToBeUpdated1 && e.newPrefixIndex == 0,
-        ),
-        predicate<WinePrefixAddedEvent>(
-          (e) => e.newPrefix == prefixToBeUpdated && e.newPrefixIndex == 1,
-        ),
-        predicate<WinePrefixAddedEvent>(
-          (e) => e.newPrefix == prefixNotToBeUpdated2 && e.newPrefixIndex == 2,
-        ),
-        predicate<WinePrefixRemovedEvent>(
-          (e) =>
-              e.removedPrefix == prefixToBeUpdated && e.removedPrefixIndex == 1,
-        ),
-        predicate<WinePrefixAddedEvent>(
-          (e) => e.newPrefix == prefixToUpateWith && e.newPrefixIndex == 1,
-        ),
-      ]),
-    );
-
-    repo.addPrefix(prefixNotToBeUpdated1);
-    repo.addPrefix(prefixToBeUpdated);
-    repo.addPrefix(prefixNotToBeUpdated2);
-    repo.updatePrefix(
-      oldPrefix: prefixToBeUpdated,
-      updatedPrefix: prefixToUpateWith,
-    );
-
-    expect(repo.orderedPrefixes.length, 3);
-    expect(repo.orderedPrefixes[0], prefixNotToBeUpdated1);
-    expect(repo.orderedPrefixes[1], prefixToUpateWith);
-    expect(repo.orderedPrefixes[2], prefixNotToBeUpdated2);
-
-    await eventMatchingCompletion;
-  });
-
-  test('Updating a non-existing prefix', () async {
-    final repo = WinePrefixRepo.empty();
-
-    final existingPrefix = _makePrefix(name: 'Prefix 1', outerDir: '/prefix1');
-    final nonExistingPrefix = _makePrefix(
-      name: 'Prefix 2',
-      outerDir: '/prefix2',
-    );
-    final prefixToUpateWith = _makePrefix(
-      name: 'Prefix 2 (updated)',
-      outerDir: '/prefix2 (updated)',
-    );
-
-    final eventMatchingCompletion = expectLater(
-      repo.eventStream,
-      emitsInOrder([
-        predicate<WinePrefixAddedEvent>(
-          (e) => e.newPrefix == existingPrefix && e.newPrefixIndex == 0,
-        ),
-      ]),
-    );
-
-    repo.addPrefix(existingPrefix);
-    repo.updatePrefix(
-      oldPrefix: nonExistingPrefix,
-      updatedPrefix: prefixToUpateWith,
-    );
-
-    expect(repo.orderedPrefixes.length, 1);
-    expect(repo.orderedPrefixes[0], existingPrefix);
 
     await eventMatchingCompletion;
   });

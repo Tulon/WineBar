@@ -21,27 +21,22 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
-import 'package:get_it/get_it.dart';
+
 import 'package:simple_icons/simple_icons.dart';
 import 'package:stream_listener_widget/stream_listener_widget.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
-import 'package:winebar/blocs/prefix_list_item/prefix_list_item_bloc.dart';
-import 'package:winebar/blocs/prefix_list_item/prefix_list_item_state.dart';
 import 'package:winebar/repositories/wine_prefix_repo.dart';
 import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 import 'package:winebar/utils/old_task_abandoning_worker.dart';
 import 'package:winebar/utils/open_url.dart';
-import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/widgets/gesture_recognizer_holder.dart';
+import 'package:winebar/widgets/wine_prefix_list_item_widget.dart';
 
 import '../models/wine_prefix.dart';
 import '../utils/startup_data.dart';
 import 'prefix_creation_dialog.dart';
-import 'wine_prefix_page.dart';
 
 class WinePrefixesPage extends StatelessWidget {
   const WinePrefixesPage({super.key});
@@ -205,17 +200,11 @@ class WinePrefixesPage extends StatelessWidget {
       return;
     }
 
-    final winePrefixRepo = GetIt.I.get<StartupData>().winePrefixRepo;
-
     unawaited(
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (_) => PrefixCreationDialog(
-          onPrefixCreated: (prefix) {
-            winePrefixRepo.addPrefix(prefix);
-          },
-        ),
+        builder: (_) => PrefixCreationDialog(onPrefixCreated: (prefix) {}),
       ),
     );
   }
@@ -265,11 +254,9 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
         initialItemCount: _winePrefixRepo.orderedPrefixes.length,
         itemBuilder: (context, index, animation) {
           final prefix = _winePrefixRepo.orderedPrefixes[index];
-          return _buildPrefixWidget(
-            context: context,
+          return _buildAnimatedPrefixWidget(
             prefix: prefix,
             animation: animation,
-            removedPrefix: false,
           );
         },
       ),
@@ -293,11 +280,9 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
       case WinePrefixRemovedEvent evt:
         animatedListState.removeItem(
           evt.removedPrefixIndex,
-          (context, animation) => _buildPrefixWidget(
-            context: context,
+          (context, animation) => _buildAnimatedPrefixWidget(
             prefix: evt.removedPrefix,
             animation: animation,
-            removedPrefix: true,
           ),
           duration: evt.animatedRemoval
               ? animatedTransitionDuration
@@ -306,226 +291,27 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     }
   }
 
-  Widget _buildPrefixWidget({
-    required BuildContext context,
+  Widget _buildAnimatedPrefixWidget({
     required WinePrefix prefix,
     required Animation<double> animation,
-    required bool removedPrefix,
   }) {
-    final theme = Theme.of(context);
-
     return FadeTransition(
       opacity: animation,
       child: SizeTransition(
         sizeFactor: animation,
         axisAlignment: 0.0,
-        child: Card(
-          margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          elevation: 3.0,
-          child: BlocProvider(
-            // Force PrefixListItemBloc to be re-created if prefix.id changes.
-            key: ValueKey(prefix.id),
-
-            create: (context) => PrefixListItemBloc(prefixId: prefix.id),
-            child: BlocBuilder<PrefixListItemBloc, PrefixListItemState>(
-              builder: (context, listItemState) {
-                return ListTile(
-                  title: Text(
-                    prefix.descriptor.name,
-                    overflow: TextOverflow.ellipsis,
+        child: WinePrefixListItemWidget(
+          prefix: prefix,
+          pinnedExecutablesLoader: () {
+            return _pinnedExecutablesLoadingWorker
+                .abandonOngoingAndStartNewTask(
+                  () => PinnedExecutableSetState.loadFromDisk(
+                    prefix.dirStructure.pinsDir,
                   ),
-                  enabled:
-                      !prefix.isBroken && !listItemState.isPrefixBeingDeleted,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
-                  ),
-                  leading: _buildPrefixMenuButton(
-                    context: context,
-                    prefix: prefix,
-                    removedPrefix: removedPrefix,
-                    prefixListItemState: listItemState,
-                  ),
-                  trailing: listItemState.numAppsRunning == 0
-                      ? null
-                      : Tooltip(
-                          // We could have displayed the number of apps
-                          // running, but that number happens to be unreliable
-                          // for reasons described in README.md.
-                          message: 'Apps are running in this prefix',
-                          child: Icon(
-                            MdiIcons.hexagonMultiple,
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                  onTap: () =>
-                      prefix.isBroken ||
-                          listItemState.isPrefixBeingDeleted ||
-                          removedPrefix
-                      ? null
-                      : _startNavigatingToPrefix(
-                          context: context,
-                          winePrefix: prefix,
-                        ),
                 );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPrefixMenuButton({
-    required BuildContext context,
-    required WinePrefix prefix,
-    required PrefixListItemState prefixListItemState,
-    required bool removedPrefix,
-  }) {
-    if (prefixListItemState.isPrefixBeingDeleted || removedPrefix) {
-      return IconButton(icon: const Icon(Icons.delete), onPressed: null);
-    }
-
-    return MenuAnchor(
-      menuChildren: <Widget>[
-        MenuItemButton(
-          // See here: https://stackoverflow.com/a/78692532
-          requestFocusOnHover: false,
-
-          leadingIcon: const Icon(Icons.delete_outlined),
-          child: const Text('Delete'),
-          onPressed: () => _maybeShowPrefixDeletionConfirmationDialog(
-            context: context,
-            prefix: prefix,
-            prefixListItemBloc: BlocProvider.of<PrefixListItemBloc>(context),
-          ),
-        ),
-      ],
-      builder:
-          (BuildContext context, MenuController controller, Widget? child) {
-            return IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {
-                if (controller.isOpen) {
-                  controller.close();
-                } else {
-                  controller.open();
-                }
-              },
-            );
           },
-    );
-  }
-
-  Future<void> _maybeShowPrefixDeletionConfirmationDialog({
-    required BuildContext context,
-    required WinePrefix prefix,
-    required PrefixListItemBloc prefixListItemBloc,
-  }) async {
-    if (maybeTellUserToFinishRunningApps(
-      context: context,
-      appsRunningInThisPrefixAreAProblem: prefix,
-    )) {
-      return;
-    }
-
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Prefix deletion confirmation'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text('The following prefix is about to be deleted:'),
-              Text(
-                prefix.descriptor.name,
-                style: TextStyle(color: colorScheme.primary),
-              ),
-              const Text("This action can't be undone!"),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton.icon(
-              icon: const Icon(Icons.delete_outlined),
-              label: const Text('Delete'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _startDeletingPrefixUnlessAppsAreRunningThere(
-                  context: context,
-                  prefix: prefix,
-                  prefixListItemBloc: prefixListItemBloc,
-                );
-              },
-            ),
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _startDeletingPrefixUnlessAppsAreRunningThere({
-    required BuildContext context,
-    required WinePrefix prefix,
-    required PrefixListItemBloc prefixListItemBloc,
-  }) {
-    if (maybeTellUserToFinishRunningApps(
-      context: context,
-      appsRunningInThisPrefixAreAProblem: prefix,
-    )) {
-      return;
-    }
-
-    prefixListItemBloc.setPrefixBeingDeleted(true);
-
-    unawaited(
-      recursiveDeleteAndLogErrors(Directory(prefix.dirStructure.outerDir)).then(
-        (_) {
-          _winePrefixRepo.removePrefix(prefix);
-        },
+        ),
       ),
     );
-  }
-
-  void _startNavigatingToPrefix({
-    required BuildContext context,
-    required WinePrefix winePrefix,
-  }) async {
-    final pinnedExecutables = await _pinnedExecutablesLoadingWorker
-        .abandonOngoingAndStartNewTask(
-          () => PinnedExecutableSetState.loadFromDisk(
-            winePrefix.dirStructure.pinsDir,
-          ),
-        );
-
-    if (context.mounted) {
-      unawaited(
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => WinePrefixPage(
-              initialPrefix: winePrefix,
-              initialPinnedExecutables: pinnedExecutables,
-              onPrefixUpdated: (updatedPrefix) {
-                _winePrefixRepo.updatePrefix(
-                  oldPrefix: winePrefix,
-                  updatedPrefix: updatedPrefix,
-                );
-              },
-            ),
-          ),
-        ),
-      );
-    }
   }
 }

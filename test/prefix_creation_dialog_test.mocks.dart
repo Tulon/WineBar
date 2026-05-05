@@ -9,17 +9,17 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i12;
 import 'package:winebar/models/archive_type.dart' as _i16;
 import 'package:winebar/models/settings_json_file.dart' as _i2;
-import 'package:winebar/models/suppressable_warning.dart' as _i7;
+import 'package:winebar/models/suppressable_warning.dart' as _i8;
 import 'package:winebar/models/wine_build.dart' as _i15;
 import 'package:winebar/models/wine_build_source.dart' as _i11;
-import 'package:winebar/models/wine_prefix.dart' as _i9;
 import 'package:winebar/models/wine_release.dart' as _i14;
 import 'package:winebar/repositories/wine_build_source_repo.dart' as _i10;
-import 'package:winebar/repositories/wine_locale_repo.dart' as _i4;
-import 'package:winebar/services/app_settings_service.dart' as _i6;
-import 'package:winebar/services/wine_process_runner_service.dart' as _i5;
+import 'package:winebar/repositories/wine_locale_repo.dart' as _i5;
+import 'package:winebar/repositories/wine_prefix_repo.dart' as _i4;
+import 'package:winebar/services/app_settings_service.dart' as _i7;
+import 'package:winebar/services/wine_process_runner_service.dart' as _i6;
 import 'package:winebar/utils/local_storage_paths.dart' as _i3;
-import 'package:winebar/utils/startup_data.dart' as _i8;
+import 'package:winebar/utils/startup_data.dart' as _i9;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -48,15 +48,21 @@ class _FakeLocalStoragePaths_1 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeWineLocaleRepo_2 extends _i1.SmartFake
-    implements _i4.WineLocaleRepo {
-  _FakeWineLocaleRepo_2(Object parent, Invocation parentInvocation)
+class _FakeWinePrefixRepo_2 extends _i1.SmartFake
+    implements _i4.WinePrefixRepo {
+  _FakeWinePrefixRepo_2(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeWineProcessRunnerService_3 extends _i1.SmartFake
-    implements _i5.WineProcessRunnerService {
-  _FakeWineProcessRunnerService_3(Object parent, Invocation parentInvocation)
+class _FakeWineLocaleRepo_3 extends _i1.SmartFake
+    implements _i5.WineLocaleRepo {
+  _FakeWineLocaleRepo_3(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeWineProcessRunnerService_4 extends _i1.SmartFake
+    implements _i6.WineProcessRunnerService {
+  _FakeWineProcessRunnerService_4(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -64,7 +70,7 @@ class _FakeWineProcessRunnerService_3 extends _i1.SmartFake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAppSettingsService extends _i1.Mock
-    implements _i6.AppSettingsService {
+    implements _i7.AppSettingsService {
   @override
   _i2.SettingsJsonFile get settings =>
       (super.noSuchMethod(
@@ -82,7 +88,7 @@ class MockAppSettingsService extends _i1.Mock
 
   @override
   void setWarningSuppressed(
-    _i7.SuppressableWarning? warning, {
+    _i8.SuppressableWarning? warning, {
     required bool? suppressed,
   }) => super.noSuchMethod(
     Invocation.method(
@@ -97,7 +103,7 @@ class MockAppSettingsService extends _i1.Mock
 /// A class which mocks [StartupData].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockStartupData extends _i1.Mock implements _i8.StartupData {
+class MockStartupData extends _i1.Mock implements _i9.StartupData {
   @override
   _i3.LocalStoragePaths get localStoragePaths =>
       (super.noSuchMethod(
@@ -114,43 +120,49 @@ class MockStartupData extends _i1.Mock implements _i8.StartupData {
           as _i3.LocalStoragePaths);
 
   @override
-  List<_i9.WinePrefix> get winePrefixes =>
+  _i4.WinePrefixRepo get winePrefixRepo =>
       (super.noSuchMethod(
-            Invocation.getter(#winePrefixes),
-            returnValue: <_i9.WinePrefix>[],
-            returnValueForMissingStub: <_i9.WinePrefix>[],
+            Invocation.getter(#winePrefixRepo),
+            returnValue: _FakeWinePrefixRepo_2(
+              this,
+              Invocation.getter(#winePrefixRepo),
+            ),
+            returnValueForMissingStub: _FakeWinePrefixRepo_2(
+              this,
+              Invocation.getter(#winePrefixRepo),
+            ),
           )
-          as List<_i9.WinePrefix>);
+          as _i4.WinePrefixRepo);
 
   @override
-  _i4.WineLocaleRepo get wineLocaleRepo =>
+  _i5.WineLocaleRepo get wineLocaleRepo =>
       (super.noSuchMethod(
             Invocation.getter(#wineLocaleRepo),
-            returnValue: _FakeWineLocaleRepo_2(
+            returnValue: _FakeWineLocaleRepo_3(
               this,
               Invocation.getter(#wineLocaleRepo),
             ),
-            returnValueForMissingStub: _FakeWineLocaleRepo_2(
+            returnValueForMissingStub: _FakeWineLocaleRepo_3(
               this,
               Invocation.getter(#wineLocaleRepo),
             ),
           )
-          as _i4.WineLocaleRepo);
+          as _i5.WineLocaleRepo);
 
   @override
-  _i5.WineProcessRunnerService get wineProcessRunnerService =>
+  _i6.WineProcessRunnerService get wineProcessRunnerService =>
       (super.noSuchMethod(
             Invocation.getter(#wineProcessRunnerService),
-            returnValue: _FakeWineProcessRunnerService_3(
+            returnValue: _FakeWineProcessRunnerService_4(
               this,
               Invocation.getter(#wineProcessRunnerService),
             ),
-            returnValueForMissingStub: _FakeWineProcessRunnerService_3(
+            returnValueForMissingStub: _FakeWineProcessRunnerService_4(
               this,
               Invocation.getter(#wineProcessRunnerService),
             ),
           )
-          as _i5.WineProcessRunnerService);
+          as _i6.WineProcessRunnerService);
 
   @override
   bool get isIntelHost =>

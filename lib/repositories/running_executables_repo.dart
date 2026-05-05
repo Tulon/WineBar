@@ -19,6 +19,8 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 
@@ -34,75 +36,125 @@ abstract interface class RunningExecutablesRepo<SlotType> with ChangeNotifier {
   }
 
   void addRunningProcess({
-    required WinePrefixId prefixId,
+    required WinePrefix prefix,
     required SlotType slot,
     required WineProcess wineProcess,
   });
 
   WineProcess? tryFindRunningProcess({
-    required WinePrefixId prefixId,
+    required WinePrefix prefix,
     required SlotType slot,
   });
 
-  int numProcessesRunningInPrefix(WinePrefixId prefixId);
+  int numProcessesRunningInPrefix(WinePrefix prefix);
 
   int totalRunningProcesses();
 }
 
-typedef _RunningExecutablesInPrefix<SlotType> = Map<SlotType, WineProcess>;
-
 class _RunningExecutablesRepo<SlotType>
     with ChangeNotifier
     implements RunningExecutablesRepo<SlotType> {
-  final runningExecutablesByPrefixId =
-      <WinePrefixId, _RunningExecutablesInPrefix<SlotType>>{};
+  final runningProcessesByPrefix =
+      <WinePrefix, _RunningProcessesInPrefix<SlotType>>{};
 
   @override
   void addRunningProcess({
-    required WinePrefixId prefixId,
+    required WinePrefix prefix,
     required SlotType slot,
     required WineProcess wineProcess,
   }) {
-    var runningExecutablesInPrefix = runningExecutablesByPrefixId[prefixId];
-    if (runningExecutablesInPrefix == null) {
-      runningExecutablesInPrefix = _RunningExecutablesInPrefix();
-      runningExecutablesByPrefixId[prefixId] = runningExecutablesInPrefix;
-    }
+    final runningProcessesInPrefix = runningProcessesByPrefix.putIfAbsent(
+      prefix,
+      () => _RunningProcessesInPrefix(),
+    );
 
-    runningExecutablesInPrefix[slot] = wineProcess;
+    runningProcessesInPrefix.addProcessAndNotifyPrefix(
+      slot: slot,
+      process: wineProcess,
+      prefix: prefix,
+    );
+
+    notifyListeners();
 
     // Remove it when WineProcess has finished.
     unawaited(
-      wineProcess.result.whenComplete(() {
-        runningExecutablesInPrefix!.remove(slot);
-        if (runningExecutablesInPrefix.isEmpty) {
-          runningExecutablesByPrefixId.remove(prefixId);
+      wineProcess.result.then((_) {}, onError: (_) {}).whenComplete(() {
+        runningProcessesInPrefix.removeProcessAndNotifyPrefix(
+          slot: slot,
+          process: wineProcess,
+          prefix: prefix,
+        );
+        if (runningProcessesInPrefix.isEmpty) {
+          runningProcessesByPrefix.remove(prefix);
         }
         notifyListeners();
       }),
     );
-
-    notifyListeners();
   }
 
   @override
   WineProcess? tryFindRunningProcess({
-    required WinePrefixId prefixId,
+    required WinePrefix prefix,
     required SlotType slot,
   }) {
-    return runningExecutablesByPrefixId[prefixId]?[slot];
+    return runningProcessesByPrefix[prefix]?[slot];
   }
 
   @override
-  int numProcessesRunningInPrefix(WinePrefixId prefixId) {
-    return runningExecutablesByPrefixId[prefixId]?.length ?? 0;
+  int numProcessesRunningInPrefix(WinePrefix prefix) {
+    return runningProcessesByPrefix[prefix]?.length ?? 0;
   }
 
   @override
   int totalRunningProcesses() {
-    return runningExecutablesByPrefixId.entries.fold(
+    return runningProcessesByPrefix.entries.fold(
       0,
       (sum, entry) => sum + entry.value.length,
     );
+  }
+}
+
+class _RunningProcessesInPrefix<SlotType> {
+  final _map = <SlotType, WineProcess>{};
+
+  bool get isEmpty => _map.isEmpty;
+
+  int get length => _map.length;
+
+  WineProcess? operator [](SlotType slot) => _map[slot];
+
+  void addProcessAndNotifyPrefix({
+    required SlotType slot,
+    required WineProcess process,
+    required WinePrefix prefix,
+  }) {
+    _map.update(slot, (oldProcess) {
+      GetIt.I.get<Logger>().e(
+        "More than one process is running in the same slot of the same "
+        "prefix. That should never happen.",
+      );
+      return process;
+    }, ifAbsent: () => process);
+
+    prefix.onNewWineProcessRunning(process);
+  }
+
+  void removeProcessAndNotifyPrefix({
+    required SlotType slot,
+    required WineProcess process,
+    required WinePrefix prefix,
+  }) {
+    final removedProcess = _map.remove(slot);
+    if (removedProcess != null && removedProcess != process) {
+      GetIt.I.get<Logger>().e(
+        "The process has finished though the slot in question had a different "
+        "process. That should never happen.",
+      );
+
+      // Put that different process back into the slot.
+      _map[slot] = removedProcess;
+    }
+
+    prefix.onWineProcessFinished(process);
   }
 }

@@ -539,6 +539,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
       );
 
       final winePrefix = WinePrefix(
+        status: WinePrefixStatus.operational,
         dirStructure: prefixDirStructure,
         descriptor: prefixDescriptor,
       );
@@ -779,6 +780,8 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         prefixCreationFailedProcessResultGetter: () => null,
       ),
     );
+
+    startupData.winePrefixRepo.addPrefix(prefix);
 
     onPrefixCreated(prefix);
   }

@@ -53,7 +53,7 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
          ),
        ) {
     final runningProcess = runningPinnedExecutablesRepo.tryFindRunningProcess(
-      prefixId: winePrefix.id,
+      prefix: winePrefix,
       slot: pinnedExecutable,
     );
 
@@ -140,7 +140,7 @@ class PinnedExecutableBloc extends Cubit<PinnedExecutableState> {
       _startProcess()
           .then((runningProcess) {
             runningPinnedExecutablesRepo.addRunningProcess(
-              prefixId: winePrefix.id,
+              prefix: winePrefix,
               slot: pinnedExecutable,
               wineProcess: runningProcess,
             );
