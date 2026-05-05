@@ -789,6 +789,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  stream_listener_widget:
+    dependency: "direct main"
+    description:
+      name: stream_listener_widget
+      sha256: "1c22f1f7a9582c64d958cf3999d62b8e17725c594c5c1c811a120d9af1157c3b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   stream_transform:
     dependency: transitive
     description:

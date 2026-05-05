@@ -23,9 +23,8 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/error_with_more_details_url.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
-import 'package:winebar/models/prefix_descriptor.dart';
-import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/repositories/wine_locale_repo.dart';
+import 'package:winebar/repositories/wine_prefix_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
@@ -33,13 +32,12 @@ import 'package:winebar/utils/settings_file_helper.dart';
 
 import '../exceptions/data_dir_not_recognized_exception.dart';
 import '../models/settings_json_file.dart';
-import '../models/wine_prefix.dart';
 import 'app_info.dart';
 import 'local_storage_paths.dart';
 
 class StartupData {
   final LocalStoragePaths localStoragePaths;
-  final List<WinePrefix> winePrefixes;
+  final WinePrefixRepo winePrefixRepo;
   final WineLocaleRepo wineLocaleRepo;
   final WineProcessRunnerService wineProcessRunnerService;
   final bool isIntelHost;
@@ -47,7 +45,7 @@ class StartupData {
 
   StartupData._({
     required this.localStoragePaths,
-    required this.winePrefixes,
+    required this.winePrefixRepo,
     required this.wineLocaleRepo,
     required this.wineProcessRunnerService,
     required this.isIntelHost,
@@ -149,8 +147,8 @@ class StartupData {
     await Directory(localStoragePaths.winePrefixesDir).create();
     await Directory(localStoragePaths.dxvkPackagesDir).create();
 
-    final winePrefixes = await _loadWinePrefixes(
-      localStoragePaths: localStoragePaths,
+    final winePrefixRepo = await WinePrefixRepo.loadFromDisk(
+      winePrefixesDir: localStoragePaths.winePrefixesDir,
     );
 
     final wineLocaleRepo = await WineLocaleRepo.loadFromBundle(rootBundle);
@@ -163,7 +161,7 @@ class StartupData {
 
     return StartupData._(
       localStoragePaths: localStoragePaths,
-      winePrefixes: winePrefixes,
+      winePrefixRepo: winePrefixRepo,
       wineLocaleRepo: wineLocaleRepo,
       wineProcessRunnerService: wineProcessRunningService,
       isIntelHost: isIntelHost,
@@ -263,64 +261,5 @@ class StartupData {
         localStoragePaths: localStoragePaths,
       ),
     );
-  }
-
-  static Future<List<WinePrefix>> _loadWinePrefixes({
-    required LocalStoragePaths localStoragePaths,
-  }) async {
-    final winePrefixes = <WinePrefix>[];
-
-    final winePrefixesDir = Directory(localStoragePaths.winePrefixesDir);
-
-    // Does nothing if the directory exists already.
-    await winePrefixesDir.create();
-
-    await for (final entity in winePrefixesDir.list()) {
-      if (entity is Directory) {
-        await _loadWinePrefixFromOuterDir(
-          winePrefixOuterDir: entity,
-          sink: winePrefixes,
-        );
-      }
-    }
-
-    return winePrefixes;
-  }
-
-  static Future<void> _loadWinePrefixFromOuterDir({
-    required Directory winePrefixOuterDir,
-    required List<WinePrefix> sink,
-  }) async {
-    final prefixDirStructure = WinePrefixDirStructure.fromOuterDir(
-      winePrefixOuterDir.path,
-    );
-
-    try {
-      final prefixJsonFileContents = await File(
-        prefixDirStructure.prefixJsonFilePath,
-      ).readAsString();
-
-      final prefixDescriptor = WinePrefixDescriptor.fromJsonString(
-        prefixJsonFileContents,
-      );
-
-      final prefix = WinePrefix(
-        dirStructure: prefixDirStructure,
-        descriptor: prefixDescriptor,
-      );
-
-      sink.add(prefix);
-    } catch (e, stackTrace) {
-      final logger = GetIt.I.get<Logger>();
-      logger.w(
-        'Found a broken wine prefix at "${winePrefixOuterDir.path}',
-        error: e,
-        stackTrace: stackTrace,
-      );
-
-      // We add broken prefixes to the list anyway, to give the user the opportunity
-      // to delete them manually.
-      sink.add(WinePrefix.broken(outerDir: winePrefixOuterDir.path));
-    }
   }
 }

@@ -23,18 +23,21 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
+import 'package:get_it/get_it.dart';
 import 'package:simple_icons/simple_icons.dart';
-import 'package:winebar/blocs/prefix_list/prefix_list_state.dart';
+import 'package:stream_listener_widget/stream_listener_widget.dart';
+import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
 import 'package:winebar/blocs/prefix_list_item/prefix_list_item_bloc.dart';
 import 'package:winebar/blocs/prefix_list_item/prefix_list_item_state.dart';
-import 'package:winebar/models/prefix_list_event.dart';
+import 'package:winebar/repositories/wine_prefix_repo.dart';
 import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
+import 'package:winebar/utils/old_task_abandoning_worker.dart';
 import 'package:winebar/utils/open_url.dart';
+import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/widgets/gesture_recognizer_holder.dart';
 
-import '../blocs/prefix_list/prefix_list_bloc.dart';
 import '../models/wine_prefix.dart';
 import '../utils/startup_data.dart';
 import 'prefix_creation_dialog.dart';
@@ -45,26 +48,19 @@ class WinePrefixesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<PrefixListBloc>(
-      create: (context) => PrefixListBloc(StartupData.instance.winePrefixes),
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: _buildAppMenuButton(context),
-              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              title: Text('Wine Prefixes'),
-              actions: [_buildDonationButton(context)],
-              actionsPadding: EdgeInsetsDirectional.only(end: 8.0),
-            ),
-            body: _WinePrefixesList(),
-            floatingActionButton: FloatingActionButton.extended(
-              label: const Text('Add Wine Prefix'),
-              icon: const Icon(Icons.add),
-              onPressed: () => _maybeShowPrefixCreationDialog(context),
-            ),
-          );
-        },
+    return Scaffold(
+      appBar: AppBar(
+        leading: _buildAppMenuButton(context),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text('Wine Prefixes'),
+        actions: [_buildDonationButton(context)],
+        actionsPadding: EdgeInsetsDirectional.only(end: 8.0),
+      ),
+      body: _WinePrefixesList(),
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('Add Wine Prefix'),
+        icon: const Icon(Icons.add),
+        onPressed: () => _maybeShowPrefixCreationDialog(context),
       ),
     );
   }
@@ -209,7 +205,7 @@ class WinePrefixesPage extends StatelessWidget {
       return;
     }
 
-    final prefixListBloc = BlocProvider.of<PrefixListBloc>(context);
+    final winePrefixRepo = GetIt.I.get<StartupData>().winePrefixRepo;
 
     unawaited(
       showDialog(
@@ -217,7 +213,7 @@ class WinePrefixesPage extends StatelessWidget {
         barrierDismissible: false,
         builder: (_) => PrefixCreationDialog(
           onPrefixCreated: (prefix) {
-            prefixListBloc.addPrefix(prefix);
+            winePrefixRepo.addPrefix(prefix);
           },
         ),
       ),
@@ -231,57 +227,72 @@ class _WinePrefixesList extends StatefulWidget {
 }
 
 class _WinePrefixesListState extends State<_WinePrefixesList> {
-  final GlobalKey<AnimatedListState> _prefixListKey =
+  late final WinePrefixRepo _winePrefixRepo;
+
+  late final OldTaskAbandoningWorker<PinnedExecutableSetState>
+  _pinnedExecutablesLoadingWorker;
+
+  final GlobalKey<AnimatedListState> _animatedListKey =
       GlobalKey<AnimatedListState>();
 
   @override
+  void initState() {
+    super.initState();
+
+    _winePrefixRepo = StartupData.instance.winePrefixRepo;
+
+    _pinnedExecutablesLoadingWorker =
+        OldTaskAbandoningWorker<PinnedExecutableSetState>();
+  }
+
+  @override
+  void dispose() {
+    unawaited(_pinnedExecutablesLoadingWorker.abandonOngoingTask());
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocListener<PrefixListBloc, PrefixListState>(
-      listener: (context, state) => _reactToPrefixListChanges(state: state),
-      child: _buildAnimatedList(context),
+    return StreamListener(
+      listeners: [
+        (_) => _winePrefixRepo.eventStream.listen(_handlePrefixRepoEvent),
+      ],
+
+      // We used to use AnimatedList.separated() here, but then I hit this bug:
+      // https://github.com/flutter/flutter/issues/179029
+      child: AnimatedList(
+        key: _animatedListKey,
+        initialItemCount: _winePrefixRepo.orderedPrefixes.length,
+        itemBuilder: (context, index, animation) {
+          final prefix = _winePrefixRepo.orderedPrefixes[index];
+          return _buildPrefixWidget(
+            context: context,
+            prefix: prefix,
+            animation: animation,
+            removedPrefix: false,
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildAnimatedList(BuildContext context) {
-    final state = BlocProvider.of<PrefixListBloc>(context).state;
-
-    // We used to use AnimatedList.separated() here, but then I hit this bug:
-    // https://github.com/flutter/flutter/issues/179029
-    return AnimatedList(
-      key: _prefixListKey,
-      initialItemCount: state.orderedPrefixes.length,
-      itemBuilder: (context, index, animation) {
-        // It's important to acquire the new state here, as it's subject
-        // to change.
-        final state = BlocProvider.of<PrefixListBloc>(context).state;
-        final prefix = state.orderedPrefixes[index];
-        return _buildPrefixWidget(
-          context: context,
-          prefix: prefix,
-          animation: animation,
-          removedPrefix: false,
-        );
-      },
-    );
-  }
-
-  void _reactToPrefixListChanges({required PrefixListState state}) {
-    final animatedListState = _prefixListKey.currentState!;
+  void _handlePrefixRepoEvent(WinePrefixRepoEvent event) {
+    final animatedListState = _animatedListKey.currentState!;
 
     const instantTransitionDuration = Duration.zero;
     const animatedTransitionDuration = Duration(milliseconds: 300);
 
-    switch (state.prefixListEvent) {
-      case PrefixAddedEvent evt:
+    switch (event) {
+      case WinePrefixAddedEvent evt:
         animatedListState.insertItem(
-          evt.prefixIndex,
+          evt.newPrefixIndex,
           duration: evt.animatedInsertion
               ? animatedTransitionDuration
               : instantTransitionDuration,
         );
-      case PrefixRemovedEvent evt:
+      case WinePrefixRemovedEvent evt:
         animatedListState.removeItem(
-          evt.prefixIndex,
+          evt.removedPrefixIndex,
           (context, animation) => _buildPrefixWidget(
             context: context,
             prefix: evt.removedPrefix,
@@ -292,13 +303,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
               ? animatedTransitionDuration
               : instantTransitionDuration,
         );
-      case null:
-    }
-
-    if (state.prefixListEvent != null) {
-      // This prevents a repeat reaction to the same event, should a widget
-      // be rebuilt for an unrelated reason.
-      BlocProvider.of<PrefixListBloc>(context).clearPrefixListEvent();
     }
   }
 
@@ -426,7 +430,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     }
 
     final colorScheme = Theme.of(context).colorScheme;
-    final prefixListBloc = BlocProvider.of<PrefixListBloc>(context);
 
     return showDialog<void>(
       context: context,
@@ -455,7 +458,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
                 _startDeletingPrefixUnlessAppsAreRunningThere(
                   context: context,
                   prefix: prefix,
-                  prefixListBloc: prefixListBloc,
                   prefixListItemBloc: prefixListItemBloc,
                 );
               },
@@ -475,7 +477,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
   void _startDeletingPrefixUnlessAppsAreRunningThere({
     required BuildContext context,
     required WinePrefix prefix,
-    required PrefixListBloc prefixListBloc,
     required PrefixListItemBloc prefixListItemBloc,
   }) {
     if (maybeTellUserToFinishRunningApps(
@@ -486,19 +487,28 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
     }
 
     prefixListItemBloc.setPrefixBeingDeleted(true);
-    prefixListBloc.startDeletingPrefix(prefix);
+
+    unawaited(
+      recursiveDeleteAndLogErrors(Directory(prefix.dirStructure.outerDir)).then(
+        (_) {
+          _winePrefixRepo.removePrefix(prefix);
+        },
+      ),
+    );
   }
 
-  static void _startNavigatingToPrefix({
+  void _startNavigatingToPrefix({
     required BuildContext context,
     required WinePrefix winePrefix,
   }) async {
-    final bloc = BlocProvider.of<PrefixListBloc>(context);
-    final pinnedExecutables = await bloc.startLoadingPinnedExecutablesFor(
-      winePrefix,
-    );
+    final pinnedExecutables = await _pinnedExecutablesLoadingWorker
+        .abandonOngoingAndStartNewTask(
+          () => PinnedExecutableSetState.loadFromDisk(
+            winePrefix.dirStructure.pinsDir,
+          ),
+        );
 
-    if (context.mounted && pinnedExecutables != null) {
+    if (context.mounted) {
       unawaited(
         Navigator.push(
           context,
@@ -507,7 +517,7 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
               initialPrefix: winePrefix,
               initialPinnedExecutables: pinnedExecutables,
               onPrefixUpdated: (updatedPrefix) {
-                bloc.updatePrefix(
+                _winePrefixRepo.updatePrefix(
                   oldPrefix: winePrefix,
                   updatedPrefix: updatedPrefix,
                 );
