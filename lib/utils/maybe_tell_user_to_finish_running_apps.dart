@@ -44,7 +44,7 @@ bool maybeTellUserToFinishRunningApps({
   final appsRunningInPrefix = appsRunningInThisPrefixAreAProblem == null
       ? null
       : runningWineProcessesTracker.numProcessesRunningInPrefix(
-          appsRunningInThisPrefixAreAProblem.id,
+          appsRunningInThisPrefixAreAProblem,
         );
 
   String? message;

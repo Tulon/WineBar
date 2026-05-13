@@ -23,6 +23,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:process/process.dart';
 import 'package:winebar/models/gpu_info.dart';
 import 'package:winebar/models/pinned_executable.dart';
 import 'package:winebar/models/special_executable_slot.dart';
@@ -105,6 +106,7 @@ void main() async {
   ]);
 
   GetIt.I.registerSingleton<Logger>(logger);
+  GetIt.I.registerSingleton<ProcessManager>(LocalProcessManager());
   GetIt.I.registerSingleton<Dio>(dio);
   GetIt.I.registerSingleton<UtilityService>(UtilityService());
   GetIt.I.registerSingleton<WineBuildSourceRepo>(WineBuildSourceRepo(dio: dio));

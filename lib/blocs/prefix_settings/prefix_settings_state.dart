@@ -22,11 +22,11 @@ import 'package:get_it/get_it.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
 import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
 import 'package:winebar/models/explicit_locale_state.dart';
+import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/settings_json_file.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_locale.dart';
 import 'package:winebar/services/app_settings_service.dart';
-import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/utils/startup_data.dart';
 
 enum PrefixUpdateStatus {
@@ -82,7 +82,7 @@ class PrefixSettingsState extends Equatable {
 
   final PrefixUpdateStatus prefixUpdateStatus;
   final String? prefixUpdateFailureMessage;
-  final WineProcessResult? prefixUpdateFailedProcessResult;
+  final List<ProcessLog> prefixUpdateFailedProcessLogs;
 
   /// Corresponds to a progress (between 0 and 1) in those states
   /// where [PrefixUpdateStatus.isInProgress] is true. A null value
@@ -99,7 +99,7 @@ class PrefixSettingsState extends Equatable {
     required this.explicitLocaleState,
     required this.prefixUpdateStatus,
     required this.prefixUpdateFailureMessage,
-    required this.prefixUpdateFailedProcessResult,
+    required this.prefixUpdateFailedProcessLogs,
     required this.prefixUpdateStepProgress,
   });
 
@@ -127,7 +127,7 @@ class PrefixSettingsState extends Equatable {
          ),
          prefixUpdateStatus: PrefixUpdateStatus.notStarted,
          prefixUpdateFailureMessage: null,
-         prefixUpdateFailedProcessResult: null,
+         prefixUpdateFailedProcessLogs: const [],
          prefixUpdateStepProgress: null,
        );
 
@@ -141,7 +141,7 @@ class PrefixSettingsState extends Equatable {
     explicitLocaleState,
     prefixUpdateStatus,
     prefixUpdateFailureMessage,
-    prefixUpdateFailedProcessResult,
+    prefixUpdateFailedProcessLogs,
     prefixUpdateStepProgress,
   ];
 
@@ -154,7 +154,7 @@ class PrefixSettingsState extends Equatable {
     ExplicitLocaleState? explicitLocaleState,
     PrefixUpdateStatus? prefixUpdateStatus,
     ValueGetter<String?>? prefixUpdateFailureMessageGetter,
-    ValueGetter<WineProcessResult?>? prefixUpdateFailedProcessResultGetter,
+    List<ProcessLog>? prefixUpdateFailedProcessLogs,
     ValueGetter<double?>? prefixUpdateStepProgressGetter,
   }) {
     return PrefixSettingsState(
@@ -176,10 +176,8 @@ class PrefixSettingsState extends Equatable {
       prefixUpdateFailureMessage: prefixUpdateFailureMessageGetter != null
           ? prefixUpdateFailureMessageGetter()
           : prefixUpdateFailureMessage,
-      prefixUpdateFailedProcessResult:
-          prefixUpdateFailedProcessResultGetter != null
-          ? prefixUpdateFailedProcessResultGetter()
-          : prefixUpdateFailedProcessResult,
+      prefixUpdateFailedProcessLogs:
+          prefixUpdateFailedProcessLogs ?? this.prefixUpdateFailedProcessLogs,
       prefixUpdateStepProgress: prefixUpdateStepProgressGetter != null
           ? prefixUpdateStepProgressGetter()
           : prefixUpdateStepProgress,

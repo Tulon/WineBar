@@ -53,7 +53,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
   SpecialExecutableBloc({required this.winePrefix})
     : super(SpecialExecutableState.defaultState()) {
     final runningProcess = runningSpecialExecutablesRepo.tryFindRunningProcess(
-      prefixId: winePrefix.id,
+      prefix: winePrefix,
       slot: executableSlot,
     );
 
@@ -158,7 +158,7 @@ abstract class SpecialExecutableBloc extends Cubit<SpecialExecutableState> {
         commandLine: commandLine,
         onProcessStarted: (runningProcess) {
           runningSpecialExecutablesRepo.addRunningProcess(
-            prefixId: winePrefix.id,
+            prefix: winePrefix,
             slot: executableSlot,
             wineProcess: runningProcess,
           );

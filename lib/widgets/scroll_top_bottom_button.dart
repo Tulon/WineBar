@@ -50,7 +50,7 @@ class ScrollTopBottomButton extends StatefulWidget {
 }
 
 class _ScrollButtonDirectionState extends State<ScrollTopBottomButton> {
-  late VoidCallback _scrollControllerListener;
+  late final VoidCallback _scrollControllerListener;
 
   @override
   void initState() {

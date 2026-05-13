@@ -16,41 +16,139 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:path/path.dart' as path;
+import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
+import 'package:winebar/services/wine_process_runner_service.dart';
+import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
+import 'package:winebar/utils/startup_data.dart';
 
 import 'prefix_descriptor.dart';
 
-typedef WinePrefixId = int;
+enum WinePrefixStatus {
+  operational(
+    mayEnter: true,
+    mayClone: true,
+    mayDelete: true,
+    menuIcon: Icons.more_vert,
+  ),
+
+  /// Indicates the prefix's directory exists on the file system but
+  /// something is missing or broken in it, making the prefix unusable.
+  /// The only thing a user can do with such a prefix is to delete it.
+  broken(
+    mayEnter: false,
+    mayClone: false,
+    mayDelete: true,
+    menuIcon: Icons.more_vert,
+  ),
+
+  beingDeleted(
+    mayEnter: false,
+    mayClone: false,
+    mayDelete: false,
+    menuIcon: Icons.delete,
+  );
+
+  /// Whether the user can enter this prefix in order to install / run apps
+  /// in it.
+  final bool mayEnter;
+
+  /// Whether this prefix may be cloned into a new one.
+  final bool mayClone;
+
+  /// Whether this prefix may be deleted.
+  final bool mayDelete;
+
+  /// The icon to use for the context menu button in the list of prefixes.
+  final IconData menuIcon;
+
+  const WinePrefixStatus({
+    required this.mayEnter,
+    required this.mayClone,
+    required this.mayDelete,
+    required this.menuIcon,
+  });
+}
+
 typedef WinePrefixCreatedCallback = void Function(WinePrefix prefix);
 
-@immutable
-class WinePrefix extends Equatable implements Comparable<WinePrefix> {
-  static WinePrefixId _lastId = 0;
+/// A mutable class representing a wine prefix present on the file system.
+///
+/// A single instance of this class shall correspond to a single directory
+/// in the file system.
+///
+/// The Comparable interface orders instances in display order.
+///
+/// This class notifies its listeners (via the ChangeNotifier mixin) whenever
+/// any observable state of an instance is modified.
+abstract interface class WinePrefix
+    with ChangeNotifier
+    implements Comparable<WinePrefix> {
+  factory WinePrefix({
+    required WinePrefixStatus status,
+    required WinePrefixDirStructure dirStructure,
+    required WinePrefixDescriptor descriptor,
+  }) {
+    return _WinePrefix(
+      status: status,
+      dirStructure: dirStructure,
+      descriptor: descriptor,
+    );
+  }
 
-  /// A numeric Id that's not persisted and that stays the same when
-  /// a prefix is updated.
-  final WinePrefixId id = ++_lastId;
+  /// Creates a prefix with the status of [WinePrefixStatus.broken].
+  factory WinePrefix.broken({required String outerDir}) {
+    return _WinePrefix(
+      status: WinePrefixStatus.broken,
+      dirStructure: WinePrefixDirStructure.fromOuterDir(outerDir),
+      descriptor: WinePrefixDescriptor.brokenPrefix(
+        name: '${path.basename(outerDir)} (broken)',
+      ),
+    );
+  }
 
-  final WinePrefixDirStructure dirStructure;
-  final WinePrefixDescriptor descriptor;
+  WinePrefixStatus get status;
 
-  WinePrefix({required this.dirStructure, required this.descriptor});
+  void updateStatus(WinePrefixStatus status);
 
-  WinePrefix.broken({required String outerDir})
-    : this(
-        dirStructure: WinePrefixDirStructure.fromOuterDir(outerDir),
-        descriptor: WinePrefixDescriptor.brokenPrefix(
-          name: '${path.basename(outerDir)} (broken)',
-        ),
-      );
+  WinePrefixDirStructure get dirStructure;
 
-  bool get isBroken => descriptor.isBroken;
+  WinePrefixDescriptor get descriptor;
+
+  void updateDescriptor(WinePrefixDescriptor newDescriptor);
+
+  bool get hasRunningProcesses;
+
+  void onNewWineProcessRunning(WineProcess process);
+
+  void onWineProcessFinished(WineProcess process);
+
+  void startDeleting();
+}
+
+class _WinePrefix with ChangeNotifier implements WinePrefix {
+  @override
+  WinePrefixStatus status;
 
   @override
-  List<Object> get props => [id, dirStructure, descriptor];
+  final WinePrefixDirStructure dirStructure;
+
+  @override
+  WinePrefixDescriptor descriptor;
+
+  int _numProcessesRunning = 0;
+
+  _WinePrefix({
+    required this.status,
+    required this.dirStructure,
+    required this.descriptor,
+  });
 
   /// Compares by [WinePrefixDescriptor.name] and then by [WinePrefixDirStructure.outerDir].
   @override
@@ -63,15 +161,48 @@ class WinePrefix extends Equatable implements Comparable<WinePrefix> {
     return dirStructure.outerDir.compareTo(other.dirStructure.outerDir);
   }
 
-  /// The [id] field is not included on purpose, as it's not supposed
-  /// to change.
-  WinePrefix copyWith({
-    WinePrefixDirStructure? dirStructure,
-    WinePrefixDescriptor? descriptor,
-  }) {
-    return WinePrefix(
-      dirStructure: dirStructure ?? this.dirStructure,
-      descriptor: descriptor ?? this.descriptor,
+  @override
+  void updateStatus(WinePrefixStatus status) {
+    if (this.status != status) {
+      this.status = status;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void updateDescriptor(WinePrefixDescriptor newDescriptor) {
+    descriptor = newDescriptor;
+    notifyListeners();
+  }
+
+  @override
+  bool get hasRunningProcesses => _numProcessesRunning > 0;
+
+  @override
+  void onNewWineProcessRunning(WineProcess process) {
+    ++_numProcessesRunning;
+  }
+
+  @override
+  void onWineProcessFinished(WineProcess process) {
+    --_numProcessesRunning;
+  }
+
+  @override
+  void startDeleting() {
+    if (!status.mayDelete) {
+      throw GenericException(
+        "This prefix is in a state were it can't be deleted",
+      );
+    }
+
+    status = WinePrefixStatus.beingDeleted;
+    notifyListeners();
+
+    unawaited(
+      recursiveDeleteAndLogErrors(Directory(dirStructure.outerDir)).then((_) {
+        GetIt.I.get<StartupData>().winePrefixRepo.removePrefix(this);
+      }),
     );
   }
 }

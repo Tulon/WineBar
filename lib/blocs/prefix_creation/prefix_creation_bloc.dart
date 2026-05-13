@@ -30,6 +30,7 @@ import 'package:winebar/models/d3d_8_to_11_implementation.dart';
 import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
 import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/prefix_descriptor.dart';
+import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/suppressable_warning.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
@@ -41,6 +42,7 @@ import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/utils/get_single_child_dir.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
+import 'package:winebar/utils/validate_prefix_name.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
 import 'package:winebar/utils/wine_tasks.dart';
 
@@ -149,7 +151,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         wow64ModePreferenceWarningToBeSuppressed: false,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
-        prefixCreationFailedProcessResultGetter: () => null,
+        prefixCreationFailedProcessLogs: const [],
       ),
     );
 
@@ -211,7 +213,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         selectedWineBuildArchWarningToBeSuppressed: false,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
-        prefixCreationFailedProcessResultGetter: () => null,
+        prefixCreationFailedProcessLogs: const [],
       ),
     );
   }
@@ -254,7 +256,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         selectedWineBuildArchWarningToBeSuppressed: false,
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
-        prefixCreationFailedProcessResultGetter: () => null,
+        prefixCreationFailedProcessLogs: const [],
       ),
     );
   }
@@ -329,7 +331,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         ),
         prefixCreationStatus: PrefixCreationStatus.notStarted,
         prefixCreationFailureMessageGetter: () => null,
-        prefixCreationFailedProcessResultGetter: () => null,
+        prefixCreationFailedProcessLogs: const [],
       ),
     );
 
@@ -344,21 +346,8 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
     }
   }
 
-  static final _validPrefixPattern = RegExp(
-    r'^[\p{Letter}\p{Mark}\p{Number}\p{Punctuation} ]+$',
-    unicode: true,
-  );
-
   void setPrefixName(String prefixName) {
-    String? errorMessage;
-
-    if (prefixName.isEmpty) {
-      errorMessage = "Prefix name can't be empty";
-    } else if (!_validPrefixPattern.hasMatch(prefixName) ||
-        prefixName.contains('/') ||
-        prefixName.contains('\\')) {
-      errorMessage = 'Illegal symbols present';
-    }
+    final errorMessage = validatePrefixName(prefixName);
 
     if (state.prefixName != prefixName ||
         state.prefixNameErrorMessage != errorMessage) {
@@ -431,7 +420,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         prefixCreationStatus: PrefixCreationStatus.starting,
 
         prefixCreationFailureMessageGetter: () => null,
-        prefixCreationFailedProcessResultGetter: () => null,
+        prefixCreationFailedProcessLogs: const [],
       ),
     );
 
@@ -515,7 +504,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         state.copyWith(
           prefixCreationStatus: PrefixCreationStatus.creatingWinePrefix,
           prefixCreationStepProgressGetter: () => null,
-          prefixCreationFailedProcessResultGetter: () => null,
+          prefixCreationFailedProcessLogs: const [],
         ),
       );
 
@@ -539,6 +528,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
       );
 
       final winePrefix = WinePrefix(
+        status: WinePrefixStatus.operational,
         dirStructure: prefixDirStructure,
         descriptor: prefixDescriptor,
       );
@@ -644,7 +634,7 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
         prefixCreationStatus:
             PrefixCreationStatus.downloadingAndExtractingWineBuild,
         prefixCreationStepProgressGetter: () => null,
-        prefixCreationFailedProcessResultGetter: () => null,
+        prefixCreationFailedProcessLogs: const [],
       ),
     );
 
@@ -776,23 +766,25 @@ class PrefixCreationBloc extends Cubit<PrefixCreationState> {
       state.copyWith(
         prefixCreationStatus: PrefixCreationStatus.succeeded,
         prefixCreationFailureMessageGetter: () => null,
-        prefixCreationFailedProcessResultGetter: () => null,
+        prefixCreationFailedProcessLogs: const [],
       ),
     );
+
+    startupData.winePrefixRepo.addPrefix(prefix);
 
     onPrefixCreated(prefix);
   }
 
   void _processPrefixCreationFailure(Object error) {
-    final processResult = error is WineCommandFailedException
-        ? error.processResult
-        : null;
+    final processLogs = error is ProcessFailedException
+        ? error.processLogs
+        : const <ProcessLog>[];
 
     emit(
       state.copyWith(
         prefixCreationStatus: PrefixCreationStatus.failed,
         prefixCreationFailureMessageGetter: () => error.toString(),
-        prefixCreationFailedProcessResultGetter: () => processResult,
+        prefixCreationFailedProcessLogs: processLogs,
       ),
     );
   }

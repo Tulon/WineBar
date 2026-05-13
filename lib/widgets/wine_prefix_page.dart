@@ -25,6 +25,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path/path.dart' as path;
+import 'package:winebar/blocs/file_selection_in_progress/file_selection_in_progress_bloc.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
@@ -39,20 +40,12 @@ import 'package:winebar/widgets/prefix_settings_dialog.dart';
 import 'package:winebar/widgets/run_process_chip.dart';
 
 import '../blocs/pinned_executable_set/pinned_executable_set_state.dart';
-import '../blocs/prefix_details/prefix_details_bloc.dart';
-import '../blocs/prefix_details/prefix_details_state.dart';
 import '../models/wine_prefix.dart';
 import 'process_logs_view_widget.dart';
 
 class WinePrefixPage extends StatelessWidget {
   final startupData = StartupData.instance;
-
-  final void Function(WinePrefix) onPrefixUpdated;
-
-  /// This member is used only to initialize the PrefixDetailsBloc.
-  /// The wine prefix in the bloc may later change as a result of
-  /// the user updating a prefix. The initial value won't change.
-  final WinePrefix initialPrefix;
+  final WinePrefix prefix;
 
   /// This member is used only to initialize the PinnedExecutableSetBloc.
   /// The set of pinned executables may change later but this value
@@ -61,8 +54,7 @@ class WinePrefixPage extends StatelessWidget {
 
   WinePrefixPage({
     super.key,
-    required this.onPrefixUpdated,
-    required this.initialPrefix,
+    required this.prefix,
     required this.initialPinnedExecutables,
   });
 
@@ -72,96 +64,75 @@ class WinePrefixPage extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PrefixDetailsBloc>(
-          create: (context) => PrefixDetailsBloc(prefix: initialPrefix),
+        BlocProvider<FileSelectionInProgressBloc>(
+          create: (context) => FileSelectionInProgressBloc(),
         ),
         BlocProvider<PinnedExecutableSetBloc>(
           create: (context) =>
               PinnedExecutableSetBloc(initialState: initialPinnedExecutables),
         ),
+        BlocProvider<CustomExecutableBloc>(
+          create: (context) => CustomExecutableBloc(winePrefix: prefix),
+        ),
+        BlocProvider<RunInstallerBloc>(
+          create: (context) => RunInstallerBloc(
+            winePrefix: prefix,
+            processExecutablePinnedInTempDir: (executablePinnedInTempDir) =>
+                BlocProvider.of<PinnedExecutableSetBloc>(
+                  context,
+                ).pinExecutable(executablePinnedInTempDir),
+          ),
+        ),
+        BlocProvider<WinecfgExecutableBloc>(
+          create: (context) => WinecfgExecutableBloc(winePrefix: prefix),
+        ),
+        BlocProvider<WinetricksExecutableBloc>(
+          create: (context) => WinetricksExecutableBloc(winePrefix: prefix),
+        ),
       ],
-      child: BlocBuilder<PrefixDetailsBloc, PrefixDetailsState>(
-        builder: (context, state) {
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider<CustomExecutableBloc>(
-                // We provide a key in order to force the bloc to be recreated
-                // when the prefix is modified.
-                key: ValueKey(state.prefix),
-
-                create: (context) =>
-                    CustomExecutableBloc(winePrefix: state.prefix),
-              ),
-              BlocProvider<RunInstallerBloc>(
-                // We provide a key in order to force the bloc to be recreated
-                // when the prefix is modified.
-                key: ValueKey(state.prefix),
-
-                create: (context) => RunInstallerBloc(
-                  winePrefix: state.prefix,
-                  processExecutablePinnedInTempDir:
-                      (executablePinnedInTempDir) =>
-                          BlocProvider.of<PinnedExecutableSetBloc>(
-                            context,
-                          ).pinExecutable(executablePinnedInTempDir),
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              backgroundColor: colorScheme.inversePrimary,
+              title: ListenableBuilder(
+                listenable: prefix,
+                builder: (context, _) => Text(
+                  'Wine Prefix: ${prefix.descriptor.name}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              BlocProvider<WinecfgExecutableBloc>(
-                // We provide a key in order to force the bloc to be recreated
-                // when the prefix is modified.
-                key: ValueKey(state.prefix),
-
-                create: (context) =>
-                    WinecfgExecutableBloc(winePrefix: state.prefix),
-              ),
-              BlocProvider<WinetricksExecutableBloc>(
-                // We provide a key in order to force the bloc to be recreated
-                // when the prefix is modified.
-                key: ValueKey(state.prefix),
-
-                create: (context) =>
-                    WinetricksExecutableBloc(winePrefix: state.prefix),
-              ),
-            ],
-            child: Stack(
-              children: [
-                Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: colorScheme.inversePrimary,
-                    title: Text(
-                      'Wine Prefix: ${state.prefix.descriptor.name}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  body: _PinnedExecutablesGridWidget(winePrefix: state.prefix),
-                  bottomNavigationBar: _buildBottomPanel(
-                    context: context,
-                    state: state,
-                    colorScheme: colorScheme,
-                  ),
-                  floatingActionButton: _buildPinExecutableButton(
-                    prefix: state.prefix,
-                  ),
-                ),
-                if (state.fileSelectionInProgress)
-                  // Blocks all interactions.
-                  ModalBarrier(
-                    dismissible: false,
-                    color: Colors
-                        .black54, // Default barrier color for showDialog()
-                  ),
-              ],
             ),
-          );
-        },
+            body: _PinnedExecutablesGridWidget(winePrefix: prefix),
+            bottomNavigationBar: _buildBottomPanel(
+              context: context,
+              colorScheme: colorScheme,
+            ),
+            floatingActionButton: _buildPinExecutableButton(prefix: prefix),
+          ),
+          BlocBuilder<FileSelectionInProgressBloc, bool>(
+            builder: (context, fileSelectionInProgress) {
+              if (fileSelectionInProgress) {
+                // Blocks all interactions.
+                return ModalBarrier(
+                  dismissible: false,
+                  color:
+                      Colors.black54, // Default barrier color for showDialog()
+                );
+              } else {
+                // Just a placeholder.
+                return SizedBox.shrink();
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildBottomPanel({
     required BuildContext context,
-    required PrefixDetailsState state,
     required ColorScheme colorScheme,
   }) {
     return Container(
@@ -201,7 +172,7 @@ class WinePrefixPage extends StatelessWidget {
               icon: Icon(MdiIcons.cogs),
               tooltip: 'Prefix settings',
               onPressed: () {
-                _maybeShowPrefixSettingsDialog(context: context, state: state);
+                _maybeShowPrefixSettingsDialog(context: context);
               },
             ),
           ),
@@ -210,15 +181,10 @@ class WinePrefixPage extends StatelessWidget {
     );
   }
 
-  void _maybeShowPrefixSettingsDialog({
-    required BuildContext context,
-    required PrefixDetailsState state,
-  }) {
-    final prefixDetailsBloc = BlocProvider.of<PrefixDetailsBloc>(context);
-
+  void _maybeShowPrefixSettingsDialog({required BuildContext context}) {
     if (maybeTellUserToFinishRunningApps(
       context: context,
-      appsRunningInThisPrefixAreAProblem: state.prefix,
+      appsRunningInThisPrefixAreAProblem: prefix,
       appsRunningInAnyPrefixAreAProblem: startupData.wineWillRunUnderMuvm,
     )) {
       return;
@@ -234,11 +200,9 @@ class WinePrefixPage extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (context) => PrefixSettingsDialog(
-          prefix: state.prefix,
+          prefix: prefix,
           onPrefixUpdated: (prefix) {
-            prefixDetailsBloc.updatePrefix(prefix);
             showPrefixUpdatedSnackBar();
-            onPrefixUpdated(prefix);
           },
         ),
       ),
@@ -386,14 +350,14 @@ class WinePrefixPage extends StatelessWidget {
   }) async {
     final utilityService = GetIt.I.get<UtilityService>();
 
-    final prefixDetailsBloc = BlocProvider.of<PrefixDetailsBloc>(context);
-    prefixDetailsBloc.setFileSelectionInProgress(true);
+    final fileSelectionInProgressBloc =
+        BlocProvider.of<FileSelectionInProgressBloc>(context);
+
+    fileSelectionInProgressBloc.setFileSelectionInProgress(true);
 
     XFile? selectedFile;
 
     try {
-      final WinePrefix prefix = prefixDetailsBloc.state.prefix;
-
       final wineInstDesc = await utilityService
           .wineInstallationDescriptorForWineInstallDir(
             prefix.descriptor.getAbsPathToWineInstall(
@@ -413,7 +377,7 @@ class WinePrefixPage extends StatelessWidget {
         ),
       );
     } finally {
-      prefixDetailsBloc.setFileSelectionInProgress(false);
+      fileSelectionInProgressBloc.setFileSelectionInProgress(false);
     }
 
     if (selectedFile != null) {

@@ -26,6 +26,7 @@ import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
 import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
 import 'package:winebar/models/explicit_locale_state.dart';
+import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
@@ -120,7 +121,7 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
         prefixUpdateStatus: PrefixUpdateStatus.starting,
 
         prefixUpdateFailureMessageGetter: () => null,
-        prefixUpdateFailedProcessResultGetter: () => null,
+        prefixUpdateFailedProcessLogs: const [],
       ),
     );
 
@@ -150,7 +151,9 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
         .get<RunningExecutablesRepo<SpecialExecutableSlot>>();
     final dxvkInstallationService = GetIt.I.get<DxvkInstallationService>();
 
-    final wineInstallDir = prefix.descriptor.getAbsPathToWineInstall(
+    final oldPrefixDescriptor = prefix.descriptor;
+
+    final wineInstallDir = oldPrefixDescriptor.getAbsPathToWineInstall(
       toplevelDataDir: startupData.localStoragePaths.toplevelDataDir,
     );
 
@@ -189,13 +192,20 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
         );
       }
 
-      // Update the prefix. Eventually it will be passed to the
-      // onPrefixUpdated() callback, but we also want the "wine reg"
+      emit(
+        state.copyWith(
+          prefixUpdateStatus: PrefixUpdateStatus.updatingPrefix,
+          prefixUpdateStepProgressGetter: () => null,
+        ),
+      );
+
+      // Update the prefix early, as we want the "wine reg"
       // command that runs under the hood of _applyHiDpiSettings()
       // below to take the current value of state.wow64ModePreferred
-      // into account.
-      prefix = prefix.copyWith(
-        descriptor: prefix.descriptor.copyWith(
+      // into account. Should prefix creation fail, we restore the
+      // original descriptor at the end of this method.
+      prefix.updateDescriptor(
+        oldPrefixDescriptor.copyWith(
           hiDpiScaleGetter: () => state.hiDpiScale,
           wow64ModePreferredGetter: () => state.wow64ModePreferred,
           d3d8To11ImplementationGetter: () => state
@@ -203,13 +213,6 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
               .explicitlySelectedD3d8To11Implementation,
           explicitLocalePosixNameGetter: () =>
               state.explicitLocaleState.explicitLocalePosixName,
-        ),
-      );
-
-      emit(
-        state.copyWith(
-          prefixUpdateStatus: PrefixUpdateStatus.updatingPrefix,
-          prefixUpdateStepProgressGetter: () => null,
         ),
       );
 
@@ -273,6 +276,12 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
       }
     } catch (e, stackTrace) {
       logger.e('Updating prefix failed', error: e, stackTrace: stackTrace);
+
+      if (prefix.descriptor != oldPrefixDescriptor) {
+        // Put back the original descriptor.
+        prefix.updateDescriptor(oldPrefixDescriptor);
+      }
+
       rethrow;
     }
   }
@@ -289,7 +298,7 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
       state.copyWith(
         prefixUpdateStatus: PrefixUpdateStatus.succeeded,
         prefixUpdateFailureMessageGetter: () => null,
-        prefixUpdateFailedProcessResultGetter: () => null,
+        prefixUpdateFailedProcessLogs: const [],
       ),
     );
 
@@ -297,15 +306,15 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
   }
 
   void _processPrefixUpdateFailure(Object error) {
-    final processResult = error is WineCommandFailedException
-        ? error.processResult
-        : null;
+    final processLogs = error is ProcessFailedException
+        ? error.processLogs
+        : const <ProcessLog>[];
 
     emit(
       state.copyWith(
         prefixUpdateStatus: PrefixUpdateStatus.failed,
         prefixUpdateFailureMessageGetter: () => error.toString(),
-        prefixUpdateFailedProcessResultGetter: () => processResult,
+        prefixUpdateFailedProcessLogs: processLogs,
       ),
     );
   }

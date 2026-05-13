@@ -131,15 +131,13 @@ class PrefixSettingsDialog extends StatelessWidget {
                         width: double.infinity,
                         text: state.prefixUpdateFailureMessage!,
                         trailingLink:
-                            state.prefixUpdateFailedProcessResult == null
+                            state.prefixUpdateFailedProcessLogs.isEmpty
                             ? null
                             : TappableLink(
                                 linkText: 'View Logs.',
                                 onTapped: () => _showWineProcessLogs(
                                   context: context,
-                                  logs: state
-                                      .prefixUpdateFailedProcessResult!
-                                      .logs,
+                                  logs: state.prefixUpdateFailedProcessLogs,
                                 ),
                               ),
                       ),

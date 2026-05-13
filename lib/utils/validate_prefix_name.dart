@@ -16,16 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:winebar/models/process_log.dart';
-
-/// This exception is used to report errors caused by an external process
-/// failing.
-class ProcessFailedException implements Exception {
-  final String errorMessage;
-  final List<ProcessLog> processLogs;
-
-  ProcessFailedException(this.errorMessage, {required this.processLogs});
-
-  @override
-  String toString() => errorMessage;
+/// Returns null if [prefixName] is valid and an error message otherwise.
+String? validatePrefixName(String prefixName) {
+  if (prefixName.isEmpty) {
+    return "Prefix name can't be empty";
+  } else if (!_validPrefixPattern.hasMatch(prefixName) ||
+      prefixName.contains('/') ||
+      prefixName.contains('\\')) {
+    return 'Illegal symbols present';
+  } else {
+    // Prefix name valid.
+    return null;
+  }
 }
+
+final _validPrefixPattern = RegExp(
+  r'^[\p{Letter}\p{Mark}\p{Number}\p{Punctuation} ]+$',
+  unicode: true,
+);

@@ -54,6 +54,8 @@ dependencies:
   simple_icons: ^14.6.1
   file_selector: ^1.1.0
   dropdown_search: ^7.0.0
+  stream_listener_widget: ^1.1.0
+  process: ^5.0.5
 
 dev_dependencies:
   flutter_test:

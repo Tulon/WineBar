@@ -27,6 +27,7 @@ import 'package:icon_decoration/icon_decoration.dart';
 import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_build_source.dart';
+import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/tappable_link.dart';
 import 'package:winebar/widgets/explicit_d3d_8_to_11_implementation_widget.dart';
 import 'package:winebar/widgets/explicit_locale_widget.dart';
@@ -651,7 +652,7 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
             enabled: !state.prefixCreationStatus.isInProgress,
             controller: widgetState.prefixNameController,
             inputFormatters: <TextInputFormatter>[
-              LengthLimitingTextInputFormatter(100),
+              LengthLimitingTextInputFormatter(AppInfo.maxCharsInPrefixName),
             ],
             decoration: InputDecoration(
               hintText: 'Enter a name for the prefix',
@@ -698,13 +699,13 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
             ErrorMessageWidget(
               width: double.infinity,
               text: state.prefixCreationFailureMessage!,
-              trailingLink: state.prefixCreationFailedProcessResult == null
+              trailingLink: state.prefixCreationFailedProcessLogs.isEmpty
                   ? null
                   : TappableLink(
                       linkText: 'View Logs.',
                       onTapped: () => _showWineProcessLogs(
                         context: context,
-                        logs: state.prefixCreationFailedProcessResult!.logs,
+                        logs: state.prefixCreationFailedProcessLogs,
                       ),
                     ),
             ),

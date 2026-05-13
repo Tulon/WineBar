@@ -114,6 +114,7 @@ void main() {
     );
 
     final prefix = WinePrefix(
+      status: WinePrefixStatus.operational,
       dirStructure: WinePrefixDirStructure.fromOuterDir(prefixOuterDir),
       descriptor: WinePrefixDescriptor(
         name: 'Prefix',
