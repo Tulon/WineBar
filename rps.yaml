@@ -7,3 +7,6 @@ scripts:
     mkdir -p lib/dbus
     dart-dbus generate-remote-object dbus/interfaces/org.freedesktop.ScreenSaver.xml \
       -o lib/dbus/org_freedesktop_screensaver.dart
+
+    # Generates localization files.
+    flutter gen-l10n

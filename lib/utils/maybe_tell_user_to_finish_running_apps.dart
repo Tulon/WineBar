@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/services/running_wine_processes_tracker.dart';
+import 'package:winebar/utils/l10n.dart';
 
 /// May tell the user (via a SnackBar) to close the apps running in a
 /// particular prefix or in all prefixes (it checks if the apps are
@@ -50,9 +51,9 @@ bool maybeTellUserToFinishRunningApps({
   String? message;
 
   if (appsRunningInAnyPrefixAreAProblem && totalRunningApps > 0) {
-    message = 'Finish the apps running in all prefixes first';
+    message = L10n.current.finishTheAppsRunningInAllPrefixesFirst;
   } else if (appsRunningInPrefix != null && appsRunningInPrefix > 0) {
-    message = 'Finish the running apps first';
+    message = L10n.current.finishTheRunningAppsFirst;
   }
 
   if (message == null) {

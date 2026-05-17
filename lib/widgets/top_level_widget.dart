@@ -18,8 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:winebar/exceptions/error_with_more_details_url.dart';
+import 'package:winebar/l10n/app_localizations.dart';
 import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/cast_or_null.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/open_url.dart';
 import 'package:winebar/utils/tappable_link.dart';
 
@@ -33,10 +35,16 @@ class TopLevelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: (context, child) {
+        L10n.current = AppLocalizations.of(context)!;
+        return child!;
+      },
       title: AppInfo.appName,
       theme: ThemeData.light(useMaterial3: true),
       darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: ThemeMode.system,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: FutureBuilder<StartupData>(
         future: StartupData.asyncInstance,
         builder: (context, snapshot) {
@@ -48,7 +56,9 @@ class TopLevelWidget extends StatelessWidget {
             // thing the user can do at this point is to close the app.
             return _buildCriticalErrorWidget(
               context: context,
-              errorMessage: snapshot.error?.toString() ?? 'Unknown error',
+              errorMessage:
+                  snapshot.error?.toString() ??
+                  L10n.current.unknownErrorMessage,
               moreDetailsUrl: castOrNull<ErrorWithMoreDetailsUrl>(
                 snapshot.error,
               )?.moreDetailsUrl,
@@ -106,7 +116,7 @@ class TopLevelWidget extends StatelessWidget {
                       size: 24.0,
                     ),
                     Text(
-                      'Critical Error',
+                      L10n.current.criticalErrorCaption,
                       style: TextStyle(
                         color: colorScheme.error,
                         fontWeight: FontWeight.bold,
@@ -119,7 +129,7 @@ class TopLevelWidget extends StatelessWidget {
                   trailingLink: moreDetailsUrl == null
                       ? null
                       : TappableLink(
-                          linkText: 'More details.',
+                          linkText: L10n.current.moreDetailsLink,
                           onTapped: () => openUrlAndLogErrors(moreDetailsUrl),
                         ),
                 ),

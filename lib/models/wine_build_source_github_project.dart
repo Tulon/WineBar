@@ -17,6 +17,7 @@
  */
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 import 'archive_type.dart';
 import 'cached_wine_build_source.dart';
@@ -30,7 +31,7 @@ class WineBuildSourceGithubProject extends CachedWineBuildSource {
   final String label;
 
   @override
-  final String? details;
+  String? getDescription(BuildContext context) => descriptionGetter(context);
 
   @override
   final bool recommended;
@@ -44,13 +45,14 @@ class WineBuildSourceGithubProject extends CachedWineBuildSource {
   @override
   final bool buildsMaySupportBothWin64AndWow64Modes;
 
+  final String? Function(BuildContext) descriptionGetter;
   final String githubRepoOwner;
   final String githubProjectName;
   final Dio dio;
 
   WineBuildSourceGithubProject({
     required this.label,
-    this.details,
+    required this.descriptionGetter,
     this.recommended = false,
     required this.directoryName,
     required this.circleAvatarText,

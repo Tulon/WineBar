@@ -16,11 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:winebar/utils/l10n.dart';
+
 class PrefixAlreadyExistsException implements Exception {
   final String prefixName;
 
   PrefixAlreadyExistsException({required this.prefixName});
 
   @override
-  String toString() => 'Prefix "$prefixName" already exists';
+  String toString() => L10n.current.prefixAlreadyExists(prefixName);
 }

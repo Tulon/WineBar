@@ -16,25 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:winebar/utils/l10n.dart';
+import 'package:winebar/l10n/app_localizations.dart';
+import 'package:winebar/l10n/app_localizations_en.dart';
 
-enum D3d8To11Implementation {
-  dxvk(jsonString: 'dxvk', label: 'DXVK'),
-  wineD3D(jsonString: 'wined3d', label: 'WineD3D');
+/// Allows accessing the current AppLocalizations without having
+/// a BuildContext.
+class L10n {
+  static AppLocalizations? _current;
 
-  final String jsonString;
-  final String label;
+  static AppLocalizations get current => (_current ??= AppLocalizationsEn());
 
-  const D3d8To11Implementation({required this.jsonString, required this.label});
-
-  String get explanationText {
-    return switch (this) {
-      dxvk => L10n.current.dxvkOptionExplanation,
-      wineD3D => L10n.current.wineD3DOptionExplanation,
-    };
-  }
-
-  static D3d8To11Implementation? fromJsonString(String? jsonString) {
-    return values.where((impl) => impl.jsonString == jsonString).firstOrNull;
-  }
+  static set current(AppLocalizations value) => _current = value;
 }

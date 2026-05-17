@@ -26,6 +26,7 @@ import 'package:winebar/blocs/prefix_cloning/prefix_cloning_bloc.dart';
 import 'package:winebar/blocs/prefix_cloning/prefix_cloning_state.dart';
 import 'package:winebar/models/process_log.dart';
 import 'package:winebar/utils/app_info.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/tappable_link.dart';
 import 'package:winebar/widgets/process_logs_view_widget.dart';
 
@@ -78,7 +79,7 @@ class PrefixCloningDialog extends StatelessWidget {
                     Expanded(
                       child: Center(
                         child: Text(
-                          'Clone Wine Prefix',
+                          L10n.current.cloneWinePrefixDialogTitle,
                           style: theme.textTheme.headlineSmall,
                         ),
                       ),
@@ -108,7 +109,7 @@ class PrefixCloningDialog extends StatelessWidget {
                     ),
                   ],
                   decoration: InputDecoration(
-                    hintText: 'Target prefix name',
+                    hintText: L10n.current.nameForTheNewPrefixHintText,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -131,7 +132,7 @@ class PrefixCloningDialog extends StatelessWidget {
                     trailingLink: state.prefixCloningFailedProcessLogs.isEmpty
                         ? null
                         : TappableLink(
-                            linkText: 'View Logs.',
+                            linkText: L10n.current.viewLogsLink,
                             onTapped: () => _showProcessLogs(
                               context: context,
                               logs: state.prefixCloningFailedProcessLogs,
@@ -178,8 +179,8 @@ class PrefixCloningDialog extends StatelessWidget {
                     label: Text(
                       state.prefixCloningStatus ==
                               PrefixCloningStatus.inProgress
-                          ? 'Cloning ...'
-                          : 'Clone',
+                          ? L10n.current.cloningButtonLabel
+                          : L10n.current.cloneButtonLabel,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

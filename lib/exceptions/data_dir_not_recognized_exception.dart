@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:winebar/utils/l10n.dart';
+
 class DataDirNotRecognizedException implements Exception {
   final String toplevelDataDir;
 
@@ -23,7 +25,5 @@ class DataDirNotRecognizedException implements Exception {
 
   @override
   String toString() =>
-      "Folder $toplevelDataDir exists but wasn't recognized as "
-      "belonging to this app.\nPlease rename it or move it to Trash and "
-      "then restart the app.";
+      L10n.current.topLevelDataDirExistsButWasntRecognized(toplevelDataDir);
 }

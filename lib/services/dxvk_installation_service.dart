@@ -29,6 +29,7 @@ import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
 import 'package:winebar/services/download_and_extraction_service.dart';
 import 'package:winebar/utils/get_single_child_dir.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
@@ -357,7 +358,7 @@ class _DxvkInstallationPlan extends DxvkInstallationPlan
       await recursiveDeleteAndLogErrors(dxvkPackageDir);
 
       throw GenericException(
-        'The DXVK package is missing the x32 or x64 subdirectory',
+        L10n.current.dxvkPackageIsMissingTheX32OrX64Subdir,
       );
     }
 

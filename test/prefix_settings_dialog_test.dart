@@ -34,6 +34,7 @@ import 'package:winebar/repositories/wine_locale_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/dxvk_installation_service.dart';
 import 'package:winebar/services/utility_service.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_tasks.dart';
@@ -156,7 +157,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await IOOverrides.runZoned(() async {
-      await tester.tap(find.text('Update Wine Prefix'));
+      await tester.tap(find.text(L10n.current.updateWinePrefixButtonLabel));
 
       await tester.pumpAndSettle();
     }, createFile: ioOps.createFile);

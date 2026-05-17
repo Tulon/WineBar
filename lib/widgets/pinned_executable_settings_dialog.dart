@@ -24,6 +24,8 @@ import 'package:winebar/blocs/pinned_executable_settings/pinned_executable_setti
 import 'package:winebar/blocs/pinned_executable_settings/pinned_executable_settings_state.dart';
 import 'package:winebar/models/gpu_info.dart';
 import 'package:winebar/models/pinned_executable.dart';
+import 'package:winebar/utils/l10n.dart';
+import 'package:winebar/utils/match_text_spans.dart';
 
 class PinnedExecutableSettingsDialog extends StatelessWidget {
   final PinnedExecutable pinnedExecutable;
@@ -98,15 +100,22 @@ class PinnedExecutableSettingsDialog extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
                                     style: theme.textTheme.headlineSmall,
-                                    children: [
-                                      TextSpan(
-                                        text: pinnedExecutable.label,
-                                        style: TextStyle(
-                                          color: theme.colorScheme.primary,
+                                    children: matchTextSpans(
+                                      L10n.current
+                                          .pinnedExecutableSettingsDialogTitlePattern(
+                                            '{{label}}',
+                                          ),
+                                      matchedBuilders: {
+                                        '{{label}}': (_) => TextSpan(
+                                          text: pinnedExecutable.label,
+                                          style: TextStyle(
+                                            color: theme.colorScheme.primary,
+                                          ),
                                         ),
-                                      ),
-                                      TextSpan(text: ' Settings'),
-                                    ],
+                                      },
+                                      unmatchedBuilder: (text) =>
+                                          TextSpan(text: text),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -159,13 +168,13 @@ class PinnedExecutableSettingsDialog extends StatelessWidget {
                 : (checked) => bloc.setParticularGpuToBeUsed(checked == true),
           ),
         ),
-        Expanded(child: const Text('Use a particular GPU')),
+        Expanded(child: Text(L10n.current.useParticularGPU)),
       ],
     );
 
     return InputDecorator(
       decoration: InputDecoration(
-        label: const Text('GPU selection'),
+        label: Text(L10n.current.gpuSelection),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
       child: Column(
@@ -175,7 +184,7 @@ class PinnedExecutableSettingsDialog extends StatelessWidget {
           maySelectGpu
               ? useParticularGpuWidget
               : Tooltip(
-                  message: 'Failed to get the list of available GPUs',
+                  message: L10n.current.failedToGetTheListOfAvailableGPUs,
                   child: useParticularGpuWidget,
                 ),
           DropdownMenu<GpuInfo>(
@@ -199,8 +208,8 @@ class PinnedExecutableSettingsDialog extends StatelessWidget {
                 .toList(),
           ),
           if (state.isParticularGpuToBeUsed)
-            const SelectableText(
-              "Note that this feature doesn't work in all scenarios.",
+            SelectableText(
+              L10n.current.noteThatThisFeatureWontWorkInAllScenarios,
             ),
         ],
       ),
@@ -228,7 +237,7 @@ class PinnedExecutableSettingsDialog extends StatelessWidget {
           foregroundColor: theme.colorScheme.onPrimary,
         ),
         child: Text(
-          'Save',
+          MaterialLocalizations.of(context).saveButtonLabel,
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),

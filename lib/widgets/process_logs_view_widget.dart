@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:winebar/models/process_log.dart';
+import 'package:winebar/utils/l10n.dart';
 
 import '../blocs/process_logs_view/process_logs_view_bloc.dart';
 import '../blocs/process_logs_view/process_logs_view_state.dart';
@@ -40,7 +41,7 @@ class ProcessLogsViewWidget extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: colorScheme.inversePrimary,
-              title: const Text('Process Logs'),
+              title: Text(L10n.current.processLogsTitle),
               actionsPadding: EdgeInsetsGeometry.symmetric(horizontal: 8.0),
               actions: [_buildLogSelectionControls(context)],
             ),
@@ -65,7 +66,7 @@ class ProcessLogsViewWidget extends StatelessWidget {
                             ),
                             Center(
                               child: Text(
-                                'No logs were captured from this process',
+                                L10n.current.noLogsWereCapturedFromThisProcess,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 16.0),
                               ),
@@ -124,31 +125,5 @@ class ProcessLogsViewWidget extends StatelessWidget {
         }
       },
     );
-    /*
-                return SegmentedButton<int>(
-                  showSelectedIcon: false,
-                  segments: state.processOutput.logs
-                      .asMap()
-                      .entries
-                      .map(
-                        (entry) => ButtonSegment<int>(
-                          value: entry.key,
-                          label: Text(entry.value.name),
-                        ),
-                      )
-                      .toList(),
-                  selected: {?state.selectedLogIndex},
-                  onSelectionChanged: (Set<int> selection) {
-                    final firstElement = selection.firstOrNull;
-                    if (firstElement != null) {
-                      BlocProvider.of<ProcessOutputViewBloc>(
-                        context,
-                      ).setSelectedLogIndex(firstElement);
-                    }
-                  },
-                );
-              },
-            ),
-            */
   }
 }

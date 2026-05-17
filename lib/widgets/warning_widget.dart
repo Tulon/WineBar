@@ -18,6 +18,7 @@
 
 import 'package:boxy/padding.dart';
 import 'package:flutter/material.dart';
+import 'package:winebar/utils/l10n.dart';
 
 class WarningWidget extends StatelessWidget {
   final bool enabled;
@@ -97,7 +98,7 @@ class WarningWidget extends StatelessWidget {
           ),
         ),
         Text(
-          "Don't show this warning again",
+          L10n.current.dontShowThisWarningAgain,
           style: enabled ? null : TextStyle(color: theme.disabledColor),
         ),
       ],

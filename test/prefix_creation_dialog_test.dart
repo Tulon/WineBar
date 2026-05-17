@@ -31,6 +31,7 @@ import 'package:winebar/models/wine_release.dart';
 import 'package:winebar/repositories/wine_build_source_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/utils/app_info.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/prefix_creation_dialog.dart';
 
@@ -104,11 +105,11 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Proceed Anyway'));
+    await tester.tap(find.text(L10n.current.proceedAnywayButtonLabel));
 
     await tester.pumpAndSettle();
 
-    expect(find.text('Create Prefix'), findsOneWidget);
+    expect(find.text(L10n.current.createWinePrefixButtonLabel), findsOneWidget);
   });
 }
 

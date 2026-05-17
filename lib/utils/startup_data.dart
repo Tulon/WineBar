@@ -27,6 +27,7 @@ import 'package:winebar/repositories/wine_locale_repo.dart';
 import 'package:winebar/repositories/wine_prefix_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/settings_file_helper.dart';
 
@@ -96,29 +97,21 @@ class StartupData {
     if (muvmNeeded) {
       if (!await File('/dev/kvm').exists()) {
         throw ErrorWithMoreDetailsUrl(
-          'This system lacks the hardware virtualization capabilities '
-          '(/dev/kvm is missing) that are required to run WineBar.',
+          L10n.current.missingHardwareVirtualizationCapabilities,
           moreDetailsUrl:
               'https://github.com/Tulon/WineBar/blob/main/Generic-ARM64-support.md',
         );
       }
 
       if (isSnapVersion && Platform.environment['SNAP_KVM_CONNECTED'] != '1') {
+        final kvmConnectCommand = 'sudo snap connect winebar:kvm :kvm';
         throw GenericException(
-          'WineBar on ARM64 needs read-write access to /dev/kvm. Ordinary '
-          'apps normally have such access, but not Snaps. To grant such '
-          'access, run the following command from the command line:\n\n'
-          'sudo snap connect winebar:kvm :kvm\n\n'
-          'Then, restart WineBar.',
+          L10n.current.snapKvmNeedsConnection(kvmConnectCommand),
         );
       }
 
       if (!await _isMuvmAvailable()) {
-        throw GenericException(
-          'This system needs muvm / FEX to be able to run Windows apps. '
-          'The Snap version of WineBar has muvm built-in. Otherwise, '
-          'please install it using "sudo dnf install muvm fex-emu" or similar',
-        );
+        throw GenericException(L10n.current.muvmIsNeededButMissing);
       }
     }
 
@@ -196,6 +189,7 @@ class StartupData {
         stackTrace: stackTrace,
       );
       throw GenericException(
+        // This shouldn't happen, so we don't localize the message.
         'Unable to get the architecture name: ${e.toString()}',
       );
     }

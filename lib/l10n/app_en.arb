@@ -1,0 +1,508 @@
+{
+  "@@locale": "en",
+  "kronekWineSourceDescription": "Provides the standard, Staging, TkG and Proton Wine builds.",
+  "@kronekWineSourceDescription": {
+    "description": "Shown when selecting the Kronek Wine build source"
+  },
+  "geProtonWineSourceDescription": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps.",
+  "@geProtonWineSourceDescription": {
+    "description": "Shown when selecting the GE Proton Wine build source"
+  },
+  "appUnpinningConfirmationDialogTitle": "App unpinning confirmation",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "This text is used as a title in a dialog"
+  },
+  "createWinePrefixDialogTitle": "Create a Wine Prefix",
+  "@createWinePrefixDialogTitle": {
+    "description": "This text is used as a title in a dialog"
+  },
+  "cloneWinePrefixDialogTitle": "Clone Wine Prefix",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "This text is used as a title of a dialog"
+  },
+  "prefixDeletionConfirmationDialogTitle": "Prefix deletion confirmation",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "This text is used as a title of a dialog"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Path inaccessible from Wine",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "This text is used as a title of a dialog"
+  },
+  "winePrefixesPageTitle": "Wine Prefixes",
+  "@winePrefixesPageTitle": {
+    "description": "This text is used as a tile of a page"
+  },
+  "winePrefixPageTitlePattern": "Wine Prefix: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "This text is used as a tile of a page",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    }
+  },
+  "prefixSettingsDialogTitlePattern": "Wine Prefix {prefixName} Settings",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "The pattern for the Prefix Settings dialog's title",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    }
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} Settings",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "The pattern for the Pinned Executable Settings dialog's title",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    }
+  },
+  "processLogsTitle": "Process Logs",
+  "@processLogsTitle": {
+    "description": "This text is used as a page title"
+  },
+  "licenseInfoPattern": "License: {license}",
+  "@licenseInfoPattern": {
+    "description": "A string that ends up on the About Dialog",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    }
+  },
+  "authorInfoPattern": "Author: {author}",
+  "@authorInfoPattern": {
+    "description": "A string that ends up on the About Dialog",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    }
+  },
+  "theCopyingProcessFailedWithExitCode": "The copying process failed with status {exitCode}",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "The error message shown when `cp -a` fails",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    }
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "The DXVK package is missing the x32 or x64 subdirectory",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "The error message shown when the directory structure of the downloaded DXVK package doesn't match our expectations"
+  },
+  "failedToPrepareWinetricksScript": "Failed to prepare the winetricks script:",
+  "@failedToPrepareWinetricksScript": {
+    "description": "The error message shown when downloading or validating the winetricks script fails"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app.",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "The error message shown when we suspect the app's data directory wasn't actually created by this app",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    }
+  },
+  "extractionFailedMessage": "Extraction failed",
+  "@extractionFailedMessage": {
+    "description": "The error message shown when archive extraction fails"
+  },
+  "prefixAlreadyExists": "Prefix \"{prefixName}\" already exists",
+  "@prefixAlreadyExists": {
+    "description": "The error message shown when trying to create a prefix that already exists",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    }
+  },
+  "unknownErrorMessage": "Unknown error",
+  "@unknownErrorMessage": {
+    "description": "A plaholder for the error text when no specific error is available"
+  },
+  "criticalErrorCaption": "Critical Error",
+  "@criticalErrorCaption": {
+    "description": "A caption of the error message box"
+  },
+  "noLogsWereCapturedFromThisProcess": "No logs were captured from this process",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "An informational message"
+  },
+  "winePrefixUpdatedMessage": "Wine prefix updated",
+  "@winePrefixUpdatedMessage": {
+    "description": "An informational message"
+  },
+  "pinnedAppUpdatedMessage": "Pinned app updated",
+  "@pinnedAppUpdatedMessage": {
+    "description": "An informational message"
+  },
+  "moreDetailsLink": "More details.",
+  "@moreDetailsLink": {
+    "description": "This text becomes a clickable link that gets inserted at the end of an error message"
+  },
+  "wow64ModeSection": "WOW64 mode",
+  "@wow64ModeSection": {
+    "description": "This text appears on an input decoration"
+  },
+  "useWow64ModeIfAvailable": "Use the WOW64 mode if available",
+  "@useWow64ModeIfAvailable": {
+    "description": "This text appears next to a checkbox"
+  },
+  "d3D8To11Implementation": "Direct3D 8-11 implementation",
+  "@d3D8To11Implementation": {
+    "description": "This text appears on an input decoration"
+  },
+  "useParticularD3D8To11Impl": "Use a particular Direct3D 8-11 implementation",
+  "@useParticularD3D8To11Impl": {
+    "description": "This text appears next to a checkbox"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "A default implementation for this particular Wine build will be used",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "The text displayed when no particular Direct3D 8-11 implementation is selected"
+  },
+  "windowsLocale": "Locale",
+  "@windowsLocale": {
+    "description": "The text next to a locale selection field. It's a Windows locale for a given Wine prefix."
+  },
+  "useParticularWindowsLocale": "Use a particular locale",
+  "@useParticularWindowsLocale": {
+    "description": "This text appears next to a checkbox"
+  },
+  "dontShowThisWarningAgain": "Don't show this warning again",
+  "@dontShowThisWarningAgain": {
+    "description": "This text appears next to a checkbox"
+  },
+  "nameForTheNewPrefixHintText": "Name for the new wine prefix",
+  "@nameForTheNewPrefixHintText": {
+    "description": "The hint text appearing in an input field"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "This may help with text display in non-Unicode apps",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "An informational text appearing if a particular windows locale is selected"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "The system locale will be used by Windows apps",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "An informational text appearing if no particular windows locale is selected"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "This will make the text too small but won't break older fullscreen apps",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "This text appears when a smaller HiDPI scale than recommended is selected"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "This is the perfect scale for your display",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "This text appears when the recommended HiDPI scale is selected and that recommended scale is 1.0"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "This will help with text being too small but will break older fullscreen apps",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "This text appears when a higher than 1 HiDPI scale is selected, but that value is still lower than than the recommended scale"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "This is the perfect scale for your display, though it will break older fullscreen apps",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "This text appears when the recommended HiDPI scale is selected but the recommended scale is grater than 1.0"
+  },
+  "thisWillProduceTextThatsTooLarge": "This may produce text that's too large",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "This text appears when a larger HiDPI scale than recommended is selected"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "This prefix is in a state were it can't be deleted",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "For instance, the prefix may already be in the process of deletion"
+  },
+  "hiDpiScaleLabel": "HiDPI scale",
+  "@hiDpiScaleLabel": {
+    "description": "This text appears on an input decoration"
+  },
+  "pleaseSelect": "Please select",
+  "@pleaseSelect": {
+    "description": "This text appears when a selection is required but no option is selected"
+  },
+  "appsAreRunningInThisPrefixTooltip": "Apps are running in this prefix",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "This text is placed on a tooltip. The 'prefix' here refers to a Wine prefix"
+  },
+  "refreshWineReleasesTooltip": "Refresh wine releases",
+  "@refreshWineReleasesTooltip": {
+    "description": "This text is placed on a tooltip"
+  },
+  "prefixSettingsTooltip": "Prefix settings",
+  "@prefixSettingsTooltip": {
+    "description": "This text is placed on a tooltip"
+  },
+  "killProcessTooltip": "Kill process",
+  "@killProcessTooltip": {
+    "description": "This text is placed on a tooltip"
+  },
+  "scrollToBottomTooltip": "Scroll to bottom",
+  "@scrollToBottomTooltip": {
+    "description": "This text is placed on a tooltip"
+  },
+  "scrollToTopTooltip": "Scroll to top",
+  "@scrollToTopTooltip": {
+    "description": "This text is placed on a tooltip"
+  },
+  "viewLogsTooltip": "View Logs",
+  "@viewLogsTooltip": {
+    "description": "This text is placed on a tooltip"
+  },
+  "viewLogsLink": "View Logs.",
+  "@viewLogsLink": {
+    "description": "This text becomes a clickable link that gets inserted at the end of an error message"
+  },
+  "useParticularGPU": "Use a particular GPU",
+  "@useParticularGPU": {
+    "description": "This text appears next to a checkbox"
+  },
+  "gpuSelection": "GPU selection",
+  "@gpuSelection": {
+    "description": "This text appears on an input decoration"
+  },
+  "failedToGetTheListOfAvailableGPUs": "Failed to get the list of available GPUs",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "This text is placed on a tooltip"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "Note that this feature doesn't work in all scenarios",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "Informational text displayed when the user activates a feature that doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "Add Wine Prefix",
+  "@addWinePrefixButtonLabel": {
+    "description": "This text is placed on a button"
+  },
+  "aboutButtonLabel": "About",
+  "@aboutButtonLabel": {
+    "description": "This text is placed on a button or a menu item"
+  },
+  "donateButtonLabel": "Donate",
+  "@donateButtonLabel": {
+    "description": "This text is placed on a button"
+  },
+  "unpinButtonLabel": "Unpin",
+  "@unpinButtonLabel": {
+    "description": "This text is placed on a button or a menu item"
+  },
+  "deleteButtonLabel": "Delete",
+  "@deleteButtonLabel": {
+    "description": "This text is placed on a button"
+  },
+  "createWinePrefixButtonLabel": "Create Wine Prefix",
+  "@createWinePrefixButtonLabel": {
+    "description": "This text is placed on a button"
+  },
+  "startingButtonLabel": "Starting ...",
+  "@startingButtonLabel": {
+    "description": "This text is placed on a button when a certain operation is starting"
+  },
+  "downloadingAndExtractingButtonLabel": "Downloading and Extracting ...",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "This text is placed on a button when a download and extraction operation is in progress"
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "Downloading and Extracting DXVK ...",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "This text is placed on a button when the download and extraction operation for DXVK is in progress"
+  },
+  "creatingWinePrefixButtonLabel": "Creating Wine Prefix ...",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "This text is placed on a button when a Wine prefix is being created"
+  },
+  "updateWinePrefixButtonLabel": "Update Wine Prefix",
+  "@updateWinePrefixButtonLabel": {
+    "description": "This text is placed on a button"
+  },
+  "updatingWinePrefixButtonLabel": "Updating Wine Prefix ...",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "This text is placed on a button when a Wine prefix is being updated"
+  },
+  "cloneButtonLabel": "Clone",
+  "@cloneButtonLabel": {
+    "description": "This text is placed on a button or a menu item"
+  },
+  "cloningButtonLabel": "Cloning ...",
+  "@cloningButtonLabel": {
+    "description": "This text is placed on a button when a wine prefix cloning operation is in progress"
+  },
+  "pinExecutableButtonLabel": "Pin Executable",
+  "@pinExecutableButtonLabel": {
+    "description": "This text is placed on a button"
+  },
+  "proceedAnywayButtonLabel": "Proceed Anyway",
+  "@proceedAnywayButtonLabel": {
+    "description": "This text is placed on a button"
+  },
+  "runExecutableButtonLabel": "Run Executable",
+  "@runExecutableButtonLabel": {
+    "description": "This text is placed on a button"
+  },
+  "runInstallerButtonLabel": "Run Installer",
+  "@runInstallerButtonLabel": {
+    "description": "This text is placed on a button"
+  },
+  "settingsMenuItem": "Settings",
+  "@settingsMenuItem": {
+    "description": "This text is placed on a menu item"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "The following app is about to be unpinned:",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "This text appears on a dialog"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "The following prefix is about to be deleted:",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "This text appears on a dialog. The 'prefix' here refers to a Wine Prefix"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "The following path is inaccessible from Wine:",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "This text appears on a dialog"
+  },
+  "pathInaccessibleFromWineExplanation": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox.",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "This text appears on a dialog"
+  },
+  "solutionHeading": "Solution",
+  "@solutionHeading": {
+    "description": "This text appears on a dialog as a heading, followed by more text below"
+  },
+  "pathInaccessibleFromWineSolution": "Copy the folder in question somewhere under your home directory.",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "This text appears on a dialog after the 'Solution' heading"
+  },
+  "thisActionCantBeUndone": "This action can't be undone!",
+  "@thisActionCantBeUndone": {
+    "description": "This text appears on a dialog"
+  },
+  "selectWineBuildProviderStepName": "Select wine build provider",
+  "@selectWineBuildProviderStepName": {
+    "description": "This text appears in a list of wizard pages and also at the top of the corresponding page"
+  },
+  "selectWineReleaseStepName": "Select wine release",
+  "@selectWineReleaseStepName": {
+    "description": "This text appears in a list of wizard pages and also at the top of the corresponding page"
+  },
+  "selectWineBuildStepName": "Select wine build",
+  "@selectWineBuildStepName": {
+    "description": "This text appears in a list of wizard pages and also at the top of the corresponding page"
+  },
+  "setOptionsStepName": "Set options",
+  "@setOptionsStepName": {
+    "description": "This text appears in a list of wizard pages and also at the top of the corresponding page"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation.",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "A warning message shown when a WOW64-only Wine build is going to be used under emumation"
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available.",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "A warning message shown when a non-WOW64-capable build is selected in an environment where 32-bit libraries may not be present"
+  },
+  "wow64PreferenceUnderEmulationWarning": "The WOW64 mode under emulation is known to have issues. Expect a broken installation.",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "A warning message shown when the WOW64 mode is preferred (on builds that support it optionally) in an environment that requires emulation"
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries.",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "A warning message shown when the WOW64 mode is not preferred (on builds that support it optionally) in an environment where 32-bit libraries may not be present"
+  },
+  "windowsExecutablesFilterName": "Windows executables",
+  "@windowsExecutablesFilterName": {
+    "description": "This text ends up the \"File type\" dropdown on the file selection dialog"
+  },
+  "dxvkOptionExplanation": "A newer and faster implementation from Proton",
+  "@dxvkOptionExplanation": {
+    "description": "A description text shown when the DXVK implementation of Direct3D 8-11 is selected"
+  },
+  "wineD3DOptionExplanation": "A mature implementation from Wine. To be used in case of issues with DXVK.",
+  "@wineD3DOptionExplanation": {
+    "description": "A description text shown when the WineD3D implementation of Direct3D 8-11 is selected"
+  },
+  "screensaverDisableReason": "A Wine app (possibly fullscreen) is running",
+  "@screensaverDisableReason": {
+    "description": "The reason for disabling the screensaver, as required by the corresponding DBus API"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "The hash of the downloaded winetricks script doesn't match the expected one.",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "The error message shown when the hash of a downloaded winetricks script doesn't match the expected one"
+  },
+  "downloadedFile": "Downloaded file: {downloadedFile}",
+  "@downloadedFile": {
+    "description": "A line in a larger error message",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    }
+  },
+  "expectedSha256Hash": "Expected SHA256 hash: {hash}",
+  "@expectedSha256Hash": {
+    "description": "A line in a larger error message",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "actualSha256Hash": "Actual SHA256 hash: {hash}",
+  "@actualSha256Hash": {
+    "description": "A line in a larger error message",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "Finish the apps running in all prefixes first",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "The error message shown when trying to do something that requres no apps to be running across all prefixes"
+  },
+  "finishTheRunningAppsFirst": "Finish the running apps first",
+  "@finishTheRunningAppsFirst": {
+    "description": "The error message shown when trying to do something that requires no apps to be running in the current prefix"
+  },
+  "missingHardwareVirtualizationCapabilities": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar.",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "The error message shown on systems where we need hardware virtualization which is not available"
+  },
+  "snapKvmNeedsConnection": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar.",
+  "@snapKvmNeedsConnection": {
+    "description": "The error message shown when running under Snap and not having write access to /dev/kvm",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    }
+  },
+  "muvmIsNeededButMissing": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar",
+  "@muvmIsNeededButMissing": {
+    "description": "The error message shown when muvm is unavailable on systems where we need it"
+  },
+  "prefixNameCantBeEmpty": "Prefix name can't be empty",
+  "@prefixNameCantBeEmpty": {
+    "description": "The error message shown when trying to create a Wine prefix with an empty name"
+  },
+  "illegalSymbolsPresent": "Illegal symbols present",
+  "@illegalSymbolsPresent": {
+    "description": "The error message shown when non allowed symbols are present in an input field"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided.",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "The error message shown when trying to run a winetricks script that couldn't be found"
+  },
+  "failedToLocateWineOrWineserverExecutables": "Failed to locate the wine / wineserver executables",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "Running Wine apps requires us locating the appropriate wine and wineserver executables. This error message is shown when we are not able to do that."
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "Failed to locate the wine / wineserver executables for running winetricks",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "Winetricks may need different versions (think with or without wow64) than for regular apps. This error message is shown when we are not able to locate them."
+  },
+  "specificCommandHasFailed": "The \"{command}\" command failed",
+  "@specificCommandHasFailed": {
+    "description": "The error message shown when an external tool has failed",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    }
+  }
+}

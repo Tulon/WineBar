@@ -28,6 +28,7 @@ import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_installation_descriptor.dart';
@@ -89,7 +90,7 @@ class WineTasks {
 
     if (processResult.exitCode != 0) {
       throw ProcessFailedException(
-        'The "wineboot -u" command failed',
+        L10n.current.specificCommandHasFailed("wineboot -u"),
         processLogs: processResult.logs,
       );
     }
@@ -144,7 +145,7 @@ class WineTasks {
 
     if (processResult.exitCode != 0) {
       throw ProcessFailedException(
-        'The "wine reg" command failed',
+        L10n.current.specificCommandHasFailed("wine reg"),
         processLogs: processResult.logs,
       );
     }
@@ -333,7 +334,7 @@ class WineTasks {
 
       if (processResult.exitCode != 0) {
         throw ProcessFailedException(
-          'The "wine reg import" command failed',
+          L10n.current.specificCommandHasFailed("wine reg import"),
           processLogs: processResult.logs,
         );
       }

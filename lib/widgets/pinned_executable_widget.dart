@@ -27,6 +27,7 @@ import 'package:winebar/blocs/pinned_executable/pinned_executable_bloc.dart';
 import 'package:winebar/blocs/pinned_executable/pinned_executable_state.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_bloc.dart';
 import 'package:winebar/models/pinned_executable.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/widgets/pinned_executable_settings_dialog.dart';
 
 import '../models/wine_prefix.dart';
@@ -228,7 +229,7 @@ class _PinnedExecutableWidgetState extends State<PinnedExecutableWidget> {
           requestFocusOnHover: false,
 
           leadingIcon: Icon(MdiIcons.pinOff),
-          child: const Text('Unpin'),
+          child: Text(L10n.current.unpinButtonLabel),
           onPressed: () {
             unawaited(_showUnpinConfirmationDialog(context: context));
           },
@@ -238,7 +239,7 @@ class _PinnedExecutableWidgetState extends State<PinnedExecutableWidget> {
           requestFocusOnHover: false,
 
           leadingIcon: Icon(MdiIcons.cogs),
-          child: const Text('Settings'),
+          child: Text(L10n.current.settingsMenuItem),
           onPressed: () {
             unawaited(_showPinnedExecutableSettingsDialog(context: context));
           },
@@ -316,12 +317,12 @@ class _PinnedExecutableWidgetState extends State<PinnedExecutableWidget> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('App unpinning confirmation'),
+          title: Text(L10n.current.appUnpinningConfirmationDialogTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text('The following app is about to be unpinned:'),
+              Text(L10n.current.theFollowingAppIsAboutToBeUnpinned),
               Text(
                 widget.pinnedExecutable.label,
                 overflow: TextOverflow.ellipsis,
@@ -332,7 +333,7 @@ class _PinnedExecutableWidgetState extends State<PinnedExecutableWidget> {
           actions: <Widget>[
             TextButton.icon(
               icon: Icon(MdiIcons.pinOff),
-              label: const Text('Unpin'),
+              label: Text(L10n.current.unpinButtonLabel),
               onPressed: () {
                 executableSetBloc.initiateUnpinningExecutable(
                   widget.pinnedExecutable,
@@ -341,7 +342,7 @@ class _PinnedExecutableWidgetState extends State<PinnedExecutableWidget> {
               },
             ),
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
               onPressed: () {
                 Navigator.of(context).pop();
               },

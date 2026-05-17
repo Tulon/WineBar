@@ -16,14 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:winebar/utils/l10n.dart';
+
 /// Returns null if [prefixName] is valid and an error message otherwise.
 String? validatePrefixName(String prefixName) {
   if (prefixName.isEmpty) {
-    return "Prefix name can't be empty";
+    return L10n.current.prefixNameCantBeEmpty;
   } else if (!_validPrefixPattern.hasMatch(prefixName) ||
       prefixName.contains('/') ||
       prefixName.contains('\\')) {
-    return 'Illegal symbols present';
+    return L10n.current.illegalSymbolsPresent;
   } else {
     // Prefix name valid.
     return null;

@@ -27,6 +27,7 @@ import 'package:path/path.dart' as path;
 import 'package:process/process.dart';
 import 'package:winebar/exceptions/wine_command_failed_exception.dart';
 import 'package:winebar/models/process_log.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/validate_prefix_name.dart';
@@ -135,7 +136,7 @@ class PrefixCloningBloc extends Cubit<PrefixCloningState> {
 
       if (result.exitCode != 0) {
         throw ProcessFailedException(
-          'The copying process failed with status ${result.exitCode}',
+          L10n.current.theCopyingProcessFailedWithExitCode(result.exitCode),
           processLogs: [ProcessLog(name: 'STDERR', content: result.stderr)],
         );
       }

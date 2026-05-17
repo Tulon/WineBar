@@ -25,6 +25,7 @@ import 'package:path/path.dart' as path;
 import 'package:winebar/exceptions/generic_exception.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
 
@@ -192,7 +193,7 @@ class _WinePrefix with ChangeNotifier implements WinePrefix {
   void startDeleting() {
     if (!status.mayDelete) {
       throw GenericException(
-        "This prefix is in a state were it can't be deleted",
+        L10n.current.thisPrefixIsInAStateWhereItCantBeDeleted,
       );
     }
 

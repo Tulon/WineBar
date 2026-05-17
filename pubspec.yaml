@@ -63,6 +63,9 @@ dependencies:
   dropdown_search: ^7.0.0
   stream_listener_widget: ^1.1.0
   process: ^5.0.5
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +86,9 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  # Necessary for generating localization files.
+  generate: true
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
