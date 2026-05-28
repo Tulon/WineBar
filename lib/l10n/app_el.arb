@@ -1,0 +1,618 @@
+{
+  "@@locale": "el",
+  "kronekWineSourceDescription": "Παρέχει τις προεπιλεγμένες, Staging, TkG και Proton εκδόσεις του Wine.",
+  "@kronekWineSourceDescription": {
+    "description": "Εμφανίζεται όταν επιλέγεται η πηγή του Wine build Kronek",
+    "x-source-message": "Provides the standard, Staging, TkG and Proton Wine builds."
+  },
+  "geProtonWineSourceDescription": "Παρέχει εκδόσεις Proton με ενσωματωμένο DXVK / VK3D. Συνιστάται για παιχνίδια και άλλες εφαρμογές πλήρους οθόνης.",
+  "@geProtonWineSourceDescription": {
+    "description": "Εμφανίζεται όταν επιλέγεται η πηγή του Wine build GE Proton",
+    "x-source-message": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps."
+  },
+  "appUnpinningConfirmationDialogTitle": "Επιβεβαίωση αποπροσκόλλησης εφαρμογής",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "Αυτό το κείμενο χρησιμοποιείται ως τίτλος σε έναν διάλογο",
+    "x-source-message": "App unpinning confirmation"
+  },
+  "createWinePrefixDialogTitle": "Δημιουργία Wine Prefix",
+  "@createWinePrefixDialogTitle": {
+    "description": "Αυτό το κείμενο χρησιμοποιείται ως τίτλος σε έναν διάλογο",
+    "x-source-message": "Create a Wine Prefix"
+  },
+  "cloneWinePrefixDialogTitle": "Κλωνοποίηση Wine Prefix",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "Αυτό το κείμενο χρησιμοποιείται ως τίτλος ενός διαλόγου",
+    "x-source-message": "Clone Wine Prefix"
+  },
+  "prefixDeletionConfirmationDialogTitle": "Επιβεβαίωση διαγραφής Prefix",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "Αυτό το κείμενο χρησιμοποιείται ως τίτλος ενός διαλόγου",
+    "x-source-message": "Prefix deletion confirmation"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Μονοπάτι μη προσβάσιμο από το Wine",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "Αυτό το κείμενο χρησιμοποιείται ως τίτλος ενός διαλόγου",
+    "x-source-message": "Path inaccessible from Wine"
+  },
+  "winePrefixesPageTitle": "Wine Prefixes",
+  "@winePrefixesPageTitle": {
+    "description": "Αυτό το κείμενο χρησιμοποιείται ως τίτλος σε μια σελίδα",
+    "x-source-message": "Wine Prefixes"
+  },
+  "winePrefixPageTitlePattern": "Wine Prefix: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "Αυτό το κείμενο χρησιμοποιείται ως τίτλος σε μια σελίδα",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix: {prefixName}"
+  },
+  "prefixSettingsDialogTitlePattern": "Wine Prefix {prefixName} Settings",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "Το μοτίβο για τον τίτλο του διαλόγου Ρυθμίσεων Prefix",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix {prefixName} Settings"
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} Ρυθμίσεις",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "Το μοτίβο για τον τίτλο του διαλόγου Ρυθμίσεων Προσκολλημένου Εκτελέσιμου",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "{pinnedExecutableLabel} Settings"
+  },
+  "processLogsTitle": "Καταγραφές Διαδικασιών",
+  "@processLogsTitle": {
+    "description": "Αυτό το κείμενο χρησιμοποιείται ως τίτλος σελίδας",
+    "x-source-message": "Process Logs"
+  },
+  "licenseInfoPattern": "Άδεια: {license}",
+  "@licenseInfoPattern": {
+    "description": "Μια συμβολοσειρά που εμφανίζεται στον διάλογο Σχετικά",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "License: {license}"
+  },
+  "authorInfoPattern": "Συγγραφέας: {author}",
+  "@authorInfoPattern": {
+    "description": "Μια συμβολοσειρά που εμφανίζεται στον διάλογο Σχετικά",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Author: {author}"
+  },
+  "theCopyingProcessFailedWithExitCode": "Η διαδικασία αντιγραφής απέτυχε με κατάσταση {exitCode}",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν το `cp -a` αποτυγχάνει",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    },
+    "x-source-message": "The copying process failed with status {exitCode}"
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "Το πακέτο DXVK λείπει το υποκατάλογο x32 ή x64",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν η δομή του καταλόγου του ληφθέντος πακέτου DXVK δεν ταιριάζει με τις προσδοκίες μας",
+    "x-source-message": "The DXVK package is missing the x32 or x64 subdirectory"
+  },
+  "failedToPrepareWinetricksScript": "Αποτυχία προετοιμασίας του σενάριου winetricks:",
+  "@failedToPrepareWinetricksScript": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν η λήψη ή η επικύρωση του σενάριου winetricks αποτυγχάνει",
+    "x-source-message": "Failed to prepare the winetricks script:"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "Ο φάκελος {toplevelDataDir} υπάρχει αλλά δεν αναγνωρίστηκε ως ανήκων σε αυτήν την εφαρμογή.\nΠαρακαλώ μετονομάστε τον ή μετακινήστε τον στο Κάδο Απορριμμάτων και στη συνέχεια επανεκκινήστε την εφαρμογή.",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν υποψιαζόμαστε ότι ο κατάλογος δεδομένων της εφαρμογής δεν δημιουργήθηκε πραγματικά από αυτήν την εφαρμογή",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app."
+  },
+  "extractionFailedMessage": "Η εξαγωγή απέτυχε",
+  "@extractionFailedMessage": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν η εξαγωγή αρχείου αποτυγχάνει",
+    "x-source-message": "Extraction failed"
+  },
+  "prefixAlreadyExists": "Το προφίλ \"{prefixName}\" υπάρχει ήδη",
+  "@prefixAlreadyExists": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν προσπαθείτε να δημιουργήσετε ένα προφίλ που υπάρχει ήδη",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Prefix \"{prefixName}\" already exists"
+  },
+  "unknownErrorMessage": "Άγνωστο σφάλμα",
+  "@unknownErrorMessage": {
+    "description": "Ένα placeholder για το κείμενο σφάλματος όταν δεν υπάρχει συγκεκριμένο σφάλμα",
+    "x-source-message": "Unknown error"
+  },
+  "criticalErrorCaption": "Κρίσιμο σφάλμα",
+  "@criticalErrorCaption": {
+    "description": "Η επικεφαλίδα του πλαισίου μηνύματος σφάλματος",
+    "x-source-message": "Critical Error"
+  },
+  "noLogsWereCapturedFromThisProcess": "Δεν καταγράφηκαν αρχεία καταγραφής από αυτή τη διαδικασία",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "Μια πληροφοριακή ενότητα",
+    "x-source-message": "No logs were captured from this process"
+  },
+  "winePrefixUpdatedMessage": "Το Wine prefix ενημερώθηκε",
+  "@winePrefixUpdatedMessage": {
+    "description": "Μια πληροφοριακή ενότητα",
+    "x-source-message": "Wine prefix updated"
+  },
+  "pinnedAppUpdatedMessage": "Η καρφιτσωμένη εφαρμογή ενημερώθηκε",
+  "@pinnedAppUpdatedMessage": {
+    "description": "Μια πληροφοριακή ενότητα",
+    "x-source-message": "Pinned app updated"
+  },
+  "moreDetailsLink": "Περισσότερες λεπτομέρειες.",
+  "@moreDetailsLink": {
+    "description": "Αυτό το κείμενο γίνεται ένας clickable σύνδεσμος που προστίθεται στο τέλος ενός μηνύματος σφάλματος",
+    "x-source-message": "More details."
+  },
+  "wow64ModeSection": "Λειτουργία WOW64",
+  "@wow64ModeSection": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε μια διακόσμηση εισόδου",
+    "x-source-message": "WOW64 mode"
+  },
+  "useWow64ModeIfAvailable": "Χρησιμοποιήστε τη λειτουργία WOW64 εάν είναι διαθέσιμη",
+  "@useWow64ModeIfAvailable": {
+    "description": "Αυτό το κείμενο εμφανίζεται δίπλα σε ένα πλαίσιο ελέγχου",
+    "x-source-message": "Use the WOW64 mode if available"
+  },
+  "d3D8To11Implementation": "Υλοποίηση Direct3D 8-11",
+  "@d3D8To11Implementation": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε μια διακόσμηση εισόδου",
+    "x-source-message": "Direct3D 8-11 implementation"
+  },
+  "useParticularD3D8To11Impl": "Χρησιμοποιήστε μια συγκεκριμένη υλοποίηση Direct3D 8-11",
+  "@useParticularD3D8To11Impl": {
+    "description": "Αυτό το κείμενο εμφανίζεται δίπλα σε ένα πλαίσιο ελέγχου",
+    "x-source-message": "Use a particular Direct3D 8-11 implementation"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "Θα χρησιμοποιηθεί μια προεπιλεγμένη υλοποίηση για αυτήν την συγκεκριμένη έκδοση του Wine",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "Το κείμενο που εμφανίζεται όταν δεν έχει επιλεγεί κάποια συγκεκριμένη υλοποίηση Direct3D 8-11",
+    "x-source-message": "A default implementation for this particular Wine build will be used"
+  },
+  "windowsLocale": "Τοπικό",
+  "@windowsLocale": {
+    "description": "Το κείμενο δίπλα σε ένα πεδίο επιλογής τοπικού. Είναι τοπικό Windows για μια συγκεκριμένη Wine prefix.",
+    "x-source-message": "Locale"
+  },
+  "useParticularWindowsLocale": "Χρήση ενός συγκεκριμένου τοπικού",
+  "@useParticularWindowsLocale": {
+    "description": "Αυτό το κείμενο εμφανίζεται δίπλα σε ένα πλαίσιο ελέγχου",
+    "x-source-message": "Use a particular locale"
+  },
+  "dontShowThisWarningAgain": "Μην εμφανίζεις ξανά αυτήν την προειδοποίηση",
+  "@dontShowThisWarningAgain": {
+    "description": "Αυτό το κείμενο εμφανίζεται δίπλα σε ένα πλαίσιο ελέγχου",
+    "x-source-message": "Don't show this warning again"
+  },
+  "nameForTheNewPrefixHintText": "Όνομα για το νέο wine prefix",
+  "@nameForTheNewPrefixHintText": {
+    "description": "Το κείμενο υποδείγματος που εμφανίζεται σε ένα πεδίο εισόδου",
+    "x-source-message": "Name for the new wine prefix"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "Αυτό μπορεί να βοηθήσει με την εμφάνιση κειμένου σε μη-Unicode εφαρμογές",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "Ένα ενημερωτικό κείμενο που εμφανίζεται αν έχει επιλεγεί ένα συγκεκριμένο τοπικό Windows",
+    "x-source-message": "This may help with text display in non-Unicode apps"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "Το τοπικό του συστήματος θα χρησιμοποιηθεί από τις εφαρμογές Windows",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "Ένα ενημερωτικό κείμενο που εμφανίζεται αν δεν έχει επιλεγεί κάποιο συγκεκριμένο τοπικό Windows",
+    "x-source-message": "The system locale will be used by Windows apps"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "Αυτό θα κάνει το κείμενο πολύ μικρό, αλλά δεν θα σπάσει τις παλιές εφαρμογές πλήρους οθόνης",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "Αυτό το κείμενο εμφανίζεται όταν επιλέγεται μια μικρότερη κλίμακα HiDPI από την προτεινόμενη",
+    "x-source-message": "This will make the text too small but won't break older fullscreen apps"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "Αυτός είναι ο τέλειος κλίμακας για την οθόνη σας",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "Αυτό το κείμενο εμφανίζεται όταν επιλέγεται η προτεινόμενη κλίμακα HiDPI και αυτή είναι 1.0",
+    "x-source-message": "This is the perfect scale for your display"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "Αυτό θα βοηθήσει με το κείμενο να είναι πολύ μικρό, αλλά θα σπάσει παλαιότερες εφαρμογές πλήρους οθόνης",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "Αυτό το κείμενο εμφανίζεται όταν επιλέγεται κλίμακα HiDPI μεγαλύτερη από 1, αλλά η τιμή είναι ακόμα χαμηλότερη από την προτεινόμενη κλίμακα",
+    "x-source-message": "This will help with text being too small but will break older fullscreen apps"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "Αυτός είναι ο τέλειος κλίμακας για την οθόνη σας, αν και θα σπάσει παλαιότερες εφαρμογές πλήρους οθόνης",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "Αυτό το κείμενο εμφανίζεται όταν επιλέγεται η προτεινόμενη κλίμακα HiDPI αλλά αυτή είναι μεγαλύτερη από 1.0",
+    "x-source-message": "This is the perfect scale for your display, though it will break older fullscreen apps"
+  },
+  "thisWillProduceTextThatsTooLarge": "Αυτό μπορεί να παράγει κείμενο που είναι πολύ μεγάλο",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "Αυτό το κείμενο εμφανίζεται όταν επιλέγεται μεγαλύτερη κλίμακα HiDPI από την προτεινόμενη",
+    "x-source-message": "This may produce text that's too large"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "Αυτό το prefix βρίσκεται σε κατάσταση όπου δεν μπορεί να διαγραφεί",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "Για παράδειγμα, το prefix μπορεί να βρίσκεται ήδη στη διαδικασία διαγραφής",
+    "x-source-message": "This prefix is in a state were it can't be deleted"
+  },
+  "hiDpiScaleLabel": "Κλίμακα HiDPI",
+  "@hiDpiScaleLabel": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε διακόσμηση εισόδου",
+    "x-source-message": "HiDPI scale"
+  },
+  "pleaseSelect": "Παρακαλώ επιλέξτε",
+  "@pleaseSelect": {
+    "description": "Αυτό το κείμενο εμφανίζεται όταν απαιτείται επιλογή αλλά δεν έχει επιλεγεί καμία επιλογή",
+    "x-source-message": "Please select"
+  },
+  "appsAreRunningInThisPrefixTooltip": "Οι εφαρμογές εκτελούνται σε αυτό το προφίλ",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα tooltip. Το 'prefix' εδώ αναφέρεται σε ένα Wine prefix",
+    "x-source-message": "Apps are running in this prefix"
+  },
+  "refreshWineReleasesTooltip": "Ανανέωση κυκλοφοριών Wine",
+  "@refreshWineReleasesTooltip": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα tooltip",
+    "x-source-message": "Refresh wine releases"
+  },
+  "prefixSettingsTooltip": "Ρυθμίσεις προφίλ",
+  "@prefixSettingsTooltip": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα tooltip",
+    "x-source-message": "Prefix settings"
+  },
+  "killProcessTooltip": "Τερματισμός διεργασίας",
+  "@killProcessTooltip": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα tooltip",
+    "x-source-message": "Kill process"
+  },
+  "scrollToBottomTooltip": "Κύλιση προς τα κάτω",
+  "@scrollToBottomTooltip": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα tooltip",
+    "x-source-message": "Scroll to bottom"
+  },
+  "scrollToTopTooltip": "Κύλιση προς τα πάνω",
+  "@scrollToTopTooltip": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα tooltip",
+    "x-source-message": "Scroll to top"
+  },
+  "viewLogsTooltip": "Προβολή αρχείων καταγραφής",
+  "@viewLogsTooltip": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα tooltip",
+    "x-source-message": "View Logs"
+  },
+  "viewLogsLink": "Προβολή αρχείων καταγραφής.",
+  "@viewLogsLink": {
+    "description": "Αυτό το κείμενο γίνεται clickable link που εισάγεται στο τέλος ενός μηνύματος σφάλματος",
+    "x-source-message": "View Logs."
+  },
+  "useParticularGPU": "Χρήση συγκεκριμένου GPU",
+  "@useParticularGPU": {
+    "description": "Αυτό το κείμενο εμφανίζεται δίπλα σε ένα checkbox",
+    "x-source-message": "Use a particular GPU"
+  },
+  "gpuSelection": "Επιλογή GPU",
+  "@gpuSelection": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε μια διακόσμηση εισόδου",
+    "x-source-message": "GPU selection"
+  },
+  "failedToGetTheListOfAvailableGPUs": "Αποτυχία λήψης της λίστας διαθέσιμων GPU",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα tooltip",
+    "x-source-message": "Failed to get the list of available GPUs"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "Σημειώστε ότι αυτή η λειτουργία δεν λειτουργεί σε όλες τις περιπτώσεις",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "Πληροφοριακό κείμενο που εμφανίζεται όταν ο χρήστης ενεργοποιεί μια λειτουργία που δεν λειτουργεί σε όλες τις περιπτώσεις",
+    "x-source-message": "Note that this feature doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "Προσθήκη Wine Prefix",
+  "@addWinePrefixButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί",
+    "x-source-message": "Add Wine Prefix"
+  },
+  "aboutButtonLabel": "Σχετικά",
+  "@aboutButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί ή στοιχείο μενού",
+    "x-source-message": "About"
+  },
+  "donateButtonLabel": "Δωρεά",
+  "@donateButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί",
+    "x-source-message": "Donate"
+  },
+  "unpinButtonLabel": "Αποπροσάρτηση",
+  "@unpinButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί ή στοιχείο μενού",
+    "x-source-message": "Unpin"
+  },
+  "deleteButtonLabel": "Διαγραφή",
+  "@deleteButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί",
+    "x-source-message": "Delete"
+  },
+  "createWinePrefixButtonLabel": "Δημιουργία Wine Prefix",
+  "@createWinePrefixButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί",
+    "x-source-message": "Create Wine Prefix"
+  },
+  "startingButtonLabel": "Εκκίνηση ...",
+  "@startingButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί όταν ξεκινά μια συγκεκριμένη λειτουργία",
+    "x-source-message": "Starting ..."
+  },
+  "downloadingAndExtractingButtonLabel": "Λήψη και εξαγωγή ...",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί όταν εκτελείται η λήψη και εξαγωγή",
+    "x-source-message": "Downloading and Extracting ..."
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "Λήψη και εξαγωγή DXVK ...",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί όταν εκτελείται η λήψη και εξαγωγή για το DXVK",
+    "x-source-message": "Downloading and Extracting DXVK ..."
+  },
+  "creatingWinePrefixButtonLabel": "Δημιουργία Wine Prefix ...",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί όταν δημιουργείται ένα Wine prefix",
+    "x-source-message": "Creating Wine Prefix ..."
+  },
+  "updateWinePrefixButtonLabel": "Ενημέρωση Wine Prefix",
+  "@updateWinePrefixButtonLabel": {
+    "description": "Αυτό το κείμενο βρίσκεται σε ένα κουμπί",
+    "x-source-message": "Update Wine Prefix"
+  },
+  "updatingWinePrefixButtonLabel": "Ενημέρωση Wine Prefix …",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα κουμπί όταν ένας Wine prefix ενημερώνεται",
+    "x-source-message": "Updating Wine Prefix ..."
+  },
+  "cloneButtonLabel": "Κλωνοποίηση",
+  "@cloneButtonLabel": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα κουμπί ή στοιχείο μενού",
+    "x-source-message": "Clone"
+  },
+  "cloningButtonLabel": "Κλωνοποίηση …",
+  "@cloningButtonLabel": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα κουμπί όταν εκτελείται η διαδικασία κλωνοποίησης ενός wine prefix",
+    "x-source-message": "Cloning ..."
+  },
+  "pinExecutableButtonLabel": "Καρφίτσωμα Εκτελέσιμου",
+  "@pinExecutableButtonLabel": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα κουμπί",
+    "x-source-message": "Pin Executable"
+  },
+  "proceedAnywayButtonLabel": "Συνέχεια Όλα Τι",
+  "@proceedAnywayButtonLabel": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα κουμπί",
+    "x-source-message": "Proceed Anyway"
+  },
+  "runExecutableButtonLabel": "Εκτέλεση Εκτελέσιμου",
+  "@runExecutableButtonLabel": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα κουμπί",
+    "x-source-message": "Run Executable"
+  },
+  "runInstallerButtonLabel": "Εκτέλεση Εγκαταστάτη",
+  "@runInstallerButtonLabel": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα κουμπί",
+    "x-source-message": "Run Installer"
+  },
+  "settingsMenuItem": "Ρυθμίσεις",
+  "@settingsMenuItem": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα στοιχείο μενού",
+    "x-source-message": "Settings"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "Η ακόλουθη εφαρμογή πρόκειται να αποκαρφίτηται:",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα διάλογο",
+    "x-source-message": "The following app is about to be unpinned:"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "Το ακόλουθο prefix πρόκειται να διαγραφεί:",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα διάλογο. Το 'prefix' εδώ αναφέρεται σε Wine Prefix",
+    "x-source-message": "The following prefix is about to be deleted:"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "Η ακόλουθη διαδρομή είναι μη προσβάσιμη από Wine:",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα διάλογο",
+    "x-source-message": "The following path is inaccessible from Wine:"
+  },
+  "pathInaccessibleFromWineExplanation": "Μια διαδρομή μπορεί να είναι μη προσβάσιμη από το Wine επειδή ολόκληρο το Wine Bar ή μόνο το Wine εκτελείται σε εικονική μηχανή (σε Macs με Apple silicon) ή σε sandbox Snap / Flatpak.",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα διάλογο",
+    "x-source-message": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox."
+  },
+  "solutionHeading": "Λύση",
+  "@solutionHeading": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα διάλογο ως επικεφαλίδα, ακολουθούμενη από περισσότερο κείμενο παρακάτω",
+    "x-source-message": "Solution"
+  },
+  "pathInaccessibleFromWineSolution": "Αντιγράψτε τον κατάλογο που αφορά κάπου κάτω από το προσωπικό σας φάκελο.",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα διάλογο μετά την επικεφαλίδα 'Λύση'",
+    "x-source-message": "Copy the folder in question somewhere under your home directory."
+  },
+  "thisActionCantBeUndone": "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί!",
+  "@thisActionCantBeUndone": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε ένα διάλογο",
+    "x-source-message": "This action can't be undone!"
+  },
+  "selectWineBuildProviderStepName": "Επιλέξτε πάροχο κατασκευής wine",
+  "@selectWineBuildProviderStepName": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε μια λίστα με σελίδες οδηγού και επίσης στην κορυφή της αντίστοιχης σελίδας",
+    "x-source-message": "Select wine build provider"
+  },
+  "selectWineReleaseStepName": "Επιλέξτε έκδοση wine",
+  "@selectWineReleaseStepName": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε μια λίστα με σελίδες οδηγού και επίσης στην κορυφή της αντίστοιχης σελίδας",
+    "x-source-message": "Select wine release"
+  },
+  "selectWineBuildStepName": "Επιλέξτε κατασκευή wine",
+  "@selectWineBuildStepName": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε μια λίστα με σελίδες οδηγού και επίσης στην κορυφή της αντίστοιχης σελίδας",
+    "x-source-message": "Select wine build"
+  },
+  "setOptionsStepName": "Ορίστε επιλογές",
+  "@setOptionsStepName": {
+    "description": "Αυτό το κείμενο εμφανίζεται σε μια λίστα με σελίδες οδηγού και επίσης στην κορυφή της αντίστοιχης σελίδας",
+    "x-source-message": "Set options"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "Ένα build WOW64 επιλέχθηκε. Γνωρίζεται ότι έχει προβλήματα υπό προσομοίωση. Αναμένετε μια χαλασμένη εγκατάσταση.",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "Μήνυμα προειδοποίησης που εμφανίζεται όταν ένα build Wine μόνο για WOW64 πρόκειται να χρησιμοποιηθεί υπό προσομοίωση",
+    "x-source-message": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation."
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "Αυτό το build απαιτεί την παρουσία 32‑bit βιβλιοθηκών στο σύστημά σας. Αν τις έχετε ήδη, μπορείτε να αγνοήσετε αυτήν την προειδοποίηση. Διαφορετικά, εγκαταστήστε το Wine από το αποθετήριο της διανομής σας (που θα φέρει αυτές τις 32‑bit βιβλιοθήκες) ή, εναλλακτικά, επιλέξτε ένα build WOW64 από τη λίστα παραπάνω αν υπάρχει διαθέσιμο.",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "Μήνυμα προειδοποίησης που εμφανίζεται όταν επιλέγεται ένα build μη‑WOW64 σε περιβάλλον όπου ενδέχεται να λείπουν οι 32‑bit βιβλιοθήκες",
+    "x-source-message": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available."
+  },
+  "wow64PreferenceUnderEmulationWarning": "Η λειτουργία WOW64 υπό προσομοίωση είναι γνωστή για προβλήματα. Αναμένετε μια χαλασμένη εγκατάσταση.",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "Μήνυμα προειδοποίησης που εμφανίζεται όταν η λειτουργία WOW64 προτιμάται (σε builds που την υποστηρίζουν προαιρετικά) σε περιβάλλον που απαιτεί προσομοίωση",
+    "x-source-message": "The WOW64 mode under emulation is known to have issues. Expect a broken installation."
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "Η μη χρήση της λειτουργίας WOW64 θα απαιτήσει την παρουσία 32‑bit βιβλιοθηκών στο σύστημά σας. Αν τις έχετε ήδη, μπορείτε να αγνοήσετε αυτήν την προειδοποίηση. Διαφορετικά, εγκαταστήστε το Wine από το αποθετήριο της διανομής σας, που θα φέρει αυτές τις 32‑bit βιβλιοθήκες.",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "Μήνυμα προειδοποίησης που εμφανίζεται όταν η λειτουργία WOW64 δεν προτιμάται (σε builds που την υποστηρίζουν προαιρετικά) σε περιβάλλον όπου ενδέχεται να λείπουν οι 32‑bit βιβλιοθήκες",
+    "x-source-message": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries."
+  },
+  "windowsExecutablesFilterName": "Εκτελέσιμα Windows",
+  "@windowsExecutablesFilterName": {
+    "description": "Αυτό το κείμενο εμφανίζεται στο αναπτυσσόμενο μενού \"Τύπος αρχείου\" στον διάλογο επιλογής αρχείων",
+    "x-source-message": "Windows executables"
+  },
+  "dxvkOptionExplanation": "Μια πιο πρόσφατη και ταχύτερη υλοποίηση από το Proton",
+  "@dxvkOptionExplanation": {
+    "description": "Ένα κείμενο περιγραφής που εμφανίζεται όταν επιλέγεται η υλοποίηση DXVK του Direct3D 8-11",
+    "x-source-message": "A newer and faster implementation from Proton"
+  },
+  "wineD3DOptionExplanation": "Μια ώριμη υλοποίηση από το Wine. Χρησιμοποιείται σε περίπτωση προβλημάτων με το DXVK.",
+  "@wineD3DOptionExplanation": {
+    "description": "Ένα κείμενο περιγραφής που εμφανίζεται όταν επιλέγεται η υλοποίηση WineD3D του Direct3D 8-11",
+    "x-source-message": "A mature implementation from Wine. To be used in case of issues with DXVK."
+  },
+  "screensaverDisableReason": "Εκτελείται μια εφαρμογή Wine (πιθανώς σε πλήρη οθόνη)",
+  "@screensaverDisableReason": {
+    "description": "Ο λόγος για την απενεργοποίηση του screensaver, όπως απαιτείται από το αντίστοιχο API DBus",
+    "x-source-message": "A Wine app (possibly fullscreen) is running"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "Το hash του ληφθέντος σενάριο winetricks δεν ταιριάζει με το αναμενόμενο.",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν το hash ενός ληφθέντος σεναρίου winetricks δεν ταιριάζει με το αναμενόμενο",
+    "x-source-message": "The hash of the downloaded winetricks script doesn't match the expected one."
+  },
+  "downloadedFile": "Ληφθείσες αρχεία: {downloadedFile}",
+  "@downloadedFile": {
+    "description": "Μια γραμμή σε ένα μεγαλύτερο μήνυμα σφάλματος",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Downloaded file: {downloadedFile}"
+  },
+  "expectedSha256Hash": "Αναμενόμενο SHA256 hash: {hash}",
+  "@expectedSha256Hash": {
+    "description": "Μια γραμμή σε ένα μεγαλύτερο μήνυμα σφάλματος",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Expected SHA256 hash: {hash}"
+  },
+  "actualSha256Hash": "Πραγματικό SHA256 hash: {hash}",
+  "@actualSha256Hash": {
+    "description": "Μια γραμμή σε ένα μεγαλύτερο μήνυμα σφάλματος",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Actual SHA256 hash: {hash}"
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "Ολοκληρώστε τις εφαρμογές που εκτελούνται σε όλα τα prefixes πρώτα",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν προσπαθείτε να κάνετε κάτι που απαιτεί ότι δεν υπάρχουν εκτελούμενες εφαρμογές σε όλα τα prefixes",
+    "x-source-message": "Finish the apps running in all prefixes first"
+  },
+  "finishTheRunningAppsFirst": "Ολοκληρώστε τις εκτελούμενες εφαρμογές πρώτα",
+  "@finishTheRunningAppsFirst": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν προσπαθείτε να κάνετε κάτι που απαιτεί ότι δεν υπάρχουν εκτελούμενες εφαρμογές στο τρέχον prefix",
+    "x-source-message": "Finish the running apps first"
+  },
+  "missingHardwareVirtualizationCapabilities": "Το σύστημα δεν διαθέτει τις δυνατότητες υλικολογικής εικονικοποίησης (/dev/kvm λείπει) που απαιτούνται για την εκτέλεση του Wine Bar.",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται σε συστήματα όπου απαιτείται υλικολογική εικονικοποίηση που δεν είναι διαθέσιμη",
+    "x-source-message": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar."
+  },
+  "snapKvmNeedsConnection": "Το Wine Bar σε ARM64 χρειάζεται πρόσβαση ανάγνωση-εγγραφή στο /dev/kvm. Τα συνηθισμένα προγράμματα συνήθως έχουν τέτοια πρόσβαση, αλλά όχι τα Snap. Για να παραχωρήσετε αυτή την πρόσβαση, εκτελέστε την ακόλουθη εντολή από τη γραμμή εντολών:\n\n{kvmConnectCommand}\n\nΣτη συνέχεια, επανεκκινήστε το Wine Bar.",
+  "@snapKvmNeedsConnection": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν εκτελείται υπό Snap και δεν υπάρχει πρόσβαση εγγραφής στο /dev/kvm",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar."
+  },
+  "muvmIsNeededButMissing": "Το σύστημα χρειάζεται muvm / FEX για να μπορεί να εκτελεί εφαρμογές Windows. Η έκδοση Snap του Wine Bar έχει ενσωματωμένο muvm. Διαφορετικά, παρακαλούμε εγκαταστήστε το χρησιμοποιώντας \"sudo dnf install muvm fex-emu\" ή παρόμοιο.",
+  "@muvmIsNeededButMissing": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν το muvm δεν είναι διαθέσιμο σε συστήματα όπου απαιτείται",
+    "x-source-message": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar"
+  },
+  "prefixNameCantBeEmpty": "Το όνομα του προθέματος δεν μπορεί να είναι κενό",
+  "@prefixNameCantBeEmpty": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν προσπαθείτε να δημιουργήσετε ένα Wine prefix με κενό όνομα",
+    "x-source-message": "Prefix name can't be empty"
+  },
+  "illegalSymbolsPresent": "Παρουσιάζονται παράνομες συμβολές",
+  "@illegalSymbolsPresent": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν υπάρχουν μη επιτρεπόμενες συμβολές σε ένα πεδίο εισόδου",
+    "x-source-message": "Illegal symbols present"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "Αυτό το Wine prefix δεν περιλαμβάνει ένα σενάριο winetricks και ούτε παρέχεται εξωτερικό.",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν προσπαθείτε να εκτελέσετε ένα σενάριο winetricks που δεν βρέθηκε",
+    "x-source-message": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided."
+  },
+  "failedToLocateWineOrWineserverExecutables": "Αποτυχία εντοπισμού των εκτελέσιμων αρχείων wine / wineserver",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "Η εκτέλεση εφαρμογών Wine απαιτεί την εντοπισμό των κατάλληλων εκτελέσιμων αρχείων wine και wineserver. Αυτό το μήνυμα σφάλματος εμφανίζεται όταν δεν μπορούμε να τα εντοπίσουμε.",
+    "x-source-message": "Failed to locate the wine / wineserver executables"
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "Αποτυχία εντοπισμού των εκτελέσιμων αρχείων wine / wineserver για την εκτέλεση winetricks",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "Το winetricks μπορεί να χρειαστεί διαφορετικές εκδόσεις (σκεφτείτε με ή χωρίς wow64) από τις για τα κανονικά προγράμματα. Αυτό το μήνυμα σφάλματος εμφανίζεται όταν δεν μπορούμε να τα εντοπίσουμε.",
+    "x-source-message": "Failed to locate the wine / wineserver executables for running winetricks"
+  },
+  "specificCommandHasFailed": "Η εντολή \"{command}\" απέτυχε",
+  "@specificCommandHasFailed": {
+    "description": "Το μήνυμα σφάλματος που εμφανίζεται όταν ένα εξωτερικό εργαλείο απέτυχε",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "The \"{command}\" command failed"
+  }
+}

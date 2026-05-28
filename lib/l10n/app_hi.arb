@@ -1,0 +1,618 @@
+{
+  "@@locale": "hi",
+  "kronekWineSourceDescription": "मानक, स्टेजिंग, TkG और Proton Wine बिल्ड्स प्रदान करता है।",
+  "@kronekWineSourceDescription": {
+    "description": "Kronek Wine बिल्ड स्रोत चुनते समय दिखाया जाता है",
+    "x-source-message": "Provides the standard, Staging, TkG and Proton Wine builds."
+  },
+  "geProtonWineSourceDescription": "DXVK / VK3D शामिल Proton बिल्ड्स प्रदान करता है। गेम और अन्य फुलस्क्रीन ऐप्स के लिए अनुशंसित।",
+  "@geProtonWineSourceDescription": {
+    "description": "GE Proton Wine बिल्ड स्रोत चुनते समय दिखाया जाता है",
+    "x-source-message": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps."
+  },
+  "appUnpinningConfirmationDialogTitle": "ऐप अनपिनिंग पुष्टि",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "यह पाठ डायलॉग के शीर्षक के रूप में उपयोग किया जाता है",
+    "x-source-message": "App unpinning confirmation"
+  },
+  "createWinePrefixDialogTitle": "एक Wine Prefix बनाएं",
+  "@createWinePrefixDialogTitle": {
+    "description": "यह पाठ डायलॉग के शीर्षक के रूप में उपयोग किया जाता है",
+    "x-source-message": "Create a Wine Prefix"
+  },
+  "cloneWinePrefixDialogTitle": "Wine Prefix क्लोन करें",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "यह पाठ डायलॉग के शीर्षक के रूप में उपयोग किया जाता है",
+    "x-source-message": "Clone Wine Prefix"
+  },
+  "prefixDeletionConfirmationDialogTitle": "Prefix हटाने की पुष्टि",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "यह पाठ डायलॉग के शीर्षक के रूप में उपयोग किया जाता है",
+    "x-source-message": "Prefix deletion confirmation"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Wine से पथ अप्राप्य",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "यह पाठ डायलॉग के शीर्षक के रूप में उपयोग किया जाता है",
+    "x-source-message": "Path inaccessible from Wine"
+  },
+  "winePrefixesPageTitle": "Wine Prefixes",
+  "@winePrefixesPageTitle": {
+    "description": "यह पाठ पृष्ठ के शीर्षक के रूप में उपयोग किया जाता है",
+    "x-source-message": "Wine Prefixes"
+  },
+  "winePrefixPageTitlePattern": "Wine Prefix: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "यह पाठ पृष्ठ के शीर्षक के रूप में उपयोग किया जाता है",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix: {prefixName}"
+  },
+  "prefixSettingsDialogTitlePattern": "Wine Prefix {prefixName} Settings",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "Prefix Settings डायलॉग के शीर्षक का पैटर्न",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix {prefixName} Settings"
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} सेटिंग्स",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "Pinned Executable Settings डायलॉग के शीर्षक का पैटर्न",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "{pinnedExecutableLabel} Settings"
+  },
+  "processLogsTitle": "प्रक्रिया लॉग",
+  "@processLogsTitle": {
+    "description": "यह पाठ पृष्ठ शीर्षक के रूप में उपयोग किया जाता है",
+    "x-source-message": "Process Logs"
+  },
+  "licenseInfoPattern": "लाइसेंस: {license}",
+  "@licenseInfoPattern": {
+    "description": "एक स्ट्रिंग जो About डायलॉग पर दिखाई देती है",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "License: {license}"
+  },
+  "authorInfoPattern": "लेखक: {author}",
+  "@authorInfoPattern": {
+    "description": "एक स्ट्रिंग जो About डायलॉग पर दिखाई देती है",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Author: {author}"
+  },
+  "theCopyingProcessFailedWithExitCode": "कॉपी करने की प्रक्रिया स्थिति {exitCode} के साथ विफल रही",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "`cp -a` विफल होने पर दिखाया जाने वाला त्रुटि संदेश",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    },
+    "x-source-message": "The copying process failed with status {exitCode}"
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "DXVK पैकेज में x32 या x64 उपनिर्देशिका गायब है",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "डाउनलोड किए गए DXVK पैकेज की निर्देशिका संरचना हमारे अपेक्षाओं से मेल नहीं खाने पर दिखाया जाने वाला त्रुटि संदेश",
+    "x-source-message": "The DXVK package is missing the x32 or x64 subdirectory"
+  },
+  "failedToPrepareWinetricksScript": "winetricks स्क्रिप्ट तैयार करने में विफल:",
+  "@failedToPrepareWinetricksScript": {
+    "description": "winetricks स्क्रिप्ट डाउनलोड या सत्यापन विफल होने पर दिखाया जाने वाला त्रुटि संदेश",
+    "x-source-message": "Failed to prepare the winetricks script:"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "फ़ोल्डर {toplevelDataDir} मौजूद है लेकिन इस ऐप से संबंधित नहीं माना गया।\nकृपया इसे पुनः नाम दें या ट्रैश में ले जाएँ और फिर ऐप को पुनः प्रारंभ करें।",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "जब हमें संदेह हो कि ऐप का डेटा निर्देशिका वास्तव में इस ऐप द्वारा नहीं बनाई गई थी, तब दिखाया जाने वाला त्रुटि संदेश",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app."
+  },
+  "extractionFailedMessage": "निकासी विफल रही",
+  "@extractionFailedMessage": {
+    "description": "आर्काइव निकासी विफल होने पर दिखाया जाने वाला त्रुटि संदेश",
+    "x-source-message": "Extraction failed"
+  },
+  "prefixAlreadyExists": "प्रिफ़िक्स \"{prefixName}\" पहले से मौजूद है",
+  "@prefixAlreadyExists": {
+    "description": "जब किसी प्रिफ़िक्स को बनाने की कोशिश की जाती है जो पहले से मौजूद हो, तब दिखाया जाने वाला त्रुटि संदेश",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Prefix \"{prefixName}\" already exists"
+  },
+  "unknownErrorMessage": "अज्ञात त्रुटि",
+  "@unknownErrorMessage": {
+    "description": "जब कोई विशिष्ट त्रुटि उपलब्ध नहीं हो, तब त्रुटि पाठ के लिए एक प्लेसहोल्डर",
+    "x-source-message": "Unknown error"
+  },
+  "criticalErrorCaption": "गंभीर त्रुटि",
+  "@criticalErrorCaption": {
+    "description": "त्रुटि संदेश बॉक्स का शीर्षक",
+    "x-source-message": "Critical Error"
+  },
+  "noLogsWereCapturedFromThisProcess": "इस प्रक्रिया से कोई लॉग कैप्चर नहीं किया गया",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "एक सूचनात्मक संदेश",
+    "x-source-message": "No logs were captured from this process"
+  },
+  "winePrefixUpdatedMessage": "Wine प्रिफ़िक्स अपडेट किया गया",
+  "@winePrefixUpdatedMessage": {
+    "description": "एक सूचनात्मक संदेश",
+    "x-source-message": "Wine prefix updated"
+  },
+  "pinnedAppUpdatedMessage": "पिन किया गया ऐप अपडेट हुआ",
+  "@pinnedAppUpdatedMessage": {
+    "description": "एक सूचनात्मक संदेश",
+    "x-source-message": "Pinned app updated"
+  },
+  "moreDetailsLink": "अधिक विवरण।",
+  "@moreDetailsLink": {
+    "description": "यह पाठ एक क्लिक करने योग्य लिंक बन जाता है जो त्रुटि संदेश के अंत में डाला जाता है",
+    "x-source-message": "More details."
+  },
+  "wow64ModeSection": "WOW64 मोड",
+  "@wow64ModeSection": {
+    "description": "यह पाठ एक इनपुट डेकोरेशन पर दिखाई देता है",
+    "x-source-message": "WOW64 mode"
+  },
+  "useWow64ModeIfAvailable": "उपलब्ध होने पर WOW64 मोड का उपयोग करें",
+  "@useWow64ModeIfAvailable": {
+    "description": "यह पाठ एक चेकबॉक्स के बगल में दिखाई देता है",
+    "x-source-message": "Use the WOW64 mode if available"
+  },
+  "d3D8To11Implementation": "Direct3D 8-11 कार्यान्वयन",
+  "@d3D8To11Implementation": {
+    "description": "यह पाठ एक इनपुट डेकोरेशन पर दिखाई देता है",
+    "x-source-message": "Direct3D 8-11 implementation"
+  },
+  "useParticularD3D8To11Impl": "एक विशेष Direct3D 8-11 कार्यान्वयन का उपयोग करें",
+  "@useParticularD3D8To11Impl": {
+    "description": "यह पाठ एक चेकबॉक्स के बगल में दिखाई देता है",
+    "x-source-message": "Use a particular Direct3D 8-11 implementation"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "इस विशेष Wine बिल्ड के लिए एक डिफ़ॉल्ट कार्यान्वयन का उपयोग किया जाएगा",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "जब कोई विशिष्ट Direct3D 8-11 कार्यान्वयन चयनित नहीं होता है तो प्रदर्शित पाठ",
+    "x-source-message": "A default implementation for this particular Wine build will be used"
+  },
+  "windowsLocale": "स्थानीय",
+  "@windowsLocale": {
+    "description": "एक स्थानीय चयन फ़ील्ड के बगल में पाठ। यह किसी दिए गए Wine prefix के लिए एक Windows locale है।",
+    "x-source-message": "Locale"
+  },
+  "useParticularWindowsLocale": "एक विशिष्ट स्थानीय का उपयोग करें",
+  "@useParticularWindowsLocale": {
+    "description": "यह पाठ एक चेकबॉक्स के बगल में दिखाई देता है",
+    "x-source-message": "Use a particular locale"
+  },
+  "dontShowThisWarningAgain": "इस चेतावनी को फिर से न दिखाएँ",
+  "@dontShowThisWarningAgain": {
+    "description": "यह पाठ एक चेकबॉक्स के बगल में दिखाई देता है",
+    "x-source-message": "Don't show this warning again"
+  },
+  "nameForTheNewPrefixHintText": "नए wine prefix का नाम",
+  "@nameForTheNewPrefixHintText": {
+    "description": "इनपुट फ़ील्ड में दिखाई देने वाला संकेत पाठ",
+    "x-source-message": "Name for the new wine prefix"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "यह गैर-Unicode ऐप्स में पाठ प्रदर्शन के लिए मददगार हो सकता है",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "एक विशिष्ट Windows locale चयनित होने पर दिखाई देने वाला सूचनात्मक पाठ",
+    "x-source-message": "This may help with text display in non-Unicode apps"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "सिस्टम स्थानीय को Windows ऐप्स द्वारा उपयोग किया जाएगा",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "जब कोई विशिष्ट Windows locale चयनित नहीं होता है तो दिखाई देने वाला सूचनात्मक पाठ",
+    "x-source-message": "The system locale will be used by Windows apps"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "यह पाठ को बहुत छोटा बना देगा लेकिन पुराने फुलस्क्रीन ऐप्स को नहीं तोड़ेगा",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "यह पाठ तब दिखाई देता है जब अनुशंसित से कम HiDPI स्केल चयनित होता है",
+    "x-source-message": "This will make the text too small but won't break older fullscreen apps"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "यह आपके डिस्प्ले के लिए उपयुक्त स्केल है",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "यह पाठ तब दिखाई देता है जब अनुशंसित HiDPI स्केल चुना जाता है और वह अनुशंसित स्केल 1.0 होता है",
+    "x-source-message": "This is the perfect scale for your display"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "यह पाठ को बहुत छोटा होने से रोकने में मदद करेगा, लेकिन इससे पुराने फुलस्क्रीन ऐप्स टूट सकते हैं",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "यह पाठ तब दिखाई देता है जब 1 से अधिक HiDPI स्केल चुना जाता है, लेकिन वह मान अभी भी अनुशंसित स्केल से कम होता है",
+    "x-source-message": "This will help with text being too small but will break older fullscreen apps"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "यह आपके डिस्प्ले के लिए उपयुक्त स्केल है, हालांकि इससे पुराने फुलस्क्रीन ऐप्स टूट सकते हैं",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "यह पाठ तब दिखाई देता है जब अनुशंसित HiDPI स्केल चुना जाता है लेकिन वह अनुशंसित स्केल 1.0 से अधिक होता है",
+    "x-source-message": "This is the perfect scale for your display, though it will break older fullscreen apps"
+  },
+  "thisWillProduceTextThatsTooLarge": "यह बहुत बड़ा पाठ उत्पन्न कर सकता है",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "यह पाठ तब दिखाई देता है जब अनुशंसित से बड़ा HiDPI स्केल चुना जाता है",
+    "x-source-message": "This may produce text that's too large"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "यह प्रीफ़िक्स ऐसी स्थिति में है जिसे हटाया नहीं जा सकता",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "उदाहरण के लिए, प्रीफ़िक्स पहले से ही हटाने की प्रक्रिया में हो सकता है",
+    "x-source-message": "This prefix is in a state were it can't be deleted"
+  },
+  "hiDpiScaleLabel": "HiDPI स्केल",
+  "@hiDpiScaleLabel": {
+    "description": "यह पाठ इनपुट सजावट पर दिखाई देता है",
+    "x-source-message": "HiDPI scale"
+  },
+  "pleaseSelect": "कृपया चुनें",
+  "@pleaseSelect": {
+    "description": "यह पाठ तब दिखाई देता है जब चयन आवश्यक हो लेकिन कोई विकल्प चुना नहीं गया हो",
+    "x-source-message": "Please select"
+  },
+  "appsAreRunningInThisPrefixTooltip": "ऐप्स इस प्रीफ़िक्स में चल रहे हैं",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "'प्रीफ़िक्स' यहाँ एक Wine प्रीफ़िक्स को संदर्भित करता है",
+    "x-source-message": "Apps are running in this prefix"
+  },
+  "refreshWineReleasesTooltip": "वाइन रिलीज़ को ताज़ा करें",
+  "@refreshWineReleasesTooltip": {
+    "description": "यह पाठ एक टूलटिप पर रखा जाता है",
+    "x-source-message": "Refresh wine releases"
+  },
+  "prefixSettingsTooltip": "प्रीफ़िक्स सेटिंग्स",
+  "@prefixSettingsTooltip": {
+    "description": "यह पाठ एक टूलटिप पर रखा जाता है",
+    "x-source-message": "Prefix settings"
+  },
+  "killProcessTooltip": "प्रक्रिया समाप्त करें",
+  "@killProcessTooltip": {
+    "description": "यह पाठ एक टूलटिप पर रखा जाता है",
+    "x-source-message": "Kill process"
+  },
+  "scrollToBottomTooltip": "नीचे स्क्रॉल करें",
+  "@scrollToBottomTooltip": {
+    "description": "यह पाठ एक टूलटिप पर रखा जाता है",
+    "x-source-message": "Scroll to bottom"
+  },
+  "scrollToTopTooltip": "ऊपर स्क्रॉल करें",
+  "@scrollToTopTooltip": {
+    "description": "यह पाठ एक टूलटिप पर रखा जाता है",
+    "x-source-message": "Scroll to top"
+  },
+  "viewLogsTooltip": "लॉग देखें",
+  "@viewLogsTooltip": {
+    "description": "यह पाठ एक टूलटिप पर रखा जाता है",
+    "x-source-message": "View Logs"
+  },
+  "viewLogsLink": "लॉग देखें.",
+  "@viewLogsLink": {
+    "description": "यह पाठ एक क्लिक करने योग्य लिंक बन जाता है जो त्रुटि संदेश के अंत में डाला जाता है",
+    "x-source-message": "View Logs."
+  },
+  "useParticularGPU": "एक विशेष GPU का उपयोग करें",
+  "@useParticularGPU": {
+    "description": "यह पाठ एक चेकबॉक्स के बगल में दिखाई देता है",
+    "x-source-message": "Use a particular GPU"
+  },
+  "gpuSelection": "GPU चयन",
+  "@gpuSelection": {
+    "description": "यह पाठ एक इनपुट डेकोरेशन पर दिखाई देता है",
+    "x-source-message": "GPU selection"
+  },
+  "failedToGetTheListOfAvailableGPUs": "उपलब्ध GPUs की सूची प्राप्त करने में विफल",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "यह पाठ एक टूलटिप पर रखा जाता है",
+    "x-source-message": "Failed to get the list of available GPUs"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "ध्यान दें कि यह सुविधा सभी परिदृश्यों में काम नहीं करती",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "सूचनात्मक पाठ जो तब प्रदर्शित होता है जब उपयोगकर्ता ऐसी सुविधा सक्रिय करता है जो सभी परिदृश्यों में काम नहीं करती",
+    "x-source-message": "Note that this feature doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "वाइन प्रीफ़िक्स जोड़ें",
+  "@addWinePrefixButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है",
+    "x-source-message": "Add Wine Prefix"
+  },
+  "aboutButtonLabel": "के बारे में",
+  "@aboutButtonLabel": {
+    "description": "यह पाठ एक बटन या मेनू आइटम पर रखा जाता है",
+    "x-source-message": "About"
+  },
+  "donateButtonLabel": "दान करें",
+  "@donateButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है",
+    "x-source-message": "Donate"
+  },
+  "unpinButtonLabel": "अनपिन करें",
+  "@unpinButtonLabel": {
+    "description": "यह पाठ एक बटन या मेनू आइटम पर रखा जाता है",
+    "x-source-message": "Unpin"
+  },
+  "deleteButtonLabel": "हटाएँ",
+  "@deleteButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है",
+    "x-source-message": "Delete"
+  },
+  "createWinePrefixButtonLabel": "वाइन प्रीफ़िक्स बनाएँ",
+  "@createWinePrefixButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है",
+    "x-source-message": "Create Wine Prefix"
+  },
+  "startingButtonLabel": "शुरू हो रहा है ...",
+  "@startingButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है जब कोई विशेष ऑपरेशन शुरू हो रहा होता है",
+    "x-source-message": "Starting ..."
+  },
+  "downloadingAndExtractingButtonLabel": "डाउनलोड और निकाल रहा है ...",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है जब डाउनलोड और निष्कर्षण ऑपरेशन चल रहा होता है",
+    "x-source-message": "Downloading and Extracting ..."
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "DXVK डाउनलोड और निकाल रहा है ...",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है जब DXVK के लिए डाउनलोड और निष्कर्षण ऑपरेशन चल रहा होता है",
+    "x-source-message": "Downloading and Extracting DXVK ..."
+  },
+  "creatingWinePrefixButtonLabel": "वाइन प्रीफ़िक्स बना रहा है ...",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है जब वाइन प्रीफ़िक्स बनाया जा रहा होता है",
+    "x-source-message": "Creating Wine Prefix ..."
+  },
+  "updateWinePrefixButtonLabel": "वाइन प्रीफ़िक्स अपडेट करें",
+  "@updateWinePrefixButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है",
+    "x-source-message": "Update Wine Prefix"
+  },
+  "updatingWinePrefixButtonLabel": "वाइन प्रीफ़िक्स अपडेट हो रहा है ...",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है जब वाइन प्रीफ़िक्स अपडेट हो रहा होता है",
+    "x-source-message": "Updating Wine Prefix ..."
+  },
+  "cloneButtonLabel": "क्लोन",
+  "@cloneButtonLabel": {
+    "description": "यह पाठ एक बटन या मेनू आइटम पर रखा जाता है",
+    "x-source-message": "Clone"
+  },
+  "cloningButtonLabel": "क्लोनिंग हो रही है ...",
+  "@cloningButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है जब वाइन प्रीफ़िक्स क्लोनिंग ऑपरेशन चल रहा हो",
+    "x-source-message": "Cloning ..."
+  },
+  "pinExecutableButtonLabel": "एक्ज़िक्यूटेबल पिन करें",
+  "@pinExecutableButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है",
+    "x-source-message": "Pin Executable"
+  },
+  "proceedAnywayButtonLabel": "फिर भी आगे बढ़ें",
+  "@proceedAnywayButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है",
+    "x-source-message": "Proceed Anyway"
+  },
+  "runExecutableButtonLabel": "एक्ज़िक्यूटेबल चलाएँ",
+  "@runExecutableButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है",
+    "x-source-message": "Run Executable"
+  },
+  "runInstallerButtonLabel": "इंस्टॉलर चलाएँ",
+  "@runInstallerButtonLabel": {
+    "description": "यह पाठ एक बटन पर रखा जाता है",
+    "x-source-message": "Run Installer"
+  },
+  "settingsMenuItem": "सेटिंग्स",
+  "@settingsMenuItem": {
+    "description": "यह पाठ एक मेनू आइटम पर रखा जाता है",
+    "x-source-message": "Settings"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "निम्नलिखित ऐप अनपिन किया जाने वाला है:",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "यह पाठ एक डायलॉग पर दिखाई देता है",
+    "x-source-message": "The following app is about to be unpinned:"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "निम्नलिखित प्रीफ़िक्स हटाया जाने वाला है:",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "यह पाठ एक डायलॉग पर दिखाई देता है। यहाँ 'प्रीफ़िक्स' वाइन प्रीफ़िक्स को संदर्भित करता है",
+    "x-source-message": "The following prefix is about to be deleted:"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "निम्न पथ वाइन से पहुँच योग्य नहीं है:",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "यह पाठ एक डायलॉग पर दिखाई देता है",
+    "x-source-message": "The following path is inaccessible from Wine:"
+  },
+  "pathInaccessibleFromWineExplanation": "एक पथ Wine से असुलभ हो सकता है क्योंकि पूरा Wine Bar या केवल Wine वर्चुअल मशीन (Apple सिलिकॉन मैक पर) में चल रहा है या Snap / Flatpak सैंडबॉक्स में।",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "यह पाठ एक संवाद पर दिखाई देता है",
+    "x-source-message": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox."
+  },
+  "solutionHeading": "समाधान",
+  "@solutionHeading": {
+    "description": "यह पाठ एक संवाद पर शीर्षक के रूप में दिखाई देता है, जिसके नीचे और अधिक पाठ होता है",
+    "x-source-message": "Solution"
+  },
+  "pathInaccessibleFromWineSolution": "संबंधित फ़ोल्डर को अपने होम निर्देशिका के किसी स्थान पर कॉपी करें।",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "यह पाठ 'समाधान' शीर्षक के बाद एक संवाद पर दिखाई देता है",
+    "x-source-message": "Copy the folder in question somewhere under your home directory."
+  },
+  "thisActionCantBeUndone": "यह कार्रवाई उलटी नहीं की जा सकती!",
+  "@thisActionCantBeUndone": {
+    "description": "यह पाठ एक संवाद पर दिखाई देता है",
+    "x-source-message": "This action can't be undone!"
+  },
+  "selectWineBuildProviderStepName": "वाइन बिल्ड प्रदाता चुनें",
+  "@selectWineBuildProviderStepName": {
+    "description": "यह पाठ विज़ार्ड पृष्ठों की सूची में और संबंधित पृष्ठ के शीर्ष पर दिखाई देता है",
+    "x-source-message": "Select wine build provider"
+  },
+  "selectWineReleaseStepName": "वाइन रिलीज़ चुनें",
+  "@selectWineReleaseStepName": {
+    "description": "यह पाठ विज़ार्ड पृष्ठों की सूची में और संबंधित पृष्ठ के शीर्ष पर दिखाई देता है",
+    "x-source-message": "Select wine release"
+  },
+  "selectWineBuildStepName": "वाइन बिल्ड चुनें",
+  "@selectWineBuildStepName": {
+    "description": "यह पाठ विज़ार्ड पृष्ठों की सूची में और संबंधित पृष्ठ के शीर्ष पर दिखाई देता है",
+    "x-source-message": "Select wine build"
+  },
+  "setOptionsStepName": "विकल्प सेट करें",
+  "@setOptionsStepName": {
+    "description": "यह पाठ विज़ार्ड पृष्ठों की सूची में और संबंधित पृष्ठ के शीर्ष पर दिखाई देता है",
+    "x-source-message": "Set options"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "एक WOW64 बिल्ड चुना गया है। यह ज्ञात है कि इम्यूलेशन के तहत समस्याएँ होती हैं। एक टूटे हुए इंस्टॉलेशन की अपेक्षा करें।",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "एक चेतावनी संदेश जो तब दिखाया जाता है जब एक WOW64-केवल Wine बिल्ड को इम्यूलेशन के तहत उपयोग किया जाने वाला हो",
+    "x-source-message": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation."
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "इस बिल्ड के लिए आपके सिस्टम पर 32‑बिट लाइब्रेरीज़ मौजूद होना आवश्यक है। यदि आपके पास पहले से ही वे हैं, तो आप इस चेतावनी को अनदेखा कर सकते हैं। अन्यथा, अपने वितरण के रिपॉज़िटरी से Wine स्थापित करें (जिससे 32‑बिट लाइब्रेरीज़ भी मिलेंगी) या वैकल्पिक रूप से ऊपर की सूची में उपलब्ध होने पर एक WOW64 बिल्ड चुनें।",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "एक चेतावनी संदेश जो तब दिखाया जाता है जब एक गैर‑WOW64-सक्षम बिल्ड चुना गया हो ऐसे वातावरण में जहाँ 32‑बिट लाइब्रेरीज़ मौजूद न हों",
+    "x-source-message": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available."
+  },
+  "wow64PreferenceUnderEmulationWarning": "इम्यूलेशन के तहत WOW64 मोड में समस्याएँ ज्ञात हैं। एक टूटे हुए इंस्टॉलेशन की अपेक्षा करें।",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "एक चेतावनी संदेश जो तब दिखाया जाता है जब WOW64 मोड को प्राथमिकता दी जाती है (ऐसे बिल्ड पर जो वैकल्पिक रूप से इसका समर्थन करते हैं) ऐसे वातावरण में जिसे इम्यूलेशन की आवश्यकता है",
+    "x-source-message": "The WOW64 mode under emulation is known to have issues. Expect a broken installation."
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "WOW64 मोड का उपयोग न करने से आपके सिस्टम पर 32‑बिट लाइब्रेरीज़ मौजूद होना आवश्यक होगा। यदि आपके पास पहले से ही वे हैं, तो आप इस चेतावनी को अनदेखा कर सकते हैं। अन्यथा, अपने वितरण के रिपॉज़िटरी से Wine स्थापित करें, जिससे 32‑बिट लाइब्रेरीज़ भी मिलेंगी।",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "एक चेतावनी संदेश जो तब दिखाया जाता है जब WOW64 मोड को प्राथमिकता नहीं दी जाती (ऐसे बिल्ड पर जो वैकल्पिक रूप से इसका समर्थन करते हैं) ऐसे वातावरण में जहाँ 32‑बिट लाइब्रेरीज़ मौजूद न हों",
+    "x-source-message": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries."
+  },
+  "windowsExecutablesFilterName": "Windows निष्पादन योग्य फ़ाइलें",
+  "@windowsExecutablesFilterName": {
+    "description": "यह पाठ \"फ़ाइल प्रकार\" ड्रॉप‑डाउन में फ़ाइल चयन संवाद पर समाप्त होता है",
+    "x-source-message": "Windows executables"
+  },
+  "dxvkOptionExplanation": "प्रोटॉन से एक नया और तेज़ कार्यान्वयन",
+  "@dxvkOptionExplanation": {
+    "description": "एक विवरण पाठ जो तब दिखाया जाता है जब Direct3D 8-11 का DXVK कार्यान्वयन चुना गया हो",
+    "x-source-message": "A newer and faster implementation from Proton"
+  },
+  "wineD3DOptionExplanation": "वाइन से एक परिपक्व कार्यान्वयन। DXVK में समस्याओं के मामले में उपयोग किया जाता है।",
+  "@wineD3DOptionExplanation": {
+    "description": "एक विवरण पाठ जो तब दिखाया जाता है जब Direct3D 8-11 का WineD3D कार्यान्वयन चुना गया हो",
+    "x-source-message": "A mature implementation from Wine. To be used in case of issues with DXVK."
+  },
+  "screensaverDisableReason": "एक Wine ऐप (संभवतः पूर्ण स्क्रीन) चल रहा है",
+  "@screensaverDisableReason": {
+    "description": "स्क्रीनसेवर को अक्षम करने का कारण, जैसा कि संबंधित DBus API द्वारा आवश्यक है",
+    "x-source-message": "A Wine app (possibly fullscreen) is running"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "डाउनलोड किए गए winetricks स्क्रिप्ट का हैश अपेक्षित से मेल नहीं खाता।",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "त्रुटि संदेश जो तब दिखाया जाता है जब डाउनलोड किए गए winetricks स्क्रिप्ट का हैश अपेक्षित से मेल नहीं खाता",
+    "x-source-message": "The hash of the downloaded winetricks script doesn't match the expected one."
+  },
+  "downloadedFile": "डाउनलोड की गई फ़ाइल: {downloadedFile}",
+  "@downloadedFile": {
+    "description": "एक बड़े त्रुटि संदेश में एक पंक्ति",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Downloaded file: {downloadedFile}"
+  },
+  "expectedSha256Hash": "अपेक्षित SHA256 हैश: {hash}",
+  "@expectedSha256Hash": {
+    "description": "एक बड़े त्रुटि संदेश में एक पंक्ति",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Expected SHA256 hash: {hash}"
+  },
+  "actualSha256Hash": "वास्तविक SHA256 हैश: {hash}",
+  "@actualSha256Hash": {
+    "description": "एक बड़े त्रुटि संदेश में एक पंक्ति",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Actual SHA256 hash: {hash}"
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "सभी प्रीफ़िक्स में चल रहे ऐप्स को पहले समाप्त करें",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "त्रुटि संदेश जो तब दिखाया जाता है जब सभी प्रीफ़िक्स में कोई ऐप चलने की आवश्यकता न हो",
+    "x-source-message": "Finish the apps running in all prefixes first"
+  },
+  "finishTheRunningAppsFirst": "चल रहे ऐप्स को पहले समाप्त करें",
+  "@finishTheRunningAppsFirst": {
+    "description": "त्रुटि संदेश जो तब दिखाया जाता है जब वर्तमान प्रीफ़िक्स में कोई ऐप चलने की आवश्यकता न हो",
+    "x-source-message": "Finish the running apps first"
+  },
+  "missingHardwareVirtualizationCapabilities": "इस सिस्टम में हार्डवेयर वर्चुअलाइज़ेशन क्षमताएँ (/dev/kvm अनुपलब्ध) नहीं हैं, जो Wine Bar चलाने के लिए आवश्यक हैं।",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "वह त्रुटि संदेश जो उन प्रणालियों पर दिखाया जाता है जहाँ हमें हार्डवेयर वर्चुअलाइज़ेशन की आवश्यकता होती है जो उपलब्ध नहीं है",
+    "x-source-message": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar."
+  },
+  "snapKvmNeedsConnection": "Wine Bar on ARM64 को /dev/kvm पर पढ़ने‑लिखने की पहुँच चाहिए। सामान्य ऐप्स के पास आम तौर पर ऐसी पहुँच होती है, लेकिन Snap में नहीं। इस पहुँच को देने के लिए, कमांड लाइन से निम्नलिखित कमांड चलाएँ:\n\n{kvmConnectCommand}\n\nफिर, Wine Bar को पुनः प्रारंभ करें।",
+  "@snapKvmNeedsConnection": {
+    "description": "Snap के तहत चलने पर और /dev/kvm पर लिखने की पहुँच न होने पर दिखाया जाने वाला त्रुटि संदेश",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar."
+  },
+  "muvmIsNeededButMissing": "इस सिस्टम को Windows ऐप्स चलाने के लिए muvm / FEX की आवश्यकता है। Wine Bar का Snap संस्करण muvm को अंतर्निहित रूप से शामिल करता है। अन्यथा, \"sudo dnf install muvm fex-emu\" या इसी तरह का कमांड चलाकर इसे स्थापित करें।",
+  "@muvmIsNeededButMissing": {
+    "description": "वह त्रुटि संदेश जो उन प्रणालियों पर दिखाया जाता है जहाँ muvm अनुपलब्ध है और हमें इसकी आवश्यकता होती है",
+    "x-source-message": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar"
+  },
+  "prefixNameCantBeEmpty": "प्रिफ़िक्स का नाम खाली नहीं हो सकता",
+  "@prefixNameCantBeEmpty": {
+    "description": "वह त्रुटि संदेश जो खाली नाम के साथ Wine प्रिफ़िक्स बनाने का प्रयास करते समय दिखाया जाता है",
+    "x-source-message": "Prefix name can't be empty"
+  },
+  "illegalSymbolsPresent": "अवैध प्रतीक मौजूद हैं",
+  "@illegalSymbolsPresent": {
+    "description": "वह त्रुटि संदेश जो इनपुट फ़ील्ड में अनुमत नहीं होने वाले प्रतीक मौजूद होने पर दिखाया जाता है",
+    "x-source-message": "Illegal symbols present"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "इस Wine प्रिफ़िक्स में winetricks स्क्रिप्ट बंडल नहीं है और न ही कोई बाहरी स्क्रिप्ट उपलब्ध थी।",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "वह त्रुटि संदेश जो winetricks स्क्रिप्ट नहीं मिलने पर दिखाया जाता है",
+    "x-source-message": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided."
+  },
+  "failedToLocateWineOrWineserverExecutables": "wine / wineserver निष्पादन योग्य फ़ाइलों को खोजने में विफल",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "\"wine\" और \"wineserver\" निष्पादन योग्य फ़ाइलों को खोजने के लिए Wine ऐप्स चलाने की आवश्यकता होती है। यह त्रुटि संदेश तब दिखाया जाता है जब हम ऐसा करने में असमर्थ होते हैं।",
+    "x-source-message": "Failed to locate the wine / wineserver executables"
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "\"winetricks\" चलाने के लिए wine / wineserver निष्पादन योग्य फ़ाइलों को खोजने में विफल",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "\"winetricks\" को अलग संस्करणों (जैसे wow64 के साथ या बिना) की आवश्यकता हो सकती है, जो सामान्य ऐप्स से भिन्न हैं। यह त्रुटि संदेश तब दिखाया जाता है जब हम उन्हें खोजने में असमर्थ होते हैं।",
+    "x-source-message": "Failed to locate the wine / wineserver executables for running winetricks"
+  },
+  "specificCommandHasFailed": "\"{command}\" कमांड विफल हुआ",
+  "@specificCommandHasFailed": {
+    "description": "बाहरी टूल के विफल होने पर दिखाया गया त्रुटि संदेश",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "The \"{command}\" command failed"
+  }
+}

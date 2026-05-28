@@ -1,0 +1,618 @@
+{
+  "@@locale": "lt",
+  "kronekWineSourceDescription": "Suteikia standartinius, Staging, TkG ir Proton Wine versijas.",
+  "@kronekWineSourceDescription": {
+    "description": "Rodoma, kai pasirenkama Kronek Wine versijos šaltinis",
+    "x-source-message": "Provides the standard, Staging, TkG and Proton Wine builds."
+  },
+  "geProtonWineSourceDescription": "Suteikia Proton versijas su įtrauktu DXVK / VK3D. Rekomenduojama žaidimams ir kitiems pilno ekrano programoms.",
+  "@geProtonWineSourceDescription": {
+    "description": "Rodoma, kai pasirenkama GE Proton Wine versijos šaltinis",
+    "x-source-message": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps."
+  },
+  "appUnpinningConfirmationDialogTitle": "Patvirtinimas, kad programa nebus fiksuota",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "Šis tekstas naudojamas dialogo pavadinime",
+    "x-source-message": "App unpinning confirmation"
+  },
+  "createWinePrefixDialogTitle": "Sukurti Wine Prefix",
+  "@createWinePrefixDialogTitle": {
+    "description": "Šis tekstas naudojamas dialogo pavadinime",
+    "x-source-message": "Create a Wine Prefix"
+  },
+  "cloneWinePrefixDialogTitle": "Klonuoti Wine Prefix",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "Šis tekstas naudojamas dialogo pavadinime",
+    "x-source-message": "Clone Wine Prefix"
+  },
+  "prefixDeletionConfirmationDialogTitle": "Patvirtinimas, kad prefix bus ištrintas",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "Šis tekstas naudojamas dialogo pavadinime",
+    "x-source-message": "Prefix deletion confirmation"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Kelias nepasiekiamas iš Wine",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "Šis tekstas naudojamas dialogo pavadinime",
+    "x-source-message": "Path inaccessible from Wine"
+  },
+  "winePrefixesPageTitle": "Wine Prefix",
+  "@winePrefixesPageTitle": {
+    "description": "Šis tekstas naudojamas puslapio pavadinime",
+    "x-source-message": "Wine Prefixes"
+  },
+  "winePrefixPageTitlePattern": "Wine Prefix: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "Šis tekstas naudojamas puslapio pavadinime",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix: {prefixName}"
+  },
+  "prefixSettingsDialogTitlePattern": "Wine Prefix {prefixName} Settings",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "Prefix Settings dialogo pavadinimo šablonas",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix {prefixName} Settings"
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} Nustatymai",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "The pattern for the Pinned Executable Settings dialog's title",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "{pinnedExecutableLabel} Settings"
+  },
+  "processLogsTitle": "Procesų žurnalai",
+  "@processLogsTitle": {
+    "description": "This text is used as a page title",
+    "x-source-message": "Process Logs"
+  },
+  "licenseInfoPattern": "Licencija: {license}",
+  "@licenseInfoPattern": {
+    "description": "A string that ends up on the About Dialog",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "License: {license}"
+  },
+  "authorInfoPattern": "Autorius: {author}",
+  "@authorInfoPattern": {
+    "description": "A string that ends up on the About Dialog",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Author: {author}"
+  },
+  "theCopyingProcessFailedWithExitCode": "Kopijavimo procesas nepavyko su statusu {exitCode}",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "The error message shown when `cp -a` fails",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    },
+    "x-source-message": "The copying process failed with status {exitCode}"
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "DXVK paketas trūksta x32 arba x64 poaplankio",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "The error message shown when the directory structure of the downloaded DXVK package doesn't match our expectations",
+    "x-source-message": "The DXVK package is missing the x32 or x64 subdirectory"
+  },
+  "failedToPrepareWinetricksScript": "Klaida paruošiant winetricks scenarijų:",
+  "@failedToPrepareWinetricksScript": {
+    "description": "The error message shown when downloading or validating the winetricks script fails",
+    "x-source-message": "Failed to prepare the winetricks script:"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "Aplankas {toplevelDataDir} egzistuoja, bet nebuvo atpažintas kaip priklausantis šiai programai.\nPakeiskite jo pavadinimą arba perkelkite į šiukšliadėžę, tada paleiskite programą iš naujo.",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "The error message shown when we suspect the app's data directory wasn't actually created by this app",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app."
+  },
+  "extractionFailedMessage": "Išskleidimas nepavyko",
+  "@extractionFailedMessage": {
+    "description": "The error message shown when archive extraction fails",
+    "x-source-message": "Extraction failed"
+  },
+  "prefixAlreadyExists": "Prefix \"{prefixName}\" jau egzistuoja",
+  "@prefixAlreadyExists": {
+    "description": "Klaidos pranešimas, rodomas bandant sukurti prefixą, kuris jau egzistuoja",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Prefix \"{prefixName}\" already exists"
+  },
+  "unknownErrorMessage": "Nežinoma klaida",
+  "@unknownErrorMessage": {
+    "description": "Klaidos teksto vieta, kai nėra konkrečios klaidos",
+    "x-source-message": "Unknown error"
+  },
+  "criticalErrorCaption": "Kritinė klaida",
+  "@criticalErrorCaption": {
+    "description": "Klaidos lango antraštė",
+    "x-source-message": "Critical Error"
+  },
+  "noLogsWereCapturedFromThisProcess": "Nuo šio proceso nebuvo surinkti jokių žurnalų",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "Informacinis pranešimas",
+    "x-source-message": "No logs were captured from this process"
+  },
+  "winePrefixUpdatedMessage": "Wine prefix atnaujintas",
+  "@winePrefixUpdatedMessage": {
+    "description": "Informacinis pranešimas",
+    "x-source-message": "Wine prefix updated"
+  },
+  "pinnedAppUpdatedMessage": "Prisegtas programos įrašas atnaujintas",
+  "@pinnedAppUpdatedMessage": {
+    "description": "Informacinis pranešimas",
+    "x-source-message": "Pinned app updated"
+  },
+  "moreDetailsLink": "Daugiau detalių.",
+  "@moreDetailsLink": {
+    "description": "Šis tekstas tampa spustelėjamuoju nuoroda, įterpiama į klaidos pranešimo pabaigą",
+    "x-source-message": "More details."
+  },
+  "wow64ModeSection": "WOW64 režimas",
+  "@wow64ModeSection": {
+    "description": "Šis tekstas rodomas įvedimo dekoracijoje",
+    "x-source-message": "WOW64 mode"
+  },
+  "useWow64ModeIfAvailable": "Naudoti WOW64 režimą, jei įmanoma",
+  "@useWow64ModeIfAvailable": {
+    "description": "Šis tekstas rodomas šalia žymeklio",
+    "x-source-message": "Use the WOW64 mode if available"
+  },
+  "d3D8To11Implementation": "Direct3D 8-11 įgyvendinimas",
+  "@d3D8To11Implementation": {
+    "description": "Šis tekstas rodomas įvedimo dekoracijoje",
+    "x-source-message": "Direct3D 8-11 implementation"
+  },
+  "useParticularD3D8To11Impl": "Naudoti konkretų Direct3D 8-11 įgyvendinimą",
+  "@useParticularD3D8To11Impl": {
+    "description": "Šis tekstas rodomas šalia žymeklio",
+    "x-source-message": "Use a particular Direct3D 8-11 implementation"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "Bus naudojama numatytoji šio Wine versijos įgyvendinimo",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "Tekstas, rodomas, kai nėra pasirinkta konkreti Direct3D 8-11 įgyvendinimo",
+    "x-source-message": "A default implementation for this particular Wine build will be used"
+  },
+  "windowsLocale": "Kalba",
+  "@windowsLocale": {
+    "description": "Tekstas, esančiam šalia kalbos pasirinkimo lauko. Tai Wine prefix kalba.",
+    "x-source-message": "Locale"
+  },
+  "useParticularWindowsLocale": "Naudoti konkrečią kalbą",
+  "@useParticularWindowsLocale": {
+    "description": "Šis tekstas rodomas šalia žymeklio",
+    "x-source-message": "Use a particular locale"
+  },
+  "dontShowThisWarningAgain": "Nerodyti šio įspėjimo dar kartą",
+  "@dontShowThisWarningAgain": {
+    "description": "Šis tekstas rodomas šalia žymeklio",
+    "x-source-message": "Don't show this warning again"
+  },
+  "nameForTheNewPrefixHintText": "Naujo wine prefix pavadinimas",
+  "@nameForTheNewPrefixHintText": {
+    "description": "Pažymėjimo tekstas, rodomas įvedimo lauke",
+    "x-source-message": "Name for the new wine prefix"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "Tai gali padėti su tekstų rodymu ne-Unicode programose",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "Informacinis tekstas, rodomas, jei pasirinkta konkreti kalba",
+    "x-source-message": "This may help with text display in non-Unicode apps"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "Sistemos kalba bus naudojama Windows programoms",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "Informacinis tekstas, rodomas, jei nėra pasirinkta konkreti kalba",
+    "x-source-message": "The system locale will be used by Windows apps"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "Tai padarys tekstą per mažą, bet nesugadins senesnių viso ekrano programų",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "Šis tekstas rodomas, kai pasirinkta mažesnė HiDPI skalė nei rekomenduojama",
+    "x-source-message": "This will make the text too small but won't break older fullscreen apps"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "Tai yra idealus mastelis jūsų ekranu",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "Šis tekstas rodomas, kai pasirinktas rekomenduojamas HiDPI mastelis ir tas mastelis yra 1.0",
+    "x-source-message": "This is the perfect scale for your display"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "Tai padės, kai tekstas yra per mažas, tačiau sugadins senesnes viso ekrano programas",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "Šis tekstas rodomas, kai pasirinktas HiDPI mastelis didesnis nei 1, tačiau šis vertė vis dar mažesnė už rekomenduojamą mastelį",
+    "x-source-message": "This will help with text being too small but will break older fullscreen apps"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "Tai yra idealus mastelis jūsų ekranu, tačiau sugadins senesnes viso ekrano programas",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "Šis tekstas rodomas, kai pasirinktas rekomenduojamas HiDPI mastelis, bet tas mastelis yra didesnis nei 1.0",
+    "x-source-message": "This is the perfect scale for your display, though it will break older fullscreen apps"
+  },
+  "thisWillProduceTextThatsTooLarge": "Tai gali sukelti per didelį tekstą",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "Šis tekstas rodomas, kai pasirinktas didesnis HiDPI mastelis nei rekomenduojamas",
+    "x-source-message": "This may produce text that's too large"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "Šis prefixas yra būsenoje, kai jį negalima ištrinti",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "Pavyzdžiui, prefixas gali jau būti ištrynimo procese",
+    "x-source-message": "This prefix is in a state were it can't be deleted"
+  },
+  "hiDpiScaleLabel": "HiDPI mastelis",
+  "@hiDpiScaleLabel": {
+    "description": "Šis tekstas rodomas įvesties dekoracijoje",
+    "x-source-message": "HiDPI scale"
+  },
+  "pleaseSelect": "Pasirinkite",
+  "@pleaseSelect": {
+    "description": "Šis tekstas rodomas, kai reikalingas pasirinkimas, bet niekas nepasirinktas",
+    "x-source-message": "Please select"
+  },
+  "appsAreRunningInThisPrefixTooltip": "Programos veikia šiame prefiksas",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "Šis tekstas pateikiamas įrašo paaiškinime. Čia „prefix“ reiškia Wine prefiksą",
+    "x-source-message": "Apps are running in this prefix"
+  },
+  "refreshWineReleasesTooltip": "Atnaujinti wine leidimus",
+  "@refreshWineReleasesTooltip": {
+    "description": "Šis tekstas pateikiamas įrašo paaiškinime",
+    "x-source-message": "Refresh wine releases"
+  },
+  "prefixSettingsTooltip": "Prefikso nustatymai",
+  "@prefixSettingsTooltip": {
+    "description": "Šis tekstas pateikiamas įrašo paaiškinime",
+    "x-source-message": "Prefix settings"
+  },
+  "killProcessTooltip": "Nutraukti procesą",
+  "@killProcessTooltip": {
+    "description": "Šis tekstas pateikiamas įrašo paaiškinime",
+    "x-source-message": "Kill process"
+  },
+  "scrollToBottomTooltip": "Slinkti į apačią",
+  "@scrollToBottomTooltip": {
+    "description": "Šis tekstas pateikiamas įrašo paaiškinime",
+    "x-source-message": "Scroll to bottom"
+  },
+  "scrollToTopTooltip": "Slinkti į viršų",
+  "@scrollToTopTooltip": {
+    "description": "Šis tekstas pateikiamas įrašo paaiškinime",
+    "x-source-message": "Scroll to top"
+  },
+  "viewLogsTooltip": "Žiūrėti žurnalus",
+  "@viewLogsTooltip": {
+    "description": "Šis tekstas pateikiamas įrašo paaiškinime",
+    "x-source-message": "View Logs"
+  },
+  "viewLogsLink": "Žiūrėti žurnalus.",
+  "@viewLogsLink": {
+    "description": "Šis tekstas tampa spustelėjamuoju nuoroda, įterpiama į klaidos pranešimo pabaigą",
+    "x-source-message": "View Logs."
+  },
+  "useParticularGPU": "Naudoti tam tikrą GPU",
+  "@useParticularGPU": {
+    "description": "Šis tekstas rodomas šalia žymeklio",
+    "x-source-message": "Use a particular GPU"
+  },
+  "gpuSelection": "GPU pasirinkimas",
+  "@gpuSelection": {
+    "description": "Šis tekstas rodomas įvedimo dekoracijoje",
+    "x-source-message": "GPU selection"
+  },
+  "failedToGetTheListOfAvailableGPUs": "Neįmanoma gauti prieinamų GPU sąrašo",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "Šis tekstas pateikiamas įrašo paaiškinime",
+    "x-source-message": "Failed to get the list of available GPUs"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "Atkreipkite dėmesį, kad ši funkcija neveikia visose situacijose",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "Informacinis tekstas, rodomas kai vartotojas įjungia funkciją, kuri neveikia visose situacijose",
+    "x-source-message": "Note that this feature doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "Pridėti Wine Prefix",
+  "@addWinePrefixButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke",
+    "x-source-message": "Add Wine Prefix"
+  },
+  "aboutButtonLabel": "Apie",
+  "@aboutButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke arba meniu parinktyje",
+    "x-source-message": "About"
+  },
+  "donateButtonLabel": "Paaukoti",
+  "@donateButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke",
+    "x-source-message": "Donate"
+  },
+  "unpinButtonLabel": "Atšaukti",
+  "@unpinButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke arba meniu parinktyje",
+    "x-source-message": "Unpin"
+  },
+  "deleteButtonLabel": "Ištrinti",
+  "@deleteButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke",
+    "x-source-message": "Delete"
+  },
+  "createWinePrefixButtonLabel": "Sukurti Wine Prefix",
+  "@createWinePrefixButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke",
+    "x-source-message": "Create Wine Prefix"
+  },
+  "startingButtonLabel": "Pradedama ...",
+  "@startingButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke, kai tam tikra operacija prasideda",
+    "x-source-message": "Starting ..."
+  },
+  "downloadingAndExtractingButtonLabel": "Atsiunčiama ir išskleidžiama ...",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke, kai vyksta atsisiuntimo ir išskleidimo operacija",
+    "x-source-message": "Downloading and Extracting ..."
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "Atsiunčiama ir išskleidžiama DXVK ...",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke, kai vyksta atsisiuntimo ir išskleidimo operacija DXVK",
+    "x-source-message": "Downloading and Extracting DXVK ..."
+  },
+  "creatingWinePrefixButtonLabel": "Kuriama Wine Prefix ...",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke, kai kuriamas Wine Prefix",
+    "x-source-message": "Creating Wine Prefix ..."
+  },
+  "updateWinePrefixButtonLabel": "Atnaujinti Wine Prefix",
+  "@updateWinePrefixButtonLabel": {
+    "description": "Šis tekstas yra rodomas mygtuke",
+    "x-source-message": "Update Wine Prefix"
+  },
+  "updatingWinePrefixButtonLabel": "Atnaujinama Wine Prefix …",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "Šis tekstas rodomas mygtuku, kai atnaujinamas Wine Prefix",
+    "x-source-message": "Updating Wine Prefix ..."
+  },
+  "cloneButtonLabel": "Klonuoti",
+  "@cloneButtonLabel": {
+    "description": "Šis tekstas rodomas mygtuku arba meniu parinktyje",
+    "x-source-message": "Clone"
+  },
+  "cloningButtonLabel": "Klonuojama …",
+  "@cloningButtonLabel": {
+    "description": "Šis tekstas rodomas mygtuku, kai vyksta Wine Prefix klonavimas",
+    "x-source-message": "Cloning ..."
+  },
+  "pinExecutableButtonLabel": "Prisegti vykdomąjį failą",
+  "@pinExecutableButtonLabel": {
+    "description": "Šis tekstas rodomas mygtuku",
+    "x-source-message": "Pin Executable"
+  },
+  "proceedAnywayButtonLabel": "Tęsti vis tiek",
+  "@proceedAnywayButtonLabel": {
+    "description": "Šis tekstas rodomas mygtuku",
+    "x-source-message": "Proceed Anyway"
+  },
+  "runExecutableButtonLabel": "Vykdyti vykdomąjį failą",
+  "@runExecutableButtonLabel": {
+    "description": "Šis tekstas rodomas mygtuku",
+    "x-source-message": "Run Executable"
+  },
+  "runInstallerButtonLabel": "Vykdyti diegimo programą",
+  "@runInstallerButtonLabel": {
+    "description": "Šis tekstas rodomas mygtuku",
+    "x-source-message": "Run Installer"
+  },
+  "settingsMenuItem": "Nustatymai",
+  "@settingsMenuItem": {
+    "description": "Šis tekstas rodomas meniu parinktyje",
+    "x-source-message": "Settings"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "Ši programa bus atšaukta iš fiksavimo:",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "Šis tekstas rodomas dialoge",
+    "x-source-message": "The following app is about to be unpinned:"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "Šis prefix bus ištrintas:",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "Šis tekstas rodomas dialoge. „prefix“ čia reiškia Wine Prefix",
+    "x-source-message": "The following prefix is about to be deleted:"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "Šis kelias nepasiekiamas iš Wine:",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "Šis tekstas rodomas dialoge",
+    "x-source-message": "The following path is inaccessible from Wine:"
+  },
+  "pathInaccessibleFromWineExplanation": "Kelias gali būti nepasiekiamas iš Wine, nes visas Wine Bar arba tik Wine veikia virtualioje mašinoje (Apple silicon Mac'ų atveju) arba Snap / Flatpak sandbox'e.",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "Šis tekstas rodomas dialoge",
+    "x-source-message": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox."
+  },
+  "solutionHeading": "Sprendimas",
+  "@solutionHeading": {
+    "description": "Šis tekstas rodomas dialoge kaip antraštė, po kurios pateikiamas papildomas tekstas",
+    "x-source-message": "Solution"
+  },
+  "pathInaccessibleFromWineSolution": "Kopijuokite nurodytą aplanką į savo namų katalogo vietą.",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "Šis tekstas rodomas dialoge po „Sprendimas“ antraštės",
+    "x-source-message": "Copy the folder in question somewhere under your home directory."
+  },
+  "thisActionCantBeUndone": "Ši veiksmas negali būti atšauktas!",
+  "@thisActionCantBeUndone": {
+    "description": "Šis tekstas rodomas dialoge",
+    "x-source-message": "This action can't be undone!"
+  },
+  "selectWineBuildProviderStepName": "Pasirinkite wine build tiekėją",
+  "@selectWineBuildProviderStepName": {
+    "description": "Šis tekstas rodomas vedlio puslapių sąraše ir taip pat viršuje atitinkamo puslapio",
+    "x-source-message": "Select wine build provider"
+  },
+  "selectWineReleaseStepName": "Pasirinkite wine release",
+  "@selectWineReleaseStepName": {
+    "description": "Šis tekstas rodomas vedlio puslapių sąraše ir taip pat viršuje atitinkamo puslapio",
+    "x-source-message": "Select wine release"
+  },
+  "selectWineBuildStepName": "Pasirinkite wine build",
+  "@selectWineBuildStepName": {
+    "description": "Šis tekstas rodomas vedlio puslapių sąraše ir taip pat viršuje atitinkamo puslapio",
+    "x-source-message": "Select wine build"
+  },
+  "setOptionsStepName": "Nustatykite parinktis",
+  "@setOptionsStepName": {
+    "description": "Šis tekstas rodomas vedlio puslapių sąraše ir taip pat viršuje atitinkamo puslapio",
+    "x-source-message": "Set options"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "Pasirinktas WOW64 versija. Žinoma, kad emuliacijoje sukelia problemų. Tikėkitės sugadintos įdiegimo.",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "Įspėjimo pranešimas, rodomas kai WOW64 tikrinama Wine versija bus naudojama emuliacijoje",
+    "x-source-message": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation."
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "Ši versija reikalauja, kad jūsų sistemoje būtų 32‑bitų bibliotekos. Jei jos jau yra, galite ignoruoti šį įspėjimą. Kitu atveju, įdiekite Wine iš savo distributoriaus saugyklos (tai suteiks 32‑bitų bibliotekas) arba, jei yra galimybė, pasirinkite WOW64 versiją iš aukščiau pateiktos sąrašo.",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "Įspėjimo pranešimas, rodomas kai pasirenkama ne‑WOW64 versija aplinkoje, kurioje gali trūkti 32‑bitų bibliotekų",
+    "x-source-message": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available."
+  },
+  "wow64PreferenceUnderEmulationWarning": "WOW64 režimas emuliacijoje žinoma, kad sukelia problemų. Tikėkitės sugadintos įdiegimo.",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "Įspėjimo pranešimas, rodomas kai WOW64 režimas yra pageidaujamas (kurių versijų tai parinktinai palaiko) aplinkoje, reikalaujantio emuliacijos",
+    "x-source-message": "The WOW64 mode under emulation is known to have issues. Expect a broken installation."
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "Neužsidarant WOW64 režimo bus reikalaujama, kad jūsų sistemoje būtų 32‑bitų bibliotekos. Jei jos jau yra, galite ignoruoti šį įspėjimą. Kitu atveju, įdiekite Wine iš savo distributoriaus saugyklos, kuri suteiks 32‑bitų bibliotekas.",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "Įspėjimo pranešimas, rodomas kai WOW64 režimas nėra pageidaujamas (kurių versijų tai parinktinai palaiko) aplinkoje, kurioje gali trūkti 32‑bitų bibliotekų",
+    "x-source-message": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries."
+  },
+  "windowsExecutablesFilterName": "Windows programos",
+  "@windowsExecutablesFilterName": {
+    "description": "Šis tekstas pateikiamas „Failo tipas“ išskleidžiamajame sąraše failų pasirinkimo dialoge",
+    "x-source-message": "Windows executables"
+  },
+  "dxvkOptionExplanation": "Naujesnė ir greitesnė Proton implementacija",
+  "@dxvkOptionExplanation": {
+    "description": "Aprašymo tekstas, rodomas, kai pasirenkama DXVK implementacija Direct3D 8-11",
+    "x-source-message": "A newer and faster implementation from Proton"
+  },
+  "wineD3DOptionExplanation": "Patikima Wine implementacija. Naudojama, kai DXVK sukelia problemų.",
+  "@wineD3DOptionExplanation": {
+    "description": "Aprašymo tekstas, rodomas, kai pasirenkama WineD3D implementacija Direct3D 8-11",
+    "x-source-message": "A mature implementation from Wine. To be used in case of issues with DXVK."
+  },
+  "screensaverDisableReason": "Veikia Wine programa (galbūt viso ekrano)",
+  "@screensaverDisableReason": {
+    "description": "Priežastis, kodėl išjungiamas ekrano užsklanda, kaip reikalauja atitinkamas DBus API",
+    "x-source-message": "A Wine app (possibly fullscreen) is running"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "Atsisiųsto winetricks scenarijaus hash nesutampa su tikėtu.",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "Klaidos pranešimas, rodomas, kai atsisiųsto winetricks scenarijaus hash nesutampa su tikėtu",
+    "x-source-message": "The hash of the downloaded winetricks script doesn't match the expected one."
+  },
+  "downloadedFile": "Atsisiųstas failas: {downloadedFile}",
+  "@downloadedFile": {
+    "description": "Eilutė didesnės klaidos pranešimo dalyje",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Downloaded file: {downloadedFile}"
+  },
+  "expectedSha256Hash": "Tikėtinas SHA256 hash: {hash}",
+  "@expectedSha256Hash": {
+    "description": "Eilutė didesnės klaidos pranešimo dalyje",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Expected SHA256 hash: {hash}"
+  },
+  "actualSha256Hash": "Faktinis SHA256 hash: {hash}",
+  "@actualSha256Hash": {
+    "description": "Eilutė didesnės klaidos pranešimo dalyje",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Actual SHA256 hash: {hash}"
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "Pirmiausia užbaikite programas, veikiančias visose Wine prefixuose",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "Klaidos pranešimas, rodomas, kai bandoma atlikti veiksmą, kuriam reikalinga, kad jokios programos nebūtų veikiamos visose prefixuose",
+    "x-source-message": "Finish the apps running in all prefixes first"
+  },
+  "finishTheRunningAppsFirst": "Pirmiausia užbaikite veikiantys programos",
+  "@finishTheRunningAppsFirst": {
+    "description": "Klaidos pranešimas, rodomas, kai bandoma atlikti veiksmą, kuriam reikalinga, kad jokios programos nebūtų veikiamos dabartiniame prefixe",
+    "x-source-message": "Finish the running apps first"
+  },
+  "missingHardwareVirtualizationCapabilities": "Ši sistema neturi aparatinės virtualizacijos galimybių (/dev/kvm trūksta), kurios reikalingos Wine Bar veikimui.",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "Klaidos pranešimas, rodomas sistemose, kuriose reikalinga aparatinė virtualizacija, bet jos nėra",
+    "x-source-message": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar."
+  },
+  "snapKvmNeedsConnection": "Wine Bar ARM64 versijai reikia skaitymo-rašymo prieigos prie /dev/kvm. Įprasti programos paprastai turi tokį leidimą, tačiau Snap jų neturi. Norėdami suteikti šią prieigą, paleiskite šią komandą iš komandinės eilutės:\n\n{kvmConnectCommand}\n\nTada paleiskite Wine Bar iš naujo.",
+  "@snapKvmNeedsConnection": {
+    "description": "Klaidos pranešimas, rodomas, kai Snap aplinkoje trūksta rašymo prieigos prie /dev/kvm",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar."
+  },
+  "muvmIsNeededButMissing": "Ši sistema reikalauja muvm / FEX, kad galėtų paleisti Windows programas. Wine Bar Snap versija turi muvm integruotą. Kitu atveju, įdiekite jį naudodami \"sudo dnf install muvm fex-emu\" arba panašiai",
+  "@muvmIsNeededButMissing": {
+    "description": "Klaidos pranešimas, rodomas, kai muvm nėra prieinamas sistemoje, kurioje jo reikia",
+    "x-source-message": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar"
+  },
+  "prefixNameCantBeEmpty": "Prieigos pavadinimas negali būti tuščias",
+  "@prefixNameCantBeEmpty": {
+    "description": "Klaidos pranešimas, rodomas bandant sukurti Wine prieigą su tuščiu pavadinimu",
+    "x-source-message": "Prefix name can't be empty"
+  },
+  "illegalSymbolsPresent": "Yra neleistini simboliai",
+  "@illegalSymbolsPresent": {
+    "description": "Klaidos pranešimas, rodomas, kai įvedimo lauke yra neleistini simboliai",
+    "x-source-message": "Illegal symbols present"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "Ši Wine prieiga neįtraukia winetricks scenarijaus ir taip pat neturėjo išorinio.",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "Klaidos pranešimas, rodomas bandant paleisti winetricks scenarijų, kurio nerasta",
+    "x-source-message": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided."
+  },
+  "failedToLocateWineOrWineserverExecutables": "Neįmanoma rasti wine / wineserver vykdomųjų failų",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "Norint paleisti Wine programas, turime rasti tinkamus wine ir wineserver vykdomuosius failus. Ši klaidos žinutė rodomas, kai nepavyksta tai padaryti.",
+    "x-source-message": "Failed to locate the wine / wineserver executables"
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "Neįmanoma rasti wine / wineserver vykdomųjų failų, reikalingų paleidžiant winetricks",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "Winetricks gali reikalauti skirtingų versijų (pavyzdžiui, su ar be wow64), nei įprastos programos. Ši klaidos žinutė rodomas, kai nepavyksta juos rasti.",
+    "x-source-message": "Failed to locate the wine / wineserver executables for running winetricks"
+  },
+  "specificCommandHasFailed": "„{command}“ komanda nepavyko",
+  "@specificCommandHasFailed": {
+    "description": "Klaidos žinutė, rodomas, kai išorinė priemonė nepavyko",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "The \"{command}\" command failed"
+  }
+}

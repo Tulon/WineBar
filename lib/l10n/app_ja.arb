@@ -1,0 +1,618 @@
+{
+  "@@locale": "ja",
+  "kronekWineSourceDescription": "標準、Staging、TkG、および Proton Wine ビルドを提供します。",
+  "@kronekWineSourceDescription": {
+    "description": "Kronek Wine ビルドソースを選択するときに表示されます",
+    "x-source-message": "Provides the standard, Staging, TkG and Proton Wine builds."
+  },
+  "geProtonWineSourceDescription": "DXVK / VK3D を含む Proton ビルドを提供します。ゲームやその他のフルスクリーンアプリに推奨されます。",
+  "@geProtonWineSourceDescription": {
+    "description": "GE Proton Wine ビルドソースを選択するときに表示されます",
+    "x-source-message": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps."
+  },
+  "appUnpinningConfirmationDialogTitle": "アプリのピン解除確認",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "ダイアログのタイトルとして使用されるテキストです",
+    "x-source-message": "App unpinning confirmation"
+  },
+  "createWinePrefixDialogTitle": "Wine Prefix を作成",
+  "@createWinePrefixDialogTitle": {
+    "description": "ダイアログのタイトルとして使用されるテキストです",
+    "x-source-message": "Create a Wine Prefix"
+  },
+  "cloneWinePrefixDialogTitle": "Wine Prefix をクローン",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "ダイアログのタイトルとして使用されるテキストです",
+    "x-source-message": "Clone Wine Prefix"
+  },
+  "prefixDeletionConfirmationDialogTitle": "Prefix 削除確認",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "ダイアログのタイトルとして使用されるテキストです",
+    "x-source-message": "Prefix deletion confirmation"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Wine からアクセスできないパス",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "ダイアログのタイトルとして使用されるテキストです",
+    "x-source-message": "Path inaccessible from Wine"
+  },
+  "winePrefixesPageTitle": "Wine Prefixes",
+  "@winePrefixesPageTitle": {
+    "description": "ページのタイトルとして使用されるテキストです",
+    "x-source-message": "Wine Prefixes"
+  },
+  "winePrefixPageTitlePattern": "Wine Prefix: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "ページのタイトルとして使用されるテキストです",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix: {prefixName}"
+  },
+  "prefixSettingsDialogTitlePattern": "Wine Prefix {prefixName} Settings",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "Prefix Settings ダイアログのタイトルパターンです",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix {prefixName} Settings"
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} 設定",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "ピン留めされた実行ファイル設定ダイアログのタイトルパターン",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "{pinnedExecutableLabel} Settings"
+  },
+  "processLogsTitle": "プロセスログ",
+  "@processLogsTitle": {
+    "description": "ページタイトルとして使用されるテキスト",
+    "x-source-message": "Process Logs"
+  },
+  "licenseInfoPattern": "ライセンス: {license}",
+  "@licenseInfoPattern": {
+    "description": "アバウトダイアログに表示される文字列",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "License: {license}"
+  },
+  "authorInfoPattern": "作者: {author}",
+  "@authorInfoPattern": {
+    "description": "アバウトダイアログに表示される文字列",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Author: {author}"
+  },
+  "theCopyingProcessFailedWithExitCode": "コピー処理がステータス {exitCode} で失敗しました",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "`cp -a` が失敗したときに表示されるエラーメッセージ",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    },
+    "x-source-message": "The copying process failed with status {exitCode}"
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "DXVK パッケージに x32 または x64 サブディレクトリがありません",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "ダウンロードした DXVK パッケージのディレクトリ構造が期待と一致しない場合に表示されるエラーメッセージ",
+    "x-source-message": "The DXVK package is missing the x32 or x64 subdirectory"
+  },
+  "failedToPrepareWinetricksScript": "winetricks スクリプトの準備に失敗しました:",
+  "@failedToPrepareWinetricksScript": {
+    "description": "winetricks スクリプトのダウンロードまたは検証に失敗したときに表示されるエラーメッセージ",
+    "x-source-message": "Failed to prepare the winetricks script:"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "フォルダー {toplevelDataDir} は存在しますが、このアプリに属していると認識されませんでした。\n名前を変更するか、ゴミ箱に移動してからアプリを再起動してください。",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "アプリのデータディレクトリが実際にこのアプリによって作成されていないと疑われる場合に表示されるエラーメッセージ",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app."
+  },
+  "extractionFailedMessage": "抽出に失敗しました",
+  "@extractionFailedMessage": {
+    "description": "アーカイブの抽出に失敗したときに表示されるエラーメッセージ",
+    "x-source-message": "Extraction failed"
+  },
+  "prefixAlreadyExists": "プレフィックス \"{prefixName}\" は既に存在します",
+  "@prefixAlreadyExists": {
+    "description": "すでに存在するプレフィックスを作成しようとしたときに表示されるエラーメッセージ",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Prefix \"{prefixName}\" already exists"
+  },
+  "unknownErrorMessage": "不明なエラー",
+  "@unknownErrorMessage": {
+    "description": "特定のエラーが利用できない場合に表示されるエラーテキストのプレースホルダー",
+    "x-source-message": "Unknown error"
+  },
+  "criticalErrorCaption": "重大なエラー",
+  "@criticalErrorCaption": {
+    "description": "エラーメッセージボックスのキャプション",
+    "x-source-message": "Critical Error"
+  },
+  "noLogsWereCapturedFromThisProcess": "このプロセスからログは取得されませんでした",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "情報メッセージ",
+    "x-source-message": "No logs were captured from this process"
+  },
+  "winePrefixUpdatedMessage": "Wine prefix が更新されました",
+  "@winePrefixUpdatedMessage": {
+    "description": "情報メッセージ",
+    "x-source-message": "Wine prefix updated"
+  },
+  "pinnedAppUpdatedMessage": "ピン留めされたアプリが更新されました",
+  "@pinnedAppUpdatedMessage": {
+    "description": "情報メッセージ",
+    "x-source-message": "Pinned app updated"
+  },
+  "moreDetailsLink": "詳細を見る。",
+  "@moreDetailsLink": {
+    "description": "エラーメッセージの末尾に挿入されるクリック可能なリンクテキスト",
+    "x-source-message": "More details."
+  },
+  "wow64ModeSection": "WOW64 モード",
+  "@wow64ModeSection": {
+    "description": "入力装飾に表示されるテキスト",
+    "x-source-message": "WOW64 mode"
+  },
+  "useWow64ModeIfAvailable": "利用可能なら WOW64 モードを使用する",
+  "@useWow64ModeIfAvailable": {
+    "description": "チェックボックスの横に表示されるテキスト",
+    "x-source-message": "Use the WOW64 mode if available"
+  },
+  "d3D8To11Implementation": "Direct3D 8-11 実装",
+  "@d3D8To11Implementation": {
+    "description": "入力装飾に表示されるテキスト",
+    "x-source-message": "Direct3D 8-11 implementation"
+  },
+  "useParticularD3D8To11Impl": "特定の Direct3D 8-11 実装を使用する",
+  "@useParticularD3D8To11Impl": {
+    "description": "チェックボックスの横に表示されるテキスト",
+    "x-source-message": "Use a particular Direct3D 8-11 implementation"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "このWineビルド専用のデフォルト実装が使用されます",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "特定のDirect3D 8-11実装が選択されていない場合に表示されるテキスト",
+    "x-source-message": "A default implementation for this particular Wine build will be used"
+  },
+  "windowsLocale": "ロケール",
+  "@windowsLocale": {
+    "description": "ロケール選択フィールドの隣に表示されるテキスト。Wine prefix用のWindowsロケールです",
+    "x-source-message": "Locale"
+  },
+  "useParticularWindowsLocale": "特定のロケールを使用する",
+  "@useParticularWindowsLocale": {
+    "description": "チェックボックスの隣に表示されるテキスト",
+    "x-source-message": "Use a particular locale"
+  },
+  "dontShowThisWarningAgain": "この警告を再表示しない",
+  "@dontShowThisWarningAgain": {
+    "description": "チェックボックスの隣に表示されるテキスト",
+    "x-source-message": "Don't show this warning again"
+  },
+  "nameForTheNewPrefixHintText": "新しいWine prefixの名前",
+  "@nameForTheNewPrefixHintText": {
+    "description": "入力フィールドに表示されるヒントテキスト",
+    "x-source-message": "Name for the new wine prefix"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "非Unicodeアプリでのテキスト表示に役立つ場合があります",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "特定のWindowsロケールが選択されたときに表示される情報テキスト",
+    "x-source-message": "This may help with text display in non-Unicode apps"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "システムロケールはWindowsアプリで使用されます",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "特定のWindowsロケールが選択されていない場合に表示される情報テキスト",
+    "x-source-message": "The system locale will be used by Windows apps"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "テキストが小さくなりますが、古いフルスクリーンアプリは壊れません",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "推奨より小さいHiDPIスケールが選択されたときに表示されるテキスト",
+    "x-source-message": "This will make the text too small but won't break older fullscreen apps"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "ディスプレイに最適なスケールです",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "推奨される HiDPI スケールが選択され、かつそのスケールが 1.0 の場合に表示されるテキストです",
+    "x-source-message": "This is the perfect scale for your display"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "テキストが小さくなる問題を解決しますが、古いフルスクリーンアプリは動作しなくなります",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "1 より大きい HiDPI スケールが選択され、かつその値が推奨スケールより低い場合に表示されるテキストです",
+    "x-source-message": "This will help with text being too small but will break older fullscreen apps"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "ディスプレイに最適なスケールですが、古いフルスクリーンアプリは動作しなくなります",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "推奨される HiDPI スケールが選択され、かつそのスケールが 1.0 より大きい場合に表示されるテキストです",
+    "x-source-message": "This is the perfect scale for your display, though it will break older fullscreen apps"
+  },
+  "thisWillProduceTextThatsTooLarge": "テキストが大きくなりすぎる可能性があります",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "推奨スケールより大きい HiDPI スケールが選択された場合に表示されるテキストです",
+    "x-source-message": "This may produce text that's too large"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "このプレフィックスは削除できない状態にあります",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "例えば、プレフィックスがすでに削除処理中の場合などです",
+    "x-source-message": "This prefix is in a state were it can't be deleted"
+  },
+  "hiDpiScaleLabel": "HiDPI スケール",
+  "@hiDpiScaleLabel": {
+    "description": "入力装飾に表示されるテキストです",
+    "x-source-message": "HiDPI scale"
+  },
+  "pleaseSelect": "選択してください",
+  "@pleaseSelect": {
+    "description": "選択が必要なのにオプションが未選択の場合に表示されるテキストです",
+    "x-source-message": "Please select"
+  },
+  "appsAreRunningInThisPrefixTooltip": "このプレフィックスでアプリが実行中です",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "このテキストはツールチップに表示されます。ここでの 'prefix' は Wine prefix を指します",
+    "x-source-message": "Apps are running in this prefix"
+  },
+  "refreshWineReleasesTooltip": "Wine リリースを更新",
+  "@refreshWineReleasesTooltip": {
+    "description": "このテキストはツールチップに表示されます",
+    "x-source-message": "Refresh wine releases"
+  },
+  "prefixSettingsTooltip": "プレフィックス設定",
+  "@prefixSettingsTooltip": {
+    "description": "このテキストはツールチップに表示されます",
+    "x-source-message": "Prefix settings"
+  },
+  "killProcessTooltip": "プロセスを終了",
+  "@killProcessTooltip": {
+    "description": "このテキストはツールチップに表示されます",
+    "x-source-message": "Kill process"
+  },
+  "scrollToBottomTooltip": "下へスクロール",
+  "@scrollToBottomTooltip": {
+    "description": "このテキストはツールチップに表示されます",
+    "x-source-message": "Scroll to bottom"
+  },
+  "scrollToTopTooltip": "上へスクロール",
+  "@scrollToTopTooltip": {
+    "description": "このテキストはツールチップに表示されます",
+    "x-source-message": "Scroll to top"
+  },
+  "viewLogsTooltip": "ログを表示",
+  "@viewLogsTooltip": {
+    "description": "このテキストはツールチップに表示されます",
+    "x-source-message": "View Logs"
+  },
+  "viewLogsLink": "ログを表示。",
+  "@viewLogsLink": {
+    "description": "このテキストはエラーメッセージの末尾に挿入されるクリック可能なリンクになります",
+    "x-source-message": "View Logs."
+  },
+  "useParticularGPU": "特定の GPU を使用",
+  "@useParticularGPU": {
+    "description": "このテキストはチェックボックスの横に表示されます",
+    "x-source-message": "Use a particular GPU"
+  },
+  "gpuSelection": "GPU 選択",
+  "@gpuSelection": {
+    "description": "このテキストは入力装飾に表示されます",
+    "x-source-message": "GPU selection"
+  },
+  "failedToGetTheListOfAvailableGPUs": "利用可能な GPU のリストを取得できませんでした",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "このテキストはツールチップに表示されます",
+    "x-source-message": "Failed to get the list of available GPUs"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "この機能はすべてのシナリオで動作しないことに注意してください",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "ユーザーがすべてのシナリオで動作しない機能を有効にしたときに表示される情報テキスト",
+    "x-source-message": "Note that this feature doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "Wine Prefix を追加",
+  "@addWinePrefixButtonLabel": {
+    "description": "This text is placed on a button",
+    "x-source-message": "Add Wine Prefix"
+  },
+  "aboutButtonLabel": "情報",
+  "@aboutButtonLabel": {
+    "description": "This text is placed on a button or a menu item",
+    "x-source-message": "About"
+  },
+  "donateButtonLabel": "寄付",
+  "@donateButtonLabel": {
+    "description": "This text is placed on a button",
+    "x-source-message": "Donate"
+  },
+  "unpinButtonLabel": "ピン留め解除",
+  "@unpinButtonLabel": {
+    "description": "This text is placed on a button or a menu item",
+    "x-source-message": "Unpin"
+  },
+  "deleteButtonLabel": "削除",
+  "@deleteButtonLabel": {
+    "description": "This text is placed on a button",
+    "x-source-message": "Delete"
+  },
+  "createWinePrefixButtonLabel": "Wine Prefix を作成",
+  "@createWinePrefixButtonLabel": {
+    "description": "This text is placed on a button",
+    "x-source-message": "Create Wine Prefix"
+  },
+  "startingButtonLabel": "開始中 …",
+  "@startingButtonLabel": {
+    "description": "This text is placed on a button when a certain operation is starting",
+    "x-source-message": "Starting ..."
+  },
+  "downloadingAndExtractingButtonLabel": "ダウンロード中・展開中 …",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "This text is placed on a button when a download and extraction operation is in progress",
+    "x-source-message": "Downloading and Extracting ..."
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "DXVK のダウンロード中・展開中 …",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "This text is placed on a button when the download and extraction operation for DXVK is in progress",
+    "x-source-message": "Downloading and Extracting DXVK ..."
+  },
+  "creatingWinePrefixButtonLabel": "Wine Prefix を作成中 …",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "This text is placed on a button when a Wine prefix is being created",
+    "x-source-message": "Creating Wine Prefix ..."
+  },
+  "updateWinePrefixButtonLabel": "Wine Prefix を更新",
+  "@updateWinePrefixButtonLabel": {
+    "description": "This text is placed on a button",
+    "x-source-message": "Update Wine Prefix"
+  },
+  "updatingWinePrefixButtonLabel": "Wine Prefix を更新中 …",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "Wine Prefix が更新されているときにボタンに表示されるテキスト",
+    "x-source-message": "Updating Wine Prefix ..."
+  },
+  "cloneButtonLabel": "複製",
+  "@cloneButtonLabel": {
+    "description": "ボタンまたはメニュー項目に表示されるテキスト",
+    "x-source-message": "Clone"
+  },
+  "cloningButtonLabel": "複製中 …",
+  "@cloningButtonLabel": {
+    "description": "Wine Prefix の複製操作が進行中のときにボタンに表示されるテキスト",
+    "x-source-message": "Cloning ..."
+  },
+  "pinExecutableButtonLabel": "実行ファイルを固定",
+  "@pinExecutableButtonLabel": {
+    "description": "ボタンに表示されるテキスト",
+    "x-source-message": "Pin Executable"
+  },
+  "proceedAnywayButtonLabel": "それでも続行",
+  "@proceedAnywayButtonLabel": {
+    "description": "ボタンに表示されるテキスト",
+    "x-source-message": "Proceed Anyway"
+  },
+  "runExecutableButtonLabel": "実行ファイルを起動",
+  "@runExecutableButtonLabel": {
+    "description": "ボタンに表示されるテキスト",
+    "x-source-message": "Run Executable"
+  },
+  "runInstallerButtonLabel": "インストーラを起動",
+  "@runInstallerButtonLabel": {
+    "description": "ボタンに表示されるテキスト",
+    "x-source-message": "Run Installer"
+  },
+  "settingsMenuItem": "設定",
+  "@settingsMenuItem": {
+    "description": "メニュー項目に表示されるテキスト",
+    "x-source-message": "Settings"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "以下のアプリが固定解除されます:",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "ダイアログに表示されるテキスト",
+    "x-source-message": "The following app is about to be unpinned:"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "以下の prefix が削除されます:",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "ダイアログに表示されるテキスト。ここでの 'prefix' は Wine Prefix を指します",
+    "x-source-message": "The following prefix is about to be deleted:"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "以下のパスは Wine からアクセスできません:",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "ダイアログに表示されるテキスト",
+    "x-source-message": "The following path is inaccessible from Wine:"
+  },
+  "pathInaccessibleFromWineExplanation": "パスが Wine からアクセスできない場合があります。これは、Apple Silicon Mac 上の仮想マシンで Wine Bar または Wine が実行されているか、Snap / Flatpak サンドボックス内で動作しているためです。",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "このテキストはダイアログに表示されます",
+    "x-source-message": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox."
+  },
+  "solutionHeading": "解決策",
+  "@solutionHeading": {
+    "description": "このテキストはダイアログの見出しとして表示され、下にさらにテキストが続きます",
+    "x-source-message": "Solution"
+  },
+  "pathInaccessibleFromWineSolution": "対象フォルダーをホームディレクトリの下にコピーしてください。",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "このテキストは「解決策」見出しの後にダイアログで表示されます",
+    "x-source-message": "Copy the folder in question somewhere under your home directory."
+  },
+  "thisActionCantBeUndone": "この操作は元に戻せません！",
+  "@thisActionCantBeUndone": {
+    "description": "このテキストはダイアログに表示されます",
+    "x-source-message": "This action can't be undone!"
+  },
+  "selectWineBuildProviderStepName": "wine ビルドプロバイダーを選択",
+  "@selectWineBuildProviderStepName": {
+    "description": "このテキストはウィザードページのリストと対応するページの上部に表示されます",
+    "x-source-message": "Select wine build provider"
+  },
+  "selectWineReleaseStepName": "wine リリースを選択",
+  "@selectWineReleaseStepName": {
+    "description": "このテキストはウィザードページのリストと対応するページの上部に表示されます",
+    "x-source-message": "Select wine release"
+  },
+  "selectWineBuildStepName": "wine ビルドを選択",
+  "@selectWineBuildStepName": {
+    "description": "このテキストはウィザードページのリストと対応するページの上部に表示されます",
+    "x-source-message": "Select wine build"
+  },
+  "setOptionsStepName": "オプションを設定",
+  "@setOptionsStepName": {
+    "description": "このテキストはウィザードページのリストと対応するページの上部に表示されます",
+    "x-source-message": "Set options"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "WOW64 ビルドが選択されました。エミュレーション下で問題が発生することが知られています。インストールに失敗する可能性があります。",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "エミュレーション下で WOW64 専用の Wine ビルドが使用される際に表示される警告メッセージ",
+    "x-source-message": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation."
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "このビルドは、システムに 32‑bit ライブラリが存在する必要があります。既にインストール済みの場合は、この警告を無視できます。そうでない場合は、ディストリビューションのリポジトリから Wine をインストールしてください（32‑bit ライブラリが同時に入ります）または、上記のリストから利用可能な WOW64 ビルドを選択してください。",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "32‑bit ライブラリが存在しない可能性のある環境で、非 WOW64 対応ビルドが選択されたときに表示される警告メッセージ",
+    "x-source-message": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available."
+  },
+  "wow64PreferenceUnderEmulationWarning": "エミュレーション下で WOW64 モードは問題があることが知られています。インストールに失敗する可能性があります。",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "エミュレーションが必要な環境で、WOW64 モードを優先した際に表示される警告メッセージ（オプションでサポートするビルドに対して）",
+    "x-source-message": "The WOW64 mode under emulation is known to have issues. Expect a broken installation."
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "WOW64 モードを使用しない場合、システムに 32‑bit ライブラリが存在する必要があります。既にインストール済みの場合は、この警告を無視できます。そうでない場合は、ディストリビューションのリポジトリから Wine をインストールしてください（32‑bit ライブラリが同時に入ります）。",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "32‑bit ライブラリが存在しない可能性のある環境で、WOW64 モードを優先しない場合に表示される警告メッセージ（オプションでサポートするビルドに対して）",
+    "x-source-message": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries."
+  },
+  "windowsExecutablesFilterName": "Windows 実行ファイル",
+  "@windowsExecutablesFilterName": {
+    "description": "\"ファイルの種類\" ドロップダウンに表示されるテキスト",
+    "x-source-message": "Windows executables"
+  },
+  "dxvkOptionExplanation": "Protonからの新しく高速な実装",
+  "@dxvkOptionExplanation": {
+    "description": "Direct3D 8-11 の DXVK 実装が選択されたときに表示される説明テキスト",
+    "x-source-message": "A newer and faster implementation from Proton"
+  },
+  "wineD3DOptionExplanation": "Wine の成熟した実装。DXVK に問題がある場合に使用します。",
+  "@wineD3DOptionExplanation": {
+    "description": "Direct3D 8-11 の WineD3D 実装が選択されたときに表示される説明テキスト",
+    "x-source-message": "A mature implementation from Wine. To be used in case of issues with DXVK."
+  },
+  "screensaverDisableReason": "Wine アプリ（フルスクリーンの可能性あり）が実行中です",
+  "@screensaverDisableReason": {
+    "description": "対応する DBus API が要求するスクリーンセーバー無効化の理由",
+    "x-source-message": "A Wine app (possibly fullscreen) is running"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "ダウンロードした winetricks スクリプトのハッシュが期待値と一致しません。",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "ダウンロードした winetricks スクリプトのハッシュが期待値と一致しない場合に表示されるエラーメッセージ",
+    "x-source-message": "The hash of the downloaded winetricks script doesn't match the expected one."
+  },
+  "downloadedFile": "ダウンロードしたファイル: {downloadedFile}",
+  "@downloadedFile": {
+    "description": "大きなエラーメッセージの一行",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Downloaded file: {downloadedFile}"
+  },
+  "expectedSha256Hash": "期待される SHA256 ハッシュ: {hash}",
+  "@expectedSha256Hash": {
+    "description": "大きなエラーメッセージの一行",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Expected SHA256 hash: {hash}"
+  },
+  "actualSha256Hash": "実際の SHA256 ハッシュ: {hash}",
+  "@actualSha256Hash": {
+    "description": "大きなエラーメッセージの一行",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Actual SHA256 hash: {hash}"
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "すべての prefix に実行中のアプリを先に終了してください",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "すべての prefix で実行中のアプリがない状態で何かをしようとしたときに表示されるエラーメッセージ",
+    "x-source-message": "Finish the apps running in all prefixes first"
+  },
+  "finishTheRunningAppsFirst": "実行中のアプリを先に終了してください",
+  "@finishTheRunningAppsFirst": {
+    "description": "現在の prefix で実行中のアプリがない状態で何かをしようとしたときに表示されるエラーメッセージ",
+    "x-source-message": "Finish the running apps first"
+  },
+  "missingHardwareVirtualizationCapabilities": "このシステムには Wine Bar を実行するために必要なハードウェア仮想化機能（/dev/kvm が欠落）がありません。",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "ハードウェア仮想化が必要で利用できないシステムに表示されるエラーメッセージ",
+    "x-source-message": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar."
+  },
+  "snapKvmNeedsConnection": "Wine Bar on ARM64 は /dev/kvm に読み書きアクセスが必要です。通常のアプリはこのアクセス権を持ちますが、Snap ではありません。そのようなアクセス権を付与するには、コマンドラインから次のコマンドを実行してください：\n\n{kvmConnectCommand}\n\nその後、Wine Bar を再起動してください。",
+  "@snapKvmNeedsConnection": {
+    "description": "Snap 上で実行中に /dev/kvm への書き込みアクセスがない場合に表示されるエラーメッセージ",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar."
+  },
+  "muvmIsNeededButMissing": "このシステムでは Windows アプリを実行するために muvm / FEX が必要です。Wine Bar の Snap バージョンには muvm が組み込まれています。それ以外の場合は、\"sudo dnf install muvm fex-emu\" などを使用してインストールしてください。",
+  "@muvmIsNeededButMissing": {
+    "description": "muvm が利用できないシステムで必要とされる場合に表示されるエラーメッセージ",
+    "x-source-message": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar"
+  },
+  "prefixNameCantBeEmpty": "プレフィックス名は空にできません",
+  "@prefixNameCantBeEmpty": {
+    "description": "空の名前で Wine prefix を作成しようとしたときに表示されるエラーメッセージ",
+    "x-source-message": "Prefix name can't be empty"
+  },
+  "illegalSymbolsPresent": "不正なシンボルが含まれています",
+  "@illegalSymbolsPresent": {
+    "description": "入力フィールドに許可されていないシンボルが含まれているときに表示されるエラーメッセージ",
+    "x-source-message": "Illegal symbols present"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "この Wine prefix は winetricks スクリプトをバンドルしておらず、外部スクリプトも提供されていません。",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "見つからない winetricks スクリプトを実行しようとしたときに表示されるエラーメッセージ",
+    "x-source-message": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided."
+  },
+  "failedToLocateWineOrWineserverExecutables": "wine / wineserver 実行ファイルを見つけられませんでした",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "Wine アプリを実行するには、適切な wine と wineserver 実行ファイルを見つける必要があります。このエラーメッセージは、それができなかったときに表示されます。",
+    "x-source-message": "Failed to locate the wine / wineserver executables"
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "winetricks を実行するための wine / wineserver 実行ファイルを見つけられませんでした",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "winetricks は、通常のアプリとは異なるバージョン（wow64 の有無など）が必要な場合があります。このエラーメッセージは、それらを見つけられなかったときに表示されます。",
+    "x-source-message": "Failed to locate the wine / wineserver executables for running winetricks"
+  },
+  "specificCommandHasFailed": "\"{command}\" コマンドが失敗しました",
+  "@specificCommandHasFailed": {
+    "description": "外部ツールが失敗したときに表示されるエラーメッセージです。",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "The \"{command}\" command failed"
+  }
+}

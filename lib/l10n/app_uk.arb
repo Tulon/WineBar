@@ -1,0 +1,618 @@
+{
+  "@@locale": "uk",
+  "kronekWineSourceDescription": "Надає стандартні, Staging, TkG та Proton збірки Wine.",
+  "@kronekWineSourceDescription": {
+    "description": "Показується при виборі джерела збірки Kronek Wine",
+    "x-source-message": "Provides the standard, Staging, TkG and Proton Wine builds."
+  },
+  "geProtonWineSourceDescription": "Надає збірки Proton з DXVK / VK3D включеними. Рекомендовано для ігор та інших повноекранних застосунків.",
+  "@geProtonWineSourceDescription": {
+    "description": "Показується при виборі джерела збірки GE Proton Wine",
+    "x-source-message": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps."
+  },
+  "appUnpinningConfirmationDialogTitle": "Підтвердження відкріплення програми",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "Цей текст використовується як заголовок у діалозі",
+    "x-source-message": "App unpinning confirmation"
+  },
+  "createWinePrefixDialogTitle": "Створити Wine Prefix",
+  "@createWinePrefixDialogTitle": {
+    "description": "Цей текст використовується як заголовок у діалозі",
+    "x-source-message": "Create a Wine Prefix"
+  },
+  "cloneWinePrefixDialogTitle": "Клонувати Wine Prefix",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "Цей текст використовується як заголовок у діалозі",
+    "x-source-message": "Clone Wine Prefix"
+  },
+  "prefixDeletionConfirmationDialogTitle": "Підтвердження видалення Prefix",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "Цей текст використовується як заголовок у діалозі",
+    "x-source-message": "Prefix deletion confirmation"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Шлях недоступний з Wine",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "Цей текст використовується як заголовок у діалозі",
+    "x-source-message": "Path inaccessible from Wine"
+  },
+  "winePrefixesPageTitle": "Wine Prefixes",
+  "@winePrefixesPageTitle": {
+    "description": "Цей текст використовується як заголовок сторінки",
+    "x-source-message": "Wine Prefixes"
+  },
+  "winePrefixPageTitlePattern": "Wine Prefix: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "Цей текст використовується як заголовок сторінки",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix: {prefixName}"
+  },
+  "prefixSettingsDialogTitlePattern": "Wine Prefix {prefixName} Settings",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "Патерн для заголовка діалогу налаштувань Prefix",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix {prefixName} Settings"
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} Налаштування",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "Візерунок заголовка діалогу Налаштування прив’язаного виконуваного файлу",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "{pinnedExecutableLabel} Settings"
+  },
+  "processLogsTitle": "Журнали процесу",
+  "@processLogsTitle": {
+    "description": "Цей текст використовується як заголовок сторінки",
+    "x-source-message": "Process Logs"
+  },
+  "licenseInfoPattern": "Ліцензія: {license}",
+  "@licenseInfoPattern": {
+    "description": "Рядок, що з’являється у діалозі Про",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "License: {license}"
+  },
+  "authorInfoPattern": "Автор: {author}",
+  "@authorInfoPattern": {
+    "description": "Рядок, що з’являється у діалозі Про",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Author: {author}"
+  },
+  "theCopyingProcessFailedWithExitCode": "Процес копіювання завершився з кодом {exitCode}",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "Повідомлення про помилку, що відображається при невдачі cp -a",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    },
+    "x-source-message": "The copying process failed with status {exitCode}"
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "У пакеті DXVK відсутня підкаталог x32 або x64",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "Повідомлення про помилку, що відображається при невідповідності структури каталогу завантаженого пакета DXVK нашим очікуванням",
+    "x-source-message": "The DXVK package is missing the x32 or x64 subdirectory"
+  },
+  "failedToPrepareWinetricksScript": "Не вдалося підготувати скрипт winetricks:",
+  "@failedToPrepareWinetricksScript": {
+    "description": "Повідомлення про помилку, що відображається при завантаженні або перевірці скрипта winetricks",
+    "x-source-message": "Failed to prepare the winetricks script:"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "Тека {toplevelDataDir} існує, але не була розпізнана як належна цій програмі.\nБудь ласка, перейменуйте її або перемістіть у смітник, а потім перезапустіть програму.",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "Повідомлення про помилку, що відображається, коли ми підозрюємо, що каталог даних програми не був створений саме цією програмою",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app."
+  },
+  "extractionFailedMessage": "Видобування не вдалося",
+  "@extractionFailedMessage": {
+    "description": "Повідомлення про помилку, що відображається при невдачі розпакування архіву",
+    "x-source-message": "Extraction failed"
+  },
+  "prefixAlreadyExists": "Префікс \"{prefixName}\" вже існує",
+  "@prefixAlreadyExists": {
+    "description": "Повідомлення про помилку, що з’являється при спробі створити префікс, який вже існує",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Prefix \"{prefixName}\" already exists"
+  },
+  "unknownErrorMessage": "Невідома помилка",
+  "@unknownErrorMessage": {
+    "description": "Заповнювач для тексту помилки, коли конкретна помилка недоступна",
+    "x-source-message": "Unknown error"
+  },
+  "criticalErrorCaption": "Критична помилка",
+  "@criticalErrorCaption": {
+    "description": "Заголовок вікна повідомлення про помилку",
+    "x-source-message": "Critical Error"
+  },
+  "noLogsWereCapturedFromThisProcess": "Жодних журналів не було зібрано з цього процесу",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "Інформаційне повідомлення",
+    "x-source-message": "No logs were captured from this process"
+  },
+  "winePrefixUpdatedMessage": "Wine prefix updated",
+  "@winePrefixUpdatedMessage": {
+    "description": "An informational message",
+    "x-source-message": "Wine prefix updated"
+  },
+  "pinnedAppUpdatedMessage": "Pinned app updated",
+  "@pinnedAppUpdatedMessage": {
+    "description": "An informational message",
+    "x-source-message": "Pinned app updated"
+  },
+  "moreDetailsLink": "More details.",
+  "@moreDetailsLink": {
+    "description": "This text becomes a clickable link that gets inserted at the end of an error message",
+    "x-source-message": "More details."
+  },
+  "wow64ModeSection": "WOW64 mode",
+  "@wow64ModeSection": {
+    "description": "This text appears on an input decoration",
+    "x-source-message": "WOW64 mode"
+  },
+  "useWow64ModeIfAvailable": "Use the WOW64 mode if available",
+  "@useWow64ModeIfAvailable": {
+    "description": "This text appears next to a checkbox",
+    "x-source-message": "Use the WOW64 mode if available"
+  },
+  "d3D8To11Implementation": "Direct3D 8-11 implementation",
+  "@d3D8To11Implementation": {
+    "description": "This text appears on an input decoration",
+    "x-source-message": "Direct3D 8-11 implementation"
+  },
+  "useParticularD3D8To11Impl": "Use a particular Direct3D 8-11 implementation",
+  "@useParticularD3D8To11Impl": {
+    "description": "This text appears next to a checkbox",
+    "x-source-message": "Use a particular Direct3D 8-11 implementation"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "Для цієї конкретної збірки Wine буде використано типову реалізацію",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "Текст, що відображається, коли не вибрано конкретну реалізацію Direct3D 8-11",
+    "x-source-message": "A default implementation for this particular Wine build will be used"
+  },
+  "windowsLocale": "Локаль",
+  "@windowsLocale": {
+    "description": "Текст поруч із полем вибору локалі. Це локаль Windows для даного Wine prefix.",
+    "x-source-message": "Locale"
+  },
+  "useParticularWindowsLocale": "Використати конкретну локаль",
+  "@useParticularWindowsLocale": {
+    "description": "Цей текст з’являється поруч із прапорцем",
+    "x-source-message": "Use a particular locale"
+  },
+  "dontShowThisWarningAgain": "Не показувати це попередження знову",
+  "@dontShowThisWarningAgain": {
+    "description": "Цей текст з’являється поруч із прапорцем",
+    "x-source-message": "Don't show this warning again"
+  },
+  "nameForTheNewPrefixHintText": "Назва нового wine prefix",
+  "@nameForTheNewPrefixHintText": {
+    "description": "Підказка, що з’являється у полі вводу",
+    "x-source-message": "Name for the new wine prefix"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "Це може допомогти з відображенням тексту у програмах, що не використовують Unicode",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "Інформаційний текст, що з’являється, якщо вибрана конкретна локаль Windows",
+    "x-source-message": "This may help with text display in non-Unicode apps"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "Локаль системи буде використана програмами Windows",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "Інформаційний текст, що з’являється, якщо не вибрано конкретну локаль Windows",
+    "x-source-message": "The system locale will be used by Windows apps"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "Це зробить текст занадто малим, але не порушить роботу старих повноекранних програм",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "Цей текст з’являється, коли вибрано менший масштаб HiDPI, ніж рекомендовано",
+    "x-source-message": "This will make the text too small but won't break older fullscreen apps"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "Це ідеальний масштаб для вашого дисплею",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "Цей текст з’являється, коли вибрано рекомендований масштаб HiDPI і цей масштаб дорівнює 1.0",
+    "x-source-message": "This is the perfect scale for your display"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "Це допоможе, коли текст занадто малий, але зламає старі програми у повноекранному режимі",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "Цей текст з’являється, коли вибрано масштаб HiDPI більший за 1, але все ще менший за рекомендований",
+    "x-source-message": "This will help with text being too small but will break older fullscreen apps"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "Це ідеальний масштаб для вашого дисплею, але зламає старі програми у повноекранному режимі",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "Цей текст з’являється, коли вибрано рекомендований масштаб HiDPI, але він більший за 1.0",
+    "x-source-message": "This is the perfect scale for your display, though it will break older fullscreen apps"
+  },
+  "thisWillProduceTextThatsTooLarge": "Це може призвести до надто великого тексту",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "Цей текст з’являється, коли вибрано масштаб HiDPI більший за рекомендований",
+    "x-source-message": "This may produce text that's too large"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "Цей префікс у стані, коли його не можна видалити",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "Наприклад, префікс вже перебуває у процесі видалення",
+    "x-source-message": "This prefix is in a state were it can't be deleted"
+  },
+  "hiDpiScaleLabel": "Масштаб HiDPI",
+  "@hiDpiScaleLabel": {
+    "description": "Цей текст з’являється на етикетці вводу",
+    "x-source-message": "HiDPI scale"
+  },
+  "pleaseSelect": "Будь ласка, виберіть",
+  "@pleaseSelect": {
+    "description": "Цей текст з’являється, коли потрібен вибір, але жоден варіант не обрано",
+    "x-source-message": "Please select"
+  },
+  "appsAreRunningInThisPrefixTooltip": "Додатки працюють у цьому префіксі",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "Цей текст розміщується у підказці. Термін «префікс» тут означає Wine префікс",
+    "x-source-message": "Apps are running in this prefix"
+  },
+  "refreshWineReleasesTooltip": "Оновити випуски Wine",
+  "@refreshWineReleasesTooltip": {
+    "description": "Цей текст розміщується у підказці",
+    "x-source-message": "Refresh wine releases"
+  },
+  "prefixSettingsTooltip": "Налаштування префікса",
+  "@prefixSettingsTooltip": {
+    "description": "Цей текст розміщується у підказці",
+    "x-source-message": "Prefix settings"
+  },
+  "killProcessTooltip": "Завершити процес",
+  "@killProcessTooltip": {
+    "description": "Цей текст розміщується у підказці",
+    "x-source-message": "Kill process"
+  },
+  "scrollToBottomTooltip": "Прокрутити вниз",
+  "@scrollToBottomTooltip": {
+    "description": "Цей текст розміщується у підказці",
+    "x-source-message": "Scroll to bottom"
+  },
+  "scrollToTopTooltip": "Прокрутити вгору",
+  "@scrollToTopTooltip": {
+    "description": "Цей текст розміщується у підказці",
+    "x-source-message": "Scroll to top"
+  },
+  "viewLogsTooltip": "Переглянути журнали",
+  "@viewLogsTooltip": {
+    "description": "Цей текст розміщується у підказці",
+    "x-source-message": "View Logs"
+  },
+  "viewLogsLink": "Переглянути журнали.",
+  "@viewLogsLink": {
+    "description": "Цей текст стає посиланням, яке вставляється наприкінці повідомлення про помилку",
+    "x-source-message": "View Logs."
+  },
+  "useParticularGPU": "Використовувати конкретний GPU",
+  "@useParticularGPU": {
+    "description": "Цей текст з’являється поруч із прапорцем",
+    "x-source-message": "Use a particular GPU"
+  },
+  "gpuSelection": "Вибір GPU",
+  "@gpuSelection": {
+    "description": "Цей текст з’являється у підписі поля вводу",
+    "x-source-message": "GPU selection"
+  },
+  "failedToGetTheListOfAvailableGPUs": "Не вдалося отримати список доступних GPU",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "Цей текст розміщується у підказці",
+    "x-source-message": "Failed to get the list of available GPUs"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "Зауважте, що ця функція не працює у всіх сценаріях",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "Інформаційний текст, що відображається, коли користувач активує функцію, яка не працює у всіх сценаріях",
+    "x-source-message": "Note that this feature doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "Додати Wine Prefix",
+  "@addWinePrefixButtonLabel": {
+    "description": "Цей текст розміщується на кнопці",
+    "x-source-message": "Add Wine Prefix"
+  },
+  "aboutButtonLabel": "Про програму",
+  "@aboutButtonLabel": {
+    "description": "Цей текст розміщується на кнопці або пункті меню",
+    "x-source-message": "About"
+  },
+  "donateButtonLabel": "Пожертвувати",
+  "@donateButtonLabel": {
+    "description": "Цей текст розміщується на кнопці",
+    "x-source-message": "Donate"
+  },
+  "unpinButtonLabel": "Відкріпити",
+  "@unpinButtonLabel": {
+    "description": "Цей текст розміщується на кнопці або пункті меню",
+    "x-source-message": "Unpin"
+  },
+  "deleteButtonLabel": "Видалити",
+  "@deleteButtonLabel": {
+    "description": "Цей текст розміщується на кнопці",
+    "x-source-message": "Delete"
+  },
+  "createWinePrefixButtonLabel": "Створити Wine Prefix",
+  "@createWinePrefixButtonLabel": {
+    "description": "Цей текст розміщується на кнопці",
+    "x-source-message": "Create Wine Prefix"
+  },
+  "startingButtonLabel": "Запуск ...",
+  "@startingButtonLabel": {
+    "description": "Цей текст розміщується на кнопці, коли певна операція починається",
+    "x-source-message": "Starting ..."
+  },
+  "downloadingAndExtractingButtonLabel": "Завантаження та розпакування ...",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "Цей текст розміщується на кнопці, коли відбувається завантаження та розпакування",
+    "x-source-message": "Downloading and Extracting ..."
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "Завантаження та розпакування DXVK ...",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "Цей текст розміщується на кнопці, коли відбувається завантаження та розпакування DXVK",
+    "x-source-message": "Downloading and Extracting DXVK ..."
+  },
+  "creatingWinePrefixButtonLabel": "Створення Wine Prefix ...",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "Цей текст розміщується на кнопці, коли створюється Wine prefix",
+    "x-source-message": "Creating Wine Prefix ..."
+  },
+  "updateWinePrefixButtonLabel": "Оновити Wine Prefix",
+  "@updateWinePrefixButtonLabel": {
+    "description": "Цей текст розміщується на кнопці",
+    "x-source-message": "Update Wine Prefix"
+  },
+  "updatingWinePrefixButtonLabel": "Оновлення Wine Prefix …",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "Цей текст розміщується на кнопці, коли Wine Prefix оновлюється",
+    "x-source-message": "Updating Wine Prefix ..."
+  },
+  "cloneButtonLabel": "Клонувати",
+  "@cloneButtonLabel": {
+    "description": "Цей текст розміщується на кнопці або пункті меню",
+    "x-source-message": "Clone"
+  },
+  "cloningButtonLabel": "Клонування …",
+  "@cloningButtonLabel": {
+    "description": "Цей текст розміщується на кнопці, коли виконується операція клонування Wine Prefix",
+    "x-source-message": "Cloning ..."
+  },
+  "pinExecutableButtonLabel": "Закріпити виконуваний файл",
+  "@pinExecutableButtonLabel": {
+    "description": "Цей текст розміщується на кнопці",
+    "x-source-message": "Pin Executable"
+  },
+  "proceedAnywayButtonLabel": "Продовжити все одно",
+  "@proceedAnywayButtonLabel": {
+    "description": "Цей текст розміщується на кнопці",
+    "x-source-message": "Proceed Anyway"
+  },
+  "runExecutableButtonLabel": "Запустити виконуваний файл",
+  "@runExecutableButtonLabel": {
+    "description": "Цей текст розміщується на кнопці",
+    "x-source-message": "Run Executable"
+  },
+  "runInstallerButtonLabel": "Запустити інсталятор",
+  "@runInstallerButtonLabel": {
+    "description": "Цей текст розміщується на кнопці",
+    "x-source-message": "Run Installer"
+  },
+  "settingsMenuItem": "Налаштування",
+  "@settingsMenuItem": {
+    "description": "Цей текст розміщується на пункті меню",
+    "x-source-message": "Settings"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "Наступний додаток збирається відкріпити:",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "Цей текст з’являється у діалоговому вікні",
+    "x-source-message": "The following app is about to be unpinned:"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "Наступний prefix збирається видалити:",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "Цей текст з’являється у діалоговому вікні. \"prefix\" тут означає Wine Prefix",
+    "x-source-message": "The following prefix is about to be deleted:"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "Наступний шлях недоступний з Wine:",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "Цей текст з’являється у діалоговому вікні",
+    "x-source-message": "The following path is inaccessible from Wine:"
+  },
+  "pathInaccessibleFromWineExplanation": "Шлях може бути недоступним з Wine, оскільки увесь Wine Bar або лише Wine працює у віртуальній машині (на Mac з Apple silicon) або у середовищі Snap / Flatpak.",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "Цей текст з’являється у діалоговому вікні",
+    "x-source-message": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox."
+  },
+  "solutionHeading": "Рішення",
+  "@solutionHeading": {
+    "description": "Цей текст з’являється у діалоговому вікні як заголовок, після нього йде ще текст",
+    "x-source-message": "Solution"
+  },
+  "pathInaccessibleFromWineSolution": "Скопіюйте відповідну папку в будь‑яке місце під вашим домашнім каталогом.",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "Цей текст з’являється у діалоговому вікні після заголовка «Рішення»",
+    "x-source-message": "Copy the folder in question somewhere under your home directory."
+  },
+  "thisActionCantBeUndone": "Цю дію не можна скасувати!",
+  "@thisActionCantBeUndone": {
+    "description": "Цей текст з’являється у діалоговому вікні",
+    "x-source-message": "This action can't be undone!"
+  },
+  "selectWineBuildProviderStepName": "Виберіть постачальника збірки Wine",
+  "@selectWineBuildProviderStepName": {
+    "description": "Цей текст з’являється у списку сторінок майстра і також вгорі відповідної сторінки",
+    "x-source-message": "Select wine build provider"
+  },
+  "selectWineReleaseStepName": "Виберіть випуск Wine",
+  "@selectWineReleaseStepName": {
+    "description": "Цей текст з’являється у списку сторінок майстра і також вгорі відповідної сторінки",
+    "x-source-message": "Select wine release"
+  },
+  "selectWineBuildStepName": "Виберіть збірку Wine",
+  "@selectWineBuildStepName": {
+    "description": "Цей текст з’являється у списку сторінок майстра і також вгорі відповідної сторінки",
+    "x-source-message": "Select wine build"
+  },
+  "setOptionsStepName": "Встановіть параметри",
+  "@setOptionsStepName": {
+    "description": "Цей текст з’являється у списку сторінок майстра і також вгорі відповідної сторінки",
+    "x-source-message": "Set options"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "Вибрано збірку WOW64. Відомо, що вона має проблеми під час емуляції. Очікуйте пошкоджену інсталяцію.",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "Попереджувальне повідомлення, що відображається, коли збірка Wine лише для WOW64 буде використана під час емуляції",
+    "x-source-message": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation."
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "Ця збірка потребує наявності 32‑розрядних бібліотек у вашій системі. Якщо вони вже встановлені, ви можете проігнорувати це попередження. В іншому випадку встановіть Wine з репозиторію вашого дистрибутива (який підключить ці 32‑розрядні бібліотеки) або, за бажанням, виберіть збірку WOW64 зі списку вище, якщо така доступна.",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "Попереджувальне повідомлення, що відображається, коли вибрана збірка без підтримки WOW64 у середовищі, де 32‑розрядні бібліотеки можуть бути відсутні",
+    "x-source-message": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available."
+  },
+  "wow64PreferenceUnderEmulationWarning": "Режим WOW64 під час емуляції відомий своїми проблемами. Очікуйте пошкоджену інсталяцію.",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "Попереджувальне повідомлення, що відображається, коли режим WOW64 (на збірках, які підтримують його опціонально) переважний у середовищі, що вимагає емуляції",
+    "x-source-message": "The WOW64 mode under emulation is known to have issues. Expect a broken installation."
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "Не використання режиму WOW64 вимагатиме наявності 32‑розрядних бібліотек у вашій системі. Якщо вони вже встановлені, ви можете проігнорувати це попередження. В іншому випадку встановіть Wine з репозиторію вашого дистрибутива, який підключить ці 32‑розрядні бібліотеки.",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "Попереджувальне повідомлення, що відображається, коли режим WOW64 не переважний (на збірках, які підтримують його опціонально) у середовищі, де 32‑розрядні бібліотеки можуть бути відсутні",
+    "x-source-message": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries."
+  },
+  "windowsExecutablesFilterName": "Виконувані файли Windows",
+  "@windowsExecutablesFilterName": {
+    "description": "Цей текст з’являється у випадаючому списку \"Тип файлу\" діалогу вибору файлів",
+    "x-source-message": "Windows executables"
+  },
+  "dxvkOptionExplanation": "Новіша і швидша реалізація від Proton",
+  "@dxvkOptionExplanation": {
+    "description": "Текст опису, що відображається при виборі реалізації DXVK Direct3D 8-11",
+    "x-source-message": "A newer and faster implementation from Proton"
+  },
+  "wineD3DOptionExplanation": "Зріла реалізація від Wine. Використовується у разі проблем з DXVK.",
+  "@wineD3DOptionExplanation": {
+    "description": "Текст опису, що відображається при виборі реалізації WineD3D Direct3D 8-11",
+    "x-source-message": "A mature implementation from Wine. To be used in case of issues with DXVK."
+  },
+  "screensaverDisableReason": "Запущено Wine‑програму (можливо, у повноекранному режимі)",
+  "@screensaverDisableReason": {
+    "description": "Причина вимкнення зберігача екрана, як вимагає відповідний API DBus",
+    "x-source-message": "A Wine app (possibly fullscreen) is running"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "Хеш завантаженого скрипту winetricks не збігається з очікуваним.",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "Повідомлення про помилку, що відображається, коли хеш завантаженого скрипту winetricks не збігається з очікуваним",
+    "x-source-message": "The hash of the downloaded winetricks script doesn't match the expected one."
+  },
+  "downloadedFile": "Завантажений файл: {downloadedFile}",
+  "@downloadedFile": {
+    "description": "Рядок у більшому повідомленні про помилку",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Downloaded file: {downloadedFile}"
+  },
+  "expectedSha256Hash": "Очікуваний SHA256 хеш: {hash}",
+  "@expectedSha256Hash": {
+    "description": "Рядок у більшому повідомленні про помилку",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Expected SHA256 hash: {hash}"
+  },
+  "actualSha256Hash": "Фактичний SHA256 хеш: {hash}",
+  "@actualSha256Hash": {
+    "description": "Рядок у більшому повідомленні про помилку",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Actual SHA256 hash: {hash}"
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "Спершу завершіть програми, що працюють у всіх префіксах",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "Повідомлення про помилку, що відображається при спробі виконати дію, яка вимагає, щоб жодна програма не працювала у всіх префіксах",
+    "x-source-message": "Finish the apps running in all prefixes first"
+  },
+  "finishTheRunningAppsFirst": "Спершу завершіть запущені програми",
+  "@finishTheRunningAppsFirst": {
+    "description": "Повідомлення про помилку, що відображається при спробі виконати дію, яка вимагає, щоб жодна програма не працювала у поточному префіксі",
+    "x-source-message": "Finish the running apps first"
+  },
+  "missingHardwareVirtualizationCapabilities": "Ця система не має можливостей апаратної віртуалізації (/dev/kvm відсутній), які потрібні для запуску Wine Bar.",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "Повідомлення про помилку, що відображається на системах, де потрібна апаратна віртуалізація, але вона недоступна",
+    "x-source-message": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar."
+  },
+  "snapKvmNeedsConnection": "Wine Bar на ARM64 потребує доступу з читанням і записом до /dev/kvm. Зазвичай звичайні програми мають такий доступ, але Snap‑и ні. Щоб надати такий доступ, запустіть наступну команду з рядка команд:\n\n{kvmConnectCommand}\n\nПотім перезапустіть Wine Bar.",
+  "@snapKvmNeedsConnection": {
+    "description": "Повідомлення про помилку, що відображається під час запуску в Snap без доступу на запис до /dev/kvm",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar."
+  },
+  "muvmIsNeededButMissing": "Ця система потребує muvm / FEX, щоб запускати програми. Версія Snap Wine Bar має muvm вбудованим. Якщо ні, встановіть його за допомогою \"sudo dnf install muvm fex-emu\" або подібної команди",
+  "@muvmIsNeededButMissing": {
+    "description": "Повідомлення про помилку, що відображається, коли muvm недоступний на системах, де він потрібен",
+    "x-source-message": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar"
+  },
+  "prefixNameCantBeEmpty": "Назва префікса не може бути порожньою",
+  "@prefixNameCantBeEmpty": {
+    "description": "Повідомлення про помилку, що відображається при спробі створити Wine prefix з порожньою назвою",
+    "x-source-message": "Prefix name can't be empty"
+  },
+  "illegalSymbolsPresent": "Наявні заборонені символи",
+  "@illegalSymbolsPresent": {
+    "description": "Повідомлення про помилку, що відображається, коли в полі введення присутні недозволені символи",
+    "x-source-message": "Illegal symbols present"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "Цей Wine prefix не містить скрипт winetricks і жоден зовнішній скрипт не був наданий.",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "Повідомлення про помилку, що відображається при спробі запустити скрипт winetricks, який не знайдено",
+    "x-source-message": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided."
+  },
+  "failedToLocateWineOrWineserverExecutables": "Не вдалося знайти виконувані файли wine / wineserver",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "Запуск Wine‑програм вимагає знаходження відповідних виконуваних файлів wine і wineserver. Це повідомлення про помилку відображається, коли ми не можемо це зробити.",
+    "x-source-message": "Failed to locate the wine / wineserver executables"
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "Не вдалося знайти виконувані файли wine / wineserver для запуску winetricks",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "Winetricks може вимагати інші версії (наприклад, з wow64 або без нього), ніж для звичайних програм. Це повідомлення про помилку відображається, коли ми не можемо їх знайти.",
+    "x-source-message": "Failed to locate the wine / wineserver executables for running winetricks"
+  },
+  "specificCommandHasFailed": "Команда \"{command}\" завершилася з помилкою",
+  "@specificCommandHasFailed": {
+    "description": "Повідомлення про помилку, що відображається, коли зовнішній інструмент завершився з помилкою",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "The \"{command}\" command failed"
+  }
+}

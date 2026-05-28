@@ -1,0 +1,618 @@
+{
+  "@@locale": "tr",
+  "kronekWineSourceDescription": "Standart, Staging, TkG ve Proton Wine derlemelerini sağlar.",
+  "@kronekWineSourceDescription": {
+    "description": "Kronek Wine derleme kaynağı seçilirken gösterilen açıklama",
+    "x-source-message": "Provides the standard, Staging, TkG and Proton Wine builds."
+  },
+  "geProtonWineSourceDescription": "DXVK / VK3D içeren Proton derlemelerini sağlar. Oyunlar ve diğer tam ekran uygulamalar için önerilir.",
+  "@geProtonWineSourceDescription": {
+    "description": "GE Proton Wine derleme kaynağı seçilirken gösterilen açıklama",
+    "x-source-message": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps."
+  },
+  "appUnpinningConfirmationDialogTitle": "Uygulamanın sabitlemesinin kaldırılması onayı",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "Bu metin bir diyalog başlığında kullanılır",
+    "x-source-message": "App unpinning confirmation"
+  },
+  "createWinePrefixDialogTitle": "Wine Prefix Oluştur",
+  "@createWinePrefixDialogTitle": {
+    "description": "Bu metin bir diyalog başlığında kullanılır",
+    "x-source-message": "Create a Wine Prefix"
+  },
+  "cloneWinePrefixDialogTitle": "Wine Prefix Kopyala",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "Bu metin bir diyalog başlığında kullanılır",
+    "x-source-message": "Clone Wine Prefix"
+  },
+  "prefixDeletionConfirmationDialogTitle": "Prefix silme onayı",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "Bu metin bir diyalog başlığında kullanılır",
+    "x-source-message": "Prefix deletion confirmation"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Wine'den erişilemeyen yol",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "Bu metin bir diyalog başlığında kullanılır",
+    "x-source-message": "Path inaccessible from Wine"
+  },
+  "winePrefixesPageTitle": "Wine Prefixleri",
+  "@winePrefixesPageTitle": {
+    "description": "Bu metin bir sayfa başlığında kullanılır",
+    "x-source-message": "Wine Prefixes"
+  },
+  "winePrefixPageTitlePattern": "Wine Prefix: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "Bu metin bir sayfa başlığında kullanılır",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix: {prefixName}"
+  },
+  "prefixSettingsDialogTitlePattern": "Wine Prefix {prefixName} Ayarları",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "Prefix Settings diyalog başlığının deseni",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix {prefixName} Settings"
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} Ayarları",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "Pinnerlenmiş Çalıştırılabilir Ayarlar iletişim kutusunun başlığı için desen",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "{pinnedExecutableLabel} Settings"
+  },
+  "processLogsTitle": "İşlem Günlükleri",
+  "@processLogsTitle": {
+    "description": "Bu metin bir sayfa başlığı olarak kullanılır",
+    "x-source-message": "Process Logs"
+  },
+  "licenseInfoPattern": "Lisans: {license}",
+  "@licenseInfoPattern": {
+    "description": "Hakkında iletişim kutusunda görüntülenen bir dize",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "License: {license}"
+  },
+  "authorInfoPattern": "Yazar: {author}",
+  "@authorInfoPattern": {
+    "description": "Hakkında iletişim kutusunda görüntülenen bir dize",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Author: {author}"
+  },
+  "theCopyingProcessFailedWithExitCode": "Kopyalama işlemi {exitCode} durum koduyla başarısız oldu",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "`cp -a` başarısız olduğunda gösterilen hata mesajı",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    },
+    "x-source-message": "The copying process failed with status {exitCode}"
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "DXVK paketi x32 veya x64 alt dizinini içermiyor",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "İndirilen DXVK paketinin dizin yapısının beklentilerimizle eşleşmediğinde gösterilen hata mesajı",
+    "x-source-message": "The DXVK package is missing the x32 or x64 subdirectory"
+  },
+  "failedToPrepareWinetricksScript": "winetricks betiği hazırlanamadı:",
+  "@failedToPrepareWinetricksScript": {
+    "description": "winetricks betiğinin indirilmesi veya doğrulanması başarısız olduğunda gösterilen hata mesajı",
+    "x-source-message": "Failed to prepare the winetricks script:"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "{toplevelDataDir} klasörü var ancak bu uygulamaya ait olarak tanınmadı.\nLütfen yeniden adlandırın veya Çöp Kutusu'na taşıyıp ardından uygulamayı yeniden başlatın.",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "Uygulamanın veri dizininin aslında bu uygulama tarafından oluşturulmadığı şüphesiyle gösterilen hata mesajı",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app."
+  },
+  "extractionFailedMessage": "Çıkartma başarısız oldu",
+  "@extractionFailedMessage": {
+    "description": "Arşiv çıkartması başarısız olduğunda gösterilen hata mesajı",
+    "x-source-message": "Extraction failed"
+  },
+  "prefixAlreadyExists": "Prefix \"{prefixName}\" zaten var",
+  "@prefixAlreadyExists": {
+    "description": "\"{prefixName}\" adlı prefix'in zaten var olduğu durumdaki hata mesajı",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Prefix \"{prefixName}\" already exists"
+  },
+  "unknownErrorMessage": "Bilinmeyen hata",
+  "@unknownErrorMessage": {
+    "description": "Belirli bir hata yokken gösterilen hata metni için yer tutucu",
+    "x-source-message": "Unknown error"
+  },
+  "criticalErrorCaption": "Kritik Hata",
+  "@criticalErrorCaption": {
+    "description": "Hata mesaj kutusunun başlığı",
+    "x-source-message": "Critical Error"
+  },
+  "noLogsWereCapturedFromThisProcess": "Bu işlemden hiç günlük yakalanmadı",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "Bilgilendirme mesajı",
+    "x-source-message": "No logs were captured from this process"
+  },
+  "winePrefixUpdatedMessage": "Wine prefix güncellendi",
+  "@winePrefixUpdatedMessage": {
+    "description": "Bilgilendirme mesajı",
+    "x-source-message": "Wine prefix updated"
+  },
+  "pinnedAppUpdatedMessage": "Sabitlenmiş uygulama güncellendi",
+  "@pinnedAppUpdatedMessage": {
+    "description": "Bilgilendirme mesajı",
+    "x-source-message": "Pinned app updated"
+  },
+  "moreDetailsLink": "Daha fazla ayrıntı.",
+  "@moreDetailsLink": {
+    "description": "Hata mesajının sonuna eklenen tıklanabilir bağlantı metni",
+    "x-source-message": "More details."
+  },
+  "wow64ModeSection": "WOW64 modu",
+  "@wow64ModeSection": {
+    "description": "Bir giriş dekorasyonunda görünen metin",
+    "x-source-message": "WOW64 mode"
+  },
+  "useWow64ModeIfAvailable": "Mümkünse WOW64 modunu kullan",
+  "@useWow64ModeIfAvailable": {
+    "description": "Bir onay kutusunun yanındaki metin",
+    "x-source-message": "Use the WOW64 mode if available"
+  },
+  "d3D8To11Implementation": "Direct3D 8-11 uygulaması",
+  "@d3D8To11Implementation": {
+    "description": "Bir giriş dekorasyonunda görünen metin",
+    "x-source-message": "Direct3D 8-11 implementation"
+  },
+  "useParticularD3D8To11Impl": "Belirli bir Direct3D 8-11 uygulamasını kullan",
+  "@useParticularD3D8To11Impl": {
+    "description": "Bir onay kutusunun yanındaki metin",
+    "x-source-message": "Use a particular Direct3D 8-11 implementation"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "Bu özel Wine derlemesi için varsayılan bir uygulama kullanılacak",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "Belirli bir Direct3D 8-11 uygulaması seçilmediğinde görüntülenen metin",
+    "x-source-message": "A default implementation for this particular Wine build will be used"
+  },
+  "windowsLocale": "Yerel",
+  "@windowsLocale": {
+    "description": "Bir yerel seçme alanının yanındaki metin. Belirli bir Wine prefixi için Windows yerelidir.",
+    "x-source-message": "Locale"
+  },
+  "useParticularWindowsLocale": "Belirli bir yerel kullan",
+  "@useParticularWindowsLocale": {
+    "description": "Bu metin bir onay kutusunun yanına gelir",
+    "x-source-message": "Use a particular locale"
+  },
+  "dontShowThisWarningAgain": "Bu uyarıyı tekrar gösterme",
+  "@dontShowThisWarningAgain": {
+    "description": "Bu metin bir onay kutusunun yanına gelir",
+    "x-source-message": "Don't show this warning again"
+  },
+  "nameForTheNewPrefixHintText": "Yeni wine prefixi için ad",
+  "@nameForTheNewPrefixHintText": {
+    "description": "Bir girdi alanında görünen ipucu metni",
+    "x-source-message": "Name for the new wine prefix"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "Bu, Unicode olmayan uygulamalarda metin görüntülemeye yardımcı olabilir",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "Belirli bir Windows yereli seçildiğinde görünen bilgilendirici metin",
+    "x-source-message": "This may help with text display in non-Unicode apps"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "Sistem yereli, Windows uygulamaları tarafından kullanılacak",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "Belirli bir Windows yereli seçilmediğinde görünen bilgilendirici metin",
+    "x-source-message": "The system locale will be used by Windows apps"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "Bu, metni çok küçük yapacak ama eski tam ekran uygulamaları bozmayacaktır",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "Önerilenden daha küçük bir HiDPI ölçeği seçildiğinde görünen metin",
+    "x-source-message": "This will make the text too small but won't break older fullscreen apps"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "Ekranınız için mükemmel ölçek",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "Bu metin, önerilen HiDPI ölçeği seçildiğinde ve bu önerilen ölçek 1.0 olduğunda görünür",
+    "x-source-message": "This is the perfect scale for your display"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "Metin çok küçük olduğunda yardımcı olur, ancak eski tam ekran uygulamaları bozar",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "Bu metin, 1'den büyük bir HiDPI ölçeği seçildiğinde ancak bu değer önerilen ölçekten düşük olduğunda görünür",
+    "x-source-message": "This will help with text being too small but will break older fullscreen apps"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "Ekranınız için mükemmel ölçek, ancak eski tam ekran uygulamaları bozar",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "Bu metin, önerilen HiDPI ölçeği seçildiğinde ancak önerilen ölçek 1.0'dan büyük olduğunda görünür",
+    "x-source-message": "This is the perfect scale for your display, though it will break older fullscreen apps"
+  },
+  "thisWillProduceTextThatsTooLarge": "Bu, çok büyük metin üretebilir",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "Bu metin, önerilenden daha büyük bir HiDPI ölçeği seçildiğinde görünür",
+    "x-source-message": "This may produce text that's too large"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "Bu prefix silinemeyecek bir durumda",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "Örneğin, prefix zaten silme işleminde olabilir",
+    "x-source-message": "This prefix is in a state were it can't be deleted"
+  },
+  "hiDpiScaleLabel": "HiDPI ölçeği",
+  "@hiDpiScaleLabel": {
+    "description": "Bu metin bir giriş dekorasyonunda görünür",
+    "x-source-message": "HiDPI scale"
+  },
+  "pleaseSelect": "Lütfen seçiniz",
+  "@pleaseSelect": {
+    "description": "Bu metin, seçim gerektiğinde ancak hiçbir seçenek seçilmediğinde görünür",
+    "x-source-message": "Please select"
+  },
+  "appsAreRunningInThisPrefixTooltip": "Uygulamalar bu ön ekte çalışıyor",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "'prefix' burada bir Wine prefixini ifade eder",
+    "x-source-message": "Apps are running in this prefix"
+  },
+  "refreshWineReleasesTooltip": "Wine sürümlerini yenile",
+  "@refreshWineReleasesTooltip": {
+    "description": "Bu metin bir bilgi balonunda gösterilir",
+    "x-source-message": "Refresh wine releases"
+  },
+  "prefixSettingsTooltip": "Ön ek ayarları",
+  "@prefixSettingsTooltip": {
+    "description": "Bu metin bir bilgi balonunda gösterilir",
+    "x-source-message": "Prefix settings"
+  },
+  "killProcessTooltip": "İşlemi sonlandır",
+  "@killProcessTooltip": {
+    "description": "Bu metin bir bilgi balonunda gösterilir",
+    "x-source-message": "Kill process"
+  },
+  "scrollToBottomTooltip": "En alta kaydır",
+  "@scrollToBottomTooltip": {
+    "description": "Bu metin bir bilgi balonunda gösterilir",
+    "x-source-message": "Scroll to bottom"
+  },
+  "scrollToTopTooltip": "En üste kaydır",
+  "@scrollToTopTooltip": {
+    "description": "Bu metin bir bilgi balonunda gösterilir",
+    "x-source-message": "Scroll to top"
+  },
+  "viewLogsTooltip": "Günlükleri görüntüle",
+  "@viewLogsTooltip": {
+    "description": "Bu metin bir bilgi balonunda gösterilir",
+    "x-source-message": "View Logs"
+  },
+  "viewLogsLink": "Günlükleri görüntüle.",
+  "@viewLogsLink": {
+    "description": "Bu metin, bir hata mesajının sonuna eklenen tıklanabilir bağlantı olarak kullanılır",
+    "x-source-message": "View Logs."
+  },
+  "useParticularGPU": "Belirli bir GPU kullan",
+  "@useParticularGPU": {
+    "description": "Bu metin, bir onay kutusunun yanına görünür",
+    "x-source-message": "Use a particular GPU"
+  },
+  "gpuSelection": "GPU seçimi",
+  "@gpuSelection": {
+    "description": "Bu metin bir giriş dekorasyonunda görünür",
+    "x-source-message": "GPU selection"
+  },
+  "failedToGetTheListOfAvailableGPUs": "Kullanılabilir GPU listesi alınamadı",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "Bu metin bir bilgi balonunda gösterilir",
+    "x-source-message": "Failed to get the list of available GPUs"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "Bu özelliğin tüm senaryolarda çalışmayabileceğini unutmayın",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "Kullanıcı, tüm senaryolarda çalışmayan bir özelliği etkinleştirdiğinde gösterilen bilgilendirici metin",
+    "x-source-message": "Note that this feature doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "Wine Prefix Ekle",
+  "@addWinePrefixButtonLabel": {
+    "description": "Bu metin bir düğmede yer alır",
+    "x-source-message": "Add Wine Prefix"
+  },
+  "aboutButtonLabel": "Hakkında",
+  "@aboutButtonLabel": {
+    "description": "Bu metin bir düğmede veya menü öğesinde yer alır",
+    "x-source-message": "About"
+  },
+  "donateButtonLabel": "Bağış Yap",
+  "@donateButtonLabel": {
+    "description": "Bu metin bir düğmede yer alır",
+    "x-source-message": "Donate"
+  },
+  "unpinButtonLabel": "Çıkar",
+  "@unpinButtonLabel": {
+    "description": "Bu metin bir düğmede veya menü öğesinde yer alır",
+    "x-source-message": "Unpin"
+  },
+  "deleteButtonLabel": "Sil",
+  "@deleteButtonLabel": {
+    "description": "Bu metin bir düğmede yer alır",
+    "x-source-message": "Delete"
+  },
+  "createWinePrefixButtonLabel": "Wine Prefix Oluştur",
+  "@createWinePrefixButtonLabel": {
+    "description": "Bu metin bir düğmede yer alır",
+    "x-source-message": "Create Wine Prefix"
+  },
+  "startingButtonLabel": "Başlatılıyor ...",
+  "@startingButtonLabel": {
+    "description": "Bu metin belirli bir işlem başlatıldığında bir düğmede yer alır",
+    "x-source-message": "Starting ..."
+  },
+  "downloadingAndExtractingButtonLabel": "İndiriliyor ve Çıkarılıyor ...",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "Bu metin bir indirme ve çıkarma işlemi devam ederken bir düğmede yer alır",
+    "x-source-message": "Downloading and Extracting ..."
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "DXVK İndiriliyor ve Çıkarılıyor ...",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "Bu metin DXVK için indirme ve çıkarma işlemi devam ederken bir düğmede yer alır",
+    "x-source-message": "Downloading and Extracting DXVK ..."
+  },
+  "creatingWinePrefixButtonLabel": "Wine Prefix Oluşturuluyor ...",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "Bu metin bir Wine prefix oluşturulurken bir düğmede yer alır",
+    "x-source-message": "Creating Wine Prefix ..."
+  },
+  "updateWinePrefixButtonLabel": "Wine Prefix Güncelle",
+  "@updateWinePrefixButtonLabel": {
+    "description": "Bu metin bir düğmede yer alır",
+    "x-source-message": "Update Wine Prefix"
+  },
+  "updatingWinePrefixButtonLabel": "Wine Prefix Güncelleniyor ...",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "Bu metin, bir Wine prefixi güncellenirken bir düğmede yer alır",
+    "x-source-message": "Updating Wine Prefix ..."
+  },
+  "cloneButtonLabel": "Klonla",
+  "@cloneButtonLabel": {
+    "description": "Bu metin bir düğme veya menü öğesinde yer alır",
+    "x-source-message": "Clone"
+  },
+  "cloningButtonLabel": "Klonlanıyor ...",
+  "@cloningButtonLabel": {
+    "description": "Bu metin, bir wine prefix klonlama işlemi devam ederken bir düğmede yer alır",
+    "x-source-message": "Cloning ..."
+  },
+  "pinExecutableButtonLabel": "Çalıştırılabilir Dosyayı Sabitle",
+  "@pinExecutableButtonLabel": {
+    "description": "Bu metin bir düğmede yer alır",
+    "x-source-message": "Pin Executable"
+  },
+  "proceedAnywayButtonLabel": "Yine de Devam Et",
+  "@proceedAnywayButtonLabel": {
+    "description": "Bu metin bir düğmede yer alır",
+    "x-source-message": "Proceed Anyway"
+  },
+  "runExecutableButtonLabel": "Çalıştırılabilir Dosyayı Çalıştır",
+  "@runExecutableButtonLabel": {
+    "description": "Bu metin bir düğmede yer alır",
+    "x-source-message": "Run Executable"
+  },
+  "runInstallerButtonLabel": "Kurucuyu Çalıştır",
+  "@runInstallerButtonLabel": {
+    "description": "Bu metin bir düğmede yer alır",
+    "x-source-message": "Run Installer"
+  },
+  "settingsMenuItem": "Ayarlar",
+  "@settingsMenuItem": {
+    "description": "Bu metin bir menü öğesinde yer alır",
+    "x-source-message": "Settings"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "Aşağıdaki uygulama sabitlemesinden kaldırılacak:",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "Bu metin bir iletişim kutusunda görünür",
+    "x-source-message": "The following app is about to be unpinned:"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "Aşağıdaki prefix silinecek:",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "Bu metin bir iletişim kutusunda görünür. Buradaki 'prefix', Wine Prefix'i ifade eder",
+    "x-source-message": "The following prefix is about to be deleted:"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "Aşağıdaki yol Wine'den erişilemez:",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "Bu metin bir iletişim kutusunda görünür",
+    "x-source-message": "The following path is inaccessible from Wine:"
+  },
+  "pathInaccessibleFromWineExplanation": "Bir yol, Wine Bar veya yalnızca Wine'in sanal bir makinede (Apple silicon Mac'lerde) çalışması ya da Snap / Flatpak sandbox içinde olması nedeniyle Wine'den erişilemez olabilir.",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "Bu metin bir iletişim kutusunda görünür",
+    "x-source-message": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox."
+  },
+  "solutionHeading": "Çözüm",
+  "@solutionHeading": {
+    "description": "Bu metin bir iletişim kutusunda başlık olarak görünür, aşağıda daha fazla metin gelir",
+    "x-source-message": "Solution"
+  },
+  "pathInaccessibleFromWineSolution": "İlgili klasörü ev dizininizin altındaki bir yere kopyalayın.",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "Bu metin 'Çözüm' başlığının ardından bir iletişim kutusunda görünür",
+    "x-source-message": "Copy the folder in question somewhere under your home directory."
+  },
+  "thisActionCantBeUndone": "Bu işlem geri alınamaz!",
+  "@thisActionCantBeUndone": {
+    "description": "Bu metin bir iletişim kutusunda görünür",
+    "x-source-message": "This action can't be undone!"
+  },
+  "selectWineBuildProviderStepName": "wine build sağlayıcısını seçin",
+  "@selectWineBuildProviderStepName": {
+    "description": "Bu metin sihirbaz sayfalarının listesinde ve ilgili sayfanın üstünde görünür",
+    "x-source-message": "Select wine build provider"
+  },
+  "selectWineReleaseStepName": "wine sürümünü seçin",
+  "@selectWineReleaseStepName": {
+    "description": "Bu metin sihirbaz sayfalarının listesinde ve ilgili sayfanın üstünde görünür",
+    "x-source-message": "Select wine release"
+  },
+  "selectWineBuildStepName": "wine build'ini seçin",
+  "@selectWineBuildStepName": {
+    "description": "Bu metin sihirbaz sayfalarının listesinde ve ilgili sayfanın üstünde görünür",
+    "x-source-message": "Select wine build"
+  },
+  "setOptionsStepName": "seçenekleri ayarlayın",
+  "@setOptionsStepName": {
+    "description": "Bu metin sihirbaz sayfalarının listesinde ve ilgili sayfanın üstünde görünür",
+    "x-source-message": "Set options"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "WOW64 derlemesi seçildi. Emülasyon altında sorunlu olduğu biliniyor. Bozuk bir kurulum bekleyin.",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "WOW64‑sadece Wine derlemesinin emülasyon altında kullanılacağı zaman gösterilen uyarı mesajı",
+    "x-source-message": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation."
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "Bu derleme, sisteminizde 32 bit kütüphanelerin bulunmasını gerektirir. Zaten varsa, bu uyarıyı görmezden gelebilirsiniz. Aksi takdirde, dağıtımınızın paket deposundan Wine kurun (bu 32 bit kütüphaneleri getirecektir) veya yukarıdaki listeden bir WOW64 derlemesi seçin, eğer mevcutsa.",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "32 bit kütüphanelerin bulunmadığı bir ortamda, WOW64 desteklemeyen bir derleme seçildiğinde gösterilen uyarı mesajı",
+    "x-source-message": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available."
+  },
+  "wow64PreferenceUnderEmulationWarning": "Emülasyon altında WOW64 modu bilinen sorunlara sahiptir. Bozuk bir kurulum bekleyin.",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "WOW64 modu tercih edildiğinde (opsiyonel olarak destekleyen derlemelerde) emülasyon gerektiren bir ortamda gösterilen uyarı mesajı",
+    "x-source-message": "The WOW64 mode under emulation is known to have issues. Expect a broken installation."
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "WOW64 modu kullanılmadığında, sisteminizde 32 bit kütüphanelerin bulunması gerekir. Zaten varsa, bu uyarıyı görmezden gelebilirsiniz. Aksi takdirde, dağıtımınızın paket deposundan Wine kurun; bu 32 bit kütüphaneleri getirecektir.",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "WOW64 modu tercih edilmediğinde (opsiyonel olarak destekleyen derlemelerde) 32 bit kütüphanelerin bulunmadığı bir ortamda gösterilen uyarı mesajı",
+    "x-source-message": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries."
+  },
+  "windowsExecutablesFilterName": "Windows çalıştırılabilirleri",
+  "@windowsExecutablesFilterName": {
+    "description": "\"Dosya türü\" açılır menüsünde görüntülenen metin",
+    "x-source-message": "Windows executables"
+  },
+  "dxvkOptionExplanation": "Proton'dan yeni ve daha hızlı bir uygulama",
+  "@dxvkOptionExplanation": {
+    "description": "Direct3D 8-11'in DXVK uygulaması seçildiğinde gösterilen açıklama metni",
+    "x-source-message": "A newer and faster implementation from Proton"
+  },
+  "wineD3DOptionExplanation": "Wine'den olgun bir uygulama. DXVK ile ilgili sorunlarda kullanılacak.",
+  "@wineD3DOptionExplanation": {
+    "description": "Direct3D 8-11'in WineD3D uygulaması seçildiğinde gösterilen açıklama metni",
+    "x-source-message": "A mature implementation from Wine. To be used in case of issues with DXVK."
+  },
+  "screensaverDisableReason": "Bir Wine uygulaması (muhtemelen tam ekran) çalışıyor",
+  "@screensaverDisableReason": {
+    "description": "Ekran koruyucusunun devre dışı bırakılma nedeni, ilgili DBus API'si gereği",
+    "x-source-message": "A Wine app (possibly fullscreen) is running"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "İndirilen winetricks betiğinin hash'i beklenenle eşleşmiyor.",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "İndirilen bir winetricks betiğinin hash'i beklenenle eşleşmediğinde gösterilen hata mesajı",
+    "x-source-message": "The hash of the downloaded winetricks script doesn't match the expected one."
+  },
+  "downloadedFile": "İndirilen dosya: {downloadedFile}",
+  "@downloadedFile": {
+    "description": "Daha büyük bir hata mesajındaki satır",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Downloaded file: {downloadedFile}"
+  },
+  "expectedSha256Hash": "Beklenen SHA256 hash: {hash}",
+  "@expectedSha256Hash": {
+    "description": "Daha büyük bir hata mesajındaki satır",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Expected SHA256 hash: {hash}"
+  },
+  "actualSha256Hash": "Gerçek SHA256 hash: {hash}",
+  "@actualSha256Hash": {
+    "description": "Daha büyük bir hata mesajındaki satır",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Actual SHA256 hash: {hash}"
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "Tüm prefixlerde çalışan uygulamaları önce bitir",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "Tüm prefixlerde çalışan uygulamaların olmaması gerektiği bir işlem yapılmaya çalışıldığında gösterilen hata mesajı",
+    "x-source-message": "Finish the apps running in all prefixes first"
+  },
+  "finishTheRunningAppsFirst": "Çalışan uygulamaları önce bitir",
+  "@finishTheRunningAppsFirst": {
+    "description": "Geçerli prefixte çalışan uygulamaların olmaması gerektiği bir işlem yapılmaya çalışıldığında gösterilen hata mesajı",
+    "x-source-message": "Finish the running apps first"
+  },
+  "missingHardwareVirtualizationCapabilities": "Bu sistem, Wine Bar’ı çalıştırmak için gerekli olan donanım sanallaştırma yeteneklerine (/dev/kvm eksik) sahip değil.",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "Donanım sanallaştırma gerektiren ve mevcut olmayan sistemlerde gösterilen hata mesajı",
+    "x-source-message": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar."
+  },
+  "snapKvmNeedsConnection": "Wine Bar on ARM64, /dev/kvm’e okuma-yazma erişimine ihtiyaç duyar. Normal uygulamalar genellikle bu erişime sahiptir, ancak Snap’ler için geçerli değildir. Böyle bir erişim sağlamak için aşağıdaki komutu terminalden çalıştırın:\n\n{kvmConnectCommand}\n\nDaha sonra Wine Bar’ı yeniden başlatın.",
+  "@snapKvmNeedsConnection": {
+    "description": "Snap altında çalışırken /dev/kvm’e yazma erişimi olmadığında gösterilen hata mesajı",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar."
+  },
+  "muvmIsNeededButMissing": "Bu sistem, Windows uygulamalarını çalıştırabilmek için muvm / FEX’e ihtiyaç duyar. Wine Bar’ın Snap sürümü muvm’i dahili olarak içerir. Aksi takdirde, \"sudo dnf install muvm fex-emu\" veya benzeri bir komutla kurun.",
+  "@muvmIsNeededButMissing": {
+    "description": "MuVM’nin gerekli olduğu sistemlerde bulunamadığında gösterilen hata mesajı",
+    "x-source-message": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar"
+  },
+  "prefixNameCantBeEmpty": "Prefix adı boş olamaz",
+  "@prefixNameCantBeEmpty": {
+    "description": "Boş adla Wine prefix’i oluşturmayı denerken gösterilen hata mesajı",
+    "x-source-message": "Prefix name can't be empty"
+  },
+  "illegalSymbolsPresent": "Yasak semboller var",
+  "@illegalSymbolsPresent": {
+    "description": "Giriş alanında izin verilmeyen semboller bulunduğunda gösterilen hata mesajı",
+    "x-source-message": "Illegal symbols present"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "Bu Wine prefix’i bir winetricks betiği içermez ve dışarıdan da sağlanmamıştır.",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "Bulunamayan bir winetricks betiği çalıştırılmaya çalışıldığında gösterilen hata mesajı",
+    "x-source-message": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided."
+  },
+  "failedToLocateWineOrWineserverExecutables": "wine / wineserver yürütülebilir dosyaları bulunamadı",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "Wine uygulamalarını çalıştırmak için uygun wine ve wineserver yürütülebilir dosyalarını bulmamız gerekir. Bu hata mesajı, bunu yapamadığımızda gösterilir.",
+    "x-source-message": "Failed to locate the wine / wineserver executables"
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "winetricks çalıştırmak için wine / wineserver yürütülebilir dosyaları bulunamadı",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "Winetricks, normal uygulamalardan farklı sürümlere (örneğin wow64 ile veya olmadan) ihtiyaç duyabilir. Bu hata mesajı, bunları bulamadığımızda gösterilir.",
+    "x-source-message": "Failed to locate the wine / wineserver executables for running winetricks"
+  },
+  "specificCommandHasFailed": "\"{command}\" komutu başarısız oldu",
+  "@specificCommandHasFailed": {
+    "description": "Harici bir aracın başarısız olduğunda gösterilen hata mesajı",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "The \"{command}\" command failed"
+  }
+}
