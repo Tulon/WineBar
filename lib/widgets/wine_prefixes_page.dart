@@ -34,6 +34,7 @@ import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 import 'package:winebar/utils/old_task_abandoning_worker.dart';
 import 'package:winebar/utils/open_url.dart';
 import 'package:winebar/widgets/gesture_recognizer_holder.dart';
+import 'package:winebar/widgets/locale_selection_button.dart';
 import 'package:winebar/widgets/wine_prefix_list_item_widget.dart';
 
 import '../models/wine_prefix.dart';
@@ -41,7 +42,9 @@ import '../utils/startup_data.dart';
 import 'prefix_creation_dialog.dart';
 
 class WinePrefixesPage extends StatelessWidget {
-  const WinePrefixesPage({super.key});
+  final void Function(Locale) onLocaleChanged;
+
+  const WinePrefixesPage({super.key, required this.onLocaleChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +53,11 @@ class WinePrefixesPage extends StatelessWidget {
         leading: _buildAppMenuButton(context),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(L10n.current.winePrefixesPageTitle),
-        actions: [_buildDonationButton(context)],
+        actions: [
+          _buildDonationButton(context),
+          SizedBox(width: 12.0),
+          LocaleSelectionButton(onLocaleSelected: onLocaleChanged),
+        ],
         actionsPadding: EdgeInsetsDirectional.only(end: 8.0),
       ),
       body: _WinePrefixesList(),

@@ -66,6 +66,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  shared_preferences: ^2.5.5
+  language_code: ^0.7.1
 
 dev_dependencies:
   flutter_test:
