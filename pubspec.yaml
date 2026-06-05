@@ -51,7 +51,14 @@ dependencies:
   posix: ^6.0.3
   dbus: ^0.7.11
   icon_decoration: ^2.1.0
-  simple_icons: ^14.6.1
+  simple_icons:
+    git:
+      url: https://github.com/jlnrrg/simple_icons.git
+
+      # This commit adds support for Flutter >= 3.44.0. At the time of this
+      # writing, this change made it into the develop branch but didn't make
+      # it into a release.
+      ref: e04d0ecad586c46d4b5442d5925198bfe36fc5cb
   file_selector: ^1.1.0
   dropdown_search: ^7.0.0
   stream_listener_widget: ^1.1.0
