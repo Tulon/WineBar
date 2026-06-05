@@ -755,11 +755,12 @@ packages:
   simple_icons:
     dependency: "direct main"
     description:
-      name: simple_icons
-      sha256: "2ca3cd79c9f12e97a8588cae0f342609f19fd2e82315356cb09b5c4987ad0808"
-      url: "https://pub.dev"
-    source: hosted
-    version: "14.6.1"
+      path: "."
+      ref: e04d0ecad586c46d4b5442d5925198bfe36fc5cb
+      resolved-ref: e04d0ecad586c46d4b5442d5925198bfe36fc5cb
+      url: "https://github.com/jlnrrg/simple_icons.git"
+    source: git
+    version: "16.20.0"
   sky_engine:
     dependency: transitive
     description: flutter
