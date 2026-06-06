@@ -16,29 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:winebar/utils/l10n.dart';
+
 enum D3d8To11Implementation {
-  dxvk(
-    jsonString: 'dxvk',
-    label: 'DXVK',
-    explanationText: 'A newer and faster implementation from Proton',
-  ),
-  wineD3D(
-    jsonString: 'wined3d',
-    label: 'WineD3D',
-    explanationText:
-        'A mature implementation from Wine. '
-        'To be used in case of issues with DXVK.',
-  );
+  dxvk(jsonString: 'dxvk', label: 'DXVK'),
+  wineD3D(jsonString: 'wined3d', label: 'WineD3D');
 
   final String jsonString;
   final String label;
-  final String explanationText;
 
-  const D3d8To11Implementation({
-    required this.jsonString,
-    required this.label,
-    required this.explanationText,
-  });
+  const D3d8To11Implementation({required this.jsonString, required this.label});
+
+  String get explanationText {
+    return switch (this) {
+      dxvk => L10n.current.dxvkOptionExplanation,
+      wineD3D => L10n.current.wineD3DOptionExplanation,
+    };
+  }
 
   static D3d8To11Implementation? fromJsonString(String? jsonString) {
     return values.where((impl) => impl.jsonString == jsonString).firstOrNull;

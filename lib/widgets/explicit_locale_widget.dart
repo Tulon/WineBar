@@ -21,6 +21,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/wine_locale.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/startup_data.dart';
 
 class ExplicitLocaleWidget extends StatelessWidget {
@@ -43,7 +44,7 @@ class ExplicitLocaleWidget extends StatelessWidget {
     return InputDecorator(
       decoration: InputDecoration(
         enabled: enabled,
-        label: const Text('Locale'),
+        label: Text(L10n.current.windowsLocale),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
       child: Column(
@@ -74,7 +75,7 @@ class ExplicitLocaleWidget extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  'Use a particular locale',
+                  L10n.current.useParticularWindowsLocale,
                   style: enabled ? null : TextStyle(color: theme.disabledColor),
                 ),
               ),
@@ -106,10 +107,10 @@ class ExplicitLocaleWidget extends StatelessWidget {
               searchFieldProps: TextFieldProps(
                 autofocus: true,
                 autocorrect: false,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.search),
-                  hintText: 'Search',
+                  hintText: MaterialLocalizations.of(context).searchFieldLabel,
                 ),
               ),
             ),
@@ -117,8 +118,8 @@ class ExplicitLocaleWidget extends StatelessWidget {
 
           SelectableText(
             state.useParticularLocale
-                ? 'This may help with text display in non-Unicode apps'
-                : 'The system locale will be used by Windows apps',
+                ? L10n.current.thisMayHelpWithTextInNonUnicodeApps
+                : L10n.current.theSystemLocaleWillBeUsedForWindowsApps,
             style: enabled ? null : TextStyle(color: theme.disabledColor),
           ),
         ],

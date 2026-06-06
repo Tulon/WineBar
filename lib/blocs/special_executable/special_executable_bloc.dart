@@ -35,6 +35,7 @@ import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/wine_process_runner_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/utils/command_line_to_wine_args.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/recursive_delete_and_log_errors.dart';
 import 'package:winebar/utils/startup_data.dart';
@@ -496,7 +497,7 @@ class WinetricksExecutableBloc extends SpecialExecutableBloc {
         stackTrace: stackTrace,
       );
       throw GenericException(
-        'Failed to prepare the winetricks script:\n${e.toString()}',
+        '${L10n.current.failedToPrepareWinetricksScript}\n${e.toString()}',
       );
     }
 

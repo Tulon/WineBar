@@ -18,6 +18,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:winebar/models/wine_build_source_github_project.dart';
+import 'package:winebar/utils/l10n.dart';
 
 import '../models/wine_build_source.dart';
 
@@ -37,7 +38,7 @@ class _WineBuildSourceRepo implements WineBuildSourceRepo {
     : sources = [
         WineBuildSourceGithubProject(
           label: 'Kronek',
-          details: 'Provides Vanilla, Staging, TkG and Proton Wine builds.',
+          descriptionGetter: (_) => L10n.current.kronekWineSourceDescription,
           directoryName: 'Kronek',
           circleAvatarText: 'KR',
           buildsMaySupportBothWin64AndWow64Modes: false,
@@ -47,9 +48,7 @@ class _WineBuildSourceRepo implements WineBuildSourceRepo {
         ),
         WineBuildSourceGithubProject(
           label: 'GE Proton',
-          details:
-              'Provides Proton builds with DXVK / VK3D included. '
-              'Recommended for games and other fullscreen apps.',
+          descriptionGetter: (_) => L10n.current.geProtonWineSourceDescription,
           recommended: true,
           directoryName: 'GE_Proton',
           circleAvatarText: 'GE',

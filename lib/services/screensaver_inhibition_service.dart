@@ -24,6 +24,7 @@ import 'package:logger/logger.dart';
 import 'package:winebar/dbus/org_freedesktop_screensaver.dart';
 import 'package:winebar/services/running_wine_processes_tracker.dart';
 import 'package:winebar/utils/app_info.dart';
+import 'package:winebar/utils/l10n.dart';
 
 abstract interface class ScreensaverInhibitionService {
   factory ScreensaverInhibitionService({
@@ -74,7 +75,7 @@ class _ScreensaverInhibitionService implements ScreensaverInhibitionService {
 
           inhibitionCookie = await screenSaver.callInhibit(
             AppInfo.appName,
-            'A Wine app (possibly fullscreen) is running',
+            L10n.current.screensaverDisableReason,
           );
         })
         .catchError((e, stackTrace) {

@@ -1,0 +1,618 @@
+{
+  "@@locale": "id",
+  "kronekWineSourceDescription": "Menyediakan build Wine standar, Staging, TkG dan Proton.",
+  "@kronekWineSourceDescription": {
+    "description": "Ditampilkan saat memilih sumber build Kronek Wine",
+    "x-source-message": "Provides the standard, Staging, TkG and Proton Wine builds."
+  },
+  "geProtonWineSourceDescription": "Menyediakan build Proton dengan DXVK / VK3D terpasang. Direkomendasikan untuk permainan dan aplikasi layar penuh lainnya.",
+  "@geProtonWineSourceDescription": {
+    "description": "Ditampilkan saat memilih sumber build GE Proton Wine",
+    "x-source-message": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps."
+  },
+  "appUnpinningConfirmationDialogTitle": "Konfirmasi pembongkaran pin aplikasi",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "Teks ini digunakan sebagai judul dalam dialog",
+    "x-source-message": "App unpinning confirmation"
+  },
+  "createWinePrefixDialogTitle": "Buat Wine Prefix",
+  "@createWinePrefixDialogTitle": {
+    "description": "Teks ini digunakan sebagai judul dalam dialog",
+    "x-source-message": "Create a Wine Prefix"
+  },
+  "cloneWinePrefixDialogTitle": "Klon Wine Prefix",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "Teks ini digunakan sebagai judul dialog",
+    "x-source-message": "Clone Wine Prefix"
+  },
+  "prefixDeletionConfirmationDialogTitle": "Konfirmasi penghapusan Prefix",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "Teks ini digunakan sebagai judul dialog",
+    "x-source-message": "Prefix deletion confirmation"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Jalur tidak dapat diakses dari Wine",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "Teks ini digunakan sebagai judul dialog",
+    "x-source-message": "Path inaccessible from Wine"
+  },
+  "winePrefixesPageTitle": "Wine Prefixes",
+  "@winePrefixesPageTitle": {
+    "description": "Teks ini digunakan sebagai judul halaman",
+    "x-source-message": "Wine Prefixes"
+  },
+  "winePrefixPageTitlePattern": "Wine Prefix: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "Teks ini digunakan sebagai judul halaman",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix: {prefixName}"
+  },
+  "prefixSettingsDialogTitlePattern": "Wine Prefix {prefixName} Settings",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "Polanya untuk judul dialog Pengaturan Prefix",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix {prefixName} Settings"
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} Settings",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "Pola judul dialog Pengaturan Eksekutabel Tersemat",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "{pinnedExecutableLabel} Settings"
+  },
+  "processLogsTitle": "Process Logs",
+  "@processLogsTitle": {
+    "description": "Teks ini digunakan sebagai judul halaman",
+    "x-source-message": "Process Logs"
+  },
+  "licenseInfoPattern": "License: {license}",
+  "@licenseInfoPattern": {
+    "description": "String yang muncul di Dialog Tentang",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "License: {license}"
+  },
+  "authorInfoPattern": "Author: {author}",
+  "@authorInfoPattern": {
+    "description": "String yang muncul di Dialog Tentang",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Author: {author}"
+  },
+  "theCopyingProcessFailedWithExitCode": "The copying process failed with status {exitCode}",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "Pesan kesalahan yang ditampilkan ketika `cp -a` gagal",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    },
+    "x-source-message": "The copying process failed with status {exitCode}"
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "The DXVK package is missing the x32 or x64 subdirectory",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "Pesan kesalahan yang ditampilkan ketika struktur direktori paket DXVK yang diunduh tidak sesuai dengan harapan kami",
+    "x-source-message": "The DXVK package is missing the x32 or x64 subdirectory"
+  },
+  "failedToPrepareWinetricksScript": "Failed to prepare the winetricks script:",
+  "@failedToPrepareWinetricksScript": {
+    "description": "Pesan kesalahan yang ditampilkan ketika pengunduhan atau validasi skrip winetricks gagal",
+    "x-source-message": "Failed to prepare the winetricks script:"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app.",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "Pesan kesalahan yang ditampilkan ketika kami curiga direktori data aplikasi tidak benar-benar dibuat oleh aplikasi ini",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app."
+  },
+  "extractionFailedMessage": "Extraction failed",
+  "@extractionFailedMessage": {
+    "description": "Pesan kesalahan yang ditampilkan ketika ekstraksi arsip gagal",
+    "x-source-message": "Extraction failed"
+  },
+  "prefixAlreadyExists": "Prefix \"{prefixName}\" sudah ada",
+  "@prefixAlreadyExists": {
+    "description": "Pesan kesalahan yang ditampilkan ketika mencoba membuat prefix yang sudah ada",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Prefix \"{prefixName}\" already exists"
+  },
+  "unknownErrorMessage": "Kesalahan tidak dikenal",
+  "@unknownErrorMessage": {
+    "description": "Pengganti teks kesalahan ketika tidak ada kesalahan spesifik yang tersedia",
+    "x-source-message": "Unknown error"
+  },
+  "criticalErrorCaption": "Kesalahan Kritis",
+  "@criticalErrorCaption": {
+    "description": "Judul kotak pesan kesalahan",
+    "x-source-message": "Critical Error"
+  },
+  "noLogsWereCapturedFromThisProcess": "Tidak ada log yang ditangkap dari proses ini",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "Pesan informasional",
+    "x-source-message": "No logs were captured from this process"
+  },
+  "winePrefixUpdatedMessage": "Wine prefix diperbarui",
+  "@winePrefixUpdatedMessage": {
+    "description": "Pesan informasional",
+    "x-source-message": "Wine prefix updated"
+  },
+  "pinnedAppUpdatedMessage": "Aplikasi tersemat diperbarui",
+  "@pinnedAppUpdatedMessage": {
+    "description": "Pesan informasional",
+    "x-source-message": "Pinned app updated"
+  },
+  "moreDetailsLink": "Lebih banyak detail.",
+  "@moreDetailsLink": {
+    "description": "Teks ini menjadi tautan yang dapat diklik dan disisipkan di akhir pesan kesalahan",
+    "x-source-message": "More details."
+  },
+  "wow64ModeSection": "WOW64 mode",
+  "@wow64ModeSection": {
+    "description": "Teks ini muncul pada dekorasi input",
+    "x-source-message": "WOW64 mode"
+  },
+  "useWow64ModeIfAvailable": "Gunakan mode WOW64 jika tersedia",
+  "@useWow64ModeIfAvailable": {
+    "description": "Teks ini muncul di samping kotak centang",
+    "x-source-message": "Use the WOW64 mode if available"
+  },
+  "d3D8To11Implementation": "Implementasi Direct3D 8-11",
+  "@d3D8To11Implementation": {
+    "description": "Teks ini muncul pada dekorasi input",
+    "x-source-message": "Direct3D 8-11 implementation"
+  },
+  "useParticularD3D8To11Impl": "Gunakan implementasi Direct3D 8-11 tertentu",
+  "@useParticularD3D8To11Impl": {
+    "description": "Teks ini muncul di samping kotak centang",
+    "x-source-message": "Use a particular Direct3D 8-11 implementation"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "Implementasi default untuk build Wine ini akan digunakan",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "Teks yang ditampilkan ketika tidak ada implementasi Direct3D 8-11 tertentu yang dipilih",
+    "x-source-message": "A default implementation for this particular Wine build will be used"
+  },
+  "windowsLocale": "Locale",
+  "@windowsLocale": {
+    "description": "Teks di samping bidang pemilihan locale. Ini adalah locale Windows untuk Wine prefix tertentu.",
+    "x-source-message": "Locale"
+  },
+  "useParticularWindowsLocale": "Gunakan locale tertentu",
+  "@useParticularWindowsLocale": {
+    "description": "Teks ini muncul di samping kotak centang",
+    "x-source-message": "Use a particular locale"
+  },
+  "dontShowThisWarningAgain": "Jangan tampilkan peringatan ini lagi",
+  "@dontShowThisWarningAgain": {
+    "description": "Teks ini muncul di samping kotak centang",
+    "x-source-message": "Don't show this warning again"
+  },
+  "nameForTheNewPrefixHintText": "Nama untuk wine prefix baru",
+  "@nameForTheNewPrefixHintText": {
+    "description": "Teks petunjuk yang muncul di bidang input",
+    "x-source-message": "Name for the new wine prefix"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "Ini dapat membantu tampilan teks di aplikasi non-Unicode",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "Teks informasional yang muncul jika locale Windows tertentu dipilih",
+    "x-source-message": "This may help with text display in non-Unicode apps"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "Locale sistem akan digunakan oleh aplikasi Windows",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "Teks informasional yang muncul jika tidak ada locale Windows tertentu dipilih",
+    "x-source-message": "The system locale will be used by Windows apps"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "Ini akan membuat teks terlalu kecil tetapi tidak akan merusak aplikasi layar penuh lama",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "Teks ini muncul ketika skala HiDPI yang lebih kecil dari rekomendasi dipilih",
+    "x-source-message": "This will make the text too small but won't break older fullscreen apps"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "Ini adalah skala sempurna untuk tampilan Anda",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "Teks ini muncul ketika skala HiDPI yang direkomendasikan dipilih dan skala tersebut adalah 1.0",
+    "x-source-message": "This is the perfect scale for your display"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "Ini akan membantu teks yang terlalu kecil tetapi akan merusak aplikasi layar penuh lama",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "Teks ini muncul ketika skala HiDPI yang lebih tinggi dari 1 dipilih, tetapi nilai tersebut masih lebih rendah daripada skala yang direkomendasikan",
+    "x-source-message": "This will help with text being too small but will break older fullscreen apps"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "Ini adalah skala sempurna untuk tampilan Anda, meskipun akan merusak aplikasi layar penuh lama",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "Teks ini muncul ketika skala HiDPI yang direkomendasikan dipilih tetapi skala tersebut lebih besar dari 1.0",
+    "x-source-message": "This is the perfect scale for your display, though it will break older fullscreen apps"
+  },
+  "thisWillProduceTextThatsTooLarge": "Ini dapat menghasilkan teks yang terlalu besar",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "Teks ini muncul ketika skala HiDPI yang lebih besar dari rekomendasi dipilih",
+    "x-source-message": "This may produce text that's too large"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "Prefix ini berada dalam keadaan di mana tidak dapat dihapus",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "Misalnya, prefix mungkin sudah dalam proses penghapusan",
+    "x-source-message": "This prefix is in a state were it can't be deleted"
+  },
+  "hiDpiScaleLabel": "Skala HiDPI",
+  "@hiDpiScaleLabel": {
+    "description": "Teks ini muncul pada dekorasi input",
+    "x-source-message": "HiDPI scale"
+  },
+  "pleaseSelect": "Silakan pilih",
+  "@pleaseSelect": {
+    "description": "Teks ini muncul ketika pemilihan diperlukan tetapi tidak ada opsi yang dipilih",
+    "x-source-message": "Please select"
+  },
+  "appsAreRunningInThisPrefixTooltip": "Aplikasi sedang berjalan di prefix ini",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "Teks ini ditempatkan pada tooltip. 'prefix' di sini merujuk ke Wine prefix",
+    "x-source-message": "Apps are running in this prefix"
+  },
+  "refreshWineReleasesTooltip": "Segarkan rilis wine",
+  "@refreshWineReleasesTooltip": {
+    "description": "Teks ini ditempatkan pada tooltip",
+    "x-source-message": "Refresh wine releases"
+  },
+  "prefixSettingsTooltip": "Pengaturan prefix",
+  "@prefixSettingsTooltip": {
+    "description": "Teks ini ditempatkan pada tooltip",
+    "x-source-message": "Prefix settings"
+  },
+  "killProcessTooltip": "Matikan proses",
+  "@killProcessTooltip": {
+    "description": "Teks ini ditempatkan pada tooltip",
+    "x-source-message": "Kill process"
+  },
+  "scrollToBottomTooltip": "Gulir ke bawah",
+  "@scrollToBottomTooltip": {
+    "description": "Teks ini ditempatkan pada tooltip",
+    "x-source-message": "Scroll to bottom"
+  },
+  "scrollToTopTooltip": "Gulir ke atas",
+  "@scrollToTopTooltip": {
+    "description": "Teks ini ditempatkan pada tooltip",
+    "x-source-message": "Scroll to top"
+  },
+  "viewLogsTooltip": "Lihat Log",
+  "@viewLogsTooltip": {
+    "description": "Teks ini ditempatkan pada tooltip",
+    "x-source-message": "View Logs"
+  },
+  "viewLogsLink": "Lihat Log.",
+  "@viewLogsLink": {
+    "description": "Teks ini menjadi tautan yang dapat diklik dan disisipkan di akhir pesan kesalahan",
+    "x-source-message": "View Logs."
+  },
+  "useParticularGPU": "Gunakan GPU tertentu",
+  "@useParticularGPU": {
+    "description": "Teks ini muncul di samping kotak centang",
+    "x-source-message": "Use a particular GPU"
+  },
+  "gpuSelection": "Pemilihan GPU",
+  "@gpuSelection": {
+    "description": "Teks ini muncul pada dekorasi input",
+    "x-source-message": "GPU selection"
+  },
+  "failedToGetTheListOfAvailableGPUs": "Gagal mendapatkan daftar GPU yang tersedia",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "Teks ini ditempatkan pada tooltip",
+    "x-source-message": "Failed to get the list of available GPUs"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "Perhatikan bahwa fitur ini tidak bekerja di semua skenario",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "Teks informasional yang ditampilkan ketika pengguna mengaktifkan fitur yang tidak bekerja di semua skenario",
+    "x-source-message": "Note that this feature doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "Tambah Wine Prefix",
+  "@addWinePrefixButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol",
+    "x-source-message": "Add Wine Prefix"
+  },
+  "aboutButtonLabel": "Tentang",
+  "@aboutButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol atau item menu",
+    "x-source-message": "About"
+  },
+  "donateButtonLabel": "Donasi",
+  "@donateButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol",
+    "x-source-message": "Donate"
+  },
+  "unpinButtonLabel": "Lepas",
+  "@unpinButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol atau item menu",
+    "x-source-message": "Unpin"
+  },
+  "deleteButtonLabel": "Hapus",
+  "@deleteButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol",
+    "x-source-message": "Delete"
+  },
+  "createWinePrefixButtonLabel": "Buat Wine Prefix",
+  "@createWinePrefixButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol",
+    "x-source-message": "Create Wine Prefix"
+  },
+  "startingButtonLabel": "Memulai ...",
+  "@startingButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol ketika suatu operasi sedang dimulai",
+    "x-source-message": "Starting ..."
+  },
+  "downloadingAndExtractingButtonLabel": "Mengunduh dan Mengekstrak ...",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol ketika operasi unduh dan ekstrak sedang berlangsung",
+    "x-source-message": "Downloading and Extracting ..."
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "Mengunduh dan Mengekstrak DXVK ...",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol ketika operasi unduh dan ekstrak untuk DXVK sedang berlangsung",
+    "x-source-message": "Downloading and Extracting DXVK ..."
+  },
+  "creatingWinePrefixButtonLabel": "Membuat Wine Prefix ...",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol ketika Wine prefix sedang dibuat",
+    "x-source-message": "Creating Wine Prefix ..."
+  },
+  "updateWinePrefixButtonLabel": "Perbarui Wine Prefix",
+  "@updateWinePrefixButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol",
+    "x-source-message": "Update Wine Prefix"
+  },
+  "updatingWinePrefixButtonLabel": "Memperbarui Wine Prefix ...",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol ketika Wine prefix sedang diperbarui",
+    "x-source-message": "Updating Wine Prefix ..."
+  },
+  "cloneButtonLabel": "Klon",
+  "@cloneButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol atau item menu",
+    "x-source-message": "Clone"
+  },
+  "cloningButtonLabel": "Mengklon ...",
+  "@cloningButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol ketika operasi kloning Wine prefix sedang berlangsung",
+    "x-source-message": "Cloning ..."
+  },
+  "pinExecutableButtonLabel": "Pin Executable",
+  "@pinExecutableButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol",
+    "x-source-message": "Pin Executable"
+  },
+  "proceedAnywayButtonLabel": "Lanjutkan Semua",
+  "@proceedAnywayButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol",
+    "x-source-message": "Proceed Anyway"
+  },
+  "runExecutableButtonLabel": "Jalankan Executable",
+  "@runExecutableButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol",
+    "x-source-message": "Run Executable"
+  },
+  "runInstallerButtonLabel": "Jalankan Installer",
+  "@runInstallerButtonLabel": {
+    "description": "Teks ini ditempatkan pada tombol",
+    "x-source-message": "Run Installer"
+  },
+  "settingsMenuItem": "Pengaturan",
+  "@settingsMenuItem": {
+    "description": "Teks ini ditempatkan pada item menu",
+    "x-source-message": "Settings"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "Aplikasi berikut akan di-unpin:",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "Teks ini muncul pada dialog",
+    "x-source-message": "The following app is about to be unpinned:"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "Prefix berikut akan dihapus:",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "Teks ini muncul pada dialog. 'prefix' di sini merujuk ke Wine Prefix",
+    "x-source-message": "The following prefix is about to be deleted:"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "Jalur berikut tidak dapat diakses dari Wine:",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "Teks ini muncul pada dialog",
+    "x-source-message": "The following path is inaccessible from Wine:"
+  },
+  "pathInaccessibleFromWineExplanation": "Sebuah jalur mungkin tidak dapat diakses dari Wine karena seluruh Wine Bar atau hanya Wine berjalan dalam mesin virtual (di Mac Apple silicon) atau di sandbox Snap / Flatpak.",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "Teks ini muncul di dialog",
+    "x-source-message": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox."
+  },
+  "solutionHeading": "Solusi",
+  "@solutionHeading": {
+    "description": "Teks ini muncul di dialog sebagai judul, diikuti teks lain di bawahnya",
+    "x-source-message": "Solution"
+  },
+  "pathInaccessibleFromWineSolution": "Salin folder yang dimaksud ke suatu tempat di bawah direktori home Anda.",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "Teks ini muncul di dialog setelah judul 'Solusi'",
+    "x-source-message": "Copy the folder in question somewhere under your home directory."
+  },
+  "thisActionCantBeUndone": "Tindakan ini tidak dapat dibatalkan!",
+  "@thisActionCantBeUndone": {
+    "description": "Teks ini muncul di dialog",
+    "x-source-message": "This action can't be undone!"
+  },
+  "selectWineBuildProviderStepName": "Pilih penyedia build wine",
+  "@selectWineBuildProviderStepName": {
+    "description": "Teks ini muncul di daftar halaman wizard dan juga di bagian atas halaman yang bersangkutan",
+    "x-source-message": "Select wine build provider"
+  },
+  "selectWineReleaseStepName": "Pilih rilis wine",
+  "@selectWineReleaseStepName": {
+    "description": "Teks ini muncul di daftar halaman wizard dan juga di bagian atas halaman yang bersangkutan",
+    "x-source-message": "Select wine release"
+  },
+  "selectWineBuildStepName": "Pilih build wine",
+  "@selectWineBuildStepName": {
+    "description": "Teks ini muncul di daftar halaman wizard dan juga di bagian atas halaman yang bersangkutan",
+    "x-source-message": "Select wine build"
+  },
+  "setOptionsStepName": "Atur opsi",
+  "@setOptionsStepName": {
+    "description": "Teks ini muncul di daftar halaman wizard dan juga di bagian atas halaman yang bersangkutan",
+    "x-source-message": "Set options"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "Sebuah build WOW64 telah dipilih. Diketahui memiliki masalah di bawah emulasi. Harapkan instalasi yang rusak.",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "Pesan peringatan yang ditampilkan ketika build Wine hanya WOW64 akan digunakan di bawah emulasi",
+    "x-source-message": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation."
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "Build ini memerlukan pustaka 32-bit di sistem Anda. Jika sudah ada, Anda dapat mengabaikan peringatan ini. Jika tidak, instal Wine dari repositori distro Anda (yang akan membawa pustaka 32-bit tersebut) atau pilih build WOW64 dari daftar di atas jika tersedia.",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "Pesan peringatan yang ditampilkan ketika build non-WOW64 dipilih di lingkungan di mana pustaka 32-bit mungkin tidak tersedia",
+    "x-source-message": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available."
+  },
+  "wow64PreferenceUnderEmulationWarning": "Mode WOW64 di bawah emulasi diketahui memiliki masalah. Harapkan instalasi yang rusak.",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "Pesan peringatan yang ditampilkan ketika mode WOW64 dipilih (pada build yang mendukungnya secara opsional) di lingkungan yang memerlukan emulasi",
+    "x-source-message": "The WOW64 mode under emulation is known to have issues. Expect a broken installation."
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "Tidak menggunakan mode WOW64 akan memerlukan pustaka 32-bit di sistem Anda. Jika sudah ada, Anda dapat mengabaikan peringatan ini. Jika tidak, instal Wine dari repositori distro Anda, yang akan membawa pustaka 32-bit tersebut.",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "Pesan peringatan yang ditampilkan ketika mode WOW64 tidak dipilih (pada build yang mendukungnya secara opsional) di lingkungan di mana pustaka 32-bit mungkin tidak tersedia",
+    "x-source-message": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries."
+  },
+  "windowsExecutablesFilterName": "Eksekutabel Windows",
+  "@windowsExecutablesFilterName": {
+    "description": "Teks ini muncul di dropdown \"Jenis file\" pada dialog pemilihan berkas",
+    "x-source-message": "Windows executables"
+  },
+  "dxvkOptionExplanation": "Implementasi yang lebih baru dan lebih cepat dari Proton",
+  "@dxvkOptionExplanation": {
+    "description": "Teks deskripsi yang ditampilkan ketika implementasi DXVK dari Direct3D 8-11 dipilih",
+    "x-source-message": "A newer and faster implementation from Proton"
+  },
+  "wineD3DOptionExplanation": "Implementasi matang dari Wine. Digunakan bila ada masalah dengan DXVK.",
+  "@wineD3DOptionExplanation": {
+    "description": "Teks deskripsi yang ditampilkan ketika implementasi WineD3D dari Direct3D 8-11 dipilih",
+    "x-source-message": "A mature implementation from Wine. To be used in case of issues with DXVK."
+  },
+  "screensaverDisableReason": "Aplikasi Wine (mungkin fullscreen) sedang berjalan",
+  "@screensaverDisableReason": {
+    "description": "Alasan menonaktifkan screensaver, sesuai dengan API DBus yang bersangkutan",
+    "x-source-message": "A Wine app (possibly fullscreen) is running"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "Hash skrip winetricks yang diunduh tidak cocok dengan hash yang diharapkan.",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "Pesan kesalahan yang ditampilkan ketika hash skrip winetricks yang diunduh tidak cocok dengan yang diharapkan",
+    "x-source-message": "The hash of the downloaded winetricks script doesn't match the expected one."
+  },
+  "downloadedFile": "Berkas terunduh: {downloadedFile}",
+  "@downloadedFile": {
+    "description": "Baris dalam pesan kesalahan yang lebih besar",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Downloaded file: {downloadedFile}"
+  },
+  "expectedSha256Hash": "Hash SHA256 yang diharapkan: {hash}",
+  "@expectedSha256Hash": {
+    "description": "Baris dalam pesan kesalahan yang lebih besar",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Expected SHA256 hash: {hash}"
+  },
+  "actualSha256Hash": "Hash SHA256 aktual: {hash}",
+  "@actualSha256Hash": {
+    "description": "Baris dalam pesan kesalahan yang lebih besar",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Actual SHA256 hash: {hash}"
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "Selesaikan aplikasi yang berjalan di semua prefix terlebih dahulu",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "Pesan kesalahan yang ditampilkan ketika mencoba melakukan sesuatu yang memerlukan tidak ada aplikasi berjalan di semua prefix",
+    "x-source-message": "Finish the apps running in all prefixes first"
+  },
+  "finishTheRunningAppsFirst": "Selesaikan aplikasi yang sedang berjalan terlebih dahulu",
+  "@finishTheRunningAppsFirst": {
+    "description": "Pesan kesalahan yang ditampilkan ketika mencoba melakukan sesuatu yang memerlukan tidak ada aplikasi berjalan di prefix saat ini",
+    "x-source-message": "Finish the running apps first"
+  },
+  "missingHardwareVirtualizationCapabilities": "Sistem ini tidak memiliki kemampuan virtualisasi perangkat keras (/dev/kvm hilang) yang diperlukan untuk menjalankan Wine Bar.",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "Pesan kesalahan yang ditampilkan pada sistem di mana kita memerlukan virtualisasi perangkat keras yang tidak tersedia",
+    "x-source-message": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar."
+  },
+  "snapKvmNeedsConnection": "Wine Bar pada ARM64 memerlukan akses baca-tulis ke /dev/kvm. Aplikasi biasa biasanya memiliki akses tersebut, tetapi Snap tidak. Untuk memberikan akses tersebut, jalankan perintah berikut dari baris perintah:\n\n{kvmConnectCommand}\n\nKemudian, restart Wine Bar.",
+  "@snapKvmNeedsConnection": {
+    "description": "Pesan kesalahan yang ditampilkan saat dijalankan di bawah Snap dan tidak memiliki akses tulis ke /dev/kvm",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar."
+  },
+  "muvmIsNeededButMissing": "Sistem ini memerlukan muvm / FEX untuk dapat menjalankan aplikasi Windows. Versi Snap Wine Bar sudah menyertakan muvm. Jika tidak, silakan instal menggunakan \"sudo dnf install muvm fex-emu\" atau serupa",
+  "@muvmIsNeededButMissing": {
+    "description": "Pesan kesalahan yang ditampilkan ketika muvm tidak tersedia pada sistem di mana kita memerlukannya",
+    "x-source-message": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar"
+  },
+  "prefixNameCantBeEmpty": "Nama prefix tidak boleh kosong",
+  "@prefixNameCantBeEmpty": {
+    "description": "Pesan kesalahan yang ditampilkan saat mencoba membuat Wine prefix dengan nama kosong",
+    "x-source-message": "Prefix name can't be empty"
+  },
+  "illegalSymbolsPresent": "Simbol ilegal ditemukan",
+  "@illegalSymbolsPresent": {
+    "description": "Pesan kesalahan yang ditampilkan ketika simbol tidak diizinkan ada dalam bidang input",
+    "x-source-message": "Illegal symbols present"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "Wine prefix ini tidak menyertakan skrip winetricks dan juga tidak ada skrip eksternal yang disediakan.",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "Pesan kesalahan yang ditampilkan saat mencoba menjalankan skrip winetricks yang tidak dapat ditemukan",
+    "x-source-message": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided."
+  },
+  "failedToLocateWineOrWineserverExecutables": "Gagal menemukan eksekutabel wine / wineserver",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "Menjalankan aplikasi Wine memerlukan kami menemukan eksekutabel wine dan wineserver yang sesuai. Pesan kesalahan ini ditampilkan ketika kami tidak dapat melakukannya.",
+    "x-source-message": "Failed to locate the wine / wineserver executables"
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "Gagal menemukan eksekutabel wine / wineserver untuk menjalankan winetricks",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "Winetricks mungkin memerlukan versi yang berbeda (misalnya dengan atau tanpa wow64) dibandingkan aplikasi biasa. Pesan kesalahan ini ditampilkan ketika kami tidak dapat menemukan mereka.",
+    "x-source-message": "Failed to locate the wine / wineserver executables for running winetricks"
+  },
+  "specificCommandHasFailed": "Perintah \"{command}\" gagal",
+  "@specificCommandHasFailed": {
+    "description": "Pesan kesalahan yang ditampilkan ketika alat eksternal gagal",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "The \"{command}\" command failed"
+  }
+}

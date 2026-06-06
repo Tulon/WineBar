@@ -1,0 +1,618 @@
+{
+  "@@locale": "zh",
+  "kronekWineSourceDescription": "提供标准、Staging、TkG 和 Proton Wine 构建。",
+  "@kronekWineSourceDescription": {
+    "description": "选择 Kronek Wine 构建源时显示",
+    "x-source-message": "Provides the standard, Staging, TkG and Proton Wine builds."
+  },
+  "geProtonWineSourceDescription": "提供包含 DXVK / VK3D 的 Proton 构建。推荐用于游戏和其他全屏应用。",
+  "@geProtonWineSourceDescription": {
+    "description": "选择 GE Proton Wine 构建源时显示",
+    "x-source-message": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps."
+  },
+  "appUnpinningConfirmationDialogTitle": "应用取消固定确认",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "此文本用作对话框标题",
+    "x-source-message": "App unpinning confirmation"
+  },
+  "createWinePrefixDialogTitle": "创建 Wine 前缀",
+  "@createWinePrefixDialogTitle": {
+    "description": "此文本用作对话框标题",
+    "x-source-message": "Create a Wine Prefix"
+  },
+  "cloneWinePrefixDialogTitle": "克隆 Wine 前缀",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "此文本用作对话框标题",
+    "x-source-message": "Clone Wine Prefix"
+  },
+  "prefixDeletionConfirmationDialogTitle": "前缀删除确认",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "此文本用作对话框标题",
+    "x-source-message": "Prefix deletion confirmation"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Wine 无法访问路径",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "此文本用作对话框标题",
+    "x-source-message": "Path inaccessible from Wine"
+  },
+  "winePrefixesPageTitle": "Wine 前缀",
+  "@winePrefixesPageTitle": {
+    "description": "此文本用作页面标题",
+    "x-source-message": "Wine Prefixes"
+  },
+  "winePrefixPageTitlePattern": "Wine 前缀: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "此文本用作页面标题",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix: {prefixName}"
+  },
+  "prefixSettingsDialogTitlePattern": "Wine 前缀 {prefixName} 设置",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "前缀设置对话框标题的模式",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix {prefixName} Settings"
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} 设置",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "Pinned Executable Settings 对话框标题的模式",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "{pinnedExecutableLabel} Settings"
+  },
+  "processLogsTitle": "进程日志",
+  "@processLogsTitle": {
+    "description": "此文本用作页面标题",
+    "x-source-message": "Process Logs"
+  },
+  "licenseInfoPattern": "许可证：{license}",
+  "@licenseInfoPattern": {
+    "description": "显示在关于对话框中的字符串",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "License: {license}"
+  },
+  "authorInfoPattern": "作者：{author}",
+  "@authorInfoPattern": {
+    "description": "显示在关于对话框中的字符串",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Author: {author}"
+  },
+  "theCopyingProcessFailedWithExitCode": "复制过程以状态码 {exitCode} 失败",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "当 `cp -a` 失败时显示的错误信息",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    },
+    "x-source-message": "The copying process failed with status {exitCode}"
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "DXVK 包缺少 x32 或 x64 子目录",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "当下载的 DXVK 包目录结构与预期不符时显示的错误信息",
+    "x-source-message": "The DXVK package is missing the x32 or x64 subdirectory"
+  },
+  "failedToPrepareWinetricksScript": "准备 winetricks 脚本失败：",
+  "@failedToPrepareWinetricksScript": {
+    "description": "下载或验证 winetricks 脚本失败时显示的错误信息",
+    "x-source-message": "Failed to prepare the winetricks script:"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "文件夹 {toplevelDataDir} 已存在，但未被识别为本应用的目录。\n请重命名它或将其移至废纸篓，然后重新启动应用。",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "当我们怀疑应用的数据目录并非由本应用创建时显示的错误信息",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app."
+  },
+  "extractionFailedMessage": "提取失败",
+  "@extractionFailedMessage": {
+    "description": "当归档提取失败时显示的错误信息",
+    "x-source-message": "Extraction failed"
+  },
+  "prefixAlreadyExists": "前缀 \"{prefixName}\" 已存在",
+  "@prefixAlreadyExists": {
+    "description": "当尝试创建已存在的前缀时显示的错误信息",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Prefix \"{prefixName}\" already exists"
+  },
+  "unknownErrorMessage": "未知错误",
+  "@unknownErrorMessage": {
+    "description": "当没有可用的具体错误时的占位符",
+    "x-source-message": "Unknown error"
+  },
+  "criticalErrorCaption": "严重错误",
+  "@criticalErrorCaption": {
+    "description": "错误消息框的标题",
+    "x-source-message": "Critical Error"
+  },
+  "noLogsWereCapturedFromThisProcess": "未从此进程捕获日志",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "一条信息性消息",
+    "x-source-message": "No logs were captured from this process"
+  },
+  "winePrefixUpdatedMessage": "Wine 前缀已更新",
+  "@winePrefixUpdatedMessage": {
+    "description": "一条信息性消息",
+    "x-source-message": "Wine prefix updated"
+  },
+  "pinnedAppUpdatedMessage": "已更新固定应用",
+  "@pinnedAppUpdatedMessage": {
+    "description": "一条信息性消息",
+    "x-source-message": "Pinned app updated"
+  },
+  "moreDetailsLink": "更多详情。",
+  "@moreDetailsLink": {
+    "description": "此文本成为可点击链接，插入到错误消息末尾",
+    "x-source-message": "More details."
+  },
+  "wow64ModeSection": "WOW64 模式",
+  "@wow64ModeSection": {
+    "description": "此文本出现在输入装饰上",
+    "x-source-message": "WOW64 mode"
+  },
+  "useWow64ModeIfAvailable": "如可用，使用 WOW64 模式",
+  "@useWow64ModeIfAvailable": {
+    "description": "此文本出现在复选框旁边",
+    "x-source-message": "Use the WOW64 mode if available"
+  },
+  "d3D8To11Implementation": "Direct3D 8-11 实现",
+  "@d3D8To11Implementation": {
+    "description": "此文本出现在输入装饰上",
+    "x-source-message": "Direct3D 8-11 implementation"
+  },
+  "useParticularD3D8To11Impl": "使用特定的 Direct3D 8-11 实现",
+  "@useParticularD3D8To11Impl": {
+    "description": "此文本出现在复选框旁边",
+    "x-source-message": "Use a particular Direct3D 8-11 implementation"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "将使用此 Wine 构建的默认实现",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "当未选择特定 Direct3D 8-11 实现时显示的文本",
+    "x-source-message": "A default implementation for this particular Wine build will be used"
+  },
+  "windowsLocale": "语言环境",
+  "@windowsLocale": {
+    "description": "位于语言环境选择字段旁的文本。它是给定 Wine 前缀的 Windows 语言环境。",
+    "x-source-message": "Locale"
+  },
+  "useParticularWindowsLocale": "使用特定的语言环境",
+  "@useParticularWindowsLocale": {
+    "description": "此文本出现在复选框旁边",
+    "x-source-message": "Use a particular locale"
+  },
+  "dontShowThisWarningAgain": "不再显示此警告",
+  "@dontShowThisWarningAgain": {
+    "description": "此文本出现在复选框旁边",
+    "x-source-message": "Don't show this warning again"
+  },
+  "nameForTheNewPrefixHintText": "新 Wine 前缀的名称",
+  "@nameForTheNewPrefixHintText": {
+    "description": "输入字段中出现的提示文本",
+    "x-source-message": "Name for the new wine prefix"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "这可能有助于在非 Unicode 应用中显示文本",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "如果选择了特定的 Windows 语言环境，则出现的信息文本",
+    "x-source-message": "This may help with text display in non-Unicode apps"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "系统语言环境将被 Windows 应用使用",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "如果未选择特定的 Windows 语言环境，则出现的信息文本",
+    "x-source-message": "The system locale will be used by Windows apps"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "这会使文本变得太小，但不会破坏旧的全屏应用",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "当选择比推荐更小的 HiDPI 缩放时出现的文本",
+    "x-source-message": "This will make the text too small but won't break older fullscreen apps"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "此比例为您显示器的最佳比例",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "当推荐的 HiDPI 比例为 1.0 时显示此文本",
+    "x-source-message": "This is the perfect scale for your display"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "此设置可解决文字过小的问题，但会破坏旧版全屏应用",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "当选择的 HiDPI 比例高于 1，但仍低于推荐比例时显示此文本",
+    "x-source-message": "This will help with text being too small but will break older fullscreen apps"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "此比例为您显示器的最佳比例，但会破坏旧版全屏应用",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "当推荐的 HiDPI 比例大于 1.0 时显示此文本",
+    "x-source-message": "This is the perfect scale for your display, though it will break older fullscreen apps"
+  },
+  "thisWillProduceTextThatsTooLarge": "这可能导致文字过大",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "当选择的 HiDPI 比例高于推荐比例时显示此文本",
+    "x-source-message": "This may produce text that's too large"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "该前缀处于无法删除的状态",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "例如，前缀可能已在删除过程中",
+    "x-source-message": "This prefix is in a state were it can't be deleted"
+  },
+  "hiDpiScaleLabel": "HiDPI 比例",
+  "@hiDpiScaleLabel": {
+    "description": "此文本出现在输入装饰中",
+    "x-source-message": "HiDPI scale"
+  },
+  "pleaseSelect": "请选择",
+  "@pleaseSelect": {
+    "description": "当需要选择但未选中任何选项时显示此文本",
+    "x-source-message": "Please select"
+  },
+  "appsAreRunningInThisPrefixTooltip": "此前缀中正在运行的应用",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "此文本放在工具提示中。这里的 'prefix' 指的是 Wine 前缀",
+    "x-source-message": "Apps are running in this prefix"
+  },
+  "refreshWineReleasesTooltip": "刷新 Wine 发布",
+  "@refreshWineReleasesTooltip": {
+    "description": "此文本放在工具提示中",
+    "x-source-message": "Refresh wine releases"
+  },
+  "prefixSettingsTooltip": "前缀设置",
+  "@prefixSettingsTooltip": {
+    "description": "此文本放在工具提示中",
+    "x-source-message": "Prefix settings"
+  },
+  "killProcessTooltip": "终止进程",
+  "@killProcessTooltip": {
+    "description": "此文本放在工具提示中",
+    "x-source-message": "Kill process"
+  },
+  "scrollToBottomTooltip": "滚动到底部",
+  "@scrollToBottomTooltip": {
+    "description": "此文本放在工具提示中",
+    "x-source-message": "Scroll to bottom"
+  },
+  "scrollToTopTooltip": "滚动到顶部",
+  "@scrollToTopTooltip": {
+    "description": "此文本放在工具提示中",
+    "x-source-message": "Scroll to top"
+  },
+  "viewLogsTooltip": "查看日志",
+  "@viewLogsTooltip": {
+    "description": "此文本放在工具提示中",
+    "x-source-message": "View Logs"
+  },
+  "viewLogsLink": "查看日志。",
+  "@viewLogsLink": {
+    "description": "此文本成为可点击链接，插入到错误信息末尾",
+    "x-source-message": "View Logs."
+  },
+  "useParticularGPU": "使用特定 GPU",
+  "@useParticularGPU": {
+    "description": "此文本出现在复选框旁边",
+    "x-source-message": "Use a particular GPU"
+  },
+  "gpuSelection": "GPU 选择",
+  "@gpuSelection": {
+    "description": "此文本出现在输入装饰中",
+    "x-source-message": "GPU selection"
+  },
+  "failedToGetTheListOfAvailableGPUs": "获取可用 GPU 列表失败",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "此文本放在工具提示中",
+    "x-source-message": "Failed to get the list of available GPUs"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "请注意此功能并非在所有场景下都能工作",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "当用户激活在所有场景下不适用的功能时显示的信息",
+    "x-source-message": "Note that this feature doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "添加 Wine 前缀",
+  "@addWinePrefixButtonLabel": {
+    "description": "此文本放置在按钮上",
+    "x-source-message": "Add Wine Prefix"
+  },
+  "aboutButtonLabel": "关于",
+  "@aboutButtonLabel": {
+    "description": "此文本放置在按钮或菜单项上",
+    "x-source-message": "About"
+  },
+  "donateButtonLabel": "捐赠",
+  "@donateButtonLabel": {
+    "description": "此文本放置在按钮上",
+    "x-source-message": "Donate"
+  },
+  "unpinButtonLabel": "取消固定",
+  "@unpinButtonLabel": {
+    "description": "此文本放置在按钮或菜单项上",
+    "x-source-message": "Unpin"
+  },
+  "deleteButtonLabel": "删除",
+  "@deleteButtonLabel": {
+    "description": "此文本放置在按钮上",
+    "x-source-message": "Delete"
+  },
+  "createWinePrefixButtonLabel": "创建 Wine 前缀",
+  "@createWinePrefixButtonLabel": {
+    "description": "此文本放置在按钮上",
+    "x-source-message": "Create Wine Prefix"
+  },
+  "startingButtonLabel": "正在启动 ...",
+  "@startingButtonLabel": {
+    "description": "此文本放置在按钮上，当某个操作正在启动时",
+    "x-source-message": "Starting ..."
+  },
+  "downloadingAndExtractingButtonLabel": "下载并解压缩 ...",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "此文本放置在按钮上，当下载和解压缩操作正在进行时",
+    "x-source-message": "Downloading and Extracting ..."
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "下载并解压缩 DXVK ...",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "此文本放置在按钮上，当 DXVK 的下载和解压缩操作正在进行时",
+    "x-source-message": "Downloading and Extracting DXVK ..."
+  },
+  "creatingWinePrefixButtonLabel": "正在创建 Wine 前缀 ...",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "此文本放置在按钮上，当 Wine 前缀正在创建时",
+    "x-source-message": "Creating Wine Prefix ..."
+  },
+  "updateWinePrefixButtonLabel": "更新 Wine 前缀",
+  "@updateWinePrefixButtonLabel": {
+    "description": "此文本放置在按钮上",
+    "x-source-message": "Update Wine Prefix"
+  },
+  "updatingWinePrefixButtonLabel": "正在更新 Wine 前缀 …",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "此文本显示在按钮上，当 Wine 前缀正在更新时",
+    "x-source-message": "Updating Wine Prefix ..."
+  },
+  "cloneButtonLabel": "克隆",
+  "@cloneButtonLabel": {
+    "description": "此文本显示在按钮或菜单项上",
+    "x-source-message": "Clone"
+  },
+  "cloningButtonLabel": "正在克隆 …",
+  "@cloningButtonLabel": {
+    "description": "此文本显示在按钮上，当 Wine 前缀克隆操作正在进行时",
+    "x-source-message": "Cloning ..."
+  },
+  "pinExecutableButtonLabel": "固定可执行文件",
+  "@pinExecutableButtonLabel": {
+    "description": "此文本显示在按钮上",
+    "x-source-message": "Pin Executable"
+  },
+  "proceedAnywayButtonLabel": "仍然继续",
+  "@proceedAnywayButtonLabel": {
+    "description": "此文本显示在按钮上",
+    "x-source-message": "Proceed Anyway"
+  },
+  "runExecutableButtonLabel": "运行可执行文件",
+  "@runExecutableButtonLabel": {
+    "description": "此文本显示在按钮上",
+    "x-source-message": "Run Executable"
+  },
+  "runInstallerButtonLabel": "运行安装程序",
+  "@runInstallerButtonLabel": {
+    "description": "此文本显示在按钮上",
+    "x-source-message": "Run Installer"
+  },
+  "settingsMenuItem": "设置",
+  "@settingsMenuItem": {
+    "description": "此文本显示在菜单项上",
+    "x-source-message": "Settings"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "以下应用即将被取消固定：",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "此文本出现在对话框中",
+    "x-source-message": "The following app is about to be unpinned:"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "以下前缀即将被删除：",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "此文本出现在对话框中。这里的 \"prefix\" 指的是 Wine 前缀",
+    "x-source-message": "The following prefix is about to be deleted:"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "以下路径在 Wine 中不可访问：",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "此文本出现在对话框中",
+    "x-source-message": "The following path is inaccessible from Wine:"
+  },
+  "pathInaccessibleFromWineExplanation": "路径可能无法从 Wine 访问，因为整个 Wine Bar 或仅 Wine 正在虚拟机中运行（适用于 Apple silicon Mac）或在 Snap / Flatpak 沙箱中。",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "This text appears on a dialog",
+    "x-source-message": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox."
+  },
+  "solutionHeading": "解决方案",
+  "@solutionHeading": {
+    "description": "This text appears on a dialog as a heading, followed by more text below",
+    "x-source-message": "Solution"
+  },
+  "pathInaccessibleFromWineSolution": "将相关文件夹复制到您的主目录下的某个位置。",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "This text appears on a dialog after the 'Solution' heading",
+    "x-source-message": "Copy the folder in question somewhere under your home directory."
+  },
+  "thisActionCantBeUndone": "此操作无法撤销！",
+  "@thisActionCantBeUndone": {
+    "description": "This text appears on a dialog",
+    "x-source-message": "This action can't be undone!"
+  },
+  "selectWineBuildProviderStepName": "选择 Wine 构建提供商",
+  "@selectWineBuildProviderStepName": {
+    "description": "This text appears in a list of wizard pages and also at the top of the corresponding page",
+    "x-source-message": "Select wine build provider"
+  },
+  "selectWineReleaseStepName": "选择 Wine 发布版本",
+  "@selectWineReleaseStepName": {
+    "description": "This text appears in a list of wizard pages and also at the top of the corresponding page",
+    "x-source-message": "Select wine release"
+  },
+  "selectWineBuildStepName": "选择 Wine 构建",
+  "@selectWineBuildStepName": {
+    "description": "This text appears in a list of wizard pages and also at the top of the corresponding page",
+    "x-source-message": "Select wine build"
+  },
+  "setOptionsStepName": "设置选项",
+  "@setOptionsStepName": {
+    "description": "This text appears in a list of wizard pages and also at the top of the corresponding page",
+    "x-source-message": "Set options"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "已选择 WOW64 构建。已知在仿真环境下会出现问题。请预期安装可能失败。",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "当将仅支持 WOW64 的 Wine 构建用于仿真时显示的警告信息",
+    "x-source-message": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation."
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "此构建需要系统中存在 32 位库。如果你已经安装了它们，可以忽略此警告。否则，请从发行版的仓库中安装 Wine（这将带来所需的 32 位库），或者在上方列表中选择可用的 WOW64 构建。",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "当在可能缺少 32 位库的环境中选择非 WOW64 能力构建时显示的警告信息",
+    "x-source-message": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available."
+  },
+  "wow64PreferenceUnderEmulationWarning": "在仿真环境下，WOW64 模式已知会出现问题。请预期安装可能失败。",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "当在需要仿真的环境中偏好使用 WOW64 模式（可选支持的构建）时显示的警告信息",
+    "x-source-message": "The WOW64 mode under emulation is known to have issues. Expect a broken installation."
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "不使用 WOW64 模式将需要系统中存在 32 位库。如果你已经安装了它们，可以忽略此警告。否则，请从发行版的仓库中安装 Wine，这将带来所需的 32 位库。",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "当在可能缺少 32 位库的环境中不偏好使用 WOW64 模式（可选支持的构建）时显示的警告信息",
+    "x-source-message": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries."
+  },
+  "windowsExecutablesFilterName": "Windows 可执行文件",
+  "@windowsExecutablesFilterName": {
+    "description": "此文本出现在文件选择对话框的“文件类型”下拉菜单中",
+    "x-source-message": "Windows executables"
+  },
+  "dxvkOptionExplanation": "来自 Proton 的更新且更快的实现",
+  "@dxvkOptionExplanation": {
+    "description": "当选择 Direct3D 8-11 的 DXVK 实现时显示的描述文本",
+    "x-source-message": "A newer and faster implementation from Proton"
+  },
+  "wineD3DOptionExplanation": "来自 Wine 的成熟实现。若 DXVK 出现问题时使用。",
+  "@wineD3DOptionExplanation": {
+    "description": "当选择 Direct3D 8-11 的 WineD3D 实现时显示的描述文本",
+    "x-source-message": "A mature implementation from Wine. To be used in case of issues with DXVK."
+  },
+  "screensaverDisableReason": "正在运行 Wine 应用（可能是全屏）",
+  "@screensaverDisableReason": {
+    "description": "禁用屏保的原因，符合相应 DBus API 的要求",
+    "x-source-message": "A Wine app (possibly fullscreen) is running"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "下载的 winetricks 脚本哈希值与预期不符。",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "当下载的 winetricks 脚本哈希值与预期不符时显示的错误信息",
+    "x-source-message": "The hash of the downloaded winetricks script doesn't match the expected one."
+  },
+  "downloadedFile": "已下载文件：{downloadedFile}",
+  "@downloadedFile": {
+    "description": "更大错误信息中的一行",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Downloaded file: {downloadedFile}"
+  },
+  "expectedSha256Hash": "预期 SHA256 哈希值：{hash}",
+  "@expectedSha256Hash": {
+    "description": "更大错误信息中的一行",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Expected SHA256 hash: {hash}"
+  },
+  "actualSha256Hash": "实际 SHA256 哈希值：{hash}",
+  "@actualSha256Hash": {
+    "description": "更大错误信息中的一行",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Actual SHA256 hash: {hash}"
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "请先结束所有前缀中的应用",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "尝试执行需要所有前缀中无应用运行时显示的错误信息",
+    "x-source-message": "Finish the apps running in all prefixes first"
+  },
+  "finishTheRunningAppsFirst": "请先结束正在运行的应用",
+  "@finishTheRunningAppsFirst": {
+    "description": "尝试执行需要当前前缀中无应用运行时显示的错误信息",
+    "x-source-message": "Finish the running apps first"
+  },
+  "missingHardwareVirtualizationCapabilities": "此系统缺少运行 Wine Bar 所需的硬件虚拟化功能（/dev/kvm 缺失）。",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "在需要硬件虚拟化但不可用的系统上显示的错误信息",
+    "x-source-message": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar."
+  },
+  "snapKvmNeedsConnection": "Wine Bar 在 ARM64 上需要对 /dev/kvm 的读写访问。普通应用通常拥有此权限，但 Snap 并不具备。要授予该权限，请在命令行中执行以下命令：\n\n{kvmConnectCommand}\n\n然后，重新启动 Wine Bar。",
+  "@snapKvmNeedsConnection": {
+    "description": "在 Snap 环境下运行且没有 /dev/kvm 写权限时显示的错误信息",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar."
+  },
+  "muvmIsNeededButMissing": "此系统需要 muvm / FEX 才能运行 Windows 应用。Wine Bar 的 Snap 版本已内置 muvm。否则，请使用 \"sudo dnf install muvm fex-emu\" 或类似命令安装。",
+  "@muvmIsNeededButMissing": {
+    "description": "在需要 muvm 的系统上但不可用时显示的错误信息",
+    "x-source-message": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar"
+  },
+  "prefixNameCantBeEmpty": "前缀名称不能为空",
+  "@prefixNameCantBeEmpty": {
+    "description": "尝试创建空名称的 Wine 前缀时显示的错误信息",
+    "x-source-message": "Prefix name can't be empty"
+  },
+  "illegalSymbolsPresent": "存在非法符号",
+  "@illegalSymbolsPresent": {
+    "description": "输入字段中出现不允许符号时显示的错误信息",
+    "x-source-message": "Illegal symbols present"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "此 Wine 前缀未捆绑 winetricks 脚本，也没有提供外部脚本。",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "尝试运行找不到 winetricks 脚本时显示的错误信息",
+    "x-source-message": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided."
+  },
+  "failedToLocateWineOrWineserverExecutables": "未能定位 wine / wineserver 可执行文件",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "运行 Wine 应用需要我们定位相应的 wine 和 wineserver 可执行文件。当无法完成此操作时会显示此错误信息。",
+    "x-source-message": "Failed to locate the wine / wineserver executables"
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "未能定位运行 winetricks 的 wine / wineserver 可执行文件",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "winetricks 可能需要与常规应用不同的版本（例如带或不带 wow64）。当无法定位它们时会显示此错误信息。",
+    "x-source-message": "Failed to locate the wine / wineserver executables for running winetricks"
+  },
+  "specificCommandHasFailed": "\"{command}\" 命令失败",
+  "@specificCommandHasFailed": {
+    "description": "当外部工具执行失败时显示的错误信息",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "The \"{command}\" command failed"
+  }
+}

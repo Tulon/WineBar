@@ -16,12 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/material.dart';
+
 import 'wine_release.dart';
 
 abstract interface class WineBuildSource {
   String get label;
 
-  String? get details;
+  String? getDescription(BuildContext context);
 
   bool get recommended;
 

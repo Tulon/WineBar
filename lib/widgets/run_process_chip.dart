@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
+import 'package:winebar/utils/l10n.dart';
 
 class RunProcessChip extends StatelessWidget {
   static const double auxButtonIconSize = 18.0;
@@ -83,7 +84,7 @@ class RunProcessChip extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onKillProcessPressed,
-            tooltip: 'Kill process',
+            tooltip: L10n.current.killProcessTooltip,
             icon: Icon(Icons.cancel_outlined),
             iconSize: auxButtonIconSize,
             padding: EdgeInsets.zero,
@@ -91,7 +92,7 @@ class RunProcessChip extends StatelessWidget {
           ),
           IconButton(
             onPressed: onViewLogsPressed,
-            tooltip: 'View Logs',
+            tooltip: L10n.current.viewLogsTooltip,
             icon: Icon(Icons.article),
             iconSize: auxButtonIconSize,
             padding: EdgeInsets.zero,

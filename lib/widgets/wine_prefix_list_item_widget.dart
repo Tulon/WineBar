@@ -23,6 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
 import 'package:winebar/blocs/prefix_cloning/prefix_cloning_bloc.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 import 'package:winebar/widgets/prefix_cloning_dialog.dart';
 
@@ -73,7 +74,7 @@ class _WinePrefixListItemState extends State<WinePrefixListItemWidget> {
                   // We could have displayed the number of apps
                   // running, but that number happens to be unreliable
                   // for reasons described in README.md.
-                  message: 'Apps are running in this prefix',
+                  message: L10n.current.appsAreRunningInThisPrefixTooltip,
                   child: Icon(
                     MdiIcons.hexagonMultiple,
                     color: theme.colorScheme.primary,
@@ -101,7 +102,7 @@ class _WinePrefixListItemState extends State<WinePrefixListItemWidget> {
           requestFocusOnHover: false,
 
           leadingIcon: const Icon(Icons.copy),
-          child: const Text('Clone'),
+          child: Text(L10n.current.cloneButtonLabel),
           onPressed: () => _maybeShowPrefixCloningConfirmationDialog(
             context: context,
             prefix: prefix,
@@ -117,7 +118,7 @@ class _WinePrefixListItemState extends State<WinePrefixListItemWidget> {
           requestFocusOnHover: false,
 
           leadingIcon: const Icon(Icons.delete_outlined),
-          child: const Text('Delete'),
+          child: Text(L10n.current.deleteButtonLabel),
           onPressed: () => _maybeShowPrefixDeletionConfirmationDialog(
             context: context,
             prefix: prefix,
@@ -189,23 +190,24 @@ class _WinePrefixListItemState extends State<WinePrefixListItemWidget> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Prefix deletion confirmation'),
+          title: Text(L10n.current.prefixDeletionConfirmationDialogTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text('The following prefix is about to be deleted:'),
+              Text(L10n.current.theFollowingPrefixIsAboutToBeDeleted),
               Text(
                 prefix.descriptor.name,
                 style: TextStyle(color: colorScheme.primary),
               ),
-              const Text("This action can't be undone!"),
+              const Text('\n'),
+              Text(L10n.current.thisActionCantBeUndone),
             ],
           ),
           actions: <Widget>[
             TextButton.icon(
               icon: const Icon(Icons.delete_outlined),
-              label: const Text('Delete'),
+              label: Text(L10n.current.deleteButtonLabel),
               onPressed: () {
                 Navigator.of(context).pop();
                 _startDeletingPrefixUnlessAppsAreRunningThere(
@@ -215,7 +217,7 @@ class _WinePrefixListItemState extends State<WinePrefixListItemWidget> {
               },
             ),
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
               onPressed: () {
                 Navigator.of(context).pop();
               },

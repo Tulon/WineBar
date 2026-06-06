@@ -21,6 +21,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:winebar/models/process_log.dart';
+import 'package:winebar/utils/l10n.dart';
+import 'package:winebar/utils/match_text_spans.dart';
 import 'package:winebar/utils/tappable_link.dart';
 import 'package:winebar/widgets/error_message_widget.dart';
 import 'package:winebar/widgets/explicit_d3d_8_to_11_implementation_widget.dart';
@@ -84,16 +86,21 @@ class PrefixSettingsDialog extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
                                 style: theme.textTheme.headlineSmall,
-                                children: [
-                                  TextSpan(text: 'Wine Prefix '),
-                                  TextSpan(
-                                    text: prefix.descriptor.name,
-                                    style: TextStyle(
-                                      color: theme.colorScheme.primary,
-                                    ),
+                                children: matchTextSpans(
+                                  L10n.current.prefixSettingsDialogTitlePattern(
+                                    '{{label}}',
                                   ),
-                                  TextSpan(text: ' Settings'),
-                                ],
+                                  matchedBuilders: {
+                                    '{{label}}': (_) => TextSpan(
+                                      text: prefix.descriptor.name,
+                                      style: TextStyle(
+                                        color: theme.colorScheme.primary,
+                                      ),
+                                    ),
+                                  },
+                                  unmatchedBuilder: (text) =>
+                                      TextSpan(text: text),
+                                ),
                               ),
                             ),
                           ),
@@ -134,7 +141,7 @@ class PrefixSettingsDialog extends StatelessWidget {
                             state.prefixUpdateFailedProcessLogs.isEmpty
                             ? null
                             : TappableLink(
-                                linkText: 'View Logs.',
+                                linkText: L10n.current.viewLogsLink,
                                 onTapped: () => _showWineProcessLogs(
                                   context: context,
                                   logs: state.prefixUpdateFailedProcessLogs,
@@ -185,13 +192,13 @@ class PrefixSettingsDialog extends StatelessWidget {
         case PrefixUpdateStatus.validationFailed:
         case PrefixUpdateStatus.failed:
         case PrefixUpdateStatus.succeeded:
-          return 'Update Wine Prefix';
+          return L10n.current.updateWinePrefixButtonLabel;
         case PrefixUpdateStatus.starting:
-          return 'Starting ...';
+          return L10n.current.startingButtonLabel;
         case PrefixUpdateStatus.downloadingAndExtractingDxvk:
-          return 'Downloading and Extracting DXVK ...';
+          return L10n.current.downloadingAndExtractingDxvkButtonLabel;
         case PrefixUpdateStatus.updatingPrefix:
-          return 'Updating Wine Prefix ...';
+          return L10n.current.updatingWinePrefixButtonLabel;
       }
     }
 

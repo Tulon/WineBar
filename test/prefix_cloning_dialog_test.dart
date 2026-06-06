@@ -30,6 +30,7 @@ import 'package:winebar/blocs/prefix_cloning/prefix_cloning_state.dart';
 import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/widgets/prefix_cloning_dialog.dart';
 
 @GenerateNiceMocks([
@@ -93,7 +94,7 @@ void main() {
     final targetPrefixNameFieldFinder = find.byWidgetPredicate((widget) {
       if (widget is TextField) {
         final decoration = widget.decoration;
-        return decoration?.hintText == 'Target prefix name';
+        return decoration?.hintText == L10n.current.nameForTheNewPrefixHintText;
       }
       return false;
     });
@@ -104,7 +105,7 @@ void main() {
 
     expect(prefixCloningState.readyToClone, isTrue);
 
-    final clonePrefixButtonFinder = find.text('Clone');
+    final clonePrefixButtonFinder = find.text(L10n.current.cloneButtonLabel);
     expect(clonePrefixButtonFinder, findsOneWidget);
 
     await tester.tap(clonePrefixButtonFinder);

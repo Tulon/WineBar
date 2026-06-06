@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/widgets/bouncing_widget.dart';
 
 class PinExecutableButton extends StatelessWidget {
@@ -52,7 +53,7 @@ class PinExecutableButton extends StatelessWidget {
           label: Row(
             spacing: 4.0,
             mainAxisSize: MainAxisSize.min,
-            children: [const Text('Pin Executable'), ?auxButton],
+            children: [Text(L10n.current.pinExecutableButtonLabel), ?auxButton],
           ),
           icon: specialExecutableState.isRunning
               ? BouncingWidget(child: icon)
@@ -83,14 +84,14 @@ class PinExecutableButton extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onKillProcessPressed,
-            tooltip: 'Kill process',
+            tooltip: L10n.current.killProcessTooltip,
             icon: Icon(Icons.cancel_outlined),
             padding: EdgeInsets.zero,
             style: _buttonStyleWithHoverColor(Colors.red),
           ),
           IconButton(
             onPressed: onViewLogsPressed,
-            tooltip: 'View Logs',
+            tooltip: L10n.current.viewLogsTooltip,
             icon: Icon(Icons.article),
             padding: EdgeInsets.zero,
             style: _buttonStyleWithHoverColor(

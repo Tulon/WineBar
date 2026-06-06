@@ -20,6 +20,7 @@ import 'package:boxy/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:winebar/models/d3d_8_to_11_implementation.dart';
 import 'package:winebar/models/explicit_d3d_8_to_11_implementation_state.dart';
+import 'package:winebar/utils/l10n.dart';
 
 class ExplicitD3d8To11ImplementationWidget extends StatelessWidget {
   final bool enabled;
@@ -41,7 +42,7 @@ class ExplicitD3d8To11ImplementationWidget extends StatelessWidget {
     return InputDecorator(
       decoration: InputDecoration(
         enabled: enabled,
-        label: const Text('Direct3D 8-11 implementation'),
+        label: Text(L10n.current.d3D8To11Implementation),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
       child: Column(
@@ -74,7 +75,7 @@ class ExplicitD3d8To11ImplementationWidget extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  'Use a particular Direct3D 8-11 implementation',
+                  L10n.current.useParticularD3D8To11Impl,
                   style: enabled ? null : TextStyle(color: theme.disabledColor),
                 ),
               ),
@@ -107,7 +108,7 @@ class ExplicitD3d8To11ImplementationWidget extends StatelessWidget {
           SelectableText(
             state.useParticularD3d8To11Implementation
                 ? state.selectedD3d8To11Implementation.explanationText
-                : 'A default implementation for this particular Wine build will be used',
+                : L10n.current.defaultD3D8To11ImplWillBeUsed,
             style: enabled ? null : TextStyle(color: theme.disabledColor),
           ),
         ],

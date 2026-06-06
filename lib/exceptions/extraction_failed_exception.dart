@@ -16,7 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:winebar/utils/l10n.dart';
+
 class ExtractionFailedException implements Exception {
   @override
-  String toString() => 'Extraction failed';
+  String toString() => L10n.current.extractionFailedMessage;
 }

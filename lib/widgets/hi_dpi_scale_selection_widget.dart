@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:winebar/utils/l10n.dart';
 
 class HiDpiScaleSelectionWidget extends StatelessWidget {
   final bool enabled;
@@ -53,29 +54,35 @@ class HiDpiScaleSelectionWidget extends StatelessWidget {
       } else if (selectedScale == 1.0) {
         if (roundedDevicePixelRatio > 1.0) {
           return Text(
-            "This will make the text too small but won't break older fullscreen apps",
+            L10n
+                .current
+                .thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp,
             style: textStyle,
           );
         } else {
           return Text(
-            "This is the perfect scale for your display",
+            L10n.current.thisIsThePrefectScaleForYourDisplay,
             style: textStyle,
           );
         }
       } else {
         if (selectedScale < roundedDevicePixelRatio) {
           return Text(
-            "This will help with text being too small but will break older fullscreen apps",
+            L10n
+                .current
+                .thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps,
             style: textStyle,
           );
         } else if (selectedScale == roundedDevicePixelRatio) {
           return Text(
-            "This is the perfect scale for your display, though it will break older fullscreen apps",
+            L10n
+                .current
+                .thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps,
             style: textStyle,
           );
         } else {
           return Text(
-            "This may produce text that's too large",
+            L10n.current.thisWillProduceTextThatsTooLarge,
             style: textStyle,
           );
         }
@@ -103,8 +110,8 @@ class HiDpiScaleSelectionWidget extends StatelessWidget {
     return InputDecorator(
       decoration: InputDecoration(
         enabled: enabled,
-        label: const Text('HiDPI scale'),
-        errorText: requiredError ? 'Please select' : null,
+        label: Text(L10n.current.hiDpiScaleLabel),
+        errorText: requiredError ? L10n.current.pleaseSelect : null,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
       child: Column(

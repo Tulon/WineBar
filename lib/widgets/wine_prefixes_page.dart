@@ -27,11 +27,14 @@ import 'package:stream_listener_widget/stream_listener_widget.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
 import 'package:winebar/repositories/wine_prefix_repo.dart';
 import 'package:winebar/utils/app_info.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
+import 'package:winebar/utils/match_text_spans.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 import 'package:winebar/utils/old_task_abandoning_worker.dart';
 import 'package:winebar/utils/open_url.dart';
 import 'package:winebar/widgets/gesture_recognizer_holder.dart';
+import 'package:winebar/widgets/locale_selection_button.dart';
 import 'package:winebar/widgets/wine_prefix_list_item_widget.dart';
 
 import '../models/wine_prefix.dart';
@@ -39,7 +42,9 @@ import '../utils/startup_data.dart';
 import 'prefix_creation_dialog.dart';
 
 class WinePrefixesPage extends StatelessWidget {
-  const WinePrefixesPage({super.key});
+  final void Function(Locale) onLocaleChanged;
+
+  const WinePrefixesPage({super.key, required this.onLocaleChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +52,17 @@ class WinePrefixesPage extends StatelessWidget {
       appBar: AppBar(
         leading: _buildAppMenuButton(context),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Wine Prefixes'),
-        actions: [_buildDonationButton(context)],
+        title: Text(L10n.current.winePrefixesPageTitle),
+        actions: [
+          _buildDonationButton(context),
+          SizedBox(width: 12.0),
+          LocaleSelectionButton(onLocaleSelected: onLocaleChanged),
+        ],
         actionsPadding: EdgeInsetsDirectional.only(end: 8.0),
       ),
       body: _WinePrefixesList(),
       floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Add Wine Prefix'),
+        label: Text(L10n.current.addWinePrefixButtonLabel),
         icon: const Icon(Icons.add),
         onPressed: () => _maybeShowPrefixCreationDialog(context),
       ),
@@ -68,7 +77,7 @@ class WinePrefixesPage extends StatelessWidget {
           requestFocusOnHover: false,
 
           leadingIcon: const Icon(Icons.info),
-          child: const Text('About'),
+          child: Text(L10n.current.aboutButtonLabel),
           onPressed: () => _showAboutDialog(context),
         ),
       ],
@@ -119,7 +128,7 @@ class WinePrefixesPage extends StatelessWidget {
                   controller.open();
                 }
               },
-              label: const Text('Donate'),
+              label: Text(L10n.current.donateButtonLabel),
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.deepPurpleAccent,
@@ -170,18 +179,32 @@ class WinePrefixesPage extends StatelessWidget {
             textAlign: TextAlign.center,
             TextSpan(
               children: [
-                TextSpan(text: 'License: '),
                 TextSpan(
-                  text: 'GPLv3',
-                  recognizer: licenseTapRecognizer,
-                  style: linkStyle,
+                  children: matchTextSpans(
+                    L10n.current.licenseInfoPattern('{{label}}'),
+                    matchedBuilders: {
+                      '{{label}}': (_) => TextSpan(
+                        text: 'GPLv3',
+                        recognizer: licenseTapRecognizer,
+                        style: linkStyle,
+                      ),
+                    },
+                    unmatchedBuilder: (text) => TextSpan(text: text),
+                  ),
                 ),
                 TextSpan(text: '\n'),
-                TextSpan(text: 'Author: '),
                 TextSpan(
-                  text: 'Joseph Artsimovich',
-                  recognizer: authorNameTapRecognizer,
-                  style: linkStyle,
+                  children: matchTextSpans(
+                    L10n.current.authorInfoPattern('{{label}}'),
+                    matchedBuilders: {
+                      '{{label}}': (_) => TextSpan(
+                        text: 'Joseph Artsimovich',
+                        recognizer: authorNameTapRecognizer,
+                        style: linkStyle,
+                      ),
+                    },
+                    unmatchedBuilder: (text) => TextSpan(text: text),
+                  ),
                 ),
               ],
             ),

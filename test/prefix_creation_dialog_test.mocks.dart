@@ -3,16 +3,17 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i13;
+import 'dart:async' as _i14;
 
+import 'package:flutter/material.dart' as _i13;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i12;
-import 'package:winebar/models/archive_type.dart' as _i16;
+import 'package:winebar/models/archive_type.dart' as _i17;
 import 'package:winebar/models/settings_json_file.dart' as _i2;
 import 'package:winebar/models/suppressable_warning.dart' as _i8;
-import 'package:winebar/models/wine_build.dart' as _i15;
+import 'package:winebar/models/wine_build.dart' as _i16;
 import 'package:winebar/models/wine_build_source.dart' as _i11;
-import 'package:winebar/models/wine_release.dart' as _i14;
+import 'package:winebar/models/wine_release.dart' as _i15;
 import 'package:winebar/repositories/wine_build_source_repo.dart' as _i10;
 import 'package:winebar/repositories/wine_locale_repo.dart' as _i5;
 import 'package:winebar/repositories/wine_prefix_repo.dart' as _i4;
@@ -266,25 +267,33 @@ class MockWineBuildSource extends _i1.Mock implements _i11.WineBuildSource {
           as bool);
 
   @override
-  _i13.Future<List<_i14.WineRelease>> getAvailableReleases({
+  String? getDescription(_i13.BuildContext? context) =>
+      (super.noSuchMethod(
+            Invocation.method(#getDescription, [context]),
+            returnValueForMissingStub: null,
+          )
+          as String?);
+
+  @override
+  _i14.Future<List<_i15.WineRelease>> getAvailableReleases({
     bool? refresh = false,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#getAvailableReleases, [], {#refresh: refresh}),
-            returnValue: _i13.Future<List<_i14.WineRelease>>.value(
-              <_i14.WineRelease>[],
+            returnValue: _i14.Future<List<_i15.WineRelease>>.value(
+              <_i15.WineRelease>[],
             ),
             returnValueForMissingStub:
-                _i13.Future<List<_i14.WineRelease>>.value(<_i14.WineRelease>[]),
+                _i14.Future<List<_i15.WineRelease>>.value(<_i15.WineRelease>[]),
           )
-          as _i13.Future<List<_i14.WineRelease>>);
+          as _i14.Future<List<_i15.WineRelease>>);
 }
 
 /// A class which mocks [WineRelease].
 ///
 /// See the documentation for Mockito's code generation for more information.
 // ignore: must_be_immutable
-class MockWineRelease extends _i1.Mock implements _i14.WineRelease {
+class MockWineRelease extends _i1.Mock implements _i15.WineRelease {
   @override
   String get releaseName =>
       (super.noSuchMethod(
@@ -301,13 +310,13 @@ class MockWineRelease extends _i1.Mock implements _i14.WineRelease {
           as String);
 
   @override
-  List<_i15.WineBuild> get builds =>
+  List<_i16.WineBuild> get builds =>
       (super.noSuchMethod(
             Invocation.getter(#builds),
-            returnValue: <_i15.WineBuild>[],
-            returnValueForMissingStub: <_i15.WineBuild>[],
+            returnValue: <_i16.WineBuild>[],
+            returnValueForMissingStub: <_i16.WineBuild>[],
           )
-          as List<_i15.WineBuild>);
+          as List<_i16.WineBuild>);
 
   @override
   List<Object> get props =>
@@ -323,7 +332,7 @@ class MockWineRelease extends _i1.Mock implements _i14.WineRelease {
 ///
 /// See the documentation for Mockito's code generation for more information.
 // ignore: must_be_immutable
-class MockWineBuild extends _i1.Mock implements _i15.WineBuild {
+class MockWineBuild extends _i1.Mock implements _i16.WineBuild {
   @override
   String get archiveFileName =>
       (super.noSuchMethod(
@@ -340,13 +349,13 @@ class MockWineBuild extends _i1.Mock implements _i15.WineBuild {
           as String);
 
   @override
-  _i16.ArchiveType get archiveType =>
+  _i17.ArchiveType get archiveType =>
       (super.noSuchMethod(
             Invocation.getter(#archiveType),
-            returnValue: _i16.ArchiveType.tarGz,
-            returnValueForMissingStub: _i16.ArchiveType.tarGz,
+            returnValue: _i17.ArchiveType.tarGz,
+            returnValueForMissingStub: _i17.ArchiveType.tarGz,
           )
-          as _i16.ArchiveType);
+          as _i17.ArchiveType);
 
   @override
   String get downloadUrl =>

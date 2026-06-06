@@ -22,6 +22,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:winebar/utils/l10n.dart';
 
 import '../exceptions/extraction_failed_exception.dart';
 import '../models/archive_type.dart';
@@ -141,7 +142,7 @@ class _DownloadAndExtractionProcess implements DownloadAndExtractionProcess {
       logger.w('Decompression of $archiveUri failed:\n$errorMessage');
       throw error.errors.$2;
     } else {
-      throw Exception('Uknown error');
+      throw Exception(L10n.current.unknownErrorMessage);
     }
   }
 }

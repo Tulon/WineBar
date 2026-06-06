@@ -1,0 +1,618 @@
+{
+  "@@locale": "sv",
+  "kronekWineSourceDescription": "Tillhandahåller standard-, Staging-, TkG- och Proton-Wine-byggnader.",
+  "@kronekWineSourceDescription": {
+    "description": "Visas när Kronek Wine-byggkällan väljs",
+    "x-source-message": "Provides the standard, Staging, TkG and Proton Wine builds."
+  },
+  "geProtonWineSourceDescription": "Tillhandahåller Proton-byggnader med DXVK / VK3D inkluderade. Rekommenderas för spel och andra applikationer i helskärmsläge.",
+  "@geProtonWineSourceDescription": {
+    "description": "Visas när GE Proton Wine-byggkällan väljs",
+    "x-source-message": "Provides Proton builds with DXVK / VK3D included. Recommended for games and other fullscreen apps."
+  },
+  "appUnpinningConfirmationDialogTitle": "Bekräftelse av avpinnande av app",
+  "@appUnpinningConfirmationDialogTitle": {
+    "description": "Denna text används som titel i en dialog",
+    "x-source-message": "App unpinning confirmation"
+  },
+  "createWinePrefixDialogTitle": "Skapa ett Wine Prefix",
+  "@createWinePrefixDialogTitle": {
+    "description": "Denna text används som titel i en dialog",
+    "x-source-message": "Create a Wine Prefix"
+  },
+  "cloneWinePrefixDialogTitle": "Klona Wine Prefix",
+  "@cloneWinePrefixDialogTitle": {
+    "description": "Denna text används som titel på en dialog",
+    "x-source-message": "Clone Wine Prefix"
+  },
+  "prefixDeletionConfirmationDialogTitle": "Bekräftelse av borttagning av prefix",
+  "@prefixDeletionConfirmationDialogTitle": {
+    "description": "Denna text används som titel på en dialog",
+    "x-source-message": "Prefix deletion confirmation"
+  },
+  "pathInaccessibleFromWineDialogTitle": "Sökväg otillgänglig från Wine",
+  "@pathInaccessibleFromWineDialogTitle": {
+    "description": "Denna text används som titel på en dialog",
+    "x-source-message": "Path inaccessible from Wine"
+  },
+  "winePrefixesPageTitle": "Wine Prefixes",
+  "@winePrefixesPageTitle": {
+    "description": "Denna text används som rubrik på en sida",
+    "x-source-message": "Wine Prefixes"
+  },
+  "winePrefixPageTitlePattern": "Wine Prefix: {prefixName}",
+  "@winePrefixPageTitlePattern": {
+    "description": "Denna text används som rubrik på en sida",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix: {prefixName}"
+  },
+  "prefixSettingsDialogTitlePattern": "Wine Prefix {prefixName} Settings",
+  "@prefixSettingsDialogTitlePattern": {
+    "description": "Mönstret för titeln på Prefix Settings-dialogen",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Prefix {prefixName} Settings"
+  },
+  "pinnedExecutableSettingsDialogTitlePattern": "{pinnedExecutableLabel} Inställningar",
+  "@pinnedExecutableSettingsDialogTitlePattern": {
+    "description": "Mönstret för titeln på dialogrutan Inställningar för fastgjort körbar",
+    "placeholders": {
+      "pinnedExecutableLabel": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "{pinnedExecutableLabel} Settings"
+  },
+  "processLogsTitle": "Processloggar",
+  "@processLogsTitle": {
+    "description": "Denna text används som sidtitel",
+    "x-source-message": "Process Logs"
+  },
+  "licenseInfoPattern": "Licens: {license}",
+  "@licenseInfoPattern": {
+    "description": "En sträng som visas i Om-dialogen",
+    "placeholders": {
+      "license": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "License: {license}"
+  },
+  "authorInfoPattern": "Författare: {author}",
+  "@authorInfoPattern": {
+    "description": "En sträng som visas i Om-dialogen",
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Author: {author}"
+  },
+  "theCopyingProcessFailedWithExitCode": "Kopieringsprocessen misslyckades med status {exitCode}",
+  "@theCopyingProcessFailedWithExitCode": {
+    "description": "Felmeddelandet som visas när `cp -a` misslyckas",
+    "placeholders": {
+      "exitCode": {
+        "type": "int"
+      }
+    },
+    "x-source-message": "The copying process failed with status {exitCode}"
+  },
+  "dxvkPackageIsMissingTheX32OrX64Subdir": "DXVK-paketet saknar undermappen x32 eller x64",
+  "@dxvkPackageIsMissingTheX32OrX64Subdir": {
+    "description": "Felmeddelandet som visas när katalogstrukturen i det nedladdade DXVK-paketet inte matchar våra förväntningar",
+    "x-source-message": "The DXVK package is missing the x32 or x64 subdirectory"
+  },
+  "failedToPrepareWinetricksScript": "Misslyckades med att förbereda winetricks-skriptet:",
+  "@failedToPrepareWinetricksScript": {
+    "description": "Felmeddelandet som visas när nedladdning eller validering av winetricks-skriptet misslyckas",
+    "x-source-message": "Failed to prepare the winetricks script:"
+  },
+  "topLevelDataDirExistsButWasntRecognized": "Mappen {toplevelDataDir} finns men togs inte för att tillhöra denna app.\nVänligen byt namn på den eller flytta den till papperskorgen och starta sedan om appen.",
+  "@topLevelDataDirExistsButWasntRecognized": {
+    "description": "Felmeddelandet som visas när vi misstänker att appens datakatalog inte skapades av denna app",
+    "placeholders": {
+      "toplevelDataDir": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Folder {toplevelDataDir} exists but wasn't recognized as belonging to this app.\nPlease rename it or move it to Trash and then restart the app."
+  },
+  "extractionFailedMessage": "Extraktion misslyckades",
+  "@extractionFailedMessage": {
+    "description": "Felmeddelandet som visas när arkivextraktion misslyckas",
+    "x-source-message": "Extraction failed"
+  },
+  "prefixAlreadyExists": "Prefix \"{prefixName}\" finns redan",
+  "@prefixAlreadyExists": {
+    "description": "Felmeddelandet som visas när man försöker skapa en prefix som redan finns",
+    "placeholders": {
+      "prefixName": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Prefix \"{prefixName}\" already exists"
+  },
+  "unknownErrorMessage": "Okänt fel",
+  "@unknownErrorMessage": {
+    "description": "En platshållare för feltexten när inget specifikt fel är tillgängligt",
+    "x-source-message": "Unknown error"
+  },
+  "criticalErrorCaption": "Kritiskt fel",
+  "@criticalErrorCaption": {
+    "description": "En rubrik för felmeddelandefönstret",
+    "x-source-message": "Critical Error"
+  },
+  "noLogsWereCapturedFromThisProcess": "Inga loggar fångades från denna process",
+  "@noLogsWereCapturedFromThisProcess": {
+    "description": "Ett informationsmeddelande",
+    "x-source-message": "No logs were captured from this process"
+  },
+  "winePrefixUpdatedMessage": "Wine prefix uppdaterad",
+  "@winePrefixUpdatedMessage": {
+    "description": "Ett informationsmeddelande",
+    "x-source-message": "Wine prefix updated"
+  },
+  "pinnedAppUpdatedMessage": "Fäst program uppdaterat",
+  "@pinnedAppUpdatedMessage": {
+    "description": "Ett informationsmeddelande",
+    "x-source-message": "Pinned app updated"
+  },
+  "moreDetailsLink": "Mer detaljer.",
+  "@moreDetailsLink": {
+    "description": "Denna text blir en klickbar länk som infogas i slutet av ett felmeddelande",
+    "x-source-message": "More details."
+  },
+  "wow64ModeSection": "WOW64-läge",
+  "@wow64ModeSection": {
+    "description": "Denna text visas på en inmatningsdekoration",
+    "x-source-message": "WOW64 mode"
+  },
+  "useWow64ModeIfAvailable": "Använd WOW64-läget om det finns tillgängligt",
+  "@useWow64ModeIfAvailable": {
+    "description": "Denna text visas bredvid en kryssruta",
+    "x-source-message": "Use the WOW64 mode if available"
+  },
+  "d3D8To11Implementation": "Direct3D 8-11 implementation",
+  "@d3D8To11Implementation": {
+    "description": "Denna text visas på en inmatningsdekoration",
+    "x-source-message": "Direct3D 8-11 implementation"
+  },
+  "useParticularD3D8To11Impl": "Använd en specifik Direct3D 8-11 implementation",
+  "@useParticularD3D8To11Impl": {
+    "description": "Denna text visas bredvid en kryssruta",
+    "x-source-message": "Use a particular Direct3D 8-11 implementation"
+  },
+  "defaultD3D8To11ImplWillBeUsed": "En standardimplementation för denna specifika Wine-version kommer att användas",
+  "@defaultD3D8To11ImplWillBeUsed": {
+    "description": "Texten som visas när ingen specifik Direct3D 8-11‑implementation är vald",
+    "x-source-message": "A default implementation for this particular Wine build will be used"
+  },
+  "windowsLocale": "Lokal",
+  "@windowsLocale": {
+    "description": "Texten bredvid ett fält för val av lokal. Det är en Windows‑lokal för en given Wine‑prefix.",
+    "x-source-message": "Locale"
+  },
+  "useParticularWindowsLocale": "Använd en specifik lokal",
+  "@useParticularWindowsLocale": {
+    "description": "Denna text visas bredvid en kryssruta",
+    "x-source-message": "Use a particular locale"
+  },
+  "dontShowThisWarningAgain": "Visa inte denna varning igen",
+  "@dontShowThisWarningAgain": {
+    "description": "Denna text visas bredvid en kryssruta",
+    "x-source-message": "Don't show this warning again"
+  },
+  "nameForTheNewPrefixHintText": "Namn för den nya wine‑prefixen",
+  "@nameForTheNewPrefixHintText": {
+    "description": "Tipstexten som visas i ett inmatningsfält",
+    "x-source-message": "Name for the new wine prefix"
+  },
+  "thisMayHelpWithTextInNonUnicodeApps": "Detta kan hjälpa till med textvisning i icke‑Unicode‑program",
+  "@thisMayHelpWithTextInNonUnicodeApps": {
+    "description": "En informativ text som visas om en specifik Windows‑lokal är vald",
+    "x-source-message": "This may help with text display in non-Unicode apps"
+  },
+  "theSystemLocaleWillBeUsedForWindowsApps": "Systemets lokal kommer att användas av Windows‑program",
+  "@theSystemLocaleWillBeUsedForWindowsApps": {
+    "description": "En informativ text som visas om ingen specifik Windows‑lokal är vald",
+    "x-source-message": "The system locale will be used by Windows apps"
+  },
+  "thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": "Detta gör texten för liten men bryter inte äldre helskärmsprogram",
+  "@thisWillMakeTheTextTooSmallButWontBreakOlderFullscreenApp": {
+    "description": "Denna text visas när en mindre HiDPI‑skala än rekommenderad är vald",
+    "x-source-message": "This will make the text too small but won't break older fullscreen apps"
+  },
+  "thisIsThePrefectScaleForYourDisplay": "Detta är den perfekta skalningen för din skärm",
+  "@thisIsThePrefectScaleForYourDisplay": {
+    "description": "Denna text visas när den rekommenderade HiDPI-skalningen är vald och den rekommenderade skalningen är 1,0",
+    "x-source-message": "This is the perfect scale for your display"
+  },
+  "thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": "Detta hjälper med att texten blir för liten men bryter äldre helskärmsappar",
+  "@thisWillHelpWithTextBeingTooSmallButWillBreakOlderFullscreenApps": {
+    "description": "Denna text visas när en högre än 1 HiDPI-skalning är vald, men värdet är fortfarande lägre än den rekommenderade skalningen",
+    "x-source-message": "This will help with text being too small but will break older fullscreen apps"
+  },
+  "thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": "Detta är den perfekta skalningen för din skärm, men det bryter äldre helskärmsappar",
+  "@thisIsThePerfectScaleForYourDisplayButWillBreakOlderFullscreenApps": {
+    "description": "Denna text visas när den rekommenderade HiDPI-skalningen är vald men den rekommenderade skalningen är större än 1,0",
+    "x-source-message": "This is the perfect scale for your display, though it will break older fullscreen apps"
+  },
+  "thisWillProduceTextThatsTooLarge": "Detta kan producera text som är för stor",
+  "@thisWillProduceTextThatsTooLarge": {
+    "description": "Denna text visas när en större HiDPI-skalning än rekommenderad är vald",
+    "x-source-message": "This may produce text that's too large"
+  },
+  "thisPrefixIsInAStateWhereItCantBeDeleted": "Denna prefix är i ett tillstånd där den inte kan raderas",
+  "@thisPrefixIsInAStateWhereItCantBeDeleted": {
+    "description": "Till exempel kan prefixet redan vara i processen att raderas",
+    "x-source-message": "This prefix is in a state were it can't be deleted"
+  },
+  "hiDpiScaleLabel": "HiDPI-skalning",
+  "@hiDpiScaleLabel": {
+    "description": "Denna text visas på en inmatningsdekoration",
+    "x-source-message": "HiDPI scale"
+  },
+  "pleaseSelect": "Välj",
+  "@pleaseSelect": {
+    "description": "Denna text visas när ett val krävs men inget alternativ är valt",
+    "x-source-message": "Please select"
+  },
+  "appsAreRunningInThisPrefixTooltip": "Program körs i denna prefix",
+  "@appsAreRunningInThisPrefixTooltip": {
+    "description": "Denna text placeras i en verktygstips. 'prefix' här syftar på ett Wine prefix",
+    "x-source-message": "Apps are running in this prefix"
+  },
+  "refreshWineReleasesTooltip": "Uppdatera wine-utgåvor",
+  "@refreshWineReleasesTooltip": {
+    "description": "Denna text placeras i en verktygstips",
+    "x-source-message": "Refresh wine releases"
+  },
+  "prefixSettingsTooltip": "Prefixinställningar",
+  "@prefixSettingsTooltip": {
+    "description": "Denna text placeras i en verktygstips",
+    "x-source-message": "Prefix settings"
+  },
+  "killProcessTooltip": "Avsluta process",
+  "@killProcessTooltip": {
+    "description": "Denna text placeras i en verktygstips",
+    "x-source-message": "Kill process"
+  },
+  "scrollToBottomTooltip": "Scrolla till botten",
+  "@scrollToBottomTooltip": {
+    "description": "Denna text placeras i en verktygstips",
+    "x-source-message": "Scroll to bottom"
+  },
+  "scrollToTopTooltip": "Scrolla till toppen",
+  "@scrollToTopTooltip": {
+    "description": "Denna text placeras i en verktygstips",
+    "x-source-message": "Scroll to top"
+  },
+  "viewLogsTooltip": "Visa loggar",
+  "@viewLogsTooltip": {
+    "description": "Denna text placeras i en verktygstips",
+    "x-source-message": "View Logs"
+  },
+  "viewLogsLink": "Visa loggar.",
+  "@viewLogsLink": {
+    "description": "Denna text blir en klickbar länk som infogas i slutet av ett felmeddelande",
+    "x-source-message": "View Logs."
+  },
+  "useParticularGPU": "Använd en specifik GPU",
+  "@useParticularGPU": {
+    "description": "Denna text visas bredvid en kryssruta",
+    "x-source-message": "Use a particular GPU"
+  },
+  "gpuSelection": "GPU-val",
+  "@gpuSelection": {
+    "description": "Denna text visas i en inmatningsdekoration",
+    "x-source-message": "GPU selection"
+  },
+  "failedToGetTheListOfAvailableGPUs": "Misslyckades med att hämta listan över tillgängliga GPU:er",
+  "@failedToGetTheListOfAvailableGPUs": {
+    "description": "Denna text placeras i en verktygstips",
+    "x-source-message": "Failed to get the list of available GPUs"
+  },
+  "noteThatThisFeatureWontWorkInAllScenarios": "Observera att denna funktion inte fungerar i alla scenarier",
+  "@noteThatThisFeatureWontWorkInAllScenarios": {
+    "description": "Informativ text som visas när användaren aktiverar en funktion som inte fungerar i alla scenarier",
+    "x-source-message": "Note that this feature doesn't work in all scenarios"
+  },
+  "addWinePrefixButtonLabel": "Lägg till Wine Prefix",
+  "@addWinePrefixButtonLabel": {
+    "description": "Denna text placeras på en knapp",
+    "x-source-message": "Add Wine Prefix"
+  },
+  "aboutButtonLabel": "Om",
+  "@aboutButtonLabel": {
+    "description": "Denna text placeras på en knapp eller ett menyalternativ",
+    "x-source-message": "About"
+  },
+  "donateButtonLabel": "Donera",
+  "@donateButtonLabel": {
+    "description": "Denna text placeras på en knapp",
+    "x-source-message": "Donate"
+  },
+  "unpinButtonLabel": "Avfäst",
+  "@unpinButtonLabel": {
+    "description": "Denna text placeras på en knapp eller ett menyalternativ",
+    "x-source-message": "Unpin"
+  },
+  "deleteButtonLabel": "Ta bort",
+  "@deleteButtonLabel": {
+    "description": "Denna text placeras på en knapp",
+    "x-source-message": "Delete"
+  },
+  "createWinePrefixButtonLabel": "Skapa Wine Prefix",
+  "@createWinePrefixButtonLabel": {
+    "description": "Denna text placeras på en knapp",
+    "x-source-message": "Create Wine Prefix"
+  },
+  "startingButtonLabel": "Startar ...",
+  "@startingButtonLabel": {
+    "description": "Denna text placeras på en knapp när en viss operation startar",
+    "x-source-message": "Starting ..."
+  },
+  "downloadingAndExtractingButtonLabel": "Laddar ner och extraherar ...",
+  "@downloadingAndExtractingButtonLabel": {
+    "description": "Denna text placeras på en knapp när en nedladdnings- och extraktionsoperation är i gång",
+    "x-source-message": "Downloading and Extracting ..."
+  },
+  "downloadingAndExtractingDxvkButtonLabel": "Laddar ner och extraherar DXVK ...",
+  "@downloadingAndExtractingDxvkButtonLabel": {
+    "description": "Denna text placeras på en knapp när nedladdnings- och extraktionsoperationen för DXVK är i gång",
+    "x-source-message": "Downloading and Extracting DXVK ..."
+  },
+  "creatingWinePrefixButtonLabel": "Skapar Wine Prefix ...",
+  "@creatingWinePrefixButtonLabel": {
+    "description": "Denna text placeras på en knapp när ett Wine Prefix skapas",
+    "x-source-message": "Creating Wine Prefix ..."
+  },
+  "updateWinePrefixButtonLabel": "Uppdatera Wine Prefix",
+  "@updateWinePrefixButtonLabel": {
+    "description": "Denna text placeras på en knapp",
+    "x-source-message": "Update Wine Prefix"
+  },
+  "updatingWinePrefixButtonLabel": "Uppdaterar Wine Prefix …",
+  "@updatingWinePrefixButtonLabel": {
+    "description": "Denna text placeras på en knapp när ett Wine Prefix uppdateras",
+    "x-source-message": "Updating Wine Prefix ..."
+  },
+  "cloneButtonLabel": "Klon",
+  "@cloneButtonLabel": {
+    "description": "Denna text placeras på en knapp eller ett menyalternativ",
+    "x-source-message": "Clone"
+  },
+  "cloningButtonLabel": "Klonar …",
+  "@cloningButtonLabel": {
+    "description": "Denna text placeras på en knapp när en Wine Prefix-klonning är i gång",
+    "x-source-message": "Cloning ..."
+  },
+  "pinExecutableButtonLabel": "Fäst körbar",
+  "@pinExecutableButtonLabel": {
+    "description": "Denna text placeras på en knapp",
+    "x-source-message": "Pin Executable"
+  },
+  "proceedAnywayButtonLabel": "Fortsätt ändå",
+  "@proceedAnywayButtonLabel": {
+    "description": "Denna text placeras på en knapp",
+    "x-source-message": "Proceed Anyway"
+  },
+  "runExecutableButtonLabel": "Kör körbar",
+  "@runExecutableButtonLabel": {
+    "description": "Denna text placeras på en knapp",
+    "x-source-message": "Run Executable"
+  },
+  "runInstallerButtonLabel": "Kör installationsprogram",
+  "@runInstallerButtonLabel": {
+    "description": "Denna text placeras på en knapp",
+    "x-source-message": "Run Installer"
+  },
+  "settingsMenuItem": "Inställningar",
+  "@settingsMenuItem": {
+    "description": "Denna text placeras på ett menyalternativ",
+    "x-source-message": "Settings"
+  },
+  "theFollowingAppIsAboutToBeUnpinned": "Följande app är på väg att lossas:",
+  "@theFollowingAppIsAboutToBeUnpinned": {
+    "description": "Denna text visas i en dialog",
+    "x-source-message": "The following app is about to be unpinned:"
+  },
+  "theFollowingPrefixIsAboutToBeDeleted": "Följande prefix är på väg att raderas:",
+  "@theFollowingPrefixIsAboutToBeDeleted": {
+    "description": "Denna text visas i en dialog. 'prefix' här syftar på ett Wine Prefix",
+    "x-source-message": "The following prefix is about to be deleted:"
+  },
+  "theFollowingPathIsInaccessibleFromWine": "Följande sökväg är otillgänglig från Wine:",
+  "@theFollowingPathIsInaccessibleFromWine": {
+    "description": "Denna text visas i en dialog",
+    "x-source-message": "The following path is inaccessible from Wine:"
+  },
+  "pathInaccessibleFromWineExplanation": "En sökväg kan vara otillgänglig från Wine eftersom hela Wine Bar eller bara Wine körs i en virtuell maskin (på Apple silicon Macs) eller i ett Snap / Flatpak-sandlåda.",
+  "@pathInaccessibleFromWineExplanation": {
+    "description": "Denna text visas i en dialog",
+    "x-source-message": "A path may be inaccessible from Wine because the whole Wine Bar or just Wine is running in a virtual machine (on Apple silicon Macs) or in a Snap / Flatpak sandbox."
+  },
+  "solutionHeading": "Lösning",
+  "@solutionHeading": {
+    "description": "Denna text visas i en dialog som rubrik, följt av mer text nedan",
+    "x-source-message": "Solution"
+  },
+  "pathInaccessibleFromWineSolution": "Kopiera den aktuella mappen någonstans under din hemkatalog.",
+  "@pathInaccessibleFromWineSolution": {
+    "description": "Denna text visas i en dialog efter rubriken 'Lösning'",
+    "x-source-message": "Copy the folder in question somewhere under your home directory."
+  },
+  "thisActionCantBeUndone": "Denna åtgärd kan inte ångras!",
+  "@thisActionCantBeUndone": {
+    "description": "Denna text visas i en dialog",
+    "x-source-message": "This action can't be undone!"
+  },
+  "selectWineBuildProviderStepName": "Välj wine build provider",
+  "@selectWineBuildProviderStepName": {
+    "description": "Denna text visas i en lista med guidarsidor och även högst upp på motsvarande sida",
+    "x-source-message": "Select wine build provider"
+  },
+  "selectWineReleaseStepName": "Välj wine release",
+  "@selectWineReleaseStepName": {
+    "description": "Denna text visas i en lista med guidarsidor och även högst upp på motsvarande sida",
+    "x-source-message": "Select wine release"
+  },
+  "selectWineBuildStepName": "Välj wine build",
+  "@selectWineBuildStepName": {
+    "description": "Denna text visas i en lista med guidarsidor och även högst upp på motsvarande sida",
+    "x-source-message": "Select wine build"
+  },
+  "setOptionsStepName": "Ställ in alternativ",
+  "@setOptionsStepName": {
+    "description": "Denna text visas i en lista med guidarsidor och även högst upp på motsvarande sida",
+    "x-source-message": "Set options"
+  },
+  "wow64BuildSelectedUnderEmulationWarning": "En WOW64-byggnad har valts. Dessa är kända för att ha problem under emulering. Förvänta dig en trasig installation.",
+  "@wow64BuildSelectedUnderEmulationWarning": {
+    "description": "En varningsmeddelande som visas när en WOW64‑endast Wine-byggnad ska användas under emulering",
+    "x-source-message": "A WOW64 build was selected. Those are known to have issues under emulation. Expect a broken installation."
+  },
+  "nonWow64BuildRequires32BitLibsWarning": "Denna byggnad kräver att 32‑bitarsbibliotek finns på ditt system. Om du redan har dem kan du ignorera denna varning. Annars installera Wine från din distributions arkiv (vilket kommer att ta med de 32‑bitarsbiblioteken) eller välj alternativt en WOW64-byggnad från listan ovan om en sådan finns.",
+  "@nonWow64BuildRequires32BitLibsWarning": {
+    "description": "En varningsmeddelande som visas när en icke‑WOW64-kompatibel byggnad väljs i en miljö där 32‑bitarsbibliotek kanske inte finns",
+    "x-source-message": "This build requires 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository (which will bring in those 32-bit libraries) or alternatively, select a WOW64 build from the list above if one is available."
+  },
+  "wow64PreferenceUnderEmulationWarning": "WOW64‑läget under emulering är känt för att ha problem. Förvänta dig en trasig installation.",
+  "@wow64PreferenceUnderEmulationWarning": {
+    "description": "En varningsmeddelande som visas när WOW64‑läget föredras (på byggnader som stödjer det valfritt) i en miljö som kräver emulering",
+    "x-source-message": "The WOW64 mode under emulation is known to have issues. Expect a broken installation."
+  },
+  "nonWow64PreferenceRequires32BitLibsWarning": "Att inte använda WOW64‑läget kräver att 32‑bitarsbibliotek finns på ditt system. Om du redan har dem kan du ignorera denna varning. Annars installera Wine från din distributions arkiv, vilket kommer att ta med de 32‑bitarsbiblioteken.",
+  "@nonWow64PreferenceRequires32BitLibsWarning": {
+    "description": "En varningsmeddelande som visas när WOW64‑läget inte föredras (på byggnader som stödjer det valfritt) i en miljö där 32‑bitarsbibliotek kanske inte finns",
+    "x-source-message": "Not using the WOW64 mode will require 32-bit libraries to be present on your system. If you have them already, you can ignore this warning. Otherwise, install Wine from your distro's repository, which will bring in those 32-bit libraries."
+  },
+  "windowsExecutablesFilterName": "Windows‑exekverbara filer",
+  "@windowsExecutablesFilterName": {
+    "description": "Denna text visas i \"Filtyp\"‑rullgardinsmenyn på filvalsdialogen",
+    "x-source-message": "Windows executables"
+  },
+  "dxvkOptionExplanation": "En nyare och snabbare implementation från Proton",
+  "@dxvkOptionExplanation": {
+    "description": "En beskrivningstext som visas när DXVK-implementationen av Direct3D 8‑11 väljs",
+    "x-source-message": "A newer and faster implementation from Proton"
+  },
+  "wineD3DOptionExplanation": "En mogen implementation från Wine. Att använda vid problem med DXVK.",
+  "@wineD3DOptionExplanation": {
+    "description": "En beskrivningstext som visas när WineD3D-implementationen av Direct3D 8‑11 väljs",
+    "x-source-message": "A mature implementation from Wine. To be used in case of issues with DXVK."
+  },
+  "screensaverDisableReason": "En Wine-app (möjligen helskärm) körs",
+  "@screensaverDisableReason": {
+    "description": "Anledningen till att skärmsläckaren inaktiveras, enligt motsvarande DBus‑API",
+    "x-source-message": "A Wine app (possibly fullscreen) is running"
+  },
+  "downloadedWinetricksHashDoesntMatchExpectation": "Hashen för den nedladdade winetricks‑skriptet matchar inte den förväntade.",
+  "@downloadedWinetricksHashDoesntMatchExpectation": {
+    "description": "Felmeddelandet som visas när hashen för en nedladdad winetricks‑skript inte matchar den förväntade",
+    "x-source-message": "The hash of the downloaded winetricks script doesn't match the expected one."
+  },
+  "downloadedFile": "Nerladdad fil: {downloadedFile}",
+  "@downloadedFile": {
+    "description": "En rad i ett större felmeddelande",
+    "placeholders": {
+      "downloadedFile": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Downloaded file: {downloadedFile}"
+  },
+  "expectedSha256Hash": "Förväntad SHA256‑hash: {hash}",
+  "@expectedSha256Hash": {
+    "description": "En rad i ett större felmeddelande",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Expected SHA256 hash: {hash}"
+  },
+  "actualSha256Hash": "Verklig SHA256‑hash: {hash}",
+  "@actualSha256Hash": {
+    "description": "En rad i ett större felmeddelande",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Actual SHA256 hash: {hash}"
+  },
+  "finishTheAppsRunningInAllPrefixesFirst": "Avsluta apparna som körs i alla prefixes först",
+  "@finishTheAppsRunningInAllPrefixesFirst": {
+    "description": "Felmeddelandet som visas när man försöker göra något som kräver att inga appar körs i alla prefixes",
+    "x-source-message": "Finish the apps running in all prefixes first"
+  },
+  "finishTheRunningAppsFirst": "Avsluta de körande apparna först",
+  "@finishTheRunningAppsFirst": {
+    "description": "Felmeddelandet som visas när man försöker göra något som kräver att inga appar körs i den aktuella prefixen",
+    "x-source-message": "Finish the running apps first"
+  },
+  "missingHardwareVirtualizationCapabilities": "Detta system saknar hårdvaruvirtualiseringsfunktioner (/dev/kvm saknas) som krävs för att köra Wine Bar.",
+  "@missingHardwareVirtualizationCapabilities": {
+    "description": "Felmeddelandet som visas på system där vi behöver hårdvaruvirtualisering som inte är tillgänglig",
+    "x-source-message": "This system lacks the hardware virtualization capabilities (/dev/kvm is missing) that are required to run Wine Bar."
+  },
+  "snapKvmNeedsConnection": "Wine Bar på ARM64 behöver läs- och skrivåtkomst till /dev/kvm. Vanliga appar har normalt sådan åtkomst, men inte Snaps. För att ge sådan åtkomst kör följande kommando från kommandoraden:\n\n{kvmConnectCommand}\n\nDärefter starta om Wine Bar.",
+  "@snapKvmNeedsConnection": {
+    "description": "Felmeddelandet som visas när man kör under Snap och inte har skrivåtkomst till /dev/kvm",
+    "placeholders": {
+      "kvmConnectCommand": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "Wine Bar on ARM64 needs read-write access to /dev/kvm. Ordinary apps normally have such access, but not Snaps. To grant such access, run the following command from the command line:\n\n{kvmConnectCommand}\n\nThen, restart Wine Bar."
+  },
+  "muvmIsNeededButMissing": "Detta system behöver muvm / FEX för att kunna köra Windows-appar. Snap-versionen av Wine Bar har muvm inbyggt. Annars, installera det med \"sudo dnf install muvm fex-emu\" eller liknande",
+  "@muvmIsNeededButMissing": {
+    "description": "Felmeddelandet som visas när muvm inte är tillgänglig på system där vi behöver det",
+    "x-source-message": "This system needs muvm / FEX to be able to run Windows apps. The Snap version of Wine Bar has muvm built-in. Otherwise, please install it using \"sudo dnf install muvm fex-emu\" or similar"
+  },
+  "prefixNameCantBeEmpty": "Prefixnamn får inte vara tomt",
+  "@prefixNameCantBeEmpty": {
+    "description": "Felmeddelandet som visas när man försöker skapa ett Wine prefix med ett tomt namn",
+    "x-source-message": "Prefix name can't be empty"
+  },
+  "illegalSymbolsPresent": "Otillåtna symboler finns",
+  "@illegalSymbolsPresent": {
+    "description": "Felmeddelandet som visas när otillåtna symboler finns i ett inmatningsfält",
+    "x-source-message": "Illegal symbols present"
+  },
+  "noBundledAndNoExternalWinetricksScriptAvailable": "Detta Wine prefix innehåller ingen winetricks-skript och det har inte heller ett externt skript tillhandahållits.",
+  "@noBundledAndNoExternalWinetricksScriptAvailable": {
+    "description": "Felmeddelandet som visas när man försöker köra ett winetricks-skript som inte kunde hittas",
+    "x-source-message": "This Wine prefix doesn't bundle a winetricks script and neither was an external one provided."
+  },
+  "failedToLocateWineOrWineserverExecutables": "Misslyckades med att hitta wine / wineserver-exekverbara",
+  "@failedToLocateWineOrWineserverExecutables": {
+    "description": "Att köra Wine-appar kräver att vi hittar rätt wine- och wineserver-exekverbara. Detta felmeddelande visas när vi inte kan göra det.",
+    "x-source-message": "Failed to locate the wine / wineserver executables"
+  },
+  "failedToLocateWineOrWineserverExecutablesForRunningWinetricks": "Misslyckades med att hitta wine / wineserver-exekverbara för att köra winetricks",
+  "@failedToLocateWineOrWineserverExecutablesForRunningWinetricks": {
+    "description": "Winetricks kan behöva olika versioner (tänk med eller utan wow64) än för vanliga appar. Detta felmeddelande visas när vi inte kan hitta dem.",
+    "x-source-message": "Failed to locate the wine / wineserver executables for running winetricks"
+  },
+  "specificCommandHasFailed": "Kommandot \"{command}\" misslyckades",
+  "@specificCommandHasFailed": {
+    "description": "Felmeddelandet som visas när ett externt verktyg har misslyckats",
+    "placeholders": {
+      "command": {
+        "type": "String"
+      }
+    },
+    "x-source-message": "The \"{command}\" command failed"
+  }
+}

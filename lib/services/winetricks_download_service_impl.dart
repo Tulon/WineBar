@@ -28,6 +28,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:posix/posix.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
+import 'package:winebar/utils/l10n.dart';
 
 import '../utils/app_info.dart';
 import '../utils/compute_digest_of_file_contents.dart';
@@ -109,10 +110,10 @@ class WinetricksDownloadServiceImpl implements WinetricksDownloadService {
         return _makeExecutableAndReturn(installedWinetricksFile.path);
       } else {
         throw GenericException(
-          "The hash of the downloaded winescript script doesn't match the expected one.\n"
-          "Downloaded file: ${installedWinetricksFile.path}\n"
-          "Expected SHA256 hash: ${expectedWinetricksFileDigest.toString()}\n"
-          "Actual SHA256 hash:   ${winetricksFileDigest.toString()}",
+          "${L10n.current.downloadedWinetricksHashDoesntMatchExpectation}\n"
+          "${L10n.current.downloadedFile(installedWinetricksFile.path)}\n"
+          "${L10n.current.expectedSha256Hash(expectedWinetricksFileDigest.toString())}\n"
+          "${L10n.current.actualSha256Hash(winetricksFileDigest.toString())}",
         );
       }
     } catch (e) {

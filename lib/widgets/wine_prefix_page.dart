@@ -31,6 +31,7 @@ import 'package:winebar/blocs/special_executable/special_executable_bloc.dart';
 import 'package:winebar/blocs/special_executable/special_executable_state.dart';
 import 'package:winebar/models/pinned_executable_list_event.dart';
 import 'package:winebar/services/utility_service.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/widgets/bouncing_widget.dart';
@@ -98,7 +99,9 @@ class WinePrefixPage extends StatelessWidget {
               title: ListenableBuilder(
                 listenable: prefix,
                 builder: (context, _) => Text(
-                  'Wine Prefix: ${prefix.descriptor.name}',
+                  L10n.current.winePrefixPageTitlePattern(
+                    prefix.descriptor.name,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -170,7 +173,7 @@ class WinePrefixPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: -8.0),
             child: IconButton.filledTonal(
               icon: Icon(MdiIcons.cogs),
-              tooltip: 'Prefix settings',
+              tooltip: L10n.current.prefixSettingsTooltip,
               onPressed: () {
                 _maybeShowPrefixSettingsDialog(context: context);
               },
@@ -191,7 +194,9 @@ class WinePrefixPage extends StatelessWidget {
     }
 
     void showPrefixUpdatedSnackBar() {
-      const snackBar = SnackBar(content: Text('Wine prefix updated'));
+      final snackBar = SnackBar(
+        content: Text(L10n.current.winePrefixUpdatedMessage),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
 
@@ -269,7 +274,7 @@ class WinePrefixPage extends StatelessWidget {
 
     return RunProcessChip(
       primaryButtonIcon: state.isRunning ? BouncingWidget(child: icon) : icon,
-      primaryButtonLabel: const Text('Run Executable'),
+      primaryButtonLabel: Text(L10n.current.runExecutableButtonLabel),
       specialExecutableState: state,
       onPrimaryButtonPressed: () => _selectSpecialExecutableToRun(
         context: context,
@@ -291,7 +296,7 @@ class WinePrefixPage extends StatelessWidget {
 
     return RunProcessChip(
       primaryButtonIcon: state.isRunning ? BouncingWidget(child: icon) : icon,
-      primaryButtonLabel: const Text('Run Installer'),
+      primaryButtonLabel: Text(L10n.current.runInstallerButtonLabel),
       specialExecutableState: state,
       onPrimaryButtonPressed: () => _selectSpecialExecutableToRun(
         context: context,
@@ -353,6 +358,8 @@ class WinePrefixPage extends StatelessWidget {
     final fileSelectionInProgressBloc =
         BlocProvider.of<FileSelectionInProgressBloc>(context);
 
+    final appLocalizations = L10n.current;
+
     fileSelectionInProgressBloc.setFileSelectionInProgress(true);
 
     XFile? selectedFile;
@@ -365,10 +372,9 @@ class WinePrefixPage extends StatelessWidget {
             ),
           );
 
-      const XTypeGroup executablesGroup = XTypeGroup(
-        label: 'Windows executables',
+      XTypeGroup executablesGroup = XTypeGroup(
+        label: appLocalizations.windowsExecutablesFilterName,
         extensions: <String>['exe', 'msi', 'lnk'],
-        uniformTypeIdentifiers: <String>['public.jpeg', 'public.png'],
       );
       selectedFile = await openFile(
         acceptedTypeGroups: <XTypeGroup>[executablesGroup],
@@ -417,14 +423,17 @@ class WinePrefixPage extends StatelessWidget {
         barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const SelectableText('Path inaccessible from Wine'),
+            title: SelectableText(
+              L10n.current.pathInaccessibleFromWineDialogTitle,
+            ),
             content: SelectableText.rich(
               TextSpan(
                 style: theme.textTheme.bodyLarge,
                 children: [
                   TextSpan(
-                    text: 'The following path is inaccessible from Wine:\n',
+                    text: L10n.current.theFollowingPathIsInaccessibleFromWine,
                   ),
+                  TextSpan(text: '\n'),
                   TextSpan(
                     text: filePath,
                     style: TextStyle(
@@ -432,28 +441,23 @@ class WinePrefixPage extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  TextSpan(text: '\n\n'),
                   TextSpan(
-                    text:
-                        '\n\nThe thing is that on Apple silicon Macs running '
-                        'Linux, Wine runs under a virtual machine, which '
-                        "doesn't have access to removable media and in fact "
-                        'to anything other than your home directory.\n\n',
+                    text: L10n.current.pathInaccessibleFromWineExplanation,
                   ),
+                  TextSpan(text: '\n\n'),
                   TextSpan(
-                    text: 'Solution\n',
+                    text: L10n.current.solutionHeading,
                     style: theme.textTheme.titleLarge,
                   ),
-                  TextSpan(
-                    text:
-                        'Copy the folder in question somewhere under your '
-                        'home directory.',
-                  ),
+                  TextSpan(text: '\n'),
+                  TextSpan(text: L10n.current.pathInaccessibleFromWineSolution),
                 ],
               ),
             ),
             actions: <Widget>[
               TextButton(
-                child: const Text('Close'),
+                child: Text(MaterialLocalizations.of(context).closeButtonLabel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -531,7 +535,9 @@ class _PinnedAppsGridState extends State<_PinnedExecutablesGridWidget> {
             await bloc.updatePinnedExecutable(pinnedExecutable);
 
             if (context.mounted) {
-              final snackBar = SnackBar(content: Text('Pinned app updated'));
+              final snackBar = SnackBar(
+                content: Text(L10n.current.pinnedAppUpdatedMessage),
+              );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
           },

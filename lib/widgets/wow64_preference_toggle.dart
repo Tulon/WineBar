@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/widgets/warning_widget.dart';
 
 class Wow64PreferenceToggle extends StatelessWidget {
@@ -45,7 +46,7 @@ class Wow64PreferenceToggle extends StatelessWidget {
     return InputDecorator(
       decoration: InputDecoration(
         enabled: enabled,
-        label: const Text('WOW64 mode'),
+        label: Text(L10n.current.wow64ModeSection),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
       child: Column(
@@ -56,7 +57,7 @@ class Wow64PreferenceToggle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Use the WOW64 mode if available',
+                L10n.current.useWow64ModeIfAvailable,
                 style: enabled ? null : TextStyle(color: theme.disabledColor),
               ),
               Switch(
@@ -88,8 +89,7 @@ class Wow64PreferenceToggle extends StatelessWidget {
         return _buildWarningWidget(
           warning: warning,
           warningContent: SelectableText(
-            'The WOW64 mode under emulation is known to have issues. '
-            'Expect a broken installation.',
+            L10n.current.wow64PreferenceUnderEmulationWarning,
             key: ValueKey(warning),
             style: textStyle,
           ),
@@ -98,11 +98,7 @@ class Wow64PreferenceToggle extends StatelessWidget {
         return _buildWarningWidget(
           warning: warning,
           warningContent: SelectableText(
-            'Not using the WOW64 mode will require 32-bit libraries to be '
-            'present on your system. If you have them already, you can '
-            'ignore this warning. Otherwise, install Wine from your '
-            "distro's repository, which will bring in those 32-bit "
-            'libraries.',
+            L10n.current.nonWow64PreferenceRequires32BitLibsWarning,
             key: ValueKey(warning),
             style: textStyle,
           ),

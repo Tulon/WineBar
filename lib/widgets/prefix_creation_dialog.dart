@@ -28,6 +28,7 @@ import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
 import 'package:winebar/models/wine_build_source.dart';
 import 'package:winebar/utils/app_info.dart';
+import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/tappable_link.dart';
 import 'package:winebar/widgets/explicit_d3d_8_to_11_implementation_widget.dart';
 import 'package:winebar/widgets/explicit_locale_widget.dart';
@@ -148,7 +149,7 @@ class _PrefixCreationDialogState extends State<_PrefixCreationStatefulDialog> {
             Expanded(
               child: Center(
                 child: Text(
-                  'Create a Wine Prefix',
+                  L10n.current.createWinePrefixDialogTitle,
                   style: theme.textTheme.headlineSmall,
                 ),
               ),
@@ -202,7 +203,8 @@ class _PrefixCreationDialogState extends State<_PrefixCreationStatefulDialog> {
 abstract class _PrefixCreationStep {
   PrefixCreationStep get step;
   PrefixCreationStep? get prevStep;
-  String get title;
+
+  String getStepTitle(BuildContext context);
 
   List<Widget> buildPageTitleTrailingWidgets({
     required BuildContext context,
@@ -228,7 +230,7 @@ abstract class _PrefixCreationStep {
           !state.prefixCreationStatus.isInProgress &&
           step.index <= state.maxAccessibleStep.index,
       selected: step == state.currentStep,
-      title: Text(title),
+      title: Text(getStepTitle(context)),
       leading: Icon(
         state.prefixCreationStatus.isInProgress ||
                 step.index < state.maxAccessibleStep.index
@@ -257,7 +259,12 @@ abstract class _PrefixCreationStep {
               spacing: 8.0,
               children: [
                 ?_maybeCreateBackButton(bloc: bloc, state: state),
-                Expanded(child: Text(title, style: textTheme.titleLarge)),
+                Expanded(
+                  child: Text(
+                    getStepTitle(context),
+                    style: textTheme.titleLarge,
+                  ),
+                ),
                 ...buildPageTitleTrailingWidgets(
                   context: context,
                   bloc: bloc,
@@ -324,7 +331,9 @@ class _WineBuildSourceSelectionStep extends _PrefixCreationStep {
   final PrefixCreationStep? prevStep = null;
 
   @override
-  final String title = 'Select wine build provider';
+  String getStepTitle(BuildContext context) {
+    return L10n.current.selectWineBuildProviderStepName;
+  }
 
   @override
   Widget buildStepPageContent({
@@ -348,10 +357,11 @@ class _WineBuildSourceSelectionStep extends _PrefixCreationStep {
         );
       }
 
+      final description = source.getDescription(context);
       return ListTile(
         leading: CircleAvatar(child: Text(source.circleAvatarText)),
         title: title,
-        subtitle: source.details != null ? Text(source.details!) : null,
+        subtitle: description != null ? Text(description) : null,
         onTap: () => bloc.selectWineBuildSource(source),
         selected: state.selectedBuildSource == source,
         trailing: state.selectedBuildSource == source
@@ -377,7 +387,9 @@ class _WineReleaseSelectionStep extends _PrefixCreationStep {
   final PrefixCreationStep? prevStep = PrefixCreationStep.selectWineBuildSource;
 
   @override
-  final String title = 'Select wine release';
+  String getStepTitle(BuildContext context) {
+    return L10n.current.selectWineReleaseStepName;
+  }
 
   @override
   List<Widget> buildPageTitleTrailingWidgets({
@@ -403,7 +415,7 @@ class _WineReleaseSelectionStep extends _PrefixCreationStep {
               padding: EdgeInsets.all(-8.0),
               child: IconButton(
                 icon: const Icon(Icons.refresh),
-                tooltip: 'Refresh wine releases',
+                tooltip: L10n.current.refreshWineReleasesTooltip,
                 onPressed: bloc.refreshWineBuilds,
               ),
             ),
@@ -450,7 +462,9 @@ class _WineBuildSelectionStep extends _PrefixCreationStep {
   final PrefixCreationStep? prevStep = PrefixCreationStep.selectWineRelease;
 
   @override
-  final String title = 'Select wine build';
+  String getStepTitle(BuildContext context) {
+    return L10n.current.selectWineBuildStepName;
+  }
 
   @override
   Widget buildStepPageContent({
@@ -476,8 +490,7 @@ class _WineBuildSelectionStep extends _PrefixCreationStep {
           state: state,
           warning: warning,
           warningContent: SelectableText(
-            'A WOW64 build was selected. Those are known to have issues '
-            'under emulation. Expect a broken installation.',
+            L10n.current.wow64BuildSelectedUnderEmulationWarning,
             style: TextStyle(color: colorScheme.error),
           ),
         );
@@ -489,11 +502,7 @@ class _WineBuildSelectionStep extends _PrefixCreationStep {
           state: state,
           warning: warning,
           warningContent: SelectableText(
-            'This build requires 32-bit libraries to be present on your system. '
-            'If you have them already, you can ignore this warning. '
-            "Otherwise, install Wine from your distro's repository (which will "
-            'bring in those 32-bit libraries) or alternatively, select a WOW64 '
-            'build from the list above if one is available.',
+            L10n.current.nonWow64BuildRequires32BitLibsWarning,
             style: TextStyle(color: colorScheme.error),
           ),
         );
@@ -572,7 +581,7 @@ class _WineBuildSelectionStep extends _PrefixCreationStep {
           foregroundColor: colorScheme.onPrimary,
         ),
         child: Text(
-          'Proceed Anyway',
+          L10n.current.proceedAnywayButtonLabel,
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
@@ -606,7 +615,9 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
   final PrefixCreationStep? prevStep = PrefixCreationStep.selectWineRelease;
 
   @override
-  final String title = 'Set options';
+  String getStepTitle(BuildContext context) {
+    return L10n.current.setOptionsStepName;
+  }
 
   final _PrefixCreationDialogState widgetState;
 
@@ -625,15 +636,15 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
         case PrefixCreationStatus.notStarted:
         case PrefixCreationStatus.failed:
         case PrefixCreationStatus.succeeded:
-          return 'Create Prefix';
+          return L10n.current.createWinePrefixButtonLabel;
         case PrefixCreationStatus.starting:
-          return 'Starting ...';
+          return L10n.current.startingButtonLabel;
         case PrefixCreationStatus.downloadingAndExtractingWineBuild:
-          return 'Downloading and Extracting ...';
+          return L10n.current.downloadingAndExtractingButtonLabel;
         case PrefixCreationStatus.downloadingAndExtractingDxvk:
-          return 'Downloading and Extracting DXVK ...';
+          return L10n.current.downloadingAndExtractingDxvkButtonLabel;
         case PrefixCreationStatus.creatingWinePrefix:
-          return 'Creating Wine Prefix ...';
+          return L10n.current.creatingWinePrefixButtonLabel;
       }
     }
 
@@ -655,7 +666,7 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
               LengthLimitingTextInputFormatter(AppInfo.maxCharsInPrefixName),
             ],
             decoration: InputDecoration(
-              hintText: 'Enter a name for the prefix',
+              hintText: L10n.current.nameForTheNewPrefixHintText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -702,7 +713,7 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
               trailingLink: state.prefixCreationFailedProcessLogs.isEmpty
                   ? null
                   : TappableLink(
-                      linkText: 'View Logs.',
+                      linkText: L10n.current.viewLogsLink,
                       onTapped: () => _showWineProcessLogs(
                         context: context,
                         logs: state.prefixCreationFailedProcessLogs,
@@ -777,8 +788,8 @@ class _WinePrefixOptionsStep extends _PrefixCreationStep {
                         : Icons.keyboard_double_arrow_up,
                   ),
                   tooltip: scrollToBottom
-                      ? 'Scroll to bottom'
-                      : 'Scroll to top',
+                      ? L10n.current.scrollToBottomTooltip
+                      : L10n.current.scrollToTopTooltip,
                   onPressed: onPressed,
                 ),
               );

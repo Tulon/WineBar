@@ -28,6 +28,7 @@ import 'package:winebar/models/pinned_executable_settings.dart';
 import 'package:winebar/models/prefix_descriptor.dart';
 import 'package:winebar/models/wine_prefix.dart';
 import 'package:winebar/models/wine_prefix_dir_structure.dart';
+import 'package:winebar/utils/l10n.dart';
 
 abstract interface class WineInstallationDescriptor {
   /// Regular Wine (not Proton) creates symlinks for folders like Desktop and
@@ -238,8 +239,7 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
       return [externalWinetricksScriptPath, ...winetricksArgs];
     } else {
       throw GenericException(
-        "This wine prefix doesn't bundle a winetricks script "
-        "and neither was an external one provided.",
+        L10n.current.noBundledAndNoExternalWinetricksScriptAvailable,
       );
     }
   }
@@ -389,9 +389,9 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
               filesBinWineExecutable,
               filesBinWineserverExecutable,
             ),
-        errMsgIfNull:
-            'Failed to locate the wine / wineserver executables for '
-            'winetricks',
+        errMsgIfNull: L10n
+            .current
+            .failedToLocateWineOrWineserverExecutablesForRunningWinetricks,
       );
     } else {
       // For launching anything other than winetricks, the order of
@@ -422,7 +422,7 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
               filesBinWineExecutable,
               filesBinWineserverExecutable,
             ),
-        errMsgIfNull: 'Failed to locate the wine / wineserver executables',
+        errMsgIfNull: L10n.current.failedToLocateWineOrWineserverExecutables,
       );
     }
   }

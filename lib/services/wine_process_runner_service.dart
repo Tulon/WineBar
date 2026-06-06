@@ -32,6 +32,7 @@ import 'package:winebar/utils/size_limited_in_memory_log.dart';
 
 void _validateCommandLine(List<String> commandLine) {
   if (commandLine.isEmpty) {
+    // This error shoudn't happen, so we don't localize it.
     throw GenericException("Command line can't be empty");
   }
 }
