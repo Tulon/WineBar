@@ -1,0 +1,58 @@
+From a2f1cf42d5fb0f75ab9a41ce5dfc9a78144e5d1b Mon Sep 17 00:00:00 2001
+From: Joseph Artsimovich <joseph.artsimovich@gmx.com>
+Date: Mon, 8 Jun 2026 14:58:40 +0300
+Subject: [PATCH] Rename references to virgl_renderer_resource_map2 with
+ virgl_renderer_resource_map_fixed
+
+The function in question was renamed in virglrenderer as part of the code review [1].
+This patch doesn't change the configuration variable of VIRGL_RESOURCE_MAP2.
+
+[1]: https://gitlab.freedesktop.org/virgl/virglrenderer/-/merge_requests/1374
+---
+ src/devices/src/virtio/gpu/virtio_gpu.rs                  | 2 +-
+ src/rutabaga_gfx/src/generated/virgl_renderer_bindings.rs | 2 +-
+ src/rutabaga_gfx/src/virgl_renderer.rs                    | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/devices/src/virtio/gpu/virtio_gpu.rs b/src/devices/src/virtio/gpu/virtio_gpu.rs
+index 43b4ef7..faf72d5 100644
+--- a/src/devices/src/virtio/gpu/virtio_gpu.rs
++++ b/src/devices/src/virtio/gpu/virtio_gpu.rs
+@@ -842,7 +842,7 @@ impl VirtioGpu {
+             // SHM and DMABUF are both regular host fds whose pages can be exposed
+             // to the guest by mmap'ing them directly into the virtio shm region.
+             // For SHM (memfd) this has always worked. For DMABUF it had been
+-            // delegated to virgl_renderer_resource_map2, which only handles
++            // delegated to virgl_renderer_resource_map_fixed, which only handles
+             // virglrenderer-allocated GPU memory and silently no-ops for external
+             // dma-bufs — leaving the guest blob backed by zero pages. That broke
+             // muvm camera capture, where the v4l2 source exports kernel buffers
+diff --git a/src/rutabaga_gfx/src/generated/virgl_renderer_bindings.rs b/src/rutabaga_gfx/src/generated/virgl_renderer_bindings.rs
+index 970e500..0380e7e 100644
+--- a/src/rutabaga_gfx/src/generated/virgl_renderer_bindings.rs
++++ b/src/rutabaga_gfx/src/generated/virgl_renderer_bindings.rs
+@@ -380,7 +380,7 @@ extern "C" {
+ }
+ #[cfg(feature = "virgl_resource_map2")]
+ extern "C" {
+-    pub fn virgl_renderer_resource_map2(
++    pub fn virgl_renderer_resource_map_fixed(
+         res_handle: u32,
+         map: *const ::std::os::raw::c_void,
+         size: u64,
+diff --git a/src/rutabaga_gfx/src/virgl_renderer.rs b/src/rutabaga_gfx/src/virgl_renderer.rs
+index a2627ca..cf8ba69 100644
+--- a/src/rutabaga_gfx/src/virgl_renderer.rs
++++ b/src/rutabaga_gfx/src/virgl_renderer.rs
+@@ -707,7 +707,7 @@ impl RutabagaComponent for VirglRenderer {
+         #[cfg(feature = "virgl_resource_map2")]
+         {
+             let ret = unsafe {
+-                virgl_renderer_resource_map2(
++                virgl_renderer_resource_map_fixed(
+                     _resource_id,
+                     _addr as *mut libc::c_void,
+                     _size,
+-- 
+2.54.0
+
