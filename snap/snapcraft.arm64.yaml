@@ -362,8 +362,15 @@ parts:
       - -usr/include
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
 
+  rust-deps:
+    plugin: nil
+    build-packages:
+      - curl
+    override-pull: |
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.91.0
+
   libkrun:
-    after: [libkrunfw, virglrenderer]
+    after: [rust-deps, libkrunfw, virglrenderer]
     source: https://github.com/containers/libkrun.git
     source-type: git
     source-tag: v1.18.0
@@ -386,6 +393,8 @@ parts:
       - libssl-dev
       - patch
       - patchelf
+    build-environment:
+      - PATH: /root/.cargo/bin:${PATH:+:$PATH}
     override-pull: |
       craftctl default
       git am $CRAFT_PROJECT_DIR/snap/libkrun-patches/*
@@ -430,12 +439,12 @@ parts:
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
 
   muvm:
-    after: [libkrun]
+    after: [libkrun, rust-deps]
     source: https://github.com/AsahiLinux/muvm.git
     source-type: git
     source-tag: muvm-0.6.0
     plugin: rust
-    rust-channel: 1.91.0
+    rust-channel: none
     organize:
       muvm: /usr/bin/
       muvm-guest: /usr/bin/
@@ -445,7 +454,6 @@ parts:
       - LD_LIBRARY_PATH: $SNAPCRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     build-packages:
       - libudev-dev
-      - librust-clang-sys-dev
     stage-packages:
       - passt
       - socat
