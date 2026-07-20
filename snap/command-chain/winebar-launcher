@@ -18,23 +18,12 @@ if [ "$SNAP_ARCH" = "arm64" ]; then
     # environment variables that point to `$SNAP/gpu-2404`. Below we rewrite
     # them to point to `$SNAP/gpu-2404-override` instead.
 
-    env_vars_to_patch=(
-        __EGL_EXTERNAL_PLATFORM_CONFIG_DIRS
-        __EGL_VENDOR_LIBRARY_DIRS
-        VK_LAYER_PATH
-        DRIRC_CONFIGDIR
-        XLOCALEDIR
-        LIBGL_DRIVERS_PATH
-        LD_LIBRARY_PATH
-        LIBVA_DRIVERS_PATH
-        GBM_BACKENDS_PATH
-        XDG_DATA_DIRS
-    )
-
-    for var in "${env_vars_to_patch[@]}"; do
-        val=$(echo ${!var} | sed -e 's|/gpu-2404/|/gpu-2404-override/|g')
-        export "$var=$val"
-    done
+    while IFS='=' read -r name value; do
+    if [[ "$value" =~ '/gpu-2404/' ]]; then
+        patched_value=$(echo "$value" | sed -e 's|/gpu-2404/|/gpu-2404-override/|g')
+        export "$name=$patched_value"
+    fi
+    done < <(env)
 fi
 
 # The thing is, on my Fedora 43, the library paths in Vulkan ICD files
