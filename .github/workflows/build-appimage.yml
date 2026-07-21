@@ -46,7 +46,10 @@ jobs:
     steps:
       - name: Install and configure snapcraft
         run: |
-          sudo snap install snapcraft --classic
+          # We've forked the `flutter` snap at the point when it was based on core20.
+          # Snapcraft 9.0 removed support for core20, so the easiest solution is to
+          # just install snapcraft 8.x and build our forked `flutter` snap with it.
+          sudo snap install snapcraft --classic --channel=8.x/stable
           sudo snap set snapcraft provider=lxd
 
       - name: Install and configure LXD
