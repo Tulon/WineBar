@@ -308,7 +308,7 @@ parts:
   libkrunfw:
     source: https://github.com/containers/libkrunfw.git
     source-type: git
-    source-tag: v5.3.0
+    source-tag: v5.5.0
     plugin: make
     make-parameters:
       - PREFIX=/usr
@@ -373,7 +373,7 @@ parts:
     after: [rust-deps, libkrunfw, virglrenderer]
     source: https://github.com/containers/libkrun.git
     source-type: git
-    source-tag: v1.18.0
+    source-tag: v1.19.0
     plugin: make
     make-parameters:
       - PREFIX=/usr
@@ -385,7 +385,7 @@ parts:
     build-packages:
       - binutils
       - libc6-dev
-      - libclang-dev
+      - libclang-20-dev
       - libcurl4-openssl-dev
       - libepoxy-dev
       - libdrm-dev
@@ -407,7 +407,7 @@ parts:
       # around.
       rm -rf srpm
       git clone https://src.fedoraproject.org/rpms/libkrun.git srpm
-      (cd srpm && git checkout f30eb433ae88db864e5b7ca72f4b15d27647963d)
+      (cd srpm && git checkout 4b267e3d98d78c059fac7bb8ae7568bb0a3c9d4e)
 
       # Apply the patches
       patch -p1 -i srpm/libkrun-remove-unused-deps.diff 
@@ -455,7 +455,7 @@ parts:
     after: [libkrun, rust-deps]
     source: https://github.com/AsahiLinux/muvm.git
     source-type: git
-    source-tag: muvm-0.6.0
+    source-commit: 25ece4c2d4a62f2ade3dacdd2dce0bb5240080fc
     plugin: rust
     rust-channel: none
     organize:
@@ -469,9 +469,6 @@ parts:
       - libudev-dev
     stage-packages:
       - socat
-    override-pull: |
-      craftctl default
-      git am $CRAFT_PROJECT_DIR/snap/muvm-patches/*
     prime:
       - -usr/share/doc
 
@@ -484,14 +481,16 @@ parts:
     plugin: cmake
     source: https://github.com/FEX-Emu/FEX.git
     source-type: git
-    source-tag: FEX-2605
+    source-tag: FEX-2608
     cmake-generator: Ninja
     cmake-parameters:
       - -DCMAKE_INSTALL_PREFIX=/usr
       - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_C_COMPILER=clang
-      - -DCMAKE_CXX_COMPILER=clang++
-      - -DUSE_LINKER=lld
+      - -DCMAKE_C_COMPILER=clang-20
+      - -DCMAKE_CXX_COMPILER=clang++-20
+      - -DClang_DIR=/usr/lib/cmake/clang-20
+      - -DLLVM_DIR=/usr/lib/cmake/llvm-20
+      - -DUSE_LINKER=lld-20
       - -DENABLE_LTO=ON
       - -DBUILD_TESTING=OFF
       - -DENABLE_ASSERTIONS=OFF
@@ -499,6 +498,8 @@ parts:
       - -DENABLE_CLANG_THUNKS=ON
       - -DBUILD_FEXCONFIG=OFF
       - -DENABLE_OFFLINE_TELEMETRY=OFF
+      - -DRANGES_BUILD_CALENDAR_EXAMPLE=OFF
+      - -DRANGES_DEBUG_INFO=OFF
 
       # The defaults are to target the processor we are building on, which
       # leads to SIGILL when trying to run FEX on older architectures. The
@@ -514,9 +515,10 @@ parts:
       # muvm puts to /usr/share/fex-emu/.
       - -DBUILD_STEAM_SUPPORT=OFF
     build-packages:
-      - clang
-      - llvm-dev
-      - lld
+      - clang-20
+      - clang-tools-20
+      - llvm-20-dev
+      - lld-20
       - binfmt-support
       - libc6-dev-amd64-cross
       - libc6-dev-i386-cross
