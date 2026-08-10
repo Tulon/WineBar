@@ -438,6 +438,19 @@ parts:
       - -usr/include
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
 
+  passt:
+    source: https://passt.top/passt
+    source-type: git
+    source-tag: 2026_07_28.f8df3f1
+    plugin: make
+    make-parameters:
+      - prefix=/usr
+    override-pull: |
+      craftctl default
+      git am $CRAFT_PROJECT_DIR/snap/passt-patches/*
+    stage:
+      - usr/bin/passt
+
   muvm:
     after: [libkrun, rust-deps]
     source: https://github.com/AsahiLinux/muvm.git
@@ -455,7 +468,6 @@ parts:
     build-packages:
       - libudev-dev
     stage-packages:
-      - passt
       - socat
     override-pull: |
       craftctl default
@@ -626,6 +638,13 @@ parts:
 
       # TODO: think about removing files under /usr/bin as well.
       # That breaks FEXBash, though it's only needed for debugging.
+
+      # Remove some files and folders, as described here:
+      # https://wiki.fex-emu.com/index.php/Development:Setting_up_RootFS
+      rm -rf $FEX_ROOTFS_MOUNT/etc/{hosts,resolv.conf,timezone,localtime,passwd} 
+      rm -rf $FEX_ROOTFS_MOUNT/{boot,dev,home,media,mnt,opt,proc,root,srv,sys,tmp
+      rm -rf $FEX_ROOTFS_MOUNT/var/cache/apt
+      rm -rf $FEX_ROOTFS_MOUNT/var/lib/apt
 
       # Make the rootfs image.
       mkdir -p "$CRAFT_PART_INSTALL/usr/share/fex-emu/RootFS"

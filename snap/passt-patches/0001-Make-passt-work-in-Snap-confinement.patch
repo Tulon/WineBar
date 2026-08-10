@@ -1,0 +1,65 @@
+From f0c4d5ab20743ce7f9cc904b1ef97f5de5bd4cbb Mon Sep 17 00:00:00 2001
+From: Joseph Artsimovich <joseph.artsimovich@gmx.com>
+Date: Sun, 9 Aug 2026 11:18:06 +0300
+Subject: [PATCH] Make passt work in Snap confinement
+
+The thing is, passt tries to secure itself by chrooting, creating namespaces
+and whatnot, but many of those things simply don't work in Snap confinement.
+
+This patch disables / comments out the non-essential operations that don't
+work in a Snap confinement.
+---
+ conf.c      | 1 +
+ isolation.c | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/conf.c b/conf.c
+index faf2681..fff93bc 100644
+--- a/conf.c
++++ b/conf.c
+@@ -1950,6 +1950,7 @@ void conf(struct ctx *c, int argc, char **argv)
+ 
+ 	conf_open_files(c);	/* Before any possible setuid() / setgid() */
+ 
++	netns_only = 1;
+ 	isolate_user(c, uid, gid, !netns_only, userns);
+ 
+ 	if (c->no_icmp)
+diff --git a/isolation.c b/isolation.c
+index 94cbe7f..52b1489 100644
+--- a/isolation.c
++++ b/isolation.c
+@@ -398,6 +398,7 @@ int isolate_prefork(const struct ctx *c)
+ 	if (!c->foreground || c->mode != MODE_PASTA)
+ 		flags |= CLONE_NEWPID;
+ 
++#if 0
+ 	if (unshare(flags)) {
+ 		err_perror("Failed to detach isolating namespaces");
+ 		return -errno;
+@@ -414,12 +415,13 @@ int isolate_prefork(const struct ctx *c)
+ 		err_perror("Failed to mount empty tmpfs for sandboxing");
+ 		return -errno;
+ 	}
+-
++#endif
+ 	if (chdir(TMPDIR)) {
+ 		err_perror("Failed to change directory into empty tmpfs");
+ 		return -errno;
+ 	}
+ 
++#if 0
+ 	if (syscall(SYS_pivot_root, ".", ".")) {
+ 		if (c->chroot_fallback) {
+ 			int rc;
+@@ -436,6 +438,7 @@ int isolate_prefork(const struct ctx *c)
+ 			return -errno;
+ 		}
+ 	}
++#endif
+ 
+ 	/* Now that initialization is more-or-less complete, we can
+ 	 * drop further capabilities
+-- 
+2.55.0
+
