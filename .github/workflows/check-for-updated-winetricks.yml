@@ -1,0 +1,64 @@
+name: "Check for updated winetricks"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "3 15 * * *" # Every night at 03:15
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-for-winetricks-updates:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Get the git tag of the latest release
+        run: |
+          LATEST_RELEASE_TAG=$(curl -s \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10"  \
+            "https://api.github.com/repos/Winetricks/winetricks/releases/latest" \
+            | jq -r .tag_name)
+
+          echo LATEST_RELEASE_TAG="$LATEST_RELEASE_TAG" >> $GITHUB_ENV
+
+      - name: Download the winetricks script for the latest release
+        run: |
+          curl -s -o winetricks-latest-release \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10"  \
+            "https://api.github.com/repos/Winetricks/winetricks/contents/src/winetricks?ref=$LATEST_RELEASE_TAG"
+
+      - name: Get the SHA256 sum of the downloaded winetricks script
+        run: |
+          WINETRICKS_SHA256="$(sha256sum winetricks-latest-release | awk '{print $1}')"
+
+          echo WINETRICKS_SHA256="$WINETRICKS_SHA256" >> $GITHUB_ENV
+
+      - name: Clean up
+        run: |
+          rm -f winetricks-latest-release
+
+      - name: Patch up app_info.dart
+        run: |
+          # The var = 'string' definition may span more than one line, and with perl,
+          # multi-line search/replace is done easier than with sed.
+          perl -0777 -pi -e " \
+            die 'winetricksGitTag not found in app_info.dart' if (s@(\\bwinetricksGitTag\s*=\s*['\"])[^'\"]*(['\"])@\${1}${{ env.LATEST_RELEASE_TAG }}\\2@ == 0); \
+            die 'winetricksSha256 not found in app_info_dart' if (s@(\\bwinetricksSha256\s*=\s*['\"])[^'\"]*(['\"])@\${1}${{ env.WINETRICKS_SHA256 }}\\2@ == 0)" \
+            lib/utils/app_info.dart
+
+      - name: Maybe create PR
+        uses: peter-evans/create-pull-request@v8
+        with:
+          base: ${{ github.event.repository.default_branch }}
+          title: Update to winetricks version ${{ env.LATEST_RELEASE_TAG }}
+          commit-message: Update to winetricks version ${{ env.LATEST_RELEASE_TAG }}
+          delete-branch: true
+          add-paths: |
+            lib/utils/app_info.dart
