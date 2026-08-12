@@ -22,11 +22,11 @@ class AppInfo {
 
   static final String winetricksGithubRepoOwner = 'Winetricks';
   static final String winetricksGithubRepoName = 'winetricks';
-  static final String winetricksGitTag = '20250102';
+  static final String winetricksGitTag = '20260125';
 
   // Just the "winetricks" script itself, not the whole github release.
   static final String winetricksSha256 =
-      '53194dead910f8a5eb1deacaa4773d4e48f5873633d18ab1ecd6fdb0cb92243b';
+      'cc596c76079348c68fadb677012acee28cee185023f587824d37847e8b9446ac';
 
   static final int maxCharsInPrefixName = 100;
 }
