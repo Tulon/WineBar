@@ -10,7 +10,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get donationSolicitationDialogText =>
-      'Hi there. I\'m the author of Wine Bar.\n\nI started working on the project in summer 2025. Since then, I’ve put a lot of effort into it. Today, Wine Bar already does everything I personally need from it. That\'s not to say it\'s perfect - it\'s just my needs are modest. That means I can keep working on it only if I can justify the time and energy it requires.\n\nTo keep development going, I’m asking for your support. Donations help cover time and ongoing work on Wine Bar, giving me a reason to keep working on it. Alternatively, if you’re a developer comfortable with Dart/Flutter, consider joining the development effort.\n\nPlease note that this message will appear occasionally even if you do donate, as Wine Bar doesn’t track who has or hasn’t donated.\n\nThank you for your understanding.';
+      '你好。我是 Wine Bar 的作者。\n\n我在 2025 年夏天开始参与这个项目。从那时起，我投入了大量精力。如今，Wine Bar 已经满足了我个人的所有需求。这并不意味着它完美无缺——只是我的需求相对简单。也就是说，只有当我能证明它所需的时间和精力是合理的时候，我才能继续开发。\n\n为了让开发持续进行，我请求你的支持。捐赠可以帮助覆盖 Wine Bar 的时间成本和后续工作，让我有继续投入的理由。或者，如果你是一名熟悉 Dart/Flutter 的开发者，也可以考虑加入我们的开发团队。\n\n请注意，即使你不捐赠，这条信息也会偶尔出现，因为 Wine Bar 并不会跟踪谁已捐赠或未捐赠。\n\n感谢你的理解。';
 
   @override
   String get kronekWineSourceDescription =>
@@ -393,6 +393,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   AppLocalizationsZhHans() : super('zh_Hans');
 
   @override
+  String get donationSolicitationDialogText =>
+      '你好。我是 Wine Bar 的作者。\n\n我在 2025 年夏天开始参与这个项目。从那时起，我投入了大量精力。如今，Wine Bar 已经满足了我个人的所有需求。这并不意味着它完美无缺——只是我的需求相对简单。也就是说，只有当我能证明它所需的时间和精力是合理的时候，我才能继续开发。\n\n为了保持开发进度，我请求你的支持。捐赠可以帮助覆盖 Wine Bar 的时间成本和持续工作，让我有理由继续投入其中。或者，如果你是一名熟悉 Dart/Flutter 的开发者，也可以考虑加入我们的开发团队。\n\n请注意，即使你不捐赠，这条信息也会偶尔出现，因为 Wine Bar 并不会跟踪谁已捐赠或未捐赠。\n\n感谢你的理解。';
+
+  @override
   String get kronekWineSourceDescription =>
       '提供标准、Staging、TkG 和 Proton Wine 构建。';
 
@@ -771,6 +775,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 /// The translations for Chinese, using the Han script (`zh_Hant`).
 class AppLocalizationsZhHant extends AppLocalizationsZh {
   AppLocalizationsZhHant() : super('zh_Hant');
+
+  @override
+  String get donationSolicitationDialogText =>
+      '嗨，您好！我是 Wine Bar 的作者。\n\n我於 2025 年夏季開始著手此專案，從那時起投入了大量精力。如今 Wine Bar 已能滿足我個人所需的一切功能，雖然並非完美——只是我的需求相對簡單。這意味著我只有在能證明其所需時間與精力的價值時，才會繼續開發。\n\n為了讓開發持續進行，我誠摯地請求您的支持。捐款能幫助覆蓋 Wine Bar 的開發時間與持續維護費用，給我繼續投入的動力。若您是熟悉 Dart/Flutter 的開發者，也歡迎加入我們的開發行列。\n\n請注意，即使您已捐款，該訊息仍會偶爾顯示，因為 Wine Bar 不追蹤誰已捐款或未捐款。\n\n感謝您的理解與支持。';
 
   @override
   String get kronekWineSourceDescription =>

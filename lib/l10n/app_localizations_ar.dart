@@ -10,7 +10,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get donationSolicitationDialogText =>
-      'Hi there. I\'m the author of Wine Bar.\n\nI started working on the project in summer 2025. Since then, I’ve put a lot of effort into it. Today, Wine Bar already does everything I personally need from it. That\'s not to say it\'s perfect - it\'s just my needs are modest. That means I can keep working on it only if I can justify the time and energy it requires.\n\nTo keep development going, I’m asking for your support. Donations help cover time and ongoing work on Wine Bar, giving me a reason to keep working on it. Alternatively, if you’re a developer comfortable with Dart/Flutter, consider joining the development effort.\n\nPlease note that this message will appear occasionally even if you do donate, as Wine Bar doesn’t track who has or hasn’t donated.\n\nThank you for your understanding.';
+      'مرحباً. أنا مؤلف Wine Bar.\n\nبدأت العمل على المشروع في صيف 2025. منذ ذلك الحين، بذلت الكثير من الجهد فيه. اليوم، يقوم Wine Bar بالفعل بكل ما أحتاجه شخصياً منه. هذا لا يعني أنه مثالياً - إن احتياجاتي بسيطة فقط. وهذا يعني أنني أستطيع الاستمرار في العمل عليه فقط إذا استطعت تبرير الوقت والطاقة التي يتطلبها.\n\nللمحافظة على سير التطوير، أطلب دعمكم. تساعد التبرعات في تغطية الوقت والعمل المستمر على Wine Bar، مما يمنحني سبباً للاستمرار في العمل عليه. بدلاً من ذلك، إذا كنت مطورًا مرتاحًا مع Dart/Flutter، فكر في الانضمام إلى جهود التطوير.\n\nيرجى ملاحظة أن هذه الرسالة ستظهر أحياناً حتى إذا قمت بالتبرع، لأن Wine Bar لا يتتبع من تبرع أو لم يتبرع.\n\nشكراً لتفهمكم.';
 
   @override
   String get kronekWineSourceDescription =>

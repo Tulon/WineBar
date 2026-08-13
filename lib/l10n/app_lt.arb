@@ -614,5 +614,10 @@
       }
     },
     "x-source-message": "The \"{command}\" command failed"
+  },
+  "donationSolicitationDialogText": "Sveiki! Aš esu Wine Bar kūrėjas.\n\nPradėjau dirbti prie projekto vasarą 2025 m. Nuo to laiko skyriau daug pastangų. Šiandien Wine Bar jau atlieka viską, ko man asmeniškai reikia. Tai nereiškia, kad tai yra tobula – tiesiog mano poreikiai yra nedideli. Tai reiškia, kad galiu tęsti darbą tik tada, kai galėsiu pagrįsti reikalaujamą laiko ir energijos išlaikymą.\n\nNorėdamas tęsti kūrimą, prašau jūsų paramos. Paaukštai padeda apmokėti laiko ir nuolatinio darbo išlaidas Wine Bar, suteikdami man priežastį tęsti darbą. Alternatyviai, jei esate kūrėjas, patogiai dirbantis su Dart/Flutter, apsvarstykite galimybę prisijungti prie kūrimo pastangų.\n\nAtkreipkite dėmesį, kad šis pranešimas kartais bus rodomas net jei nepaaukštėte, nes Wine Bar neperskaito, kas paaukštė, o kas ne.\n\nAčiū už supratimą.",
+  "@donationSolicitationDialogText": {
+    "description": "The body of the donation solicitation dialog",
+    "x-source-message": "Hi there. I'm the author of Wine Bar.\n\nI started working on the project in summer 2025. Since then, I’ve put a lot of effort into it. Today, Wine Bar already does everything I personally need from it. That's not to say it's perfect - it's just my needs are modest. That means I can keep working on it only if I can justify the time and energy it requires.\n\nTo keep development going, I’m asking for your support. Donations help cover time and ongoing work on Wine Bar, giving me a reason to keep working on it. Alternatively, if you’re a developer comfortable with Dart/Flutter, consider joining the development effort.\n\nPlease note that this message will appear occasionally even if you do donate, as Wine Bar doesn’t track who has or hasn’t donated.\n\nThank you for your understanding."
   }
 }
