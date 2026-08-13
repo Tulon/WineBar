@@ -23,6 +23,7 @@ import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
+import 'package:winebar/models/donation_solicitation_state.dart';
 import 'package:winebar/models/suppressable_warning.dart';
 import 'package:winebar/utils/app_info.dart';
 import 'package:winebar/utils/cast_or_null.dart';
@@ -36,17 +37,24 @@ class SettingsJsonFile extends Equatable {
   final String appPackageId;
 
   final Set<SuppressableWarning> suppressedWarnings;
+  final DonationSolicitationState donationSolicitationState;
 
   static final _appPackageIdKey = 'appPackageId';
   static final _suppressedWarningsKey = 'suppressedWarnings';
+  static final _donationSolicitationStateKey = 'donationSolicitationState';
 
   const SettingsJsonFile({
     required this.appPackageId,
     required this.suppressedWarnings,
+    required this.donationSolicitationState,
   });
 
   @override
-  List<Object> get props => [appPackageId, suppressedWarnings];
+  List<Object> get props => [
+    appPackageId,
+    suppressedWarnings,
+    donationSolicitationState,
+  ];
 
   factory SettingsJsonFile._fromJsonString(
     String jsonString, {
@@ -71,6 +79,9 @@ class SettingsJsonFile extends Equatable {
             castOrNull<List<dynamic>>(json[_suppressedWarningsKey]),
           ) ??
           settingsFileHelper.buildDefaultSetOfSuppressedWarnings(),
+      donationSolicitationState: DonationSolicitationState.fromJson(
+        castOrNull<Map<String, dynamic>>(json[_donationSolicitationStateKey]),
+      ),
     );
   }
 
@@ -110,6 +121,7 @@ class SettingsJsonFile extends Equatable {
     final Map<String, dynamic> json = {
       _appPackageIdKey: appPackageId,
       _suppressedWarningsKey: _buildJsonSuppressedWarnings(),
+      _donationSolicitationStateKey: donationSolicitationState.toJson(),
     };
 
     final encoder = JsonEncoder.withIndent('  ');
@@ -137,10 +149,13 @@ class SettingsJsonFile extends Equatable {
   SettingsJsonFile copyWith({
     String? appPackageId,
     Set<SuppressableWarning>? suppressedWarnings,
+    DonationSolicitationState? donationSolicitationState,
   }) {
     return SettingsJsonFile(
       appPackageId: appPackageId ?? this.appPackageId,
       suppressedWarnings: suppressedWarnings ?? this.suppressedWarnings,
+      donationSolicitationState:
+          donationSolicitationState ?? this.donationSolicitationState,
     );
   }
 

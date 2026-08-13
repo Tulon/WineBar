@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'dart:ui';
+
 import 'package:dbus/dbus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +37,7 @@ import 'package:winebar/services/screensaver_inhibition_service.dart';
 import 'package:winebar/services/utility_service.dart';
 import 'package:winebar/services/winetricks_download_service.dart';
 import 'package:winebar/services/winetricks_download_service_impl.dart';
+import 'package:winebar/utils/donation_solicitation_logic.dart';
 import 'package:winebar/utils/startup_data.dart';
 import 'package:winebar/utils/wine_tasks.dart';
 
@@ -143,5 +146,18 @@ void main() async {
   WineTasks.createAndRegisterInstance();
   StartupData.asyncCreateAndRegisterInstance();
 
+  // This must be called after StartupData.asyncCreateAndRegisterInstance()
+  DonationSolicitationLogic.asyncCreateAndRegisterInstance(
+    runningWineProcessesTracker: runningWineProcessesTracker,
+  );
+
   runApp(TopLevelWidget());
+
+  // This has to be called after runApp().
+  AppLifecycleListener(
+    onExitRequested: () async {
+      DonationSolicitationLogic.instance.onAppShuttingDown();
+      return AppExitResponse.exit;
+    },
+  );
 }

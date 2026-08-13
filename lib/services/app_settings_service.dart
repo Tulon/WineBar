@@ -21,6 +21,7 @@ import 'dart:io';
 
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:winebar/models/donation_solicitation_state.dart';
 import 'package:winebar/models/settings_json_file.dart';
 import 'package:winebar/models/suppressable_warning.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
@@ -42,6 +43,8 @@ abstract interface class AppSettingsService {
     SuppressableWarning warning, {
     required bool suppressed,
   });
+
+  void setDonationSolicitationState(DonationSolicitationState state);
 }
 
 class _AppSettingsService implements AppSettingsService {
@@ -66,6 +69,12 @@ class _AppSettingsService implements AppSettingsService {
       suppressed: suppressed,
     );
 
+    _scheduleWritingSettingsFile();
+  }
+
+  @override
+  void setDonationSolicitationState(DonationSolicitationState state) {
+    settings = settings.copyWith(donationSolicitationState: state);
     _scheduleWritingSettingsFile();
   }
 

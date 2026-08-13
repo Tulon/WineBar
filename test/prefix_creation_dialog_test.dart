@@ -23,6 +23,7 @@ import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:winebar/models/archive_type.dart';
+import 'package:winebar/models/donation_solicitation_state.dart';
 import 'package:winebar/models/settings_json_file.dart';
 import 'package:winebar/models/wine_build.dart';
 import 'package:winebar/models/wine_build_source.dart';
@@ -65,6 +66,7 @@ void main() {
     final settingsJsonFile = SettingsJsonFile(
       appPackageId: AppInfo.appPackageId,
       suppressedWarnings: {},
+      donationSolicitationState: DonationSolicitationState.initialState(),
     );
 
     when(appSettingsService.settings).thenReturn(settingsJsonFile);

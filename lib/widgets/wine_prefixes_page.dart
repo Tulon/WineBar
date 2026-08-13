@@ -27,12 +27,14 @@ import 'package:stream_listener_widget/stream_listener_widget.dart';
 import 'package:winebar/blocs/pinned_executable_set/pinned_executable_set_state.dart';
 import 'package:winebar/repositories/wine_prefix_repo.dart';
 import 'package:winebar/utils/app_info.dart';
+import 'package:winebar/utils/donation_solicitation_logic.dart';
 import 'package:winebar/utils/l10n.dart';
 import 'package:winebar/utils/local_storage_paths.dart';
 import 'package:winebar/utils/match_text_spans.dart';
 import 'package:winebar/utils/maybe_tell_user_to_finish_running_apps.dart';
 import 'package:winebar/utils/old_task_abandoning_worker.dart';
 import 'package:winebar/utils/open_url.dart';
+import 'package:winebar/widgets/donation_solicitation_dialog.dart';
 import 'package:winebar/widgets/gesture_recognizer_holder.dart';
 import 'package:winebar/widgets/locale_selection_button.dart';
 import 'package:winebar/widgets/wine_prefix_list_item_widget.dart';
@@ -41,10 +43,33 @@ import '../models/wine_prefix.dart';
 import '../utils/startup_data.dart';
 import 'prefix_creation_dialog.dart';
 
-class WinePrefixesPage extends StatelessWidget {
+class WinePrefixesPage extends StatefulWidget {
   final void Function(Locale) onLocaleChanged;
 
   const WinePrefixesPage({super.key, required this.onLocaleChanged});
+
+  @override
+  State<WinePrefixesPage> createState() => _WinePrefixesPageState();
+}
+
+class _WinePrefixesPageState extends State<WinePrefixesPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    if (DonationSolicitationLogic.instance.maybeTriggerDonationSolicitation()) {
+      unawaited(
+        // Turns out calling showDialog() is not allowed directly from initState(),
+        // so we wrap it with Future.delayed().
+        Future.delayed(Duration.zero, () async {
+          final ctx = context;
+          if (ctx.mounted) {
+            return _showDonationSolicitationDialog(context: ctx);
+          }
+        }),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +81,7 @@ class WinePrefixesPage extends StatelessWidget {
         actions: [
           _buildDonationButton(context),
           SizedBox(width: 12.0),
-          LocaleSelectionButton(onLocaleSelected: onLocaleChanged),
+          LocaleSelectionButton(onLocaleSelected: widget.onLocaleChanged),
         ],
         actionsPadding: EdgeInsetsDirectional.only(end: 8.0),
       ),
@@ -135,6 +160,18 @@ class WinePrefixesPage extends StatelessWidget {
               ),
             );
           },
+    );
+  }
+
+  Future<void> _showDonationSolicitationDialog({
+    required BuildContext context,
+  }) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return DonationSolicitationDialog();
+      },
     );
   }
 
