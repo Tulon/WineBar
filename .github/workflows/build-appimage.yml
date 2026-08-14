@@ -113,9 +113,10 @@ jobs:
 
       - name: Verify the generated files were up to date
         run: |
-          # Note that pubspec.lock is ignored because "flutter pub get" may modify
-          # it when Dart SDK is upgraded.
-          NUM_MODIFIED_FILES=$(git status --porcelain | grep -v pubspec.lock | wc -l)
+          # Note that pubspec.lock and analysis_options.yaml are ignored because
+          # "flutter pub get" may modify them when the Dart SDK is upgraded.
+          NUM_MODIFIED_FILES=$(git status --porcelain | \
+            grep -v -E 'pubspec.lock|analysis_options.yaml' | wc -l)
           if [ "$NUM_MODIFIED_FILES" != "0" ]; then
             echo "The working tree is not clean. The following files were modified:"
             git status --porcelain | grep -v pubspec.lock
