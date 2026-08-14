@@ -614,5 +614,10 @@
       }
     },
     "x-source-message": "The \"{command}\" command failed"
+  },
+  "donationSolicitationDialogText": "नमस्ते। मैं Wine Bar का लेखक हूँ।\n\nमैंने इस प्रोजेक्ट पर गर्मियों 2025 में काम शुरू किया था। तब से, मैंने इसमें काफी प्रयास लगाया है। आज, Wine Bar पहले ही वह सब कुछ कर रहा है जो मुझे व्यक्तिगत रूप से इसकी आवश्यकता है। इसका मतलब यह नहीं कि यह परिपूर्ण है - मेरी ज़रूरतें बस मामूली हैं। इसका अर्थ है कि मैं केवल तभी इस पर काम जारी रख सकता हूँ जब मैं इसके लिए आवश्यक समय और ऊर्जा को सही ठहरा सकूँ।\n\nविकास जारी रखने के लिए, मैं आपकी सहायता माँग रहा हूँ। दान से Wine Bar पर समय और चल रहे कार्य को कवर करने में मदद मिलती है, जिससे मुझे इसे जारी रखने का कारण मिलता है। वैकल्पिक रूप से, यदि आप Dart/Flutter में सहज एक डेवलपर हैं, तो विकास प्रयास में शामिल होने पर विचार करें।\n\nकृपया ध्यान दें कि यह संदेश कभी-कभी दिखाई देगा, भले ही आप दान करें, क्योंकि Wine Bar ट्रैक नहीं करता कि किसने या किसने दान नहीं किया है।\n\nआपकी समझ के लिए धन्यवाद।",
+  "@donationSolicitationDialogText": {
+    "description": "दान अनुरोध संवाद का मुख्य भाग",
+    "x-source-message": "Hi there. I'm the author of Wine Bar.\n\nI started working on the project in summer 2025. Since then, I’ve put a lot of effort into it. Today, Wine Bar already does everything I personally need from it. That's not to say it's perfect - it's just my needs are modest. That means I can keep working on it only if I can justify the time and energy it requires.\n\nTo keep development going, I’m asking for your support. Donations help cover time and ongoing work on Wine Bar, giving me a reason to keep working on it. Alternatively, if you’re a developer comfortable with Dart/Flutter, consider joining the development effort.\n\nPlease note that this message will appear occasionally even if you do donate, as Wine Bar doesn’t track who has or hasn’t donated.\n\nThank you for your understanding."
   }
 }

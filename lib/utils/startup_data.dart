@@ -23,6 +23,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/error_with_more_details_url.dart';
 import 'package:winebar/exceptions/generic_exception.dart';
+import 'package:winebar/models/donation_solicitation_state.dart';
 import 'package:winebar/repositories/wine_locale_repo.dart';
 import 'package:winebar/repositories/wine_prefix_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
@@ -245,6 +246,7 @@ class StartupData {
       appPackageId: AppInfo.appPackageId,
       suppressedWarnings: settingsFileHelper
           .buildDefaultSetOfSuppressedWarnings(),
+      donationSolicitationState: DonationSolicitationState.initialState(),
     );
 
     await settingsJsonFile.save(localStoragePaths.settingsJsonFilePath);

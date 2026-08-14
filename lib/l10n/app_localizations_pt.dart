@@ -9,6 +9,10 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
+  String get donationSolicitationDialogText =>
+      'Olá! Eu sou o autor do Wine Bar.\n\nComecei a trabalhar no projeto no verão de 2025. Desde então, dediquei muito esforço a ele. Hoje, o Wine Bar já faz tudo que eu preciso pessoalmente. Isso não significa que seja perfeito – apenas minhas necessidades são modestas. Isso implica que só posso continuar desenvolvendo se conseguir justificar o tempo e a energia necessários.\n\nPara manter o desenvolvimento, peço seu apoio. Doações ajudam a cobrir tempo e trabalho contínuo no Wine Bar, dando-me um motivo para continuar. Alternativamente, se você é desenvolvedor confortável com Dart/Flutter, considere participar do esforço de desenvolvimento.\n\nObserve que esta mensagem aparecerá ocasionalmente mesmo se você doar, pois o Wine Bar não rastreia quem doou ou não.\n\nObrigado pela compreensão.';
+
+  @override
   String get kronekWineSourceDescription =>
       'Fornece as compilações padrão, Staging, TkG e Proton do Wine.';
 
@@ -414,6 +418,10 @@ class AppLocalizationsPt extends AppLocalizations {
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
 class AppLocalizationsPtBr extends AppLocalizationsPt {
   AppLocalizationsPtBr() : super('pt_BR');
+
+  @override
+  String get donationSolicitationDialogText =>
+      'Olá! Eu sou o autor do Wine Bar.\n\nComecei a trabalhar no projeto no verão de 2025. Desde então, dediquei muito esforço a ele. Hoje, o Wine Bar já faz tudo que eu preciso pessoalmente. Isso não significa que seja perfeito – apenas minhas necessidades são modestas. Isso implica que só posso continuar desenvolvendo se conseguir justificar o tempo e a energia necessários.\n\nPara manter o desenvolvimento, peço seu apoio. Doações ajudam a cobrir tempo e trabalho contínuo no Wine Bar, dando-me um motivo para continuar. Alternativamente, se você é desenvolvedor confortável com Dart/Flutter, considere participar do esforço de desenvolvimento.\n\nObserve que esta mensagem aparecerá ocasionalmente mesmo se você doar, pois o Wine Bar não rastreia quem doou ou não.\n\nObrigado pela compreensão.';
 
   @override
   String get kronekWineSourceDescription =>

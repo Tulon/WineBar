@@ -9,6 +9,10 @@ class AppLocalizationsNo extends AppLocalizations {
   AppLocalizationsNo([String locale = 'no']) : super(locale);
 
   @override
+  String get donationSolicitationDialogText =>
+      'Hei! Jeg er forfatteren av Wine Bar.\n\nJeg begynte å jobbe med prosjektet i sommer 2025. Siden da har jeg lagt ned mye arbeid i det. I dag gjør Wine Bar alt jeg personlig trenger av den. Det betyr ikke at den er perfekt – mine behov er ganske enkle. Det innebærer at jeg bare kan fortsette å jobbe med den hvis jeg kan rettferdiggjøre tiden og energien som kreves.\n\nFor å holde utviklingen i gang, ber jeg om din støtte. Donasjoner hjelper til med å dekke tid og løpende arbeid på Wine Bar, og gir meg en grunn til å fortsette arbeidet. Alternativt, hvis du er utvikler som er komfortabel med Dart/Flutter, vurder å bli med på utviklingsarbeidet.\n\nVennligst merk at denne meldingen vil vises av og til selv om du donerer, ettersom Wine Bar ikke sporer hvem som har eller ikke har donert.\n\nTakk for forståelsen.';
+
+  @override
   String get kronekWineSourceDescription =>
       'Gir standard, Staging, TkG og Proton Wine-versjoner.';
 

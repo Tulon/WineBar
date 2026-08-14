@@ -9,6 +9,10 @@ class AppLocalizationsHe extends AppLocalizations {
   AppLocalizationsHe([String locale = 'he']) : super(locale);
 
   @override
+  String get donationSolicitationDialogText =>
+      'שלום! אני מחבר Wine Bar.\n\nהתחלתי לעבוד על הפרויקט בקיץ 2025. מאז, השקתי בו מאמץ רב. היום Wine Bar כבר עושה את כל מה שאני צריך ממנה באופן אישי. זה לא אומר שהיא מושלמת – הצרכים שלי פשוטים. לכן, אני יכול להמשיך לעבוד עליה רק אם אוכל להצדיק את הזמן והאנרגיה הדרושים.\n\nכדי להמשיך בפיתוח, אני מבקש את תמיכתכם. תרומות עוזרות לכסות זמן ועבודה מתמשכת על Wine Bar, ומעניקות לי סיבה להמשיך לעבוד עליה. לחלופין, אם אתם מפתחים נוחי עם Dart/Flutter, שקלו להצטרף למאמץ הפיתוח.\n\nשימו לב שהודעה זו תופיע מעת לעת גם אם תרמתם, כיוון ש-Wine Bar אינו עוקב מי תרם או לא.\n\nתודה על ההבנה.';
+
+  @override
   String get kronekWineSourceDescription =>
       'מספק את הגרסאות הסטנדרטיות, Staging, TkG ו-Proton של Wine.';
 
