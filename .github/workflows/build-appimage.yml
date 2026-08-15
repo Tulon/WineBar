@@ -104,6 +104,30 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v5
 
+      # Without this step, the winebar-flutter snap will install the latest stable
+      # version of Flutter. Here we install the version we want and put it where
+      # winebar-flutter will find it and will skip installing it by itself.
+      - name: Install the correct version of flutter
+        run: |
+          flutter_version_required=$(
+            awk '
+              /^[[:space:]]*#/ {next}   # skip comments
+              NF {print; exit}          # first non-blank line
+            ' .flutter-version
+          )
+
+          mkdir -p ~/snap/winebar-flutter/common
+          cd ~/snap/winebar-flutter/common
+
+          # Clone the flutter repo with minimal objects fetched initially
+          git clone --filter=blob:none --no-checkout https://github.com/flutter/flutter.git flutter
+
+          # Checkout the revision we want.
+          (cd flutter && git fetch --depth=1 origin "refs/tags/$flutter_version_required" && git checkout --detach "$flutter_version_required")
+
+          flutter --version
+          flutter precache --linux
+
       - name: Regenerate generated files
         run: |
           flutter pub get

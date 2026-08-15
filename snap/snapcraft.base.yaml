@@ -131,16 +131,38 @@ parts:
     source: .
     plugin: flutter
     override-build: |
-      # Note that we don't do "craftctl default" here, as that doesn't allow
-      # us to pass the --build-name argument to "flutter build". Still, we
-      # use the "flutter" plugin as it brings in the extra dependencies that
+      # Note that we don't do "craftctl default" here, as: 
+      #
+      # 1. That doesn't allow us to specify the particular version of flutter we want to use.
+      # 2. That doesn't allow us to pass the --build-name argument to "flutter build".
+      #
+      # Still, we use the "flutter" plugin as it brings in the extra dependencies that
       # flutter needs.
+
+      flutter_version_required=$(
+        awk '
+          /^[[:space:]]*#/ {next}   # skip comments
+          NF {print; exit}          # first non-blank line
+        ' $CRAFT_PROJECT_DIR/.flutter-version
+      )
+
+      flutter_checkout_check_tag() {
+        $(cd flutter-checkout && git tag --points-at HEAD | grep -Fx "$1")
+      }
 
       export PATH="$PWD/flutter-checkout/bin:$PATH"
 
-      # Install latest flutter unless already installed.
-      if [[ ! -e flutter-checkout ]]; then
-        git clone --depth 1 -b stable https://github.com/flutter/flutter.git flutter-checkout
+      # Install the required version of flutter unless already installed.
+      if [[ (! -d flutter-checkout) || $(flutter_checkout_check_tag "$flutter_version_required") != "$flutter_version_required" ]]; then
+        # Remove the whole flutter checkout
+        rm -rf flutter-checkout
+
+        # Clone the flutter repo with minimal objects fetched initially
+        git clone --filter=blob:none --no-checkout https://github.com/flutter/flutter.git flutter-checkout
+
+        # Checkout the revision we want.
+        (cd flutter-checkout && git fetch --depth=1 origin "refs/tags/$flutter_version_required" && git checkout --detach "$flutter_version_required")
+
         flutter precache --linux
       fi
 
