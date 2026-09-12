@@ -49,7 +49,6 @@ abstract interface class AppSettingsService {
 
 class _AppSettingsService implements AppSettingsService {
   final LocalStoragePaths localStoragePaths;
-  Future<void> _lastSettingsFileWriteCompletion = Future.value();
 
   @override
   SettingsJsonFile settings;
@@ -69,28 +68,29 @@ class _AppSettingsService implements AppSettingsService {
       suppressed: suppressed,
     );
 
-    _scheduleWritingSettingsFile();
+    _writeSettingsFile();
   }
 
   @override
   void setDonationSolicitationState(DonationSolicitationState state) {
     settings = settings.copyWith(donationSolicitationState: state);
-    _scheduleWritingSettingsFile();
+    _writeSettingsFile();
   }
 
-  void _scheduleWritingSettingsFile() {
-    _lastSettingsFileWriteCompletion = _lastSettingsFileWriteCompletion
-        .then<void>(
-          (_) => File(
-            localStoragePaths.settingsJsonFilePath,
-          ).writeAsString(settings.toJsonString()),
-        )
-        .catchError((e, stackTrace) {
-          GetIt.I.get<Logger>().e(
-            'Failed to write the settings file',
-            error: e,
-            stackTrace: stackTrace,
-          );
-        });
+  void _writeSettingsFile() {
+    try {
+      // The reason we use synchronous I/O here is that we may write the settings file
+      // from the AppLifecycleListener.onExitRequested callback, where you apparently
+      // can't initiate unawaited asynchronous operations.
+      final tempFile = File("${localStoragePaths.settingsJsonFilePath}.temp");
+      tempFile.writeAsStringSync(settings.toJsonString());
+      tempFile.renameSync(localStoragePaths.settingsJsonFilePath);
+    } catch (e, stackTrace) {
+      GetIt.I.get<Logger>().e(
+        'Failed to write the settings file',
+        error: e,
+        stackTrace: stackTrace,
+      );
+    }
   }
 }
