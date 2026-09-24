@@ -23,6 +23,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/utils/l10n.dart';
+import 'package:winebar/utils/startup_data.dart';
 
 import '../exceptions/extraction_failed_exception.dart';
 import '../models/archive_type.dart';
@@ -40,7 +41,15 @@ class DownloadAndExtractionServiceImpl implements DownloadAndExtractionService {
     required String extractionDir,
     DownloadAndExtractionProgressCallback? progressCallback,
   }) async {
-    final extractionProcess = await Process.start('tar', [
+    // At some point, tar stopped working inside the Snap confinement
+    // (permission errors while extracting). So, in Snap confinement
+    // we now use bsdtar (part of the libarchive-tools package) which
+    // still works fine.
+    final tarExecutable = StartupData.instance.isRunningInSnapConfinement
+        ? 'bsdtar'
+        : 'tar';
+
+    final extractionProcess = await Process.start(tarExecutable, [
       archiveType.tarCompressionOption,
       '-xf',
       '-',

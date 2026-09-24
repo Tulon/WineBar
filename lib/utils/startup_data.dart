@@ -44,6 +44,7 @@ class StartupData {
   final WineProcessRunnerService wineProcessRunnerService;
   final bool isIntelHost;
   final bool wineWillRunUnderMuvm;
+  final bool isRunningInSnapConfinement;
 
   StartupData._({
     required this.localStoragePaths,
@@ -52,6 +53,7 @@ class StartupData {
     required this.wineProcessRunnerService,
     required this.isIntelHost,
     required this.wineWillRunUnderMuvm,
+    required this.isRunningInSnapConfinement,
   });
 
   static void asyncCreateAndRegisterInstance() {
@@ -160,6 +162,7 @@ class StartupData {
       wineProcessRunnerService: wineProcessRunningService,
       isIntelHost: isIntelHost,
       wineWillRunUnderMuvm: muvmNeeded,
+      isRunningInSnapConfinement: isSnapVersion,
     );
   }
 
