@@ -205,6 +205,12 @@ parts:
       - jq # Used by the winebar-launcher script
       - xz-utils
       - zstd
+
+      # At some point, tar stopped working inside the Snap confinement
+      # (permission errors while extracting). So, in Snap confinement
+      # we now use bsdtar (part of the libarchive-tools package) which
+      # still works fine.
+      - libarchive-tools
     prime:
       - -usr/share/doc
       - -usr/share/man

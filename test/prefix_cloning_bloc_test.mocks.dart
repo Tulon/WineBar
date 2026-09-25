@@ -198,6 +198,15 @@ class MockStartupData extends _i1.Mock implements _i8.StartupData {
             returnValueForMissingStub: false,
           )
           as bool);
+
+  @override
+  bool get isRunningInSnapConfinement =>
+      (super.noSuchMethod(
+            Invocation.getter(#isRunningInSnapConfinement),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
 }
 
 /// A class which mocks [LocalStoragePaths].
