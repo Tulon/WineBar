@@ -56,7 +56,7 @@ parts:
   mesa-source:
     source: https://gitlab.freedesktop.org/mesa/mesa.git
     source-type: git
-    source-tag: mesa-26.1.2
+    source-tag: mesa-26.2.0
     plugin: nil
     override-pull: |
       craftctl default
@@ -233,9 +233,10 @@ parts:
       - libvulkan1
       #- libgbm1  # part of Mesa
 
-      # DRM userspace
-      - libdrm2
-      - libdrm-common
+      # DRM userspace (excluded, as they are provided by newer versions of mesa,
+      # which we build ourselves from source).
+      # - libdrm2
+      # - libdrm-common
 
       # Video Acceleration API
       - libva2
@@ -299,6 +300,7 @@ parts:
       - -gpu-2404-override/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libGLX_mesa.*
       - -gpu-2404-override/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/dri
       - -gpu-2404-override/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/gbm
+      - -gpu-2404-override/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdrm_*
       - -gpu-2404-override/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libgbm.*
       - -gpu-2404-override/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libgallium-*
       - -gpu-2404-override/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libxshmfence.*
