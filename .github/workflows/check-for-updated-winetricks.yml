@@ -3,7 +3,7 @@ name: "Check for updated winetricks"
 on:
   workflow_dispatch:
   schedule:
-    - cron: "3 15 * * *" # Every night at 03:15
+    - cron: "3 15 * * 0" # At 03:15 on Sundays
 
 permissions:
   contents: write
