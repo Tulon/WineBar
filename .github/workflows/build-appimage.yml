@@ -11,7 +11,11 @@ on:
         required: true
         type: string
         description: Architecture (x64|arm64)
-      runs-on:
+      build-on:
+        required: true
+        type: string
+        description: Github runner name
+      build-flutter-snap-on:
         required: true
         type: string
         description: Github runner name
@@ -29,19 +33,28 @@ on:
         options:
           - x64
           - arm64
-      runs-on:
+      build-on:
         required: true
         type: choice
         description: Github runner name
         options:
           - ubuntu-24.04
           - ubuntu-24.04-arm
+      build-flutter-snap-on:
+        required: true
+        type: choice
+        description: Github runner name
+        options:
+          # Since some time ago, our old, core20 based Flutter snap doesn't
+          # build on ubuntu-24.04. It still works on 22.04 though.
+          - ubuntu-22.04
+          - ubuntu-22.04-arm
 
 jobs:
-  build-x64:
-    name: Build
-    runs-on: ${{ inputs.runs-on }}
-    timeout-minutes: 40
+  build-custom-flutter-snap:
+    name: Build a custom Flutter Snap
+    runs-on: ${{ inputs.build-flutter-snap-on }}
+    timeout-minutes: 35
 
     steps:
       - name: Install and configure snapcraft
@@ -74,19 +87,30 @@ jobs:
           sudo usermod -a -G lxd $USER
 
           # newgrp doesn't work in Github Actions, though sg does.
-          sg lxd -c "snapcraft pack -o winebar-flutter.snap"
+          sg lxd -c "snapcraft pack -o winebar-flutter-${{ inputs.arch }}.snap"
 
-      # This one is usefull for debugging
-      #- name: Upload the built winebar-flutter snap
-      #  uses: actions/upload-artifact@v6
-      #  with:
-      #    name: "winebar-flutter-${{ inputs.arch }}.snap"
-      #    path: "winebar-flutter.snap"
-      #    if-no-files-found: error
+      - name: Upload the Flutter snap
+        uses: actions/upload-artifact@v6
+        with:
+          name: "winebar-flutter-${{ inputs.arch }}.snap"
+          path: "winebar-flutter-${{ inputs.arch }}.snap"
+          if-no-files-found: error
+
+  build-winebar-appimage:
+    name: Build WineBar AppImage
+    needs: build-custom-flutter-snap
+    runs-on: ${{ inputs.build-on }}
+    timeout-minutes: 10
+
+    steps:
+      - name: Download build artefacts
+        uses: actions/download-artifact@v8
+        with:
+          name: "winebar-flutter-${{ inputs.arch }}.snap"
 
       - name: Instal the winebar-flutter snap
         run: |
-          sudo snap install winebar-flutter.snap --classic --dangerous
+          sudo snap install winebar-flutter-${{ inputs.arch }}.snap --classic --dangerous
           sudo snap alias winebar-flutter.dart dart
           sudo snap alias winebar-flutter.flutter flutter
 
