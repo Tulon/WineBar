@@ -23,7 +23,8 @@ jobs:
     with:
       version: ${{needs.prepare.outputs.version}}
       arch: x64
-      runs-on: ubuntu-24.04
+      build-on: ubuntu-24.04
+      build-flutter-snap-on: ubuntu-22.04
 
   build-appimage-arm64:
     name: Build arm64 AppImage
@@ -32,7 +33,8 @@ jobs:
     with:
       version: ${{needs.prepare.outputs.version}}
       arch: arm64
-      runs-on: ubuntu-24.04-arm
+      build-on: ubuntu-24.04-arm
+      build-flutter-snap-on: ubuntu-22.04-arm
 
   build-snap-x64:
     name: Build x64 Snap
