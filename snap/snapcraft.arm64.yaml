@@ -483,7 +483,7 @@ parts:
     plugin: cmake
     source: https://github.com/FEX-Emu/FEX.git
     source-type: git
-    source-tag: FEX-2609
+    source-tag: FEX-2611
     cmake-generator: Ninja
     cmake-parameters:
       - -DCMAKE_INSTALL_PREFIX=/usr
