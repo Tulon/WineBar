@@ -67,12 +67,17 @@ class WineBuildSourceGithubProject extends CachedWineBuildSource {
     final encodedRepoOwner = Uri.encodeComponent(githubRepoOwner);
     final encodedProjectName = Uri.encodeComponent(githubProjectName);
 
-    final url =
+    final baseUrl =
         'https://api.github.com/repos/$encodedRepoOwner/$encodedProjectName/releases';
+
+    // The default for the per_page parameter is 30 and it's clamped at 100 on the high side.
+    final perPageParam = 'per_page=100';
+
+    final url = '$baseUrl?$perPageParam';
 
     final headers = <String, String>{
       'Accept': 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28',
+      'X-GitHub-Api-Version': '2026-03-10',
     };
 
     final response = await dio.getUri(
