@@ -91,10 +91,22 @@ class ExplicitLocaleWidget extends StatelessWidget {
             items: (filter, loadProps) {
               assert(loadProps == null);
 
+              final selectedLocaleKnown =
+                  startupData.wineLocaleRepo.tryFind(
+                    posixName: state.selectedLocale?.posixName,
+                  ) !=
+                  null;
+
+              final localePlaceholder = selectedLocaleKnown
+                  ? null
+                  : state.selectedLocale;
+
               // There is no need to apply the filter here, as filterFn
               // will get called anyway.
-              return startupData.wineLocaleRepo.localesOrderedByDisplayString
-                  .toList();
+              return [
+                ?localePlaceholder,
+                ...startupData.wineLocaleRepo.localesOrderedByDisplayString,
+              ];
             },
             selectedItem: state.selectedLocale,
             onSelected: (selectedLocale) => onStateChanged(

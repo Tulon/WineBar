@@ -29,6 +29,7 @@ import 'package:winebar/models/explicit_locale_state.dart';
 import 'package:winebar/models/process_log.dart';
 import 'package:winebar/models/special_executable_slot.dart';
 import 'package:winebar/models/wine_arch_warning.dart';
+import 'package:winebar/models/wine_locale.dart';
 import 'package:winebar/repositories/running_executables_repo.dart';
 import 'package:winebar/services/app_settings_service.dart';
 import 'package:winebar/services/dxvk_installation_service.dart';
@@ -53,11 +54,36 @@ class PrefixSettingsBloc extends Cubit<PrefixSettingsState> {
           hiDpiScale: prefix.descriptor.hiDpiScale,
           wow64ModePreferred: prefix.descriptor.wow64ModePreferred,
           d3d8To11Implementation: prefix.descriptor.d3d8To11Implementation,
-          explicitLocale: GetIt.I.get<StartupData>().wineLocaleRepo.tryFind(
-            posixName: prefix.descriptor.explicitLocalePosixName,
-          ),
+          explicitLocale:
+              GetIt.I.get<StartupData>().wineLocaleRepo.tryFind(
+                posixName: prefix.descriptor.explicitLocalePosixName,
+              ) ??
+              _maybeBuildLocalePlaceholder(
+                prefix.descriptor.explicitLocalePosixName,
+              ),
         ),
       );
+
+  static WineLocale? _maybeBuildLocalePlaceholder(String? localePosixName) {
+    if (localePosixName == null) {
+      return null;
+    }
+
+    // The case for having a locale placeholder is this:
+    // We used to generate a list of supported locales by a python script.
+    // Then we switched to the language_code package. Now suppose a user
+    // has already selected a locale that for some reason is not present
+    // in the list from the language_code package. Now they go to the
+    // Prefix Settings page. What we want is for them to see the locale
+    // they've already selected in some form. This function builds such
+    // a locale placeholder.
+
+    return WineLocale(
+      posixName: localePosixName,
+      localizedDisplayName: null,
+      englishDisplayName: null,
+    );
+  }
 
   void setHiDpiScale(double scaleFactor) {
     emit(state.copyWith(hiDpiScaleGetter: () => scaleFactor));

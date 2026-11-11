@@ -17,16 +17,53 @@
  */
 
 import 'dart:collection';
-import 'dart:convert';
 
-import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
+import 'package:language_code/language_code.dart';
 import 'package:winebar/models/wine_locale.dart';
 
 abstract interface class WineLocaleRepo {
-  static Future<WineLocaleRepo> loadFromBundle(AssetBundle bundle) {
-    return _WineLocaleRepo.loadFromBundle(bundle);
+  static WineLocaleRepo load() {
+    final locales = <WineLocale>[];
+    final posixNamesToSuppress = <String>{};
+
+    // The LanguageCodes enum also lists the 3-letter locales,
+    // which we don't want.
+    final posixNamePattern = RegExp(r'^(\w\w)(_|$)');
+
+    for (final langCode in LanguageCodes.values) {
+      final match = posixNamePattern.firstMatch(langCode.code);
+      if (match != null) {
+        if (match.group(1)!.isNotEmpty) {
+          // Since we've found a locale containing a country code, we suppress
+          // the locale with the same language code but without a country code.
+          // The reason we do is that that we can't add the encoding to locale
+          // names consisting of just the language code. At least, Wine doesn't
+          // understand it when it's present. Adding the encoding fixes the
+          // input of international text in non-Unicode Windows apps, so by
+          // suppressing those language-code-only locales, we are trying to
+          // prevent the user from making a selection that will result in them
+          // not being able to enter international text.
+          posixNamesToSuppress.add(match.group(0)!);
+        }
+
+        locales.add(
+          WineLocale(
+            posixName: langCode.code,
+            localizedDisplayName: langCode.nativeName,
+            englishDisplayName: langCode.englishName,
+          ),
+        );
+      }
+    }
+
+    return _WineLocaleRepo(
+      locales
+          .where(
+            (locale) =>
+                posixNamesToSuppress.contains(locale.posixName) == false,
+          )
+          .toList(),
+    );
   }
 
   Iterable<WineLocale> get localesOrderedByDisplayString;
@@ -52,43 +89,4 @@ class _WineLocaleRepo implements WineLocaleRepo {
 
   @override
   WineLocale? tryFind({required String? posixName}) => locales[posixName];
-
-  static Future<WineLocaleRepo> loadFromBundle(AssetBundle bundle) async {
-    final locales = <WineLocale>[];
-
-    final jsonString = await bundle.loadString('data/locales.json');
-    final data = jsonDecode(jsonString);
-    if (data is! List) {
-      GetIt.I.get<Logger>().e(
-        'Failed reading locales.json',
-        error: 'Top-level element was not a list',
-      );
-      return _WineLocaleRepo(locales);
-    }
-
-    int skippedEntries = 0;
-
-    for (final entry in data) {
-      try {
-        locales.add(
-          WineLocale(
-            posixName: entry[0] as String,
-            localizedDisplayName: entry[1] as String?,
-            englishDisplayName: entry[2] as String?,
-          ),
-        );
-      } catch (_) {
-        ++skippedEntries;
-        continue;
-      }
-    }
-
-    if (skippedEntries > 0) {
-      GetIt.I.get<Logger>().w(
-        '$skippedEntries entries were skipped while parsing locales.json',
-      );
-    }
-
-    return _WineLocaleRepo(locales);
-  }
 }

@@ -18,7 +18,6 @@
 
 import 'dart:io';
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:winebar/exceptions/error_with_more_details_url.dart';
@@ -147,7 +146,7 @@ class StartupData {
       winePrefixesDir: localStoragePaths.winePrefixesDir,
     );
 
-    final wineLocaleRepo = await WineLocaleRepo.loadFromBundle(rootBundle);
+    final wineLocaleRepo = WineLocaleRepo.load();
 
     final wineProcessRunningService = WineProcessRunnerService(
       toplevelTempDir: localStoragePaths.tempDir,

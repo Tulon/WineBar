@@ -359,7 +359,6 @@ class _WinePrefixesListState extends State<_WinePrefixesList> {
       opacity: animation,
       child: SizeTransition(
         sizeFactor: animation,
-        axisAlignment: 0.0,
         child: WinePrefixListItemWidget(
           prefix: prefix,
           pinnedExecutablesLoader: () {
