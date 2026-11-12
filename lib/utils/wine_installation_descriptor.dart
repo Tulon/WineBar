@@ -443,7 +443,19 @@ class _WineInstallationDescriptor implements WineInstallationDescriptor {
       (entry) => entry.key == 'LANG' || entry.key.startsWith('LC_'),
     );
 
-    final localeName = winePrefix.descriptor.explicitLocalePosixName;
+    var localeName = winePrefix.descriptor.explicitLocalePosixName;
+
+    if (localeName != null &&
+        localeName.contains('_') &&
+        !localeName.contains('.')) {
+      // If the locale name doesn't specify an encoding, use the UTF-8 one.
+      // Adding the UTF-8 encoding fixes the input of international characters
+      // in non-Unicode Windows apps. However, if the locale name consists
+      // only of the language code, then we can't add the encoding, or at
+      // least Wine doesn't understand it, which is why we also check for
+      // the '_' symbol in locale name.
+      localeName = '$localeName.UTF-8';
+    }
 
     for (final entry in systemLocaleVars) {
       envVars[entry.key] = localeName ?? entry.value;
