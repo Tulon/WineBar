@@ -16,12 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:get_it/get_it.dart';
-import 'package:logger/logger.dart';
 
 class WineLocale extends Equatable {
   /// The POSIX locale name. Example: "de_CH" where "de" is the language
@@ -50,6 +45,10 @@ class WineLocale extends Equatable {
   List<Object?> get props => [posixName];
 
   bool matchesLowerCaseSearchString(String lowerCaseSearchString) {
+    if (lowerCaseSearchString.isEmpty) {
+      return true;
+    }
+
     return lowerCaseEnglishDisplayName?.contains(lowerCaseSearchString) ==
             true ||
         lowerCaseLocalizedDisplayName?.contains(lowerCaseSearchString) == true;
@@ -60,44 +59,5 @@ class WineLocale extends Equatable {
     // The reason we don't include the native name is that Flutter simply
     // can't display all such names (fonts missing glyphs for rare scripts).
     return englishDisplayName ?? posixName;
-  }
-
-  static Future<List<WineLocale>> loadLocaleList() async {
-    final locales = <WineLocale>[];
-
-    final jsonString = await rootBundle.loadString('data/locales.json');
-    final data = jsonDecode(jsonString);
-    if (data is! List) {
-      GetIt.I.get<Logger>().e(
-        'Failed reading locales.json',
-        error: 'Top-level element was not a list',
-      );
-      return locales;
-    }
-
-    int skippedEntries = 0;
-
-    for (final entry in data) {
-      try {
-        locales.add(
-          WineLocale(
-            posixName: entry[0] as String,
-            localizedDisplayName: entry[1] as String?,
-            englishDisplayName: entry[2] as String?,
-          ),
-        );
-      } catch (_) {
-        ++skippedEntries;
-        continue;
-      }
-    }
-
-    if (skippedEntries > 0) {
-      GetIt.I.get<Logger>().w(
-        '$skippedEntries entries were skipped while parsing locales.json',
-      );
-    }
-
-    return locales;
   }
 }
